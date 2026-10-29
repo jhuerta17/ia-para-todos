@@ -1,18 +1,18 @@
 # Documentation Index
 
-Welcome to the IA Para Todos documentation. The repository is in **Part 5 of a seven-part setup**: organization, strategy, nonprofit, operations, safety, workshops, and templates exist; roadmap and brand sections arrive in later phases.
+Welcome to the IA Para Todos documentation. The repository is in **Part 6 of a seven-part setup**: all documentation sections exist (organization, strategy, nonprofit, roadmap, operations, safety, brand) plus workshops and templates; only assets, scripts, and `.github/` automation remain.
 
 ## Structure
 
 | Directory | Contents |
 |---|---|
 | `organization/` | [overview.md](organization/overview.md) · [mission-vision.md](organization/mission-vision.md) · [values.md](organization/values.md) · [target-audience.md](organization/target-audience.md) · [faq.md](organization/faq.md) |
-| `strategy/` | [problem-statement.md](strategy/problem-statement.md) · [theory-of-change.md](strategy/theory-of-change.md) · [risks-and-mitigation.md](strategy/risks-and-mitigation.md) · [growth-strategy.md](strategy/growth-strategy.md) |
+| `strategy/` | [problem-statement.md](strategy/problem-statement.md) · [theory-of-change.md](strategy/theory-of-change.md) · [risks-and-mitigation.md](strategy/risks-and-mitigation.md) · [growth-strategy.md](strategy/growth-strategy.md) · [sustainability.md](strategy/sustainability.md) · [partnerships.md](strategy/partnerships.md) |
 | `nonprofit/` | [formation-options.md](nonprofit/formation-options.md) · [governance.md](nonprofit/governance.md) · [compliance-checklist.md](nonprofit/compliance-checklist.md) · [conflict-of-interest.md](nonprofit/conflict-of-interest.md) |
-| `roadmap/` | Planned — 90-day pilot plan, milestones, future initiatives |
+| `roadmap/` | [90-day-pilot.md](roadmap/90-day-pilot.md) · [milestones.md](roadmap/milestones.md) · [future-initiatives.md](roadmap/future-initiatives.md) |
 | `operations/` | [workshop-checklist.md](operations/workshop-checklist.md) · [venue-requirements.md](operations/venue-requirements.md) · [facilitator-guide.md](operations/facilitator-guide.md) · [volunteer-onboarding.md](operations/volunteer-onboarding.md) · [outreach-process.md](operations/outreach-process.md) · [budget-template.md](operations/budget-template.md) · [impact-measurement.md](operations/impact-measurement.md) |
 | `safety/` | [responsible-ai.md](safety/responsible-ai.md) · [privacy-guidelines.md](safety/privacy-guidelines.md) · [participant-safeguarding.md](safety/participant-safeguarding.md) · [accessibility.md](safety/accessibility.md) |
-| `brand/` | Planned — brand, voice-and-tone, and messaging guidelines |
+| `brand/` | [brand-guidelines.md](brand/brand-guidelines.md) · [voice-and-tone.md](brand/voice-and-tone.md) · [messaging.md](brand/messaging.md) |
 
 Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · `assets/`, `scripts/`, `.github/` (planned in later phases).
 
