@@ -1,0 +1,22 @@
+<section aria-labelledby="benefits-title">
+  <h2 id="benefits-title" class="visually-hidden">Lo que te llevas de cada taller</h2>
+  <div class="composition">
+    <div class="panels">
+      @for (benefit of benefits; track benefit.image) {
+        <article class="benefit-panel" [attr.aria-labelledby]="'benefit-' + $index">
+          <div class="inline-media">
+            <img [src]="'/images/' + benefit.image + '-960.webp'"
+              [srcset]="'/images/' + benefit.image + '-480.webp 480w, /images/' + benefit.image + '-960.webp 960w, /images/' + benefit.image + '-1600.webp 1600w'"
+              sizes="(max-width: 809px) calc(100vw - 40px), (max-width: 1199px) 60vw, 638px"
+              [alt]="benefit.alt" width="1600" height="1066" loading="lazy" />
+          </div>
+          <div class="benefit-copy">
+            <app-icon [name]="benefit.icon" />
+            <h3 [id]="'benefit-' + $index">{{ benefit.title }}</h3>
+            <p>{{ benefit.body }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>

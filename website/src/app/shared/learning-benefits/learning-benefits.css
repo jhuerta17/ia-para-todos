@@ -1,0 +1,27 @@
+:host { display: block; background: var(--color-warm); }
+section { padding-inline: 80px; }
+.composition { max-width: var(--wide-width); margin-inline: auto; }
+.benefit-panel { display: grid; grid-template-columns: minmax(0, 770fr) minmax(0, 392fr); gap: 38px; align-items: center; min-height: 100svh; padding-block: 80px; }
+.inline-media { width: 100%; max-width: 638px; aspect-ratio: 3 / 2; justify-self: center; overflow: hidden; border-radius: 40px; }
+.inline-media img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.benefit-copy { min-width: 0; max-width: 392px; }
+.benefit-copy app-icon { --icon-size: 48px; color: var(--color-accent); margin-bottom: 12px; }
+h3 { font-size: 30.08px; line-height: 1.4; }
+.benefit-copy p { margin: 12px 0 0; font-size: 18.08px; line-height: 1.7; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (min-width: 810px) and (max-width: 1199px) {
+  section { padding-inline: 40px; }
+  .benefit-panel { gap: 32px; }
+}
+@media (max-width: 809px) {
+  section { padding: 100px 20px; }
+  .benefit-panel { display: block; min-height: 0; padding: 0; }
+  .inline-media { max-width: none; border-radius: 30px; }
+  .benefit-copy { max-width: none; padding-block: 50px 70px; }
+  h3 { font-size: 26.08px; }
+  .benefit-copy p { font-size: 16px; }
+  .benefit-panel:last-child .benefit-copy { padding-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .benefit-panel { min-height: 0; }
+}
