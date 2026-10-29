@@ -1,0 +1,32 @@
+.motion-control { position: absolute; z-index: 2; top: 16px; right: 16px; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text); background: white; cursor: pointer; }
+.motion-control app-icon { --icon-size: 16px; }
+.motion-control:hover { background: var(--color-cool); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (offset-path: ellipse(35% 39% at 50% 50%)) {
+    .motion-ready .portrait { left: 0; top: 0; transform: none; offset-path: ellipse(35% 39% at 50% 50%); offset-anchor: center; offset-rotate: 0deg; offset-distance: var(--start); animation: portrait-travel 32s linear infinite; }
+    @keyframes portrait-travel { to { offset-distance: calc(var(--start) + 100%); } }
+  }
+  .paused .portrait, .orbit-track.idle .portrait, .orbit:hover .portrait, .orbit:focus-within .portrait { animation-play-state: paused; }
+}
+@media (min-width: 810px) and (prefers-reduced-motion: no-preference) {
+  .motion-ready .example-track { animation: example-travel 45.6s linear infinite; }
+  .paused .example-track, .motion-ready .example-track.idle, .examples:hover .example-track, .examples:focus-within .example-track { animation-play-state: paused; }
+  @keyframes example-travel { to { transform: translateX(-50%); } }
+}
+@media (max-width: 809px), (prefers-reduced-motion: reduce) {
+  .duplicate { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .examples-window { mask-image: none; overflow: visible; }
+  .examples { padding: 24px; }
+  .example-track, .example-group { display: grid; width: 100%; padding: 0; gap: 16px; }
+  .example { width: 100%; min-height: 240px; }
+}
+@media print {
+  .portrait, .example-track { animation: none !important; }
+  .motion-control, .duplicate { display: none; }
+  .examples-window { mask-image: none; overflow: visible; }
+  .example-track, .example-group { display: grid; width: 100%; padding: 0; }
+  .example { width: 100%; }
+}

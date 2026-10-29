@@ -38,7 +38,7 @@ strong { font: 400 36px/1.4 var(--font-heading); }
   :host { padding-block: 100px 50px; }
   .top-row, .bottom-row { grid-template-columns: minmax(0, 1fr); }
   .orbit { min-height: 598px; }
-  .orbit-copy { max-width: 150px; }
+  .orbit-copy { max-width: clamp(110px, calc(100vw - 240px), 150px); }
   .number { font-size: 40px; }
   h2 { font-size: 20px; }
   .orbit-copy p { font-size: 14px; }

@@ -1,12 +1,15 @@
-<section aria-label="Un programa pensado para ti">
+<section aria-label="Un programa pensado para ti" [class.motion-ready]="motionReady()" [class.paused]="paused() || pageHidden()">
   <div class="top-row">
-    <div class="orbit tile">
-      <div class="orbit-track" aria-hidden="true">
+    <div #orbit class="orbit tile">
+      @if (motionReady()) {
+        <button class="motion-control" type="button" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? 'Reanudar movimiento del programa' : 'Pausar movimiento del programa'" (click)="toggleMotion()"><app-icon [name]="paused() ? 'player-play' : 'player-pause'" /></button>
+      }
+      <div class="orbit-track" aria-hidden="true" [class.idle]="!orbitVisible()">
         @for (portrait of portraits; track portrait.image) {
-          <img class="portrait" [src]="portrait.image" alt="" width="81" height="81" loading="lazy" [style.--x]="portrait.x + '%'" [style.--y]="portrait.y + '%'" />
+          <img class="portrait" [src]="portrait.image" alt="" width="81" height="81" loading="lazy" [style.--start]="portrait.start + '%'" [style.--x]="portrait.x + '%'" [style.--y]="portrait.y + '%'" />
         }
       </div>
-      <div class="orbit-copy"><span class="number">4</span><h2>Temas previstos</h2><p>Para aprender desde cero.</p></div>
+      <div class="orbit-copy"><span class="number"><span aria-hidden="true">{{ count() }}</span><span class="visually-hidden">4</span></span><h2>Temas previstos</h2><p>Para aprender desde cero.</p></div>
       <span class="illustration-note">Retratos ilustrativos</span>
     </div>
     <div class="side-facts">
@@ -22,10 +25,15 @@
       <app-learning-comparison />
       <div class="action-tile tile"><app-action-link to="/participar" label="Participar" /></div>
     </div>
-    <div class="examples tile" aria-label="Ejemplos de práctica, no testimonios">
+    <div #examplePanel class="examples tile" aria-label="Ejemplos de práctica, no testimonios">
       <div class="examples-window">
-        <div class="example-track">
+        <div class="example-track" [class.idle]="!examplesVisible()">
           <div class="example-group">
+            @for (example of examples; track example.category) {
+              <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>Ejemplo de práctica</span></div></footer></article>
+            }
+          </div>
+          <div class="example-group duplicate" aria-hidden="true" inert>
             @for (example of examples; track example.category) {
               <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>Ejemplo de práctica</span></div></footer></article>
             }
