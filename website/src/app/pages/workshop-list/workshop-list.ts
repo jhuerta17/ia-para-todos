@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RevealOnEnter } from '../../shared/motion/reveal-on-enter';
 import { workshops } from '../../data/workshops';
 import { WorkshopCard } from '../../shared/workshop-card/workshop-card';
 import { FaqSection } from '../../shared/faq-section/faq-section';
@@ -8,9 +9,9 @@ import { Icon } from '../../shared/icon';
 
 @Component({
   selector: 'app-workshop-list',
-  imports: [WorkshopCard, FaqSection, Icon],
+  imports: [WorkshopCard, FaqSection, Icon, RevealOnEnter],
   templateUrl: './workshop-list.html',
-  styleUrl: './workshop-list.css',
+  styleUrls: ['./workshop-list.css', './workshop-list-interactions.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkshopList {
