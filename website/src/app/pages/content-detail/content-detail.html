@@ -1,4 +1,4 @@
-<main tabindex="-1"><app-page-cover [image]="detail().image" [alt]="detail().alt ?? 'Fotografía ilustrativa de archivo.'" />
+<main id="main-content" tabindex="-1"><app-page-cover [image]="detail().image" [alt]="detail().alt ?? 'Fotografía ilustrativa de archivo.'" />
 <article class="content"><a class="back" [routerLink]="detail().parent"><app-icon name="arrow-left" /><span>{{ detail().parentLabel }}</span></a>
 <header appRevealOnEnter><div class="metadata"><p>{{ detail().status }}</p><span>{{ detail().category }}</span></div><h1>{{ detail().title }}</h1><p class="lead">{{ detail().summary }}</p><p class="caption">Fotografía ilustrativa de archivo.</p></header>
 @if (detail().facts?.length) {<dl class="facts">@for (fact of detail().facts; track fact.label) {<div appRevealOnEnter><dt>{{ fact.label }}</dt><dd>{{ fact.value }}</dd></div>}</dl>}

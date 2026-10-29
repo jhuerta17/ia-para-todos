@@ -17,6 +17,13 @@ export class App {
   private initialActivation = true;
   private readonly metadata = inject(RouteMetadata);
 
+  protected skipToContent(event: Event): void {
+    event.preventDefault();
+    const main = this.document.querySelector<HTMLElement>('main');
+    main?.focus({ preventScroll: true });
+    main?.scrollIntoView({ block: 'start', behavior: 'instant' });
+  }
+
   protected onPageActivated(): void {
     this.metadata.update();
     if (this.initialActivation) {
