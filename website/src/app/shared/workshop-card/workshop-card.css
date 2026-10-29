@@ -18,3 +18,14 @@ app-action-link { width: 200px; max-width: 100%; --action-gap: 10px; }
   .summary { font-size: 16px; }
   dd { font-size: 20px; }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  :host(.motion-ready) { transition: opacity var(--duration-reveal) var(--ease-out), filter var(--duration-reveal) var(--ease-out), transform var(--duration-reveal) var(--ease-out); }
+  :host(.motion-ready:not(.entered)) { opacity: .2; filter: blur(2px); transform: translateY(20px); }
+  :host(.motion-ready:focus-within) { opacity: 1; filter: none; transform: none; transition-delay: 0ms; }
+  .media img { transition: transform var(--duration-standard) var(--ease-out); }
+  .media:is(:hover, :focus-visible) img { transform: scale(1.1); }
+}
+@media print {
+  :host(.motion-ready) { opacity: 1; filter: none; transform: none; }
+}
