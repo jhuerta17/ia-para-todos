@@ -5,7 +5,7 @@ section { --sticky-top: 270px; position: relative; height: 2608px; padding: 100p
 .statement p { margin: 0; color: var(--color-heading); font: 400 30.08px/56.16px var(--font-heading); }
 .token { display: inline-block; vertical-align: middle; }
 .animated .token { opacity: calc(.2 + .8 * var(--reveal)); filter: blur(calc(2px * (1 - var(--reveal)))); }
-.token app-logo-placeholder { --logo-size: 48px; margin: 0 4px; }
+.token app-brand-mark { --logo-size: 48px; margin: 0 4px; }
 .portraits { display: inline-flex; vertical-align: middle; }
 .portraits img { width: 40px; height: 44px; border: 1px solid white; border-radius: 14px; object-fit: cover; object-position: 50% 35%; box-shadow: var(--shadow-card); }
 .portraits img + img { margin-left: -3px; }

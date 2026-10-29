@@ -6,7 +6,7 @@
           <span class="token" [class.word]="token.kind === 'word'" [style.--reveal]="reveal($index)">
             @switch (token.kind) {
               @case ('word') { {{ token.text }} }
-              @case ('logo') { <app-logo-placeholder /> }
+              @case ('logo') { <app-brand-mark /> }
               @case ('portraits') {
                 <span class="portraits" role="img" aria-label="Retratos ilustrativos de archivo">
                   <img src="/images/portrait-01-96.webp" alt="" width="40" height="44" loading="lazy" />

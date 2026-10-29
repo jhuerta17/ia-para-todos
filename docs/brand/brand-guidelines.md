@@ -1,6 +1,6 @@
 # Brand Guidelines (Provisional)
 
-> **DRAFT:** Provisional foundation only. No finalized logo, trademark, color palette, or registered domain exists — nothing here claims otherwise. Revisit with community input after the pilot.
+> **DRAFT:** Provisional foundation only. A supplied symbol is now used on the website. The wider identity remains provisional; this does not imply trademark registration or a registered domain. Revisit with community input after the pilot.
 
 ## Name
 
@@ -34,12 +34,12 @@ One brand must work for churches, schools, libraries, volunteers, sponsors, and 
 
 ## Provisional visual direction (not final)
 
-- **Logo:** none yet. When needed, use the wordmark "IA Para Todos" in clean type. Do not commission or adopt a mark until post-pilot.
-- **Colors:** no palette selected. Interim: high-contrast, print-friendly (black text, white background, one accent used sparingly) for readability and cheap printing.
-- **Typography:** system fonts only for now (readable, free, no licensing); minimum 14pt on print.
+- **Website logo:** use the supplied transparent symbol at `website/public/images/brand/ia-para-todos-symbol-color.png` through the shared brand-mark component. Render the website name “IA para todos” as real HTML text in Libre Baskerville, the existing heading font. Use the symbol by itself for inline marks and the browser icon. Do not use the horizontal or vertical image wordmarks as website text.
+- **Website colors:** retain the existing brown `#4a1c00`, warm `#f8f4ec`, cool `#f2f3f7`, white, and dark text. Keep the supplied symbol colors intact. Broader print and outreach palettes remain provisional and should prioritize contrast and inexpensive reproduction.
+- **Website typography:** self-hosted Libre Baskerville for headings and the text wordmark; Instrument Sans for body text. Their licenses are included with the font assets. Print materials remain readable and use a minimum 14pt text size.
 - **Photography/illustration:** no participant photos by default; if imagery is ever used, consent-first, dignified, representative of the community — and never committed with identifying details.
 
-> **DECISION NEEDED:** logo, palette, typography, domain, and trademark review — all deferred until after pilot validation.
+> **Website implementation:** apply the same supplied symbol and live text wordmark to all existing and future page headers, the footer, and other brand locations. Broader identity, domain, and trademark decisions remain provisional.
 
 ## Usage rules
 

@@ -1,13 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { LogoPlaceholder } from '../logo-placeholder';
+import { BrandMark } from '../brand-mark';
 
 type Token = { kind: 'word'; text: string } | { kind: 'logo' | 'portraits' | 'photo' };
 const words = (text: string): Token[] => text.split(' ').map(text => ({ kind: 'word', text }));
 
 @Component({
   selector: 'app-mission-reveal',
-  imports: [LogoPlaceholder],
+  imports: [BrandMark],
   templateUrl: './mission-reveal.html',
   styleUrl: './mission-reveal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

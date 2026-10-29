@@ -3,13 +3,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Icon } from '../icon';
 import { ActionLink } from '../action-link';
-import { LogoPlaceholder } from '../logo-placeholder';
+import { BrandMark } from '../brand-mark';
 
 type Disclosure = 'explore' | 'contact' | null;
 
 @Component({
   selector: 'app-site-header',
-  imports: [RouterLink, RouterLinkActive, Icon, LogoPlaceholder, ActionLink],
+  imports: [RouterLink, RouterLinkActive, Icon, BrandMark, ActionLink],
   templateUrl: './site-header.html',
   styleUrl: './site-header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

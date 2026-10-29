@@ -1,6 +1,6 @@
 # Borrador de contenido del sitio web (español)
 
-> **Borrador para revisión, no copy público aprobado.** Contenido en español, cálido, práctico y para principiantes. Todos los talleres, actividades y recursos descritos son planes o borradores pendientes de validación piloto. No se ha realizado ningún taller oficial ni se ha formado ninguna alianza formal. Ubicaciones de logotipo: usar recuadros provisionales. Iconos futuros: Tabler (sin maquetación de iconos en este borrador). Fotografía: se seleccionará por separado; este borrador no incluye imágenes.
+> **Borrador para revisión, no copy público aprobado.** Contenido en español, cálido, práctico y para principiantes. Todos los talleres, actividades y recursos descritos son planes o borradores pendientes de validación piloto. No se ha realizado ningún taller oficial ni se ha formado ninguna alianza formal. Identidad del sitio: usar el símbolo proporcionado en `website/public/images/brand/ia-para-todos-symbol-color.png`. Escribir “IA para todos” como texto HTML en Libre Baskerville; no usar las imágenes con el nombre incrustado. Aplicar esta regla al encabezado, pie y demás ubicaciones de marca. Iconos futuros: Tabler (sin maquetación de iconos en este borrador). Fotografía: se seleccionará por separado; este borrador no incluye imágenes.
 
 ## Contenido de portada
 

@@ -2,7 +2,7 @@
 .site-header { display: flex; align-items: center; gap: 32px; min-height: 48px; padding: 2px 2px 2px 12px; border-radius: 22px; box-shadow: 0 0 0 1px rgb(0 0 0 / 2%); background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); pointer-events: auto; }
 a { text-decoration: none; }
 .brand { display: flex; align-items: center; gap: 8px; white-space: nowrap; font: 400 20px/1.4 var(--font-heading); }
-.brand app-logo-placeholder { --logo-size: 28px; }
+.brand app-brand-mark { --logo-size: 28px; }
 .desktop-nav { display: flex; align-items: center; gap: 16px; }
 .desktop-nav > a, button { font-size: 18px; line-height: 24px; }
 button { color: inherit; cursor: pointer; }
@@ -26,7 +26,7 @@ a:hover, .disclosure > button:hover, .active { color: var(--color-accent); }
   :host { display: block; padding: 0; }
   .site-header { position: relative; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0; min-height: 64px; padding: 16px 24px; border-radius: 0; background: transparent; backdrop-filter: none; }
   .site-header::before { content: ''; position: absolute; z-index: -1; inset: 0; border-radius: 0 0 48px 48px; background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); }
-  .brand app-logo-placeholder { --logo-size: 32px; }
+  .brand app-brand-mark { --logo-size: 32px; }
   .desktop-nav { display: none; }
   .mobile-toggle { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 0; border-radius: 8px; background: transparent; }
   .mobile-toggle app-icon { --icon-size: 24px; }
