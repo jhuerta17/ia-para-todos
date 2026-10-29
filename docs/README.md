@@ -16,6 +16,10 @@ Welcome to the IA Para Todos documentation. The seven-part setup is **complete**
 
 Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · [`scripts/`](../scripts/validate-docs.sh) (`bootstrap.sh`, `validate-docs.sh`) · [`.github/`](../.github/PULL_REQUEST_TEMPLATE.md) (issue/PR templates, docs-check workflow) · `assets/` (brand/media files, planned once visual identity is decided).
 
+## Website implementation
+
+- [Spanish website content draft](website-content-draft.es.md) — provisional page copy for review.
+
 ## Documentation conventions
 
 All contributors and future setup phases must follow these:
