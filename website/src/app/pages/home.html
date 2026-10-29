@@ -17,19 +17,7 @@
             <app-action-link to="/nosotros" label="La iniciativa" />
           </div>
         </div>
-        <ul class="intro-cards" aria-label="Temas de talleres previstos">
-          @for (item of introductions; track item.image) {
-            <li>
-              <a class="intro-card" routerLink="/talleres">
-                <img [src]="'/images/' + item.image + '-480.webp'" [alt]="item.alt" width="480" height="320" />
-                <div class="card-copy">
-                  <h2>{{ item.title }}</h2>
-                  <div class="card-bottom"><span>Taller previsto</span><app-icon name="arrow-right" /></div>
-                </div>
-              </a>
-            </li>
-          }
-        </ul>
+        <app-intro-cards />
       </div>
     </div>
   </section>

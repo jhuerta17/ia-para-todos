@@ -1,0 +1,27 @@
+:host { display: block; min-width: 0; }
+.intro-cards { display: grid; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.intro-cards li { min-width: 0; }
+.intro-card { display: flex; gap: 10px; min-height: 150px; padding: 8px; border-radius: 24px; background: white; color: var(--color-heading); text-decoration: none; box-shadow: var(--shadow-card); }
+.card-media { display: block; overflow: hidden; flex: none; width: 134px; max-width: 38%; height: 134px; border-radius: 14px; }
+.card-media img { width: 100%; height: 100%; object-fit: cover; }
+.card-copy { display: flex; flex: 1; flex-direction: column; justify-content: space-between; min-width: 0; padding: 0 4px 2px 0; }
+h2 { font-size: 20px; line-height: 1.6; }
+.card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: var(--text-small); line-height: 1.7; }
+.card-bottom app-icon { --icon-size: 20px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-media img { transition: transform var(--duration-standard) var(--ease-out); }
+  .intro-card:hover .card-media img { transform: scale(1.1); }
+  .card-bottom app-icon { transition: transform var(--duration-standard) var(--ease-out); }
+  .intro-card:hover app-icon, .intro-card:focus-visible app-icon { transform: translateX(3px); }
+}
+@media (min-width: 1200px) and (min-height: 700px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .intro-cards { height: 150px; gap: 0; }
+  .intro-cards li { grid-area: 1 / 1; transform-origin: center top; transition: transform 450ms var(--ease-out); }
+  .intro-cards li:nth-child(1) { z-index: 3; }
+  .intro-cards li:nth-child(2) { z-index: 2; transform: translateY(-14px) scale(.95); }
+  .intro-cards li:nth-child(3) { z-index: 1; transform: translateY(-28px) scale(.9); }
+  .intro-cards:is(:hover, :focus-within) li:nth-child(1) { transform: translateY(-332px); }
+  .intro-cards:is(:hover, :focus-within) li:nth-child(2) { transform: translateY(-166px); }
+  .intro-cards:is(:hover, :focus-within) li:nth-child(3) { transform: none; }
+}
