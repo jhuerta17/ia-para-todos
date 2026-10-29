@@ -1,3 +1,4 @@
+import { RouteMetadata } from './shared/metadata/route-metadata';
 import { SiteFooter } from './shared/site-footer/site-footer';
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, Component, inject, Injector } from '@angular/core';
@@ -14,8 +15,10 @@ export class App {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
   private initialActivation = true;
+  private readonly metadata = inject(RouteMetadata);
 
   protected onPageActivated(): void {
+    this.metadata.update();
     if (this.initialActivation) {
       this.initialActivation = false;
       return;
