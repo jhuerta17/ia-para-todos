@@ -1,11 +1,11 @@
 <section aria-labelledby="participation-title" id="participar">
   @if (!page()) {
-  <header appRevealOnEnter><h2 id="participation-title">Aprendamos paso a paso</h2><p>Prueba cómo podría ser participar. Esta es una demostración local: nada se envía, se guarda, te suscribe ni te registra.</p></header>
+  <header appRevealOnEnter><h2 id="participation-title">Aprendamos paso a paso</h2><p>Cuéntanos tu interés en participar. Esta es una práctica local: nada se envía, se guarda, te suscribe ni te registra.</p></header>
   } @else {<h2 id="participation-title" class="visually-hidden">Formulario de demostración y pasos</h2>}
   <div class="columns">
     <ol class="steps">@for (step of steps(); track step.title; let index = $index) {<li appRevealOnEnter><app-icon [name]="step.icon" /><div><h3>{{ step.title }}</h3><p>{{ step.text }}</p></div><span class="number">0{{ index + 1 }}</span></li>}</ol>
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off" appRevealOnEnter>
-      <h3>{{ context() === 'community' ? 'Colaboración (demostración)' : 'Participa (demostración)' }}</h3><p class="form-note">Usa datos inventados. Los campos con * son obligatorios.</p>
+      <h3>{{ context() === 'community' ? 'Colaboración' : 'Participa' }}</h3><p class="form-note">Usa datos inventados. Los campos con * son obligatorios.</p>
       <label for="demo-name">Nombre de prueba *</label><input id="demo-name" required formControlName="name" placeholder="Persona de ejemplo" maxlength="100" [attr.aria-invalid]="invalid('name')" aria-describedby="name-error" />
       <p id="name-error" class="error">@if (invalid('name')) { Este campo es obligatorio. }</p>
       <div class="field-row"><div><label for="demo-email">Correo de prueba *</label><input id="demo-email" required type="email" formControlName="email" placeholder="nombre@ejemplo.com" maxlength="200" [attr.aria-invalid]="invalid('email')" aria-describedby="email-error" /><p id="email-error" class="error">@if (invalid('email')) { Escribe un correo válido, por ejemplo nombre@ejemplo.com. }</p></div><div><label for="demo-phone">Teléfono de prueba (opcional)</label><input id="demo-phone" type="tel" formControlName="phone" maxlength="30" /></div></div>

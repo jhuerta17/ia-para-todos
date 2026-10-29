@@ -4,7 +4,6 @@ section { max-width: 1040px; margin-inline: auto; }
 .invitation-copy { position: relative; z-index: 1; width: 350px; max-width: 100%; text-align: center; }
 h2 { font-size: 32px; }
 p { margin: 16px 0; font-size: 20px; line-height: 1.5; }
-.status { font-size: 14px; line-height: 1.6; }
 app-action-link { display: block; width: 174px; margin: 20px auto 0; }
 .photographs { position: absolute; inset: 0; pointer-events: none; }
 .photo { position: absolute; width: 176px; height: 176px; border-radius: 30px; object-fit: cover; }

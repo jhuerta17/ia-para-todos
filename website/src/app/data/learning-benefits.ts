@@ -18,21 +18,21 @@ export const learningBenefits: LearningBenefit[] = [
   },
   {
     "title": "Aprende a verificar en otro lado",
-    "body": "Si una respuesta es importante, la práctica propuesta es contrastarla con otra fuente o una persona de confianza. La IA también se equivoca.",
+    "body": "Si una respuesta es importante, la práctica recomendada es contrastarla con otra fuente o una persona de confianza. La IA también se equivoca.",
     "icon": "search",
     "image": "peer-support",
     "alt": "Fotografía ilustrativa: Dos personas revisando apuntes y una computadora."
   },
   {
     "title": "Cuida tu privacidad",
-    "body": "Las prácticas propuestas usan datos inventados. Aprenderías a reconocer qué información personal no compartir en las herramientas.",
+    "body": "Las prácticas usan datos inventados. Aprendes a reconocer qué información personal no compartir en las herramientas.",
     "icon": "shield-check",
     "image": "family-phone",
     "alt": "Fotografía ilustrativa: Una madre y su hijo mirando un teléfono en casa."
   },
   {
     "title": "Resuelve cosas cotidianas",
-    "body": "Mensajes, avisos, horarios, traducciones y planes: proponemos ejercicios cercanos a tu vida, con instrucciones claras.",
+    "body": "Mensajes, avisos, horarios, traducciones y planes: ejercicios cercanos a tu vida, con instrucciones claras.",
     "icon": "device-mobile",
     "image": "work-business",
     "alt": "Fotografía ilustrativa: Personas preparando pedidos junto a una computadora."

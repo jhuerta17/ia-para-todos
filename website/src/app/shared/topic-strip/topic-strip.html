@@ -7,7 +7,7 @@
   </div>
   <div class="viewport">
     <div class="track" [class.paused]="paused() || !visible() || pageHidden()">
-      <ul class="group" aria-label="Temas de aprendizaje previstos">
+      <ul class="group" aria-label="Temas de aprendizaje">
         @for (topic of topics; track topic.label) {
           <li class="topic"><app-icon [name]="topic.icon" /><span>{{ topic.label }}</span></li>
         }

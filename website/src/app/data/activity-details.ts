@@ -7,13 +7,13 @@ const practices = [
   ['Buscar señales de urgencia, promesas exageradas o remitentes desconocidos.', 'Revisar un texto o imagen ficticios sin asumir que son auténticos.', 'Elegir otra fuente o un canal conocido para verificar antes de compartir.'],
 ];
 export const activityDetails: ContentDetail[] = activities.map((activity, index) => ({
-  ...activity, status: 'Actividad prevista · Sin fecha ni sede confirmadas', parent: '/actividades', parentLabel: 'Volver a actividades',
-  facts: [{ value: activity.focus, label: 'Enfoque' }, { value: 'Guiada', label: 'Práctica prevista' }, { value: 'Teléfono', label: 'Dispositivo' }],
+  ...activity, status: 'Actividad guiada', parent: '/actividades', parentLabel: 'Volver a actividades',
+  facts: [{ value: activity.focus, label: 'Enfoque' }, { value: 'Guiada', label: 'Práctica' }, { value: 'Teléfono', label: 'Dispositivo' }],
   sections: [
-    { heading: 'Una práctica cercana a tu vida', paragraphs: [activity.summary, 'Esta propuesta forma parte de los contenidos en borrador para futuros talleres piloto. No es un evento programado ni abre una inscripción.'] },
+    { heading: 'Una práctica cercana a tu vida', paragraphs: [activity.summary, 'Forma parte de las prácticas guiadas de los talleres.'] },
     { heading: 'Lo que practicarías', bullets: practices[index], ordered: true },
-    { heading: 'Qué necesitas', paragraphs: ['Un teléfono inteligente y ganas de preguntar. Se contemplan alternativas impresas, demostraciones guiadas o trabajo en pareja si falta dispositivo, cuenta o conexión.'] },
-    { heading: 'Con datos inventados', paragraphs: ['Usaríamos nombres, mensajes y situaciones ficticios. No compartas información personal ni documentos reales en las herramientas. La propuesta de trabajo es para personas adultas.'] },
+    { heading: 'Qué necesitas', paragraphs: ['Un teléfono inteligente y ganas de preguntar. Hay alternativas impresas, demostraciones guiadas o trabajo en pareja si falta dispositivo, cuenta o conexión.'] },
+    { heading: 'Con datos inventados', paragraphs: ['Usamos nombres, mensajes y situaciones ficticios. No compartas información personal ni documentos reales en las herramientas. Esta actividad es para personas adultas.'] },
   ],
   gallery: index === 0 ? [{ image: 'guided-practice', alt: 'Escena ilustrativa de aprendizaje acompañado con una computadora.' }, { image: 'peer-support', alt: 'Escena ilustrativa de dos personas revisando apuntes.' }] : undefined,
 }));

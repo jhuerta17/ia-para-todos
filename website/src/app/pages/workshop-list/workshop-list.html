@@ -2,7 +2,7 @@
   <section class="hero" aria-labelledby="workshop-list-title">
     <div class="hero-panel">
       <img class="hero-photo" src="/images/community-group-1600.webp" srcset="/images/community-group-480.webp 480w, /images/community-group-960.webp 960w, /images/community-group-1600.webp 1600w" sizes="(max-width: 809px) 800px, 100vw" width="1600" height="1066" fetchpriority="high" alt="Fotografía ilustrativa de personas adultas reunidas alrededor de una computadora." />
-      <div class="hero-copy" appRevealOnEnter><app-icon name="calendar-event" /><h1 id="workshop-list-title">Talleres previstos</h1><p>Aprende a usar la IA en español, desde cero y con tu teléfono. Cuatro temas para practicar a tu ritmo y en comunidad.</p></div>
+      <div class="hero-copy" appRevealOnEnter><app-icon name="calendar-event" /><h1 id="workshop-list-title">Talleres</h1><p>Aprende a usar la IA en español, desde cero y con tu teléfono. Cuatro temas para practicar a tu ritmo y en comunidad.</p></div>
     </div>
   </section>
   <section class="catalog" aria-labelledby="catalog-title">
@@ -11,10 +11,10 @@
         <div class="search-field"><label for="workshop-search">Buscar talleres</label><div class="search-input"><app-icon name="search" /><input id="workshop-search" type="search" [value]="query()" (input)="search($event)" (keydown.escape)="clearSearch()" placeholder="Nombre o tema" autocomplete="off" maxlength="200" />@if (query()) {<button type="button" aria-label="Limpiar búsqueda" (click)="clearSearch()"><app-icon name="x" /></button>}</div></div>
         <fieldset><legend>Temas</legend><div class="categories">@for (topic of categories; track topic) {<button type="button" [attr.aria-pressed]="category() === topic" (click)="selectCategory(topic)">{{ topic }}</button>}</div></fieldset>
       </div>
-      <p class="results" role="status" aria-live="polite" aria-atomic="true">{{ filtered().length }} {{ filtered().length === 1 ? 'taller previsto' : 'talleres previstos' }}@if (category() !== 'Todos') { · {{ category() }} }</p>
+      <p class="results" role="status" aria-live="polite" aria-atomic="true">{{ filtered().length }} {{ filtered().length === 1 ? 'taller' : 'talleres' }}@if (category() !== 'Todos') { · {{ category() }} }</p>
       <div class="cards">@for (workshop of filtered(); track workshop.slug) {<app-workshop-card [workshop]="workshop" />}</div>
-      <p class="preparation">Contenidos en borrador, pendientes de piloto. Aún no hay fechas ni sedes confirmadas. Fotografías ilustrativas de archivo.</p>
-      @if (filtered().length === 0) {<div class="empty"><app-icon name="search" /><h3>No encontramos talleres con esos filtros</h3><p>Prueba otro nombre o tema, o vuelve a ver los cuatro talleres previstos.</p><button type="button" (click)="reset()">Restablecer búsqueda</button></div>}
+      <p class="preparation">Fotografías ilustrativas de archivo.</p>
+      @if (filtered().length === 0) {<div class="empty"><app-icon name="search" /><h3>No encontramos talleres con esos filtros</h3><p>Prueba otro nombre o tema, o vuelve a ver los cuatro talleres.</p><button type="button" (click)="reset()">Restablecer búsqueda</button></div>}
     </div>
   </section>
   <app-faq-section />

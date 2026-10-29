@@ -17,7 +17,7 @@ export class CollaborationCarousel {
     { title: 'Facilitar talleres', description: 'Explicar con palabras sencillas y guiar ejercicios paso a paso.', portrait: '01' },
     { title: 'Acompañar prácticas', description: 'Escuchar preguntas y apoyar a cada persona a su ritmo.', portrait: '02' },
     { title: 'Traducir contenidos', description: 'Ayudar a que las instrucciones sean claras y accesibles.', portrait: '03' },
-    { title: 'Compartir la iniciativa', description: 'Acercar la propuesta a vecinos, familias y espacios comunitarios.', portrait: '04' },
+    { title: 'Compartir la iniciativa', description: 'Acercar la iniciativa a vecinos, familias y espacios comunitarios.', portrait: '04' },
   ];
 
   constructor() {

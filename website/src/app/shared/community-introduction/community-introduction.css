@@ -7,7 +7,6 @@ blockquote { margin: 0 0 20px; }
 blockquote p { margin: 0; font: 400 var(--text-section)/1.4 var(--font-heading); color: var(--color-heading); }
 .signature { display: flex; align-items: center; justify-content: center; gap: 8px; font: 400 20px/1.4 var(--font-heading); }
 .signature app-brand-mark { --logo-size: 32px; }
-.status { margin: 8px 0 24px; font-size: var(--text-small); }
 .statement app-action-link { width: 260px; max-width: 100%; margin-inline: auto; --action-gap: 10px; }
 figure { min-width: 0; margin: 0; }
 .community-photo { width: 100%; aspect-ratio: 495 / 479.234; overflow: hidden; border-radius: 40px; }

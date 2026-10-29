@@ -13,7 +13,7 @@ const articles = [
     sections: [
       { heading: 'Un primer borrador para tareas cotidianas', paragraphs: ['La IA puede ayudarte a comenzar un mensaje, ordenar una lista o preparar un horario. Tú decides qué conservar, qué cambiar y qué quitar. El objetivo es apoyar tu tarea, sin reemplazar tu criterio.', 'Para practicar, inventa una situación sencilla: un aviso para un grupo de vecinos o un plan de estudio. Explica a quién va dirigido y qué tono buscas.'] },
       { heading: 'Comprueba que diga lo que tú quieres', paragraphs: ['Lee el mensaje antes de usarlo. Asegúrate de que no añada compromisos, fechas ni hechos que no escribiste. Si una traducción es importante, compárala con otra fuente o revísala con una persona que conozca ambos idiomas.'] },
-      { heading: 'Deja los documentos reales fuera de la práctica', paragraphs: ['No hace falta pegar cartas personales, recibos ni datos de tu familia para aprender. Cambia nombres, direcciones y cualquier detalle que identifique a una persona. En los talleres propuestos usaríamos ejemplos inventados.'] },
+      { heading: 'Deja los documentos reales fuera de la práctica', paragraphs: ['No hace falta pegar cartas personales, recibos ni datos de tu familia para aprender. Cambia nombres, direcciones y cualquier detalle que identifique a una persona. En los talleres usamos ejemplos inventados.'] },
     ],
     practice: 'Pide dos versiones de un mensaje ficticio: “Un grupo de vecinos quiere cambiar una reunión de las cinco a las seis. Escribe un aviso breve y amable, sin añadir más datos”. Compara las versiones y elige tus propias palabras.',
   },
@@ -29,9 +29,9 @@ const articles = [
     sections: [
       { heading: 'Conversar antes de compartir', paragraphs: ['La IA puede producir textos e imágenes convincentes que no describen algo real. Un mensaje urgente o una imagen llamativa merecen una pausa antes de reenviarlos.', 'En familia, puedes practicar con ejemplos inventados: quién envía el mensaje, qué pide, de dónde viene y cómo comprobarlo por otro medio. Una sola señal visual no basta para demostrar que algo es falso o verdadero.'] },
       { heading: 'Protege los detalles de tu familia', paragraphs: ['No subas fotos familiares, nombres de menores, escuelas, contraseñas ni documentos personales para practicar. Usa personajes y situaciones ficticios. Revisa los permisos y las opciones de privacidad de las herramientas que decidas usar.'] },
-      { heading: 'Apoya el aprendizaje sin reemplazarlo', paragraphs: ['Para una actividad escolar ficticia, pide pistas o preguntas en vez de una respuesta para copiar. Habla sobre el razonamiento y contrasta los datos con el material educativo. El taller propuesto para padres y familias está dirigido a personas adultas.'] },
+      { heading: 'Apoya el aprendizaje sin reemplazarlo', paragraphs: ['Para una actividad escolar ficticia, pide pistas o preguntas en vez de una respuesta para copiar. Habla sobre el razonamiento y contrasta los datos con el material educativo. El taller para padres y familias está dirigido a personas adultas.'] },
     ],
     practice: 'Inventa un mensaje que anuncie un premio inesperado y pida actuar de inmediato. Sin abrir enlaces ni usar datos reales, anota qué te hace dudar y qué canal conocido consultarías para verificarlo.',
   },
 ];
-export const resourceDetails: ContentDetail[] = resources.map((resource, index) => ({ ...resource, status: 'Recurso en borrador · Pendiente de revisión', parent: '/recursos', parentLabel: 'Volver a recursos', ...articles[index] }));
+export const resourceDetails: ContentDetail[] = resources.map((resource, index) => ({ ...resource, status: 'Recurso educativo', parent: '/recursos', parentLabel: 'Volver a recursos', ...articles[index] }));

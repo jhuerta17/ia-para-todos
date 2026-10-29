@@ -38,7 +38,7 @@ export class SiteHeader {
     { path: '/actividades', label: 'Actividades' },
     { path: '/historias', label: 'Historias' },
     { path: '/privacidad', label: 'Privacidad' },
-    { path: '/terminos', label: 'Términos' },
+    { path: '/terminos', label: 'Acerca de' },
     { path: '/seguridad', label: 'Seguridad' },
   ];
   protected readonly mobileLinks = [this.explore[0], ...this.primary, ...this.explore.slice(1), { path: '/contacto', label: 'Contacto' }];

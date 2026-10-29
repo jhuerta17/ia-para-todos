@@ -1,9 +1,9 @@
-<div class="carousel" role="region" aria-label="Roles de colaboración propuestos" aria-roledescription="carrusel">
-  <ul #track class="track" tabindex="0" aria-label="Cuatro roles propuestos. Usa las flechas del teclado o desliza para explorar. Inicio y Fin van a los extremos." (scroll)="updateEdges()" (keydown)="onKeydown($event)">
+<div class="carousel" role="region" aria-label="Roles de colaboración" aria-roledescription="carrusel">
+  <ul #track class="track" tabindex="0" aria-label="Cuatro roles. Usa las flechas del teclado o desliza para explorar. Inicio y Fin van a los extremos." (scroll)="updateEdges()" (keydown)="onKeydown($event)">
     @for (role of roles; track role.title) {
       <li>
         <div class="portrait"><img [src]="'/images/portrait-' + role.portrait + '-256.webp'" alt="" width="256" height="256" loading="lazy" /></div>
-        <div class="copy"><p class="eyebrow">Rol propuesto</p><h4>{{ role.title }}</h4><p>{{ role.description }}</p></div>
+        <div class="copy"><p class="eyebrow">Rol</p><h4>{{ role.title }}</h4><p>{{ role.description }}</p></div>
       </li>
     }
   </ul>

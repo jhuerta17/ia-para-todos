@@ -10,14 +10,14 @@ export class RouteMetadata {
   private readonly meta = inject(Meta);
   private readonly router = inject(Router);
   private readonly descriptions: Record<string, string> = {
-    '': 'Iniciativa comunitaria en preparación: talleres gratuitos en español para aprender inteligencia artificial desde cero, con tu teléfono.',
-    talleres: 'Explora cuatro talleres previstos de IA en español: primeros pasos, vida diaria, trabajo y negocios, y padres y familias. Borradores pendientes de piloto.',
-    nosotros: 'Conoce la misión, el enfoque comunitario y la etapa exploratoria de IA para todos, una iniciativa educativa en español.',
-    comunidad: 'Descubre formas propuestas de colaborar con IA para todos. Roles aún por definir y formulario de demostración local.',
-    participar: 'Prueba la demostración local de participación con datos inventados. No envía información ni abre una inscripción.',
+    '': 'Iniciativa comunitaria: talleres gratuitos en español para aprender inteligencia artificial desde cero, con tu teléfono.',
+    talleres: 'Cuatro talleres de IA en español: primeros pasos, vida diaria, trabajo y negocios, y padres y familias.',
+    nosotros: 'Conoce la misión y el enfoque comunitario de IA para todos, una iniciativa educativa en español.',
+    comunidad: 'Formas de colaborar con IA para todos: facilitación, acompañamiento, traducción y difusión.',
+    participar: 'Explora cómo participar en los talleres de IA para todos. El formulario es una práctica local con datos inventados.',
     historias: 'Cinco escenarios de aprendizaje inventados para imaginar cómo practicar con IA. Ejemplos ilustrativos, no testimonios.',
-    contacto: 'Consulta el estado de los canales de contacto de IA para todos y su enfoque previsto en Dallas–Fort Worth.',
-    '**': 'No encontramos esa página. Vuelve al inicio o explora los talleres previstos de IA para todos.',
+    contacto: 'Contacto de IA para todos, iniciativa educativa en español en Dallas–Fort Worth.',
+    '**': 'No encontramos esa página. Vuelve al inicio o explora los talleres de IA para todos.',
   };
 
   update(): void {

@@ -14,12 +14,12 @@ const curriculum = {
         "heading": "Qué necesitas",
         "bullets": [
           "Ninguno obligatorio. Ideal: saber abrir el navegador o una aplicación en el teléfono.",
-          "Quienes necesiten ayuda con lo básico del teléfono pueden tomar primero la orientación de habilidades digitales (propuesta, aún no creada).",
-          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, se contempla una demostración guiada, trabajo en pareja o material impreso."
+          "Quienes necesiten ayuda con lo básico del teléfono pueden tomar primero la orientación de habilidades digitales.",
+          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, hay demostración guiada, trabajo en pareja o material impreso."
         ]
       },
       {
-        "heading": "Objetivos propuestos",
+        "heading": "Objetivos",
         "ordered": true,
         "bullets": [
           "Explicar con sus palabras qué es la inteligencia artificial y qué es la IA generativa.",
@@ -33,7 +33,7 @@ const curriculum = {
       {
         "heading": "Privacidad en cada práctica",
         "paragraphs": [
-          "Los ejercicios propuestos usan datos ficticios. Nunca se pediría información personal, médica, financiera, migratoria o legal real. La retroalimentación prevista es anónima."
+          "Los ejercicios usan datos ficticios. Nunca se pide información personal, médica, financiera, migratoria o legal real. La retroalimentación es anónima."
         ]
       }
     ],
@@ -81,11 +81,11 @@ const curriculum = {
         "bullets": [
           "Recomendado: Taller 1 (o saber qué es un prompt y cómo abrir una herramienta gratuita de IA).",
           "Saber abrir el navegador o una aplicación en el teléfono (con apoyo de parejas y asistentes).",
-          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, se contempla una demostración guiada, trabajo en pareja o material impreso."
+          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, hay demostración guiada, trabajo en pareja o material impreso."
         ]
       },
       {
-        "heading": "Objetivos propuestos",
+        "heading": "Objetivos",
         "ordered": true,
         "bullets": [
           "Redactar con ayuda de la IA un mensaje o correo claro y educado.",
@@ -100,7 +100,7 @@ const curriculum = {
       {
         "heading": "Privacidad en cada práctica",
         "paragraphs": [
-          "Los ejercicios propuestos usan datos ficticios. Nunca se pediría información personal, médica, financiera, migratoria o legal real. La retroalimentación prevista es anónima."
+          "Los ejercicios usan datos ficticios. Nunca se pide información personal, médica, financiera, migratoria o legal real. La retroalimentación es anónima."
         ]
       }
     ],
@@ -148,12 +148,12 @@ const curriculum = {
         "bullets": [
           "Recomendado: Taller 1 (prompts básicos, alucinaciones, privacidad).",
           "Saber abrir el navegador o una aplicación en el teléfono (con apoyo de parejas y asistentes).",
-          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, se contempla una demostración guiada, trabajo en pareja o material impreso.",
+          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, hay demostración guiada, trabajo en pareja o material impreso.",
           "Aclaración honesta desde el inicio: este taller no ofrece empleo, certificación ni clientes; enseña a usar una herramienta."
         ]
       },
       {
-        "heading": "Objetivos propuestos",
+        "heading": "Objetivos",
         "ordered": true,
         "bullets": [
           "Crear con la IA un borrador de currículum ordenado usando información general (sin datos sensibles reales).",
@@ -167,7 +167,7 @@ const curriculum = {
       {
         "heading": "Privacidad en cada práctica",
         "paragraphs": [
-          "Los ejercicios propuestos usan datos ficticios. Nunca se pediría información personal, médica, financiera, migratoria o legal real. La retroalimentación prevista es anónima."
+          "Los ejercicios usan datos ficticios. Nunca se pide información personal, médica, financiera, migratoria o legal real. La retroalimentación es anónima."
         ]
       }
     ],
@@ -215,12 +215,12 @@ const curriculum = {
         "bullets": [
           "Ninguno obligatorio; recomendado: Taller 1 (o el repaso de 10 minutos incluido aquí).",
           "Saber abrir el navegador o una aplicación en el teléfono (con apoyo de parejas y asistentes).",
-          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, se contempla una demostración guiada, trabajo en pareja o material impreso.",
+          "No se necesita computadora ni cuenta de IA. Si falta una cuenta o internet, hay demostración guiada, trabajo en pareja o material impreso.",
           "Nota: este taller es para adultos. No se recomienda traer niñas o niños como participantes; los ejemplos sobre menores usan casos ficticios."
         ]
       },
       {
-        "heading": "Objetivos propuestos",
+        "heading": "Objetivos",
         "ordered": true,
         "bullets": [
           "Explicar cómo la IA está cambiando la educación y las tareas escolares.",
@@ -235,7 +235,7 @@ const curriculum = {
       {
         "heading": "Privacidad en cada práctica",
         "paragraphs": [
-          "Los ejercicios propuestos usan datos ficticios. Nunca se pediría información personal, médica, financiera, migratoria o legal real. La retroalimentación prevista es anónima."
+          "Los ejercicios usan datos ficticios. Nunca se pide información personal, médica, financiera, migratoria o legal real. La retroalimentación es anónima."
         ]
       }
     ],
@@ -272,4 +272,4 @@ const curriculum = {
   }
 };
 
-export const workshopDetails: ContentDetail[] = workshops.map(workshop => ({ ...workshop, status: 'Borrador pendiente de piloto', parent: '/talleres', parentLabel: 'Volver a talleres', facts: [{ value: '90–120 min', label: 'Duración propuesta' }, { value: 'Teléfono', label: 'Dispositivo previsto' }], ...curriculum[workshop.slug as keyof typeof curriculum] }));
+export const workshopDetails: ContentDetail[] = workshops.map(workshop => ({ ...workshop, status: 'Taller gratuito', parent: '/talleres', parentLabel: 'Volver a talleres', facts: [{ value: '90–120 min', label: 'Duración' }, { value: 'Teléfono', label: 'Dispositivo' }], ...curriculum[workshop.slug as keyof typeof curriculum] }));

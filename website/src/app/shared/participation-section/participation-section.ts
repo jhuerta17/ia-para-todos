@@ -11,13 +11,13 @@ export class ParticipationSection {
   readonly context = input<'workshops' | 'community'>('workshops');
   protected readonly choices = computed(() => this.context() === 'community' ? ['Facilitar talleres', 'Acompañar prácticas', 'Traducir contenidos', 'Compartir la iniciativa'] : ['Introducción a la IA', 'Vida diaria', 'Trabajo y negocios', 'Padres y familias']);
   protected readonly steps = computed<{ title: string; text: string; icon: IconName }[]>(() => this.context() === 'community' ? [
-    { title: 'Imagina cómo ayudar', text: 'Facilitación, acompañamiento, traducción o difusión: roles aún por definir.', icon: 'users' },
+    { title: 'Imagina cómo ayudar', text: 'Facilitación, acompañamiento, traducción o difusión: elige el tuyo en el formulario.', icon: 'users' },
     { title: 'Prueba el formulario', text: 'Usa solo datos inventados; no es una solicitud de voluntariado real.', icon: 'pencil' },
     { title: 'Revisa el aviso', text: 'Nada se envía ni se guarda, y no te registra como colaborador.', icon: 'shield-check' },
   ] : [
     { title: 'Elige tu interés', text: 'Explora los cuatro temas y elige lo que te gustaría practicar.', icon: 'book' },
     { title: 'Usa datos de prueba', text: 'Completa esta práctica con información inventada, nunca real.', icon: 'pencil' },
-    { title: 'Revisa la demostración', text: 'Nada se envía, se guarda ni te registra en un taller.', icon: 'shield-check' },
+    { title: 'Revisa el aviso', text: 'Nada se envía, se guarda ni te registra en un taller.', icon: 'shield-check' },
   ]);
   protected readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S/)] }),
