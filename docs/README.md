@@ -14,7 +14,7 @@ Welcome to the IA Para Todos documentation. The repository is in **Part 2 of a s
 | `safety/` | Planned — responsible AI, privacy, safeguarding, accessibility |
 | `brand/` | Planned — brand, voice-and-tone, and messaging guidelines |
 
-Top-level companions (outside `docs/`): `workshops/` (curricula), `templates/`, `assets/`, `scripts/`, `.github/` — all planned in later phases.
+Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/`, `assets/`, `scripts/`, `.github/` (planned in later phases).
 
 ## Documentation conventions
 
