@@ -1,0 +1,42 @@
+:host { display: block; padding: 100px 40px 80px; }
+section { max-width: 1040px; margin-inline: auto; }
+.collage { position: relative; display: grid; place-items: center; min-height: 900px; }
+.invitation-copy { position: relative; z-index: 1; width: 350px; max-width: 100%; text-align: center; }
+h2 { font-size: 32px; }
+p { margin: 16px 0; font-size: 20px; line-height: 1.5; }
+.status { font-size: 14px; line-height: 1.6; }
+app-action-link { display: block; width: 174px; margin: 20px auto 0; }
+.photographs { position: absolute; inset: 0; pointer-events: none; }
+.photo { position: absolute; width: 176px; height: 176px; border-radius: 30px; object-fit: cover; }
+.photo-0 { width: 123px; height: 123px; left: calc(50% - 274px); top: 80px; }
+.photo-1 { left: calc(50% - 88px); top: 0; }
+.photo-2 { width: 123px; height: 123px; right: calc(50% - 304px); top: 80px; }
+.photo-3 { left: calc(50% - 394px); top: 280px; }
+.photo-4 { right: calc(50% - 394px); top: 280px; }
+.photo-5 { width: 123px; height: 123px; left: calc(50% - 274px); bottom: 100px; }
+.photo-6 { width: 123px; height: 123px; right: calc(50% - 304px); bottom: 100px; }
+.photo-7 { left: calc(50% - 88px); bottom: 0; }
+.caption { margin: 24px 0 0; font-size: 12px; text-align: center; }
+@media (max-width: 809px) {
+  :host { padding: 60px 20px; }
+  .collage { min-height: 960px; }
+  .invitation-copy { width: 290px; }
+  h2 { font-size: 28px; }
+  p { font-size: 17px; }
+  .photo { width: 100px; height: 100px; border-radius: 20px; }
+  .photo-0 { width: 70px; height: 70px; left: 0; top: 100px; }
+  .photo-1 { left: calc(50% - 50px); top: 0; }
+  .photo-2 { width: 70px; height: 70px; right: 0; top: 100px; }
+  .photo-3 { left: 0; top: 180px; width: 60px; height: 60px; }
+  .photo-4 { right: 0; top: 180px; width: 60px; height: 60px; }
+  .photo-5 { width: 70px; height: 70px; left: 0; bottom: 100px; }
+  .photo-6 { width: 70px; height: 70px; right: 0; bottom: 100px; }
+  .photo-7 { left: calc(50% - 50px); bottom: 0; }
+}
+@media print { :host { padding-block: 40px; } .collage { min-height: 0; } .photographs { display: none; } }
+@media (min-width: 600px) and (max-width: 809px) {
+  .photo-0, .photo-5 { left: calc(50% - 220px); }
+  .photo-2, .photo-6 { right: calc(50% - 220px); }
+  .photo-3 { left: calc(50% - 285px); top: 360px; width: 100px; height: 100px; }
+  .photo-4 { right: calc(50% - 285px); top: 360px; width: 100px; height: 100px; }
+}

@@ -1,0 +1,16 @@
+<section aria-labelledby="community-invitation-title">
+  <div class="collage">
+    <div class="photographs" aria-hidden="true">
+      @for (photograph of photographs; track photograph; let index = $index) {
+        <img [class]="'photo photo-' + index" [src]="'/images/' + photograph + '-480.webp'" alt="" width="480" height="480" loading="lazy" />
+      }
+    </div>
+    <div class="invitation-copy">
+      <h2 id="community-invitation-title">Ven como eres; aquí se aprende con calma.</h2>
+      <p>Si hablas español y tienes curiosidad, este lugar es para ti. Queremos crear un espacio abierto a todas las personas, sin importar sus creencias.</p>
+      <p class="status">La iniciativa está en preparación; aún no hay talleres programados.</p>
+      <app-action-link to="/participar" label="Participar" />
+    </div>
+  </div>
+  <p class="caption">Fotografías ilustrativas de archivo.</p>
+</section>
