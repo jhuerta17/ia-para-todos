@@ -1,3 +1,4 @@
+import { SiteFooter } from './shared/site-footer/site-footer';
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, Component, inject, Injector } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
@@ -5,7 +6,7 @@ import { SiteHeader } from './shared/site-header/site-header';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeader],
+  imports: [RouterOutlet, SiteHeader, SiteFooter],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
