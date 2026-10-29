@@ -1,0 +1,48 @@
+<header class="site-header" [class.expanded]="expanded()">
+  <a class="brand" routerLink="/" aria-label="IA para todos, inicio">
+    <app-logo-placeholder />
+    <span>IA para todos</span>
+  </a>
+  <nav class="desktop-nav" aria-label="Navegación principal">
+    <div class="disclosure" (mouseenter)="hoverDisclosure('explore', exploreToggle)" (mouseleave)="disclosure.set(null)" (focusout)="leaveDisclosure($event)">
+      <button #exploreToggle type="button" aria-controls="explore-links" [attr.aria-expanded]="disclosure() === 'explore'" (click)="toggleDisclosure('explore', exploreToggle)">
+        Explorar <app-icon name="chevron-down" />
+      </button>
+      <div id="explore-links" class="dropdown" [class.open]="disclosure() === 'explore'" [attr.inert]="disclosure() !== 'explore' ? '' : null">
+        @for (link of explore; track link.path) {
+          <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">{{ link.label }}</a>
+        }
+      </div>
+    </div>
+    @for (link of primary; track link.path) {
+      <a [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page">{{ link.label }}</a>
+    }
+    <div class="disclosure" (mouseenter)="hoverDisclosure('contact', contactToggle)" (mouseleave)="disclosure.set(null)" (focusout)="leaveDisclosure($event)">
+      <button #contactToggle type="button" aria-controls="contact-panel" [attr.aria-expanded]="disclosure() === 'contact'" (click)="toggleDisclosure('contact', contactToggle)">
+        Contacto <app-icon name="chevron-down" />
+      </button>
+      <div id="contact-panel" class="dropdown contact-panel" [class.open]="disclosure() === 'contact'" [attr.inert]="disclosure() !== 'contact' ? '' : null">
+        <p>Estamos preparando nuestros canales de contacto.</p>
+        <span><app-icon name="mail" /> Correo aún no disponible</span>
+        <span><app-icon name="phone" /> Teléfono aún no disponible</span>
+        <a routerLink="/contacto">Ver contacto <app-icon name="arrow-up-right" /></a>
+      </div>
+    </div>
+    @if (!participationPage()) {
+      <app-action-link to="/participar" label="Participar" />
+    }
+  </nav>
+  <button #mobileToggle class="mobile-toggle" type="button" [attr.aria-label]="expanded() ? 'Cerrar navegación' : 'Abrir navegación'" aria-controls="mobile-links" [attr.aria-expanded]="expanded()" (click)="toggleMobile()">
+    <app-icon [name]="expanded() ? 'x' : 'menu-2'" />
+  </button>
+  <div id="mobile-links" class="mobile-panel" [class.open]="expanded()" [attr.inert]="!expanded() ? '' : null">
+    <nav aria-label="Navegación móvil">
+      @for (link of mobileLinks; track link.path) {
+        <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="dismiss()">{{ link.label }}</a>
+      }
+      @if (!participationPage()) {
+        <app-action-link to="/participar" label="Participar" tone="warm" (click)="dismiss()" />
+      }
+    </nav>
+  </div>
+</header>
