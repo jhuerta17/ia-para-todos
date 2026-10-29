@@ -3,7 +3,7 @@
   <div class="carousel" role="region" aria-label="Ejemplos de aprendizaje" aria-roledescription="carrusel" tabindex="0" (keydown)="onKey($event)" (touchstart)="start($event)" (touchend)="end($event)">
     @for (story of stories; track story.title; let index = $index) {
       <article [class.current]="active() === index" [style.--position]="position(index)" [attr.aria-hidden]="active() !== index" [attr.inert]="active() !== index ? '' : null">
-        <img [src]="'/images/' + story.image + '-960.webp'" alt="" width="960" height="640" loading="lazy" />
+        <img [src]="'/images/' + story.image + '-960.webp'" alt="" width="960" height="640" [loading]="pageHeading() && active() === index ? 'eager' : 'lazy'" [attr.fetchpriority]="pageHeading() && active() === index ? 'high' : null" />
         <div class="copy"><span>Ejemplo ilustrativo · {{ index + 1 }} de 5</span><h3>{{ story.title }}</h3><p>{{ story.text }}</p></div>
       </article>
     }
