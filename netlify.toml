@@ -1,5 +1,7 @@
 # Netlify configuration for the IA Para Todos website.
 # App source lives in website/; Netlify builds and publishes from there.
+# The Angular build prerenders every public route to static HTML, so no
+# SPA fallback is used: unknown paths serve 404.html with a real 404.
 
 [build]
   base = "website"
@@ -10,8 +12,18 @@
   NODE_VERSION = "24.16.0"
   NPM_FLAGS = "--no-audit --no-fund"
 
-# Single-page application fallback: serve index.html for client-side routes.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
+    X-Frame-Options = "DENY"
+
+# Custom 404: Netlify serves existing prerendered files first (no force),
+# so this only catches unknown paths. 404.html is the client shell, which
+# boots the branded Angular recovery page for visitors with JavaScript.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
-  status = 200
+  to = "/404.html"
+  status = 404

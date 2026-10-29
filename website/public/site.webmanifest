@@ -1,0 +1,23 @@
+{
+  "name": "IA para todos",
+  "short_name": "IA para todos",
+  "description": "Talleres gratuitos en español para aprender inteligencia artificial desde cero.",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#4a1c00",
+  "background_color": "#f8f4ec",
+  "icons": [
+    {
+      "src": "/images/brand/ia-para-todos-symbol-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/brand/ia-para-todos-symbol-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
