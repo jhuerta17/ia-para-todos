@@ -1,3 +1,5 @@
+import { ContentDetail } from './pages/content-detail/content-detail';
+import { workshopDetails } from './data/workshop-details';
 import { WorkshopList } from './pages/workshop-list/workshop-list';
 import { resources } from './data/resources';
 import { Routes } from '@angular/router';
@@ -26,10 +28,7 @@ export const routes: Routes = [
     path, component: PagePreview, title: `${heading} · IA para todos`,
     data: { heading, description },
   })),
-  ...workshops.map(workshop => ({
-    path: `talleres/${workshop.slug}`, component: PagePreview, title: `${workshop.title} · IA para todos`,
-    data: { heading: workshop.title, description: `${workshop.summary} Contenido en borrador, pendiente de piloto. La duración propuesta es de 90–120 minutos, con práctica guiada y sin herramientas de pago. Aún no hay sesiones programadas.` },
-  })),
+  ...workshops.map((workshop, index) => ({ path: `talleres/${workshop.slug}`, component: ContentDetail, title: `${workshop.title} · IA para todos`, data: { detail: workshopDetails[index] } })),
   ...activities.map(activity => ({
     path: `actividades/${activity.slug}`, component: PagePreview, title: `${activity.title} · IA para todos`,
     data: { heading: activity.title, description: `${activity.summary} Es una actividad prevista para futuros talleres piloto, sin fechas ni sedes confirmadas. Las prácticas usarían datos ficticios para cuidar la privacidad.` },
