@@ -1,12 +1,1 @@
 :host { display: block; }
-
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-md);
-  min-height: 100svh;
-  padding: var(--space-lg);
-}
-
-h1 { font-size: var(--text-section); }

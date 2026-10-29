@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { LogoPlaceholder } from './shared/logo-placeholder';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [LogoPlaceholder],
+  imports: [RouterOutlet],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
