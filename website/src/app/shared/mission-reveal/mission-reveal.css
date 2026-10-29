@@ -1,0 +1,38 @@
+:host { display: block; }
+section { --sticky-top: 270px; position: relative; height: 2608px; padding: 100px 50px 250px; }
+.scroll-space { height: 100%; }
+.statement { position: sticky; top: var(--sticky-top); max-width: 886px; margin-inline: auto; }
+.statement p { margin: 0; color: var(--color-heading); font: 400 30.08px/56.16px var(--font-heading); }
+.token { display: inline-block; vertical-align: middle; }
+.animated .token { opacity: calc(.2 + .8 * var(--reveal)); filter: blur(calc(2px * (1 - var(--reveal)))); }
+.token app-logo-placeholder { --logo-size: 48px; margin: 0 4px; }
+.portraits { display: inline-flex; vertical-align: middle; }
+.portraits img { width: 40px; height: 44px; border: 1px solid white; border-radius: 14px; object-fit: cover; object-position: 50% 35%; box-shadow: var(--shadow-card); }
+.portraits img + img { margin-left: -3px; }
+.community-photo { display: inline-block; width: 166px; height: 110px; object-fit: cover; border-radius: 16px; box-shadow: var(--shadow-card); }
+.project-status { position: absolute; bottom: 70px; left: 50%; transform: translateX(-50%); width: calc(100% - 100px); max-width: 886px; margin: 0; color: var(--color-text); font-size: var(--text-small); line-height: 1.7; }
+section.unpinned { height: auto; padding-block: 80px; }
+.unpinned .scroll-space { height: auto; }
+.unpinned .statement { position: static; }
+.unpinned .project-status { position: static; transform: none; width: 100%; margin: 32px auto 0; }
+@media (max-width: 809px) {
+  section { --sticky-top: 160px; height: 1732.25px; padding: 50px 50px 276px; }
+  .statement, .project-status { max-width: 290px; }
+  .statement p { font-size: 22.08px; line-height: 44.16px; }
+  .community-photo { width: 100px; height: 66px; }
+  .project-status { bottom: 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  section { height: auto; padding-block: 80px; }
+  .scroll-space { height: auto; }
+  .statement { position: static; }
+  .animated .token { opacity: 1; filter: none; }
+  .project-status { position: static; transform: none; width: 100%; margin: 32px auto 0; }
+}
+@media print {
+  section { height: auto; padding-block: 32px; }
+  .scroll-space { height: auto; }
+  .statement { position: static; }
+  .animated .token { opacity: 1; filter: none; }
+  .project-status { position: static; transform: none; width: 100%; margin: 32px auto 0; }
+}

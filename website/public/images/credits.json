@@ -54,5 +54,47 @@
       "y": 50
     },
     "illustrative": true
+  },
+  {
+    "key": "portrait-01",
+    "id": "2362887",
+    "source": "https://www.pexels.com/photo/portrait-photo-of-woman-smiling-2362887/",
+    "photographer": "nappy",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
+    "focalPoint": {
+      "x": 50,
+      "y": 35
+    },
+    "illustrative": true
+  },
+  {
+    "key": "portrait-02",
+    "id": "12311528",
+    "source": "https://www.pexels.com/photo/portrait-of-smiling-man-12311528/",
+    "photographer": "Joseph Eulo",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
+    "focalPoint": {
+      "x": 50,
+      "y": 35
+    },
+    "illustrative": true
+  },
+  {
+    "key": "portrait-03",
+    "id": "20603347",
+    "source": "https://www.pexels.com/photo/portrait-of-smiling-woman-20603347/",
+    "photographer": "BYB BYB",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
+    "focalPoint": {
+      "x": 50,
+      "y": 35
+    },
+    "illustrative": true
   }
 ]
