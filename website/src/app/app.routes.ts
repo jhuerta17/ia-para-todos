@@ -1,3 +1,4 @@
+import { WorkshopList } from './pages/workshop-list/workshop-list';
 import { resources } from './data/resources';
 import { Routes } from '@angular/router';
 import { activities } from './data/activities';
@@ -7,7 +8,6 @@ import { PagePreview } from './pages/page-preview';
 
 const pages = [
   ['nosotros', 'Nosotros', 'Queremos acercar la inteligencia artificial a las comunidades mediante talleres gratuitos y prácticos en español. La iniciativa está en etapa exploratoria.'],
-  ['talleres', 'Talleres previstos', 'Cuatro temas para aprender desde cero: primeros pasos, vida diaria, trabajo y negocios, y padres y familias. Los contenidos están en borrador, pendientes de piloto.'],
   ['recursos', 'Recursos para aprender', 'Estamos preparando guías sencillas para practicar, cuidar tus datos y verificar las respuestas de la inteligencia artificial.'],
   ['comunidad', 'Aprender en comunidad', 'Estamos explorando formas de colaborar y acompañar a quienes quieren aprender. Aún no contamos con alianzas formales.'],
   ['actividades', 'Actividades previstas', 'Prácticas guiadas con ejemplos de la vida diaria. Son propuestas para futuros talleres, sin fechas ni sedes confirmadas.'],
@@ -21,6 +21,7 @@ const pages = [
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'IA para todos' },
+  { path: 'talleres', component: WorkshopList, title: 'Talleres previstos · IA para todos' },
   ...pages.map(([path, heading, description]) => ({
     path, component: PagePreview, title: `${heading} · IA para todos`,
     data: { heading, description },
