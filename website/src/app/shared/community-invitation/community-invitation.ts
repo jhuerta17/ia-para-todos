@@ -1,6 +1,13 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ActionLink } from '../action-link';
+import { Language } from '../../i18n/language';
+import { PHOTO_NOTE } from '../../i18n/lang';
+
+const text = {
+  es: { heading: 'Ven como eres; aquí se aprende con calma.', lead: 'Si hablas español y tienes curiosidad, este lugar es para ti. Queremos crear un espacio abierto a todas las personas, sin importar sus creencias.', participate: 'Participar' },
+  en: { heading: 'Come as you are; here we learn calmly.', lead: 'If you speak Spanish and are curious, this place is for you. We want to create a space open to everyone, whatever their beliefs.', participate: 'Participate' },
+};
 
 @Component({
   selector: 'app-community-invitation',
@@ -16,6 +23,9 @@ export class CommunityInvitation {
   private readonly copy = viewChild.required<ElementRef<HTMLElement>>('copy');
   protected readonly moving = signal(false);
   protected readonly spread = signal(1);
+  private readonly language = inject(Language);
+  protected readonly c = computed(() => text[this.language.lang()]);
+  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
 
   constructor() {
     afterNextRender(() => {

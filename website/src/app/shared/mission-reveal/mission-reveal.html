@@ -1,20 +1,20 @@
-<section #section aria-label="Nuestra misión" [class.animated]="animated()" [class.unpinned]="unpinned()">
+<section #section [attr.aria-label]="c().mission" [class.animated]="animated()" [class.unpinned]="unpinned()">
   <div class="scroll-space">
     <div #statement class="statement">
       <p>
-        @for (token of tokens; track $index) {
+        @for (token of tokens(); track $index) {
           <span class="token" [class.word]="token.kind === 'word'" [style.--reveal]="reveal($index)">
             @switch (token.kind) {
               @case ('word') { {{ token.text }} }
               @case ('logo') { <app-brand-mark /> }
               @case ('portraits') {
-                <span class="portraits" role="img" aria-label="Retratos ilustrativos de archivo">
+                <span class="portraits" role="img" [attr.aria-label]="c().portraits">
                   <img src="/images/portrait-01-96.webp" alt="" width="40" height="44" loading="lazy" />
                   <img src="/images/portrait-02-96.webp" alt="" width="40" height="44" loading="lazy" />
                   <img src="/images/portrait-03-96.webp" alt="" width="40" height="44" loading="lazy" />
                 </span>
               }
-              @case ('photo') { <img class="community-photo" src="/images/community-group-480.webp" alt="Fotografía ilustrativa de personas adultas alrededor de una computadora." width="166" height="110" loading="lazy" /> }
+              @case ('photo') { <img class="community-photo" src="/images/community-group-480.webp" [alt]="c().photo" width="166" height="110" loading="lazy" /> }
             }
           </span>{{ ' ' }}
         }

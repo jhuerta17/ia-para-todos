@@ -1,9 +1,11 @@
 import { RouteMetadata } from './shared/metadata/route-metadata';
 import { SiteFooter } from './shared/site-footer/site-footer';
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, Component, inject, Injector } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { afterNextRender, Component, computed, inject, Injector } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { SiteHeader } from './shared/site-header/site-header';
+import { Language } from './i18n/language';
+import { Lang } from './i18n/lang';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +18,17 @@ export class App {
   private readonly injector = inject(Injector);
   private initialActivation = true;
   private readonly metadata = inject(RouteMetadata);
+  private readonly router = inject(Router);
+  private readonly language = inject(Language);
+  protected readonly skipLabel = computed(() => this.language.lang() === 'es' ? 'Saltar al contenido' : 'Skip to content');
+
+  private routeLanguage(): Lang {
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    const lang = route.data['lang'] as Lang | undefined;
+    if (lang === 'es' || lang === 'en') return lang;
+    return this.router.url.split(/[?#]/)[0].startsWith('/en') ? 'en' : 'es';
+  }
 
   protected skipToContent(event: Event): void {
     event.preventDefault();
@@ -25,6 +38,7 @@ export class App {
   }
 
   protected onPageActivated(): void {
+    this.language.set(this.routeLanguage());
     this.metadata.update();
     if (this.initialActivation) {
       this.initialActivation = false;

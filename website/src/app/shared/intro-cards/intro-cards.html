@@ -1,11 +1,11 @@
-        <ul class="intro-cards" aria-label="Temas de talleres">
-          @for (item of introductions; track item.image) {
+        <ul class="intro-cards" [attr.aria-label]="c().list">
+          @for (item of introductions(); track item.image) {
             <li>
-              <a class="intro-card" routerLink="/talleres">
+              <a class="intro-card" [routerLink]="language.path('talleres')">
                 <span class="card-media"><img [src]="'/images/' + item.image + '-480.webp'" [alt]="item.alt" width="480" height="320" /></span>
                 <div class="card-copy">
                   <h2>{{ item.title }}</h2>
-                  <div class="card-bottom"><span>Taller</span><app-icon name="arrow-right" /></div>
+                  <div class="card-bottom"><span>{{ c().kind }}</span><app-icon name="arrow-right" /></div>
                 </div>
               </a>
             </li>

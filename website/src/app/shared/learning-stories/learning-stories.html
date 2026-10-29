@@ -1,14 +1,14 @@
 <section aria-labelledby="stories-title">
-  <header appRevealOnEnter>@if (pageHeading()) {<h1 id="stories-title">Historias ilustrativas</h1>} @else {<h2 id="stories-title">Cómo podría ayudarte la IA</h2>}<p>Ejemplos inventados para imaginar lo que podrías practicar. No son testimonios ni describen resultados reales.</p></header>
-  <div class="carousel" role="region" aria-label="Ejemplos de aprendizaje" aria-roledescription="carrusel" tabindex="0" (keydown)="onKey($event)" (touchstart)="start($event)" (touchend)="end($event)">
-    @for (story of stories; track story.title; let index = $index) {
+  <header appRevealOnEnter>@if (pageHeading()) {<h1 id="stories-title">{{ c().pageTitle }}</h1>} @else {<h2 id="stories-title">{{ c().sectionTitle }}</h2>}<p>{{ c().lead }}</p></header>
+  <div class="carousel" role="region" [attr.aria-label]="c().region" [attr.aria-roledescription]="c().carousel" tabindex="0" (keydown)="onKey($event)" (touchstart)="start($event)" (touchend)="end($event)">
+    @for (story of stories(); track story.title; let index = $index) {
       <article [class.current]="active() === index" [style.--position]="position(index)" [attr.aria-hidden]="active() !== index" [attr.inert]="active() !== index ? '' : null">
         <img [src]="'/images/' + story.image + '-960.webp'" alt="" width="960" height="640" [loading]="pageHeading() && active() === index ? 'eager' : 'lazy'" [attr.fetchpriority]="pageHeading() && active() === index ? 'high' : null" />
-        <div class="copy"><span>Ejemplo ilustrativo · {{ index + 1 }} de 5</span><h3>{{ story.title }}</h3><p>{{ story.text }}</p></div>
+        <div class="copy"><span>{{ c().badge }} · {{ index + 1 }} {{ c().of }} 5</span><h3>{{ story.title }}</h3><p>{{ story.text }}</p></div>
       </article>
     }
   </div>
-  <div class="controls"><button type="button" aria-label="Ejemplo anterior" (click)="move(-1)"><app-icon name="arrow-left" /></button><div class="dots">@for (story of stories; track story.title; let index = $index) {<button type="button" [attr.aria-label]="'Mostrar ejemplo ' + (index + 1) + ': ' + story.title" [attr.aria-current]="active() === index ? 'true' : null" (click)="active.set(index)"><span></span></button>}</div><button type="button" aria-label="Ejemplo siguiente" (click)="move(1)"><app-icon name="arrow-right" /></button></div>
-  <p class="announcement" aria-live="polite" aria-atomic="true">Ejemplo {{ active() + 1 }} de 5: {{ stories[active()].title }}.</p>
-  <p class="caption">Fotografías ilustrativas de archivo.</p>
+  <div class="controls"><button type="button" [attr.aria-label]="c().prev" (click)="move(-1)"><app-icon name="arrow-left" /></button><div class="dots">@for (story of stories(); track story.title; let index = $index) {<button type="button" [attr.aria-label]="c().show + ' ' + (index + 1) + ': ' + story.title" [attr.aria-current]="active() === index ? 'true' : null" (click)="active.set(index)"><span></span></button>}</div><button type="button" [attr.aria-label]="c().next" (click)="move(1)"><app-icon name="arrow-right" /></button></div>
+  <p class="announcement" aria-live="polite" aria-atomic="true">{{ c().example }} {{ active() + 1 }} {{ c().of }} 5: {{ stories()[active()].title }}.</p>
+  <p class="caption">{{ caption() }}</p>
 </section>

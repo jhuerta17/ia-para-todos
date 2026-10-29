@@ -1,8 +1,14 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal, viewChild, viewChildren } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild, viewChildren } from '@angular/core';
 import { learningBenefits } from '../../data/learning-benefits';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Icon } from '../icon';
+import { Language } from '../../i18n/language';
+
+const copy = {
+  es: { heading: 'Lo que te llevas de cada taller' },
+  en: { heading: 'What you take from each workshop' },
+};
 
 @Component({
   selector: 'app-learning-benefits',
@@ -12,7 +18,9 @@ import { Icon } from '../icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LearningBenefits {
-  protected readonly benefits = learningBenefits;
+  private readonly language = inject(Language);
+  protected readonly c = computed(() => copy[this.language.lang()]);
+  protected readonly benefits = computed(() => learningBenefits[this.language.lang()]);
   private readonly document = inject(DOCUMENT);
   private readonly destroy = inject(DestroyRef);
   private readonly section = viewChild.required<ElementRef<HTMLElement>>('section');
@@ -29,7 +37,7 @@ export class LearningBenefits {
 
   protected currentAlt(): string {
     const index = this.lower() + (this.blend() > .5 ? 1 : 0);
-    return this.benefits[index]?.alt ?? '';
+    return this.benefits()[index]?.alt ?? '';
   }
 
   constructor() {
@@ -44,7 +52,7 @@ export class LearningBenefits {
         const enabled = !preference.matches && window.innerWidth >= 810 && window.innerHeight >= 600 && tallest + 128 <= window.innerHeight;
         this.pinned.set(enabled);
         if (!enabled) { this.lower.set(0); this.blend.set(0); return; }
-        const progress = Math.max(0, Math.min(this.benefits.length - 1, -this.section().nativeElement.getBoundingClientRect().top / window.innerHeight));
+        const progress = Math.max(0, Math.min(this.benefits().length - 1, -this.section().nativeElement.getBoundingClientRect().top / window.innerHeight));
         const lower = Math.floor(progress);
         this.lower.set(lower);
         this.blend.set(Math.max(0, Math.min(1, (progress - lower - .35) / .6)));

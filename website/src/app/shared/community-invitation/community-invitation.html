@@ -6,10 +6,10 @@
       }
     </div>
     <div #copy class="invitation-copy">
-      <h2 id="community-invitation-title">Ven como eres; aquí se aprende con calma.</h2>
-      <p>Si hablas español y tienes curiosidad, este lugar es para ti. Queremos crear un espacio abierto a todas las personas, sin importar sus creencias.</p>
-      <app-action-link to="/participar" label="Participar" />
+      <h2 id="community-invitation-title">{{ c().heading }}</h2>
+      <p>{{ c().lead }}</p>
+      <app-action-link to="/participar" [label]="c().participate" />
     </div>
   </div>
-  <p class="caption">Fotografías ilustrativas de archivo.</p>
+  <p class="caption">{{ caption() }}</p>
 </section>

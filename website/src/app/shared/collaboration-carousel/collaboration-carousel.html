@@ -1,17 +1,17 @@
-<div class="carousel" role="region" aria-label="Roles de colaboración" aria-roledescription="carrusel">
-  <ul #track class="track" tabindex="0" aria-label="Cuatro roles. Usa las flechas del teclado o desliza para explorar. Inicio y Fin van a los extremos." (scroll)="updateEdges()" (keydown)="onKeydown($event)">
-    @for (role of roles; track role.title) {
+<div class="carousel" role="region" [attr.aria-label]="c().region" [attr.aria-roledescription]="c().carousel">
+  <ul #track class="track" tabindex="0" [attr.aria-label]="c().track" (scroll)="updateEdges()" (keydown)="onKeydown($event)">
+    @for (role of roles(); track role.title) {
       <li>
         <div class="portrait"><img [src]="'/images/portrait-' + role.portrait + '-256.webp'" alt="" width="256" height="256" loading="lazy" /></div>
-        <div class="copy"><p class="eyebrow">Rol</p><h4>{{ role.title }}</h4><p>{{ role.description }}</p></div>
+        <div class="copy"><p class="eyebrow">{{ c().eyebrow }}</p><h4>{{ role.title }}</h4><p>{{ role.description }}</p></div>
       </li>
     }
   </ul>
   <div class="toolbar">
-    <p>Retratos ilustrativos de archivo; no representan a personas del equipo.</p>
+    <p>{{ c().note }}</p>
     <div class="controls">
-      <button type="button" aria-label="Ver rol anterior" [disabled]="atStart()" (click)="move(-1)"><app-icon name="arrow-left" /></button>
-      <button type="button" aria-label="Ver siguiente rol" [disabled]="atEnd()" (click)="move(1)"><app-icon name="arrow-right" /></button>
+      <button type="button" [attr.aria-label]="c().prev" [disabled]="atStart()" (click)="move(-1)"><app-icon name="arrow-left" /></button>
+      <button type="button" [attr.aria-label]="c().next" [disabled]="atEnd()" (click)="move(1)"><app-icon name="arrow-right" /></button>
     </div>
   </div>
 </div>

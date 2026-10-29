@@ -1,11 +1,11 @@
 <section #section aria-labelledby="benefits-title" [class.pinned]="pinned()">
-  <h2 id="benefits-title" class="visually-hidden">Lo que te llevas de cada taller</h2>
+  <h2 id="benefits-title" class="visually-hidden">{{ c().heading }}</h2>
   <div class="composition">
     @if (pinned()) {
       <div class="pinned-media">
         <div class="image-stack" appRevealOnEnter role="img" [attr.aria-label]="currentAlt()">
           @if (nearby()) {
-            @for (benefit of benefits; track benefit.image) {
+            @for (benefit of benefits(); track benefit.image) {
               <img [src]="'/images/' + benefit.image + '-960.webp'"
                 [srcset]="'/images/' + benefit.image + '-480.webp 480w, /images/' + benefit.image + '-960.webp 960w, /images/' + benefit.image + '-1600.webp 1600w'"
                 sizes="(max-width: 1199px) 60vw, 638px" alt="" width="1600" height="1066" loading="eager" fetchpriority="low"
@@ -16,7 +16,7 @@
       </div>
     }
     <div class="panels">
-      @for (benefit of benefits; track benefit.image) {
+      @for (benefit of benefits(); track benefit.image) {
         <article #panel class="benefit-panel" [attr.aria-labelledby]="'benefit-' + $index">
           <div class="inline-media" appRevealOnEnter>
             <img [src]="'/images/' + benefit.image + '-960.webp'"

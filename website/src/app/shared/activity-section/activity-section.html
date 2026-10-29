@@ -1,10 +1,10 @@
 <section aria-labelledby="activities-title">
   <div class="section-heading">
-    <div><h2 id="activities-title"><app-animated-number [value]="activities.length" /> actividades</h2><p>Ideas para practicar con ejemplos cotidianos, a tu ritmo.</p></div>
-    <app-action-link to="/actividades" label="Ver todas" />
+    <div><h2 id="activities-title"><app-animated-number [value]="activities().length" /> {{ c().heading }}</h2><p>{{ c().lead }}</p></div>
+    <app-action-link to="/actividades" [label]="c().viewAll" />
   </div>
   <div class="rows" appStackedRows>
-    @for (row of rows; track $index) {
+    @for (row of rows(); track $index) {
       <div class="card-row">
         @for (activity of row; track activity.slug) { <app-activity-card [activity]="activity" /> }
       </div>

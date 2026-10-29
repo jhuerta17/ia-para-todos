@@ -1,9 +1,29 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { BrandMark } from '../brand-mark';
+import { Language } from '../../i18n/language';
+import { Lang } from '../../i18n/lang';
 
 type Token = { kind: 'word'; text: string } | { kind: 'logo' | 'portraits' | 'photo' };
 const words = (text: string): Token[] => text.split(' ').map(text => ({ kind: 'word', text }));
+
+const sentences: Record<Lang, string[]> = {
+  es: [
+    'Queremos reducir la brecha digital con talleres gratuitos, accesibles y prácticos.',
+    'Aprender IA en español, con palabras sencillas y ejemplos cotidianos.',
+    'En comunidad, a tu ritmo y desde cero.',
+  ],
+  en: [
+    'We want to close the digital divide with free, accessible, hands-on workshops.',
+    'Learn AI in Spanish, with simple words and everyday examples.',
+    'In community, at your pace, from scratch.',
+  ],
+};
+
+const chrome = {
+  es: { mission: 'Nuestra misión', portraits: 'Retratos ilustrativos de archivo', photo: 'Fotografía ilustrativa de personas adultas alrededor de una computadora.' },
+  en: { mission: 'Our mission', portraits: 'Illustrative stock portraits', photo: 'Illustrative photo of adults around a computer.' },
+};
 
 @Component({
   selector: 'app-mission-reveal',
@@ -20,17 +40,22 @@ export class MissionReveal {
   protected readonly animated = signal(false);
   protected readonly unpinned = signal(false);
   protected readonly progress = signal(1);
-  protected readonly tokens: Token[] = [
-    ...words('Queremos reducir la brecha digital con talleres gratuitos, accesibles y prácticos.'),
-    { kind: 'logo' },
-    ...words('Aprender IA en español, con palabras sencillas y ejemplos cotidianos.'),
-    { kind: 'portraits' },
-    ...words('En comunidad, a tu ritmo y desde cero.'),
-    { kind: 'photo' },
-  ];
+  private readonly language = inject(Language);
+  protected readonly c = computed(() => chrome[this.language.lang()]);
+  protected readonly tokens = computed(() => {
+    const lines = sentences[this.language.lang()];
+    return [
+      ...words(lines[0]),
+      { kind: 'logo' },
+      ...words(lines[1]),
+      { kind: 'portraits' },
+      ...words(lines[2]),
+      { kind: 'photo' },
+    ] as Token[];
+  });
 
   protected reveal(index: number): number {
-    return Math.max(0, Math.min(1, (this.progress() * (this.tokens.length + 4) - index) / 4));
+    return Math.max(0, Math.min(1, (this.progress() * (this.tokens().length + 4) - index) / 4));
   }
 
   constructor() {

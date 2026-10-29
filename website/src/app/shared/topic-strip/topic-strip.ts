@@ -1,6 +1,20 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal } from '@angular/core';
 import { Icon, IconName } from '../icon';
+import { Language } from '../../i18n/language';
+import { Lang } from '../../i18n/lang';
+
+const labels: Record<Lang, string[]> = {
+  es: ['Primeros pasos', 'Vida diaria', 'Trabajo y negocios', 'Padres y familias'],
+  en: ['First steps', 'Everyday life', 'Work and business', 'Parents and families'],
+};
+
+const icons: IconName[] = ['sparkles', 'device-mobile', 'bulb', 'users'];
+
+const copy = {
+  es: { heading: '¿Qué puedes practicar aquí?', pause: 'Pausar movimiento de temas', resume: 'Reanudar movimiento de temas', group: 'Temas de aprendizaje' },
+  en: { heading: 'What can you practice here?', pause: 'Pause topic movement', resume: 'Resume topic movement', group: 'Learning topics' },
+};
 
 @Component({
   selector: 'app-topic-strip',
@@ -13,15 +27,12 @@ export class TopicStrip {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly document = inject(DOCUMENT);
   private readonly destroy = inject(DestroyRef);
+  private readonly language = inject(Language);
   protected readonly paused = signal(false);
   protected readonly visible = signal(false);
   protected readonly pageHidden = signal(false);
-  protected readonly topics: { label: string; icon: IconName }[] = [
-    { label: 'Primeros pasos', icon: 'sparkles' },
-    { label: 'Vida diaria', icon: 'device-mobile' },
-    { label: 'Trabajo y negocios', icon: 'bulb' },
-    { label: 'Padres y familias', icon: 'users' },
-  ];
+  protected readonly c = computed(() => copy[this.language.lang()]);
+  protected readonly topics = computed(() => labels[this.language.lang()].map((label, index) => ({ label, icon: icons[index] })));
 
   protected toggleMotion(): void {
     this.paused.update(value => !value);

@@ -1,4 +1,4 @@
-<a class="skip-link" href="#main-content" (click)="skipToContent($event)">Saltar al contenido</a>
+<a class="skip-link" href="#main-content" (click)="skipToContent($event)">{{ skipLabel() }}</a>
 <app-site-header />
 <router-outlet (activate)="onPageActivated()" />
 

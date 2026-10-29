@@ -6,15 +6,15 @@
         <img class="hero-photo" src="/images/community-group-1600.webp"
         srcset="/images/community-group-480.webp 480w, /images/community-group-960.webp 960w, /images/community-group-1600.webp 1600w"
         sizes="100vw" width="1600" height="1066" fetchpriority="high"
-        alt="Fotografía ilustrativa de personas adultas compartiendo un momento con tecnología." />
+        [alt]="c().photo" />
       </picture>
       <div class="hero-content">
         <div class="hero-copy">
-          <h1 id="hero-title">Inteligencia artificial para todos.</h1>
-          <p>Talleres gratuitos en español para aprender IA desde cero, con tu teléfono.</p>
+          <h1 id="hero-title">{{ c().title }}</h1>
+          <p>{{ c().lead }}</p>
           <div class="hero-actions">
-            <app-action-link to="/talleres" label="Explorar talleres" tone="warm" />
-            <app-action-link to="/nosotros" label="La iniciativa" />
+            <app-action-link to="/talleres" [label]="c().explore" tone="warm" />
+            <app-action-link to="/nosotros" [label]="c().initiative" />
           </div>
         </div>
         <app-intro-cards />

@@ -1,41 +1,41 @@
-<section aria-label="Un programa pensado para ti" [class.motion-ready]="motionReady()" [class.paused]="paused() || pageHidden()">
+<section [attr.aria-label]="c().section" [class.motion-ready]="motionReady()" [class.paused]="paused() || pageHidden()">
   <div class="top-row">
     <div #orbit class="orbit tile">
       @if (motionReady()) {
-        <button class="motion-control" type="button" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? 'Reanudar movimiento del programa' : 'Pausar movimiento del programa'" (click)="toggleMotion()"><app-icon [name]="paused() ? 'player-play' : 'player-pause'" /></button>
+        <button class="motion-control" type="button" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? c().resume : c().pause" (click)="toggleMotion()"><app-icon [name]="paused() ? 'player-play' : 'player-pause'" /></button>
       }
       <div class="orbit-track" aria-hidden="true" [class.idle]="!orbitVisible()">
         @for (portrait of portraits; track portrait.image) {
           <img class="portrait" [src]="portrait.image" alt="" width="81" height="81" loading="lazy" [style.--start]="portrait.start + '%'" [style.--x]="portrait.x + '%'" [style.--y]="portrait.y + '%'" />
         }
       </div>
-      <div class="orbit-copy"><span class="number"><span aria-hidden="true">{{ count() }}</span><span class="visually-hidden">4</span></span><h2>Temas</h2><p>Para aprender desde cero.</p></div>
-      <span class="illustration-note">Retratos ilustrativos</span>
+      <div class="orbit-copy"><span class="number"><span aria-hidden="true">{{ count() }}</span><span class="visually-hidden">4</span></span><h2>{{ c().topics }}</h2><p>{{ c().fromScratch }}</p></div>
+      <span class="illustration-note">{{ c().portraits }}</span>
     </div>
     <div class="side-facts">
       <div class="photo-fact tile">
-        <img src="/images/guided-practice-960.webp" alt="Fotografía ilustrativa de una práctica con acompañamiento." width="960" height="640" loading="lazy" />
-        <div><strong>90–120 min</strong><span>Duración</span></div>
+        <img src="/images/guided-practice-960.webp" [alt]="c().photo" width="960" height="640" loading="lazy" />
+        <div><strong>90–120 min</strong><span>{{ c().duration }}</span></div>
       </div>
-      <div class="cost-fact tile"><strong>Sin costo</strong><h3>Participación</h3><p>Sin herramientas de pago.</p><app-icon name="device-mobile" /></div>
+      <div class="cost-fact tile"><strong>{{ c().free }}</strong><h3>{{ c().participation }}</h3><p>{{ c().noPaidTools }}</p><app-icon name="device-mobile" /></div>
     </div>
   </div>
   <div class="bottom-row">
     <div class="comparison-column">
       <app-learning-comparison />
-      <div class="action-tile tile"><app-action-link to="/participar" label="Participar" /></div>
+      <div class="action-tile tile"><app-action-link to="/participar" [label]="c().participate" /></div>
     </div>
-    <div #examplePanel class="examples tile" aria-label="Ejemplos de práctica, no testimonios">
+    <div #examplePanel class="examples tile" [attr.aria-label]="c().examples">
       <div class="examples-window">
         <div class="example-track" [class.idle]="!examplesVisible()">
           <div class="example-group">
-            @for (example of examples; track example.category) {
-              <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>Ejemplo de práctica</span></div></footer></article>
+            @for (example of examples(); track example.category) {
+              <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>{{ c().practiceExample }}</span></div></footer></article>
             }
           </div>
           <div class="example-group duplicate" aria-hidden="true" inert>
-            @for (example of examples; track example.category) {
-              <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>Ejemplo de práctica</span></div></footer></article>
+            @for (example of examples(); track example.category) {
+              <article class="example"><p>{{ example.text }}</p><footer><app-icon name="quote" /><div><h3>{{ example.category }}</h3><span>{{ c().practiceExample }}</span></div></footer></article>
             }
           </div>
         </div>

@@ -1,11 +1,11 @@
 <div class="comparison" [style.--position]="position() + '%'">
   <img class="scene" src="/images/family-learning-960.webp" alt="" width="960" height="640" loading="lazy" />
   <img class="scene community" src="/images/community-learning-960.webp" alt="" width="960" height="640" loading="lazy" />
-  <span class="label community-label">En comunidad</span><span class="label home-label">En casa</span>
+  <span class="label community-label">{{ c().community }}</span><span class="label home-label">{{ c().home }}</span>
   <span class="divider" aria-hidden="true"></span>
   <span class="handle" aria-hidden="true"><app-icon name="arrows-horizontal" /></span>
   <input type="range" min="0" max="100" step="1" [value]="position()" (input)="update($event)"
-    aria-label="Comparar escenas de aprendizaje" aria-describedby="comparison-help"
-    [attr.aria-valuetext]="position() + '% en comunidad y ' + (100 - position()) + '% en casa'" />
+    [attr.aria-label]="c().compare" aria-describedby="comparison-help"
+    [attr.aria-valuetext]="valueText()" />
 </div>
-<p id="comparison-help" class="visually-hidden">Fotografías ilustrativas de aprendizaje en comunidad y en casa. Arrastra el control o usa las flechas. Inicio y Fin muestran cada escena completa. No representa resultados antes y después.</p>
+<p id="comparison-help" class="visually-hidden">{{ c().help }}</p>

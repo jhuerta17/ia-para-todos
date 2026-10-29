@@ -1,19 +1,19 @@
 <section aria-labelledby="topics-title">
   <div class="section-heading">
-    <h2 id="topics-title">¿Qué puedes practicar aquí?</h2>
-    <button type="button" class="motion-control" [attr.aria-label]="paused() ? 'Reanudar movimiento de temas' : 'Pausar movimiento de temas'" [attr.aria-pressed]="paused()" (click)="toggleMotion()">
+    <h2 id="topics-title">{{ c().heading }}</h2>
+    <button type="button" class="motion-control" [attr.aria-label]="paused() ? c().resume : c().pause" [attr.aria-pressed]="paused()" (click)="toggleMotion()">
       <app-icon [name]="paused() ? 'player-play' : 'player-pause'" />
     </button>
   </div>
   <div class="viewport">
     <div class="track" [class.paused]="paused() || !visible() || pageHidden()">
-      <ul class="group" aria-label="Temas de aprendizaje">
-        @for (topic of topics; track topic.label) {
+      <ul class="group" [attr.aria-label]="c().group">
+        @for (topic of topics(); track topic.label) {
           <li class="topic"><app-icon [name]="topic.icon" /><span>{{ topic.label }}</span></li>
         }
       </ul>
       <ul class="group" aria-hidden="true" inert>
-        @for (topic of topics; track topic.label) {
+        @for (topic of topics(); track topic.label) {
           <li class="topic"><app-icon [name]="topic.icon" /><span>{{ topic.label }}</span></li>
         }
       </ul>
