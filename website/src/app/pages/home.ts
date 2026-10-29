@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
-import { LogoPlaceholder } from '../shared/logo-placeholder';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { ActionLink } from '../shared/action-link';
+import { Icon } from '../shared/icon';
 
 @Component({
   selector: 'app-home',
-  imports: [LogoPlaceholder],
-  template: `<main tabindex="-1"><app-logo-placeholder /><h1>IA para todos</h1></main>`,
-  styles: `main:focus { outline: none; } main { display: flex; align-items: center; justify-content: center; gap: var(--space-md); min-height: 100svh; padding: var(--space-lg); } h1 { font-size: var(--text-section); }`,
+  imports: [RouterLink, ActionLink, Icon],
+  templateUrl: './home.html',
+  styleUrl: './home.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Home {}
+export class Home {
+  protected readonly introductions = [
+    { title: 'Empieza desde cero', image: 'guided-practice', alt: 'Personas adultas practicando con una computadora y apoyo cercano.' },
+    { title: 'IA para tu día a día', image: 'everyday-phone', alt: 'Tres mujeres mirando juntas la pantalla de un teléfono.' },
+    { title: 'Con cuidado y sin miedo', image: 'family-learning', alt: 'Una madre y su hija usando una computadora en casa.' },
+  ];
+}

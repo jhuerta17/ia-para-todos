@@ -1,0 +1,36 @@
+<main tabindex="-1">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-panel">
+      <picture>
+        <source media="(max-width: 809px)" srcset="/images/everyday-phone-1600.webp" />
+        <img class="hero-photo" src="/images/community-group-1600.webp"
+        srcset="/images/community-group-480.webp 480w, /images/community-group-960.webp 960w, /images/community-group-1600.webp 1600w"
+        sizes="100vw" width="1600" height="1066" fetchpriority="high"
+        alt="Fotografía ilustrativa de personas adultas compartiendo un momento con tecnología." />
+      </picture>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <h1 id="hero-title">Inteligencia artificial para todos.</h1>
+          <p>Talleres gratuitos en español para aprender IA desde cero, con tu teléfono.</p>
+          <div class="hero-actions">
+            <app-action-link to="/talleres" label="Explorar talleres" tone="warm" />
+            <app-action-link to="/nosotros" label="La iniciativa" />
+          </div>
+        </div>
+        <ul class="intro-cards" aria-label="Temas de talleres previstos">
+          @for (item of introductions; track item.image) {
+            <li>
+              <a class="intro-card" routerLink="/talleres">
+                <img [src]="'/images/' + item.image + '-480.webp'" [alt]="item.alt" width="480" height="320" />
+                <div class="card-copy">
+                  <h2>{{ item.title }}</h2>
+                  <div class="card-bottom"><span>Taller previsto</span><app-icon name="arrow-right" /></div>
+                </div>
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>

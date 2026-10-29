@@ -1,0 +1,58 @@
+[
+  {
+    "key": "guided-practice",
+    "id": "7983557",
+    "source": "https://www.pexels.com/photo/elderly-using-laptop-in-class-7983557/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Personas adultas practicando con una computadora y apoyo cercano.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "everyday-phone",
+    "id": "5257343",
+    "source": "https://www.pexels.com/photo/senior-women-using-smartphone-while-surfing-internet-5257343/",
+    "photographer": "Anna Shvets",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Tres mujeres mirando juntas la pantalla de un teléfono.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "family-learning",
+    "id": "4260325",
+    "source": "https://www.pexels.com/photo/mother-helping-her-daughter-use-a-laptop-4260325/",
+    "photographer": "August de Richelieu",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Una madre y su hija usando una computadora en casa.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "community-group",
+    "id": "7983576",
+    "source": "https://www.pexels.com/photo/group-of-elderly-people-standing-behind-a-laptop-and-smiling-7983576/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Un grupo de personas adultas reunidas alrededor de una computadora.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  }
+]
