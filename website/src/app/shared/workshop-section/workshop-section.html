@@ -5,9 +5,9 @@
         <div><h2 id="workshops-title">Talleres previstos</h2><p>Aprende desde cero, con práctica y a tu ritmo. Contenidos en borrador, pendientes de piloto.</p></div>
         <app-action-link to="/talleres" label="Ver todos" />
       </div>
-      <div class="rows" [class.stack-enabled]="stackEnabled()" [style.--stack-scale]="scale()">
+      <div class="rows" appStackedRows>
         @for (row of rows; track $index) {
-          <div #row class="card-row">
+          <div class="card-row">
             @for (workshop of row; track workshop.slug) { <app-workshop-card [workshop]="workshop" /> }
           </div>
         }

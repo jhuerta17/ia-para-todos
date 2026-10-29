@@ -1,0 +1,10 @@
+@media (min-width: 810px) {
+  .stack-enabled .card-row:first-child { position: sticky; top: 80px; align-self: start; transform: scale(var(--stack-scale)); transform-origin: center; }
+  .stack-enabled .card-row:last-child { position: relative; z-index: 1; }
+  .stack-enabled .card-row:first-child:focus-within { z-index: 2; transform: none; }
+  .card-row > :nth-child(2) { transition-delay: 70ms; }
+  .card-row > :focus-within { transition-delay: 0ms; }
+}
+@media print {
+  .stack-enabled .card-row:first-child { position: relative; top: auto; transform: none; }
+}
