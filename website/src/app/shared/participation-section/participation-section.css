@@ -1,0 +1,13 @@
+:host { display: block; padding: 140px 40px; } section { max-width: 1040px; margin: auto; scroll-margin-top: 100px; }
+h2 { font-size: var(--text-section); } header p { max-width: 560px; margin: 16px 0 64px; }
+.columns { display: grid; grid-template-columns: 480fr 540fr; gap: 20px; align-items: stretch; }
+.steps { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 70px; list-style: none; margin: 0; padding: 10px 0; }
+.steps::before { content: ''; position: absolute; top: 20%; bottom: 20%; left: 48%; width: 34px; border: 2px solid var(--color-border-strong); border-radius: 50%; transform: rotate(-10deg); }
+li { position: relative; display: flex; align-items: center; gap: 24px; padding: 28px 24px; background: var(--color-warm); border: 1px solid var(--color-border); border-radius: 30px; box-shadow: var(--shadow-card); }
+li app-icon { --icon-size: 32px; color: var(--color-accent); } h3 { font-size: 24px; } li p { margin: 8px 0 0; font-size: 18px; } .number { margin-left: auto; font: 400 30px var(--font-heading); color: var(--color-border-strong); }
+form { min-width: 0; padding: 30px; background: var(--color-cool); border: 1px solid var(--color-border); border-radius: 30px; } form h3 { font-size: 30px; } .form-note { font-size: 14px; } .field-row { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+@media (max-width: 809px) { :host { padding: 70px 20px; } .columns { grid-template-columns: 1fr; gap: 32px; } header p { margin-bottom: 36px; } .steps { gap: 20px; } li { padding: 24px 20px; gap: 16px; } li p { font-size: 16px; } h3 { font-size: 22px; } form { padding: 24px 20px; } .field-row { grid-template-columns: 1fr; gap: 0; } }
+@media (prefers-reduced-motion: no-preference) { .motion-ready { transition: transform var(--duration-reveal) var(--ease-out), opacity var(--duration-reveal); } .motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } }
+@media print { .motion-ready { opacity: 1; transform: none; } .columns { display: block; } form { margin-top: 24px; } }
+.steps, li > div { min-width: 0; }
+@media (max-width: 809px) { .columns { grid-template-columns: minmax(0, 1fr); } form h3 { font-size: 26px; overflow-wrap: anywhere; } .number { font-size: 24px; } }

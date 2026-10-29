@@ -1,0 +1,9 @@
+label { display: block; font-size: 14px; margin: 16px 0 8px; }
+input:not([type=checkbox]), select, textarea { display: block; width: 100%; min-width: 0; min-height: 44px; border: 1px solid transparent; border-radius: 12px; padding: 10px 12px; color: var(--color-text); background: white; font-size: 16px; }
+textarea { resize: vertical; } [aria-invalid=true] { border-color: #a52b16 !important; }
+.error { margin: 4px 0 0; color: #952711; font-size: 13px; } .error:empty { display: none; }
+.consent { display: flex; align-items: flex-start; gap: 10px; line-height: 1.6; }
+input[type=checkbox] { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--color-accent); }
+.submit { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; margin-top: 24px; padding: 2px 2px 2px 20px; border: 0; border-radius: 24px; color: white; background: var(--color-accent); cursor: pointer; font: 400 16px/1.5 var(--font-heading); transition: background var(--duration-fast); }
+.submit app-icon { padding: 12px; box-sizing: content-box; --icon-size: 16px; color: var(--color-accent); background: var(--color-warm); border-radius: 50%; }
+.submit:hover { background: #704024; } .result { font-size: 14px; margin: 16px 0 0; } .result:empty { display: none; }
