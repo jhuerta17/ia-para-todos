@@ -1,6 +1,6 @@
 # Documentation Index
 
-Welcome to the IA Para Todos documentation. The repository is in **Part 2 of a seven-part setup**: organization and strategy docs exist; remaining sections arrive in later phases.
+Welcome to the IA Para Todos documentation. The repository is in **Part 4 of a seven-part setup**: organization, strategy, operations, workshops, and templates exist; nonprofit, roadmap, safety, and brand sections arrive in later phases.
 
 ## Structure
 
@@ -10,11 +10,11 @@ Welcome to the IA Para Todos documentation. The repository is in **Part 2 of a s
 | `strategy/` | [problem-statement.md](strategy/problem-statement.md) · [theory-of-change.md](strategy/theory-of-change.md) · [risks-and-mitigation.md](strategy/risks-and-mitigation.md) · [growth-strategy.md](strategy/growth-strategy.md) |
 | `nonprofit/` | Planned — legal-structure exploration (informal vs. fiscal sponsorship vs. independent nonprofit) |
 | `roadmap/` | Planned — 90-day pilot plan, milestones, future initiatives |
-| `operations/` | Planned — checklists, facilitator and volunteer guides, outreach, budgeting, impact measurement |
+| `operations/` | [workshop-checklist.md](operations/workshop-checklist.md) · [venue-requirements.md](operations/venue-requirements.md) · [facilitator-guide.md](operations/facilitator-guide.md) · [volunteer-onboarding.md](operations/volunteer-onboarding.md) · [outreach-process.md](operations/outreach-process.md) · [budget-template.md](operations/budget-template.md) · [impact-measurement.md](operations/impact-measurement.md) |
 | `safety/` | Planned — responsible AI, privacy, safeguarding, accessibility |
 | `brand/` | Planned — brand, voice-and-tone, and messaging guidelines |
 
-Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/`, `assets/`, `scripts/`, `.github/` (planned in later phases).
+Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · `assets/`, `scripts/`, `.github/` (planned in later phases).
 
 ## Documentation conventions
 
