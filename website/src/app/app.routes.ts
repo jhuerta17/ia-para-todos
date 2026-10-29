@@ -1,3 +1,4 @@
+import { resources } from './data/resources';
 import { Routes } from '@angular/router';
 import { activities } from './data/activities';
 import { workshops } from './data/workshops';
@@ -32,6 +33,7 @@ export const routes: Routes = [
     path: `actividades/${activity.slug}`, component: PagePreview, title: `${activity.title} · IA para todos`,
     data: { heading: activity.title, description: `${activity.summary} Es una actividad prevista para futuros talleres piloto, sin fechas ni sedes confirmadas. Las prácticas usarían datos ficticios para cuidar la privacidad.` },
   })),
+  ...resources.map(resource => ({ path: `recursos/${resource.slug}`, component: PagePreview, title: `${resource.title} · IA para todos`, data: { heading: resource.title, description: `${resource.summary} Recurso en borrador, aún no publicado.` } })),
   { path: '**', component: PagePreview, title: 'Página no encontrada · IA para todos',
     data: { heading: 'No encontramos esta página', description: 'Puedes volver al inicio para seguir explorando.' } },
 ];
