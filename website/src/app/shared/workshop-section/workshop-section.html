@@ -1,0 +1,17 @@
+<section aria-labelledby="workshops-title">
+  <div class="panel">
+    <div class="content">
+      <div class="section-heading">
+        <div><h2 id="workshops-title">Talleres previstos</h2><p>Aprende desde cero, con práctica y a tu ritmo. Contenidos en borrador, pendientes de piloto.</p></div>
+        <app-action-link to="/talleres" label="Ver todos" />
+      </div>
+      <div class="rows">
+        @for (row of rows; track $index) {
+          <div class="card-row">
+            @for (workshop of row; track workshop.slug) { <app-workshop-card [workshop]="workshop" /> }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>

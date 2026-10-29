@@ -96,5 +96,33 @@
       "y": 35
     },
     "illustrative": true
+  },
+  {
+    "key": "community-learning",
+    "id": "7983574",
+    "source": "https://www.pexels.com/photo/elderly-people-learning-about-computers-7983574/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Personas adultas aprendiendo con computadoras en un aula.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "work-business",
+    "id": "7857532",
+    "source": "https://www.pexels.com/photo/woman-sitting-at-the-table-and-packing-orders-7857532/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Personas preparando pedidos junto a una computadora.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
   }
 ]

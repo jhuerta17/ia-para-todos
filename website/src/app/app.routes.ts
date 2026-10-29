@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { workshops } from './data/workshops';
 import { Home } from './pages/home';
 import { PagePreview } from './pages/page-preview';
 
@@ -21,6 +22,10 @@ export const routes: Routes = [
   ...pages.map(([path, heading, description]) => ({
     path, component: PagePreview, title: `${heading} · IA para todos`,
     data: { heading, description },
+  })),
+  ...workshops.map(workshop => ({
+    path: `talleres/${workshop.slug}`, component: PagePreview, title: `${workshop.title} · IA para todos`,
+    data: { heading: workshop.title, description: `${workshop.summary} Contenido en borrador, pendiente de piloto. La duración propuesta es de 90–120 minutos, con práctica guiada y sin herramientas de pago. Aún no hay sesiones programadas.` },
   })),
   { path: '**', component: PagePreview, title: 'Página no encontrada · IA para todos',
     data: { heading: 'No encontramos esta página', description: 'Puedes volver al inicio para seguir explorando.' } },
