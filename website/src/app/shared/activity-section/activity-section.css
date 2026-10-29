@@ -1,0 +1,15 @@
+:host { display: block; padding: 100px 20px; }
+section { max-width: var(--content-width); margin-inline: auto; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 32px; margin-bottom: 60px; }
+h2 { font-size: var(--text-section); }
+.section-heading p { max-width: 600px; margin: 12px 0 0; font-size: 18px; line-height: 1.7; }
+.section-heading app-action-link { flex: none; width: 175px; }
+.rows { display: grid; gap: 120px; }
+.card-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 809px) {
+  :host { padding-bottom: 50px; }
+  .section-heading { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .section-heading p { font-size: 16px; }
+  .rows, .card-row { gap: 32px; }
+  .card-row { grid-template-columns: minmax(0, 1fr); }
+}

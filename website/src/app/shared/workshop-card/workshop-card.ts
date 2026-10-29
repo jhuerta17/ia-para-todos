@@ -8,7 +8,7 @@ import { ActionLink } from '../action-link';
   selector: 'app-workshop-card',
   imports: [RouterLink, ActionLink],
   templateUrl: './workshop-card.html',
-  styleUrl: './workshop-card.css',
+  styleUrls: ['../content-card.css', './workshop-card.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class.motion-ready]': 'motionReady()', '[class.entered]': 'entered()' },
 })

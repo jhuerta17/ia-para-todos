@@ -1,0 +1,13 @@
+<section aria-labelledby="activities-title">
+  <div class="section-heading">
+    <div><h2 id="activities-title">{{ activities.length }} actividades previstas</h2><p>Ideas para practicar en futuros talleres piloto. Son planes, sin fechas ni sedes confirmadas.</p></div>
+    <app-action-link to="/actividades" label="Ver todas" />
+  </div>
+  <div class="rows">
+    @for (row of rows; track $index) {
+      <div class="card-row">
+        @for (activity of row; track activity.slug) { <app-activity-card [activity]="activity" /> }
+      </div>
+    }
+  </div>
+</section>

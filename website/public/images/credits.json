@@ -208,5 +208,61 @@
       "y": 35
     },
     "illustrative": true
+  },
+  {
+    "key": "collaboration",
+    "id": "6457524",
+    "source": "https://www.pexels.com/photo/young-positive-multiethnic-women-working-with-laptop-and-smartphone-6457524/",
+    "photographer": "Alexander Suhorucov",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Dos personas conversando con un teléfono y una computadora.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "family-phone",
+    "id": "27177880",
+    "source": "https://www.pexels.com/photo/mother-and-child-interacting-with-smartphone-at-home-27177880/",
+    "photographer": "Helena Lopes",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Una madre y su hijo mirando un teléfono en casa.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "accessible-technology",
+    "id": "9543922",
+    "source": "https://www.pexels.com/photo/women-looking-at-the-screen-of-a-cellphone-together-9543922/",
+    "photographer": "Mikhail Nilov",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Dos personas compartiendo información en un teléfono.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "peer-support",
+    "id": "4308095",
+    "source": "https://www.pexels.com/photo/focused-tutor-and-student-doing-homework-assignment-using-laptop-4308095/",
+    "photographer": "Ketut Subiyanto",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Dos personas revisando apuntes y una computadora.",
+    "focalPoint": {
+      "x": 50,
+      "y": 50
+    },
+    "illustrative": true
   }
 ]
