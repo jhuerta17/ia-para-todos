@@ -1,0 +1,44 @@
+# Dependencies & build output
+node_modules/
+dist/
+build/
+*.log
+
+# Editors & OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*~
+
+# Secrets & credentials — NEVER commit these
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets/
+*_rsa
+*_dsa
+
+# Participant / operational data — NEVER commit these
+participants/
+registrations/
+surveys/*.csv
+surveys/*.xlsx
+rosters/
+contact-lists/
+private-notes/
+
+# Python / tooling
+__pycache__/
+.venv/
+.pytest_cache/
+
+# Temporary files
+tmp/
+temp/
