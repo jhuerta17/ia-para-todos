@@ -1,3 +1,4 @@
+import { Contact } from './pages/contact/contact';
 import { ParticipationPage } from './pages/participation-page/participation-page';
 import { Stories } from './pages/stories/stories';
 import { About } from './pages/about/about';
@@ -15,7 +16,6 @@ import { Home } from './pages/home';
 import { PagePreview } from './pages/page-preview';
 
 const pages = [
-  ['contacto', 'Conversemos', 'Los canales públicos de contacto aún no están disponibles. Esta página forma parte de una demostración local.'],
   ['privacidad', 'Privacidad de la demostración', 'Esta demostración no envía formularios, no almacena datos personales y no procesa pagos.'],
   ['terminos', 'Acerca de esta demostración', 'El sitio está en preparación. Sus contenidos describen una iniciativa educativa exploratoria y no constituyen una oferta de talleres programados.'],
   ['seguridad', 'Aprender con cuidado', 'Practica con ejemplos inventados, evita compartir datos personales y verifica la información antes de usarla o compartirla.'],
@@ -30,6 +30,7 @@ export const routes: Routes = [
   { path: 'comunidad', component: ParticipationPage, title: 'Comunidad · IA para todos', data: { community: true } },
   { path: 'participar', component: ParticipationPage, title: 'Participa — demostración · IA para todos' },
   { path: 'historias', component: Stories, title: 'Historias ilustrativas · IA para todos' },
+  { path: 'contacto', component: Contact, title: 'Contacto · IA para todos' },
   ...pages.map(([path, heading, description]) => ({
     path, component: PagePreview, title: `${heading} · IA para todos`,
     data: { heading, description },
