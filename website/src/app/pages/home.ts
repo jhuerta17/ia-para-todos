@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommunityIntroduction } from '../shared/community-introduction/community-introduction';
 import { LearningBenefits } from '../shared/learning-benefits/learning-benefits';
 import { ActionLink } from '../shared/action-link';
 import { ActivitySection } from '../shared/activity-section/activity-section';
@@ -10,7 +11,7 @@ import { IntroCards } from '../shared/intro-cards/intro-cards';
 
 @Component({
   selector: 'app-home',
-  imports: [ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits],
+  imports: [ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits, CommunityIntroduction],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
