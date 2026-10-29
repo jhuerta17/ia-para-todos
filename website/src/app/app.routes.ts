@@ -1,3 +1,6 @@
+import { Information } from './pages/information/information';
+import { informationPages } from './data/information-pages';
+import { NotFound } from './pages/not-found/not-found';
 import { Contact } from './pages/contact/contact';
 import { ParticipationPage } from './pages/participation-page/participation-page';
 import { Stories } from './pages/stories/stories';
@@ -13,13 +16,6 @@ import { Routes } from '@angular/router';
 import { activities } from './data/activities';
 import { workshops } from './data/workshops';
 import { Home } from './pages/home';
-import { PagePreview } from './pages/page-preview';
-
-const pages = [
-  ['privacidad', 'Privacidad de la demostración', 'Esta demostración no envía formularios, no almacena datos personales y no procesa pagos.'],
-  ['terminos', 'Acerca de esta demostración', 'El sitio está en preparación. Sus contenidos describen una iniciativa educativa exploratoria y no constituyen una oferta de talleres programados.'],
-  ['seguridad', 'Aprender con cuidado', 'Practica con ejemplos inventados, evita compartir datos personales y verifica la información antes de usarla o compartirla.'],
-];
 
 export const routes: Routes = [
   { path: '', component: Home, title: 'IA para todos' },
@@ -31,13 +27,9 @@ export const routes: Routes = [
   { path: 'participar', component: ParticipationPage, title: 'Participa — demostración · IA para todos' },
   { path: 'historias', component: Stories, title: 'Historias ilustrativas · IA para todos' },
   { path: 'contacto', component: Contact, title: 'Contacto · IA para todos' },
-  ...pages.map(([path, heading, description]) => ({
-    path, component: PagePreview, title: `${heading} · IA para todos`,
-    data: { heading, description },
-  })),
+  ...informationPages.map(information => ({ path: information.path, component: Information, title: `${information.title} · IA para todos`, data: { information } })),
   ...workshops.map((workshop, index) => ({ path: `talleres/${workshop.slug}`, component: ContentDetail, title: `${workshop.title} · IA para todos`, data: { detail: workshopDetails[index] } })),
   ...activities.map((activity, index) => ({ path: `actividades/${activity.slug}`, component: ContentDetail, title: `${activity.title} · IA para todos`, data: { detail: activityDetails[index] } })),
   ...resources.map((resource, index) => ({ path: `recursos/${resource.slug}`, component: ContentDetail, title: `${resource.title} · IA para todos`, data: { detail: resourceDetails[index] } })),
-  { path: '**', component: PagePreview, title: 'Página no encontrada · IA para todos',
-    data: { heading: 'No encontramos esta página', description: 'Puedes volver al inicio para seguir explorando.' } },
+  { path: '**', component: NotFound, title: 'Página no encontrada · IA para todos' },
 ];

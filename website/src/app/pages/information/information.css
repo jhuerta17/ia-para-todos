@@ -1,0 +1,4 @@
+main { max-width: 1120px; padding: 140px 40px 30px; margin: auto; } main:focus { outline: none; } h1 { font-size: var(--text-section); } .lead { font-size: 20px; margin: 16px 0; } .status { font-size: 14px; } section { margin-top: 60px; } h2 { font-size: 30px; margin-bottom: 24px; } p { line-height: 1.8; } p + p { margin-top: 24px; } app-action-link { width: 220px; max-width: 100%; margin-top: 50px; }
+@media (max-width: 809px) { main { padding: 120px 20px 20px; } h1 { font-size: 32px; } h2 { font-size: 26px; } section { margin-top: 40px; } }
+@media (prefers-reduced-motion: no-preference) { .motion-ready { transition: opacity var(--duration-reveal),transform var(--duration-reveal); } .motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } }
+@media print { main { padding: 30px 0; } .motion-ready { opacity: 1; transform: none; } }
