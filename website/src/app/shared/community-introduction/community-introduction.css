@@ -31,3 +31,5 @@ h3 { font-size: var(--text-section); }
 @media print {
   section .motion-ready { opacity: 1; filter: none; transform: none; }
 }
+
+:host(.compact) { padding-top: 100px; } :host(.compact) section { padding-top: 0; }

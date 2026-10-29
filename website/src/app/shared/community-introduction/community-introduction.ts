@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CollaborationCarousel } from '../collaboration-carousel/collaboration-carousel';
 import { ActionLink } from '../action-link';
 import { BrandMark } from '../brand-mark';
@@ -10,6 +10,7 @@ import { RevealOnEnter } from '../motion/reveal-on-enter';
   imports: [CollaborationCarousel, ActionLink, BrandMark, Icon, RevealOnEnter],
   templateUrl: './community-introduction.html',
   styleUrl: './community-introduction.css',
+  host: { '[class.compact]': 'compact()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommunityIntroduction {}
+export class CommunityIntroduction { readonly compact = input(false); }

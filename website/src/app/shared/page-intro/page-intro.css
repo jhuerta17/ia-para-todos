@@ -1,0 +1,4 @@
+:host { display: block; } header { max-width: 1120px; margin: auto; padding: 140px 40px 0; } h1 { font-size: var(--text-section); } p { font-size: 20px; margin: 20px 0 0; line-height: 1.7; } .lead { margin-top: 16px; }
+@media (max-width: 809px) { header { padding: 120px 20px 0; } h1 { font-size: 32px; } p { font-size: 18px; } }
+@media (prefers-reduced-motion: no-preference) { .motion-ready { transition: opacity var(--duration-reveal),transform var(--duration-reveal); } .motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } }
+@media print { header { padding-top: 30px; } .motion-ready { opacity: 1; transform: none; } }
