@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { Icon } from '../icon';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 
 @Component({selector: 'app-learning-stories', imports: [Icon, RevealOnEnter], templateUrl: './learning-stories.html', styleUrl: './learning-stories.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class LearningStories {
+  readonly pageHeading = input(false);
   protected readonly active = signal(0);
   private touchStart = 0;
   protected readonly stories = [

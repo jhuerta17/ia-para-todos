@@ -11,3 +11,7 @@ form { min-width: 0; padding: 30px; background: var(--color-cool); border: 1px s
 @media print { .motion-ready { opacity: 1; transform: none; } .columns { display: block; } form { margin-top: 24px; } }
 .steps, li > div { min-width: 0; }
 @media (max-width: 809px) { .columns { grid-template-columns: minmax(0, 1fr); } form h3 { font-size: 26px; overflow-wrap: anywhere; } .number { font-size: 24px; } }
+
+:host(.page) { padding-top: 40px; padding-bottom: 80px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 809px) { .columns form { grid-row: 1; } .steps { grid-row: 2; } }
