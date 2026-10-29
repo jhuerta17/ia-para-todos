@@ -35,7 +35,7 @@ Any volunteer who leads or assists a workshop. Read this plus the specific works
 - Treat every participant with patience and respect; never mock a question or rush a struggling learner.
 - Do not ask about immigration status, income, health, or other sensitive matters.
 - Physical safety first: know the exits, the safety contact, and the venue's emergency basics.
-- A formal code of conduct will be added in a later setup phase; until then these standards plus common decency govern, and the lead facilitator may remove anyone disrupting participant safety or learning.
+- Our [Code of Conduct](../../CODE_OF_CONDUCT.md) governs all events and spaces; the lead facilitator may remove anyone disrupting participant safety or learning. Report conduct concerns per the Code's interim process until a formal committee exists.
 
 ## Preparation standard
 

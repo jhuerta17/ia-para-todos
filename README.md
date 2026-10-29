@@ -35,7 +35,7 @@ Planned introductory workshops (90–120 minutes each, smartphone-friendly, no p
 3. **IA para el Trabajo y los Negocios** — professional communication, résumés, productivity, business basics.
 4. **IA para Padres y Familias** — how children use AI, misinformation, privacy, digital safety.
 
-Every workshop will include guidance on AI accuracy, privacy, safety, and independent verification. Curricula will live under [`workshops/`](workshops/) as they are drafted in later setup phases.
+Every workshop includes guidance on AI accuracy, privacy, safety, and independent verification. Draft curricula live under [`workshops/`](workshops/) and are pending pilot validation.
 
 ## Current project status
 
@@ -48,9 +48,8 @@ Every workshop will include guidance on AI accuracy, privacy, safety, and indepe
 
 ## Planned roadmap
 
-1. **Part 1 (this phase):** Initialize the public repository — structure, bilingual READMEs, documentation conventions.
-2. **Later phases:** Add organizational and strategy documentation, nonprofit exploration research, pilot roadmap, operations guides, safety standards, brand guidelines, workshop curricula, templates, and automation.
-3. **Beyond setup:** Validate the program through small pilot workshops, measure results honestly, and only then consider formal structure or expansion.
+1. **Setup (complete):** Public repository initialized — structure, bilingual READMEs, conventions, documentation, curricula, templates, and automation.
+2. **Next:** Validate the program through small pilot workshops (see [90-day pilot plan](docs/roadmap/90-day-pilot.md)), measure results honestly, and only then consider formal structure or expansion.
 
 Details will be documented under [`docs/`](docs/) as each phase lands. See the [documentation index](docs/README.md).
 
@@ -62,11 +61,11 @@ ia-para-todos/
 ├── CONTRIBUTING.md             # How to contribute
 ├── docs/                       # Documentation (organization, strategy, nonprofit,
 │                               # roadmap, operations, safety, brand)
-├── workshops/                  # Workshop curricula (planned)
-├── templates/                  # Outreach, feedback, and planning templates (planned)
+├── workshops/                  # Workshop curricula (drafts pending pilot)
+├── templates/                  # Outreach, feedback, and planning templates
 ├── assets/                     # Brand and media assets (planned)
-├── scripts/                    # Repository automation (planned)
-└── .github/                    # Issue/PR templates and workflows (planned)
+├── scripts/                    # Repository automation (bootstrap, validation)
+└── .github/                    # Issue/PR templates and workflows
 ```
 
 ## Privacy notice
@@ -79,4 +78,4 @@ Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## License
 
-> **DECISION NEEDED:** A license has not been selected yet. It will be added in a later setup phase. Until then, no license is granted — do not assume reuse rights beyond reading.
+Proposed dual licensing (see [LICENSE](LICENSE), pending final approval): educational materials under **CC BY 4.0**, scripts and automation under the **MIT License**. No third-party materials are included under these terms.

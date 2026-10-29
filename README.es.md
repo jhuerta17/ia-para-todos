@@ -34,7 +34,7 @@ Talleres introductorios planeados (90–120 minutos cada uno, diseñados para te
 3. **IA para el Trabajo y los Negocios** — comunicación profesional, currículums, productividad, conceptos de negocio.
 4. **IA para Padres y Familias** — cómo usan la IA los jóvenes, desinformación, privacidad, seguridad digital.
 
-Cada taller incluirá orientación sobre precisión de la IA, privacidad, seguridad y verificación independiente. Los planes de estudio vivirán en [`workshops/`](workshops/) a medida que se redacten en fases posteriores.
+Cada taller incluye orientación sobre precisión de la IA, privacidad, seguridad y verificación independiente. Los borradores de planes de estudio viven en [`workshops/`](workshops/) y están pendientes de validación piloto.
 
 ## Estado actual del proyecto
 
@@ -47,9 +47,8 @@ Cada taller incluirá orientación sobre precisión de la IA, privacidad, seguri
 
 ## Hoja de ruta planeada
 
-1. **Parte 1 (esta fase):** Inicializar el repositorio público — estructura, READMEs bilingües, convenciones de documentación.
-2. **Fases posteriores:** Agregar documentación organizacional y de estrategia, investigación sobre estructura sin fines de lucro, plan piloto, guías operativas, estándares de seguridad, guías de marca, planes de estudio, plantillas y automatización.
-3. **Después de la configuración:** Validar el programa con pequeños talleres piloto, medir resultados con honestidad, y solo entonces considerar una estructura formal o expansión.
+1. **Configuración (completa):** Repositorio público inicializado — estructura, READMEs bilingües, convenciones, documentación, planes de estudio, plantillas y automatización.
+2. **Siguiente paso:** Validar el programa con pequeños talleres piloto (ver [plan piloto de 90 días](docs/roadmap/90-day-pilot.md)), medir resultados con honestidad, y solo entonces considerar una estructura formal o expansión.
 
 Los detalles se documentarán en [`docs/`](docs/) a medida que avance cada fase. Ver el [índice de documentación](docs/README.md).
 
@@ -61,11 +60,11 @@ ia-para-todos/
 ├── CONTRIBUTING.md             # Cómo contribuir
 ├── docs/                       # Documentación (organización, estrategia, sin fines
 │                               # de lucro, ruta, operaciones, seguridad, marca)
-├── workshops/                  # Planes de estudio (planeado)
-├── templates/                  # Plantillas de difusión, retroalimentación (planeado)
+├── workshops/                  # Planes de estudio (borradores pendientes de piloto)
+├── templates/                  # Plantillas de difusión, retroalimentación
 ├── assets/                     # Recursos de marca y medios (planeado)
-├── scripts/                    # Automatización del repositorio (planeado)
-└── .github/                    # Plantillas y flujos de trabajo (planeado)
+├── scripts/                    # Automatización del repositorio (bootstrap, validación)
+└── .github/                    # Plantillas y flujos de trabajo
 ```
 
 ## Aviso de privacidad
@@ -78,4 +77,4 @@ Tus contribuciones son bienvenidas. Lee primero [CONTRIBUTING.md](CONTRIBUTING.m
 
 ## Licencia
 
-> **DECISIÓN PENDIENTE:** Aún no se ha seleccionado una licencia. Se agregará en una fase posterior. Hasta entonces, no se otorga ninguna licencia — no asumas derechos de reutilización más allá de la lectura.
+Licencia dual propuesta (ver [LICENSE](LICENSE), pendiente de aprobación final): materiales educativos bajo **CC BY 4.0**, scripts y automatización bajo la **Licencia MIT**. Ningún material de terceros está incluido bajo estos términos.

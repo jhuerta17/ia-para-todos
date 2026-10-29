@@ -1,0 +1,100 @@
+IA Para Todos — Licensing
+===========================
+
+> Status: PROPOSED, pending final approval. The licensing direction below is
+> the working decision for this repository. It has not been finally approved
+> (there is no board or legal entity yet to approve it). If the direction
+> changes, this file will be updated and the change noted. Until final
+> approval, treat reuse conservatively and ask the maintainers if in doubt.
+
+## Summary
+
+- Original educational materials (documentation, curricula, guides,
+  templates, messaging): **Creative Commons Attribution 4.0 International
+  (CC BY 4.0)**.
+- Software and automation (files under `scripts/` and `.github/workflows/`):
+  **MIT License**.
+- No third-party materials are included under these terms. Anything sourced
+  from elsewhere keeps its own license and must be credited accordingly.
+
+## 1. Educational materials — CC BY 4.0
+
+All original prose, curricula, and educational content in this repository is
+intended to be licensed under the Creative Commons Attribution 4.0
+International Public License.
+
+You are free to:
+
+- Share — copy and redistribute the material in any medium or format.
+- Adapt — remix, transform, and build upon the material for any purpose,
+  even commercially.
+
+Under the following term:
+
+- Attribution — give appropriate credit, provide a link to the license, and
+  indicate if changes were made.
+
+Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+Human-readable summary: https://creativecommons.org/licenses/by/4.0/
+
+Why CC BY 4.0: it maximizes reuse and translation of community education
+materials (including commercial reprints and adaptations by other
+nonprofits) while requiring credit to IA Para Todos and its contributors.
+Unlike ShareAlike variants, it does not obligate downstream adapters to
+use the same license — a deliberate choice to lower adoption friction for
+community organizations.
+
+## 2. Software and automation — MIT License
+
+Files under `scripts/` and `.github/workflows/` are intended to be licensed
+under the MIT License:
+
+MIT License — Copyright (c) IA Para Todos contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Why MIT: it is the simplest permissive license for small utility scripts,
+compatible with virtually every project that might reuse this automation.
+
+## Differences at a glance
+
+| Aspect              | CC BY 4.0 (educational content) | MIT (code/scripts) |
+|---------------------|----------------------------------|--------------------|
+| Covers              | Prose, curricula, guides         | Scripts, workflows |
+| Commercial reuse    | Allowed                          | Allowed            |
+| Attribution         | Required (credit + link + notes) | Required (keep notice) |
+| Copyleft            | No                               | No                 |
+| Warranty            | None                             | None               |
+
+## Pending decisions
+
+- Final approval of this dual-license direction (needs a formal decision
+  once governance exists).
+- Whether contributor terms (e.g., a lightweight contributor agreement) are
+  needed for significant future contributions.
+- License headers or SPDX identifiers in individual files (proposed: add
+  `SPDX-License-Identifier` lines when the direction is approved).
+
+## Notes
+
+- "IA Para Todos contributors" means the individual authors of each
+  contribution, not a legal entity — none exists yet.
+- This file grants no rights to third-party trademarks, tools, or content
+  referenced in the documentation. AI tools mentioned in curricula belong to
+  their respective owners.

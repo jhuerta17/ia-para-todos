@@ -12,7 +12,7 @@ Everyone who attends, volunteers at, or hosts our activities deserves physical, 
 - **Physical safety:** venue walkthrough covers exits, first aid, lighting, and accessibility (see [venue-requirements.md](../operations/venue-requirements.md)); incidents stop the session first, paperwork later.
 - **Informational safety:** fictional exercise data; no photos of participants without explicit consent (prefer none); anonymous feedback; private storage of any operational records.
 - **Boundaries:** volunteers don't exchange personal contacts for non-project purposes, meet participants alone to "help extra," or provide professional advice (legal/medical/financial) — they refer to qualified help.
-- **Reporting:** concerns about safety or conduct go to the lead facilitator promptly and confidentially; serious concerns pause the involved volunteer's participation pending review. (A formal reporting channel arrives in a later setup phase.)
+- **Reporting:** concerns about safety or conduct go to the lead facilitator promptly and confidentially; serious concerns pause the involved volunteer's participation pending review. See the [Code of Conduct](../../CODE_OF_CONDUCT.md) and [Security Policy](../../SECURITY.md) for the interim reporting process.
 
 ## Youth under 18 — future programs only (NOT active)
 

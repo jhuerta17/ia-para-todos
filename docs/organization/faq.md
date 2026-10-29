@@ -39,7 +39,7 @@ Host outreach is planned for a later phase. During validation we intend to work 
 Volunteer roles (facilitators, assistants, translators, outreach helpers) will be defined in a later phase. No volunteers have been recruited yet.
 
 **Can I use these materials?**
-> **DECISION NEEDED:** A license has not been selected yet (see [../../README.md](../../README.md)). Until one is added, no reuse rights are granted.
+Proposed dual licensing — CC BY 4.0 for educational materials, MIT for scripts — is documented in [LICENSE](../../LICENSE) and is pending final approval. Until approved, treat reuse conservatively and ask the maintainers if in doubt.
 
 ## Trust and safety
 

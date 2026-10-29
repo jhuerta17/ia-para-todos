@@ -1,6 +1,6 @@
 # Documentation Index
 
-Welcome to the IA Para Todos documentation. The repository is in **Part 6 of a seven-part setup**: all documentation sections exist (organization, strategy, nonprofit, roadmap, operations, safety, brand) plus workshops and templates; only assets, scripts, and `.github/` automation remain.
+Welcome to the IA Para Todos documentation. The seven-part setup is **complete**: all documentation sections exist (organization, strategy, nonprofit, roadmap, operations, safety, brand) plus workshops, templates, scripts, and `.github/` automation. Remaining: `assets/` brand/media files (planned once visual identity is decided) and pilot validation of every draft.
 
 ## Structure
 
@@ -14,7 +14,7 @@ Welcome to the IA Para Todos documentation. The repository is in **Part 6 of a s
 | `safety/` | [responsible-ai.md](safety/responsible-ai.md) · [privacy-guidelines.md](safety/privacy-guidelines.md) · [participant-safeguarding.md](safety/participant-safeguarding.md) · [accessibility.md](safety/accessibility.md) |
 | `brand/` | [brand-guidelines.md](brand/brand-guidelines.md) · [voice-and-tone.md](brand/voice-and-tone.md) · [messaging.md](brand/messaging.md) |
 
-Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · `assets/`, `scripts/`, `.github/` (planned in later phases).
+Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · [`scripts/`](../scripts/validate-docs.sh) (`bootstrap.sh`, `validate-docs.sh`) · [`.github/`](../.github/PULL_REQUEST_TEMPLATE.md) (issue/PR templates, docs-check workflow) · `assets/` (brand/media files, planned once visual identity is decided).
 
 ## Documentation conventions
 

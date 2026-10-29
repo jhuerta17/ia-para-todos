@@ -43,7 +43,7 @@ Small pilots may combine roles (e.g., assistant + tech, welcome + outreach), but
 
 - Volunteers represent a nonsectarian, non-commercial educational initiative: no selling, recruiting, preaching, or campaigning at events.
 - Report concerns about participant safety or volunteer behavior to the lead facilitator promptly and confidentially.
-- A formal code of conduct and reporting channel will be added in a later setup phase; until then the lead facilitator is the point of contact, and serious concerns pause the volunteer's participation pending review.
+- Our [Code of Conduct](../../CODE_OF_CONDUCT.md) and its interim reporting process apply to all volunteers; the lead facilitator is the point of contact, and serious concerns pause the volunteer's participation pending review.
 
 ## Recognition and retention (proposed)
 

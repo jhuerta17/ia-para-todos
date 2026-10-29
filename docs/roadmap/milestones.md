@@ -10,7 +10,7 @@ Milestones are **gates, not dates**. A phase begins when its entry criteria are 
 
 - Entry: project exploration begins.
 - Exit: all seven setup phases landed; every doc honest about draft status; zero dead links; zero invented facts.
-- Status: in progress.
+- Status: complete (all seven setup phases landed).
 
 ## M1 — Validation complete (90-day pilot, Days 1–30)
 

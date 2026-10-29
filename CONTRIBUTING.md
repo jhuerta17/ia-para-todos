@@ -6,11 +6,11 @@ Thank you for your interest in contributing! IA Para Todos is a community educat
 
 ## Project stage
 
-This repository is in **Part 1 of a seven-part setup**: structure, bilingual READMEs, and documentation conventions only. Organizational docs, curricula, operations guides, and automation arrive in later phases. Early contributions most helpful right now:
+The seven-part repository setup is **complete**: organization, strategy, nonprofit, roadmap, operations, safety, and brand docs plus workshop curricula, templates, and automation all exist as unvalidated drafts. The most helpful contributions right now:
 
-- Feedback on the mission framing and bilingual READMEs.
+- Feedback on mission framing, curricula clarity, and bilingual quality.
 - Translation improvements (Spanish ↔ English).
-- Suggestions for the planned documentation structure.
+- Pilot-readiness review: try the checklists and facilitator guides as if you were a new volunteer and report gaps.
 
 ## Ways to contribute (as the repo grows)
 
@@ -20,7 +20,7 @@ This repository is in **Part 1 of a seven-part setup**: structure, bilingual REA
 - **Outreach ideas** — connections to community organizations, libraries, or venues.
 - **Accessibility** — improve readability and accessible formats.
 
-> A code of conduct, issue templates, and pull request template will be added in a later setup phase. Until then, be kind and constructive: assume good faith, welcome beginners, and focus feedback on the work.
+All participants must follow our [Code of Conduct](CODE_OF_CONDUCT.md). Issue templates live under [.github/ISSUE_TEMPLATE/](.github/ISSUE_TEMPLATE/) — pick the one that fits; pull requests follow the [pull request template](.github/PULL_REQUEST_TEMPLATE.md). Be kind and constructive: assume good faith, welcome beginners, and focus feedback on the work.
 
 ## How to contribute
 
