@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-const iconNames = ['alert-circle', 'arrow-left', 'arrow-right', 'arrow-up-right', 'arrows-horizontal', 'book', 'brand-instagram', 'brand-linkedin', 'brand-tiktok', 'brand-x', 'brand-youtube', 'bulb', 'calendar-event', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'clipboard-check', 'device-mobile', 'mail', 'map-pin', 'menu-2', 'minus', 'pencil', 'phone', 'plus', 'quote', 'search', 'shield-check', 'sparkles', 'users', 'x'] as const;
+const iconNames = ['alert-circle', 'arrow-left', 'arrow-right', 'arrow-up-right', 'arrows-horizontal', 'book', 'brand-instagram', 'brand-linkedin', 'brand-tiktok', 'brand-x', 'brand-youtube', 'bulb', 'calendar-event', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'circle-check', 'clipboard-check', 'device-mobile', 'mail', 'map-pin', 'menu-2', 'minus', 'pencil', 'phone', 'player-pause', 'player-play', 'plus', 'quote', 'search', 'shield-check', 'sparkles', 'users', 'x'] as const;
 export type IconName = (typeof iconNames)[number];
 
 @Component({

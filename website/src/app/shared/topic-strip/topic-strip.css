@@ -1,0 +1,32 @@
+:host { display: block; }
+section { max-width: 1440px; margin-inline: auto; padding: 70px 64px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 32px; margin-bottom: 34px; }
+h2 { font: 400 18px/1.7 var(--font-body); color: var(--color-text); }
+.motion-control { flex: none; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text); background: white; cursor: pointer; }
+.motion-control app-icon { --icon-size: 16px; }
+.motion-control:hover { background: var(--color-warm); }
+.viewport { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent); }
+.track { display: flex; width: max-content; animation: topics-travel 43.733s linear infinite; }
+.track.paused, .viewport:hover .track, .viewport:focus-within .track { animation-play-state: paused; }
+.group { display: flex; gap: 14px; margin: 0; padding: 0 14px 0 0; list-style: none; }
+.topic { display: flex; flex: none; align-items: center; justify-content: center; gap: 12px; width: 314px; height: 226px; padding: 24px; border-radius: 32px; background: var(--color-cool); color: #4b4b4b; font-size: 22px; line-height: 1.3; font-weight: 600; }
+.topic app-icon { --icon-size: 32px; }
+@keyframes topics-travel { to { transform: translateX(-50%); } }
+@media (max-width: 809px) {
+  section { padding: 50px 20px 66px; }
+  .section-heading { margin-bottom: 50px; }
+  h2 { font-size: 16px; }
+  .track { animation-duration: 29.866s; }
+  .topic { width: 210px; height: 150px; padding: 16px; border-radius: 26px; gap: 10px; font-size: 18px; }
+  .topic app-icon { --icon-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-control, .group[aria-hidden] { display: none; }
+  .viewport { overflow: visible; mask-image: none; }
+  .track { display: block; width: auto; animation: none; }
+  .group { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 0; }
+  .topic { width: auto; height: 150px; flex-direction: column; text-align: center; }
+}
+@media (prefers-reduced-motion: reduce) and (max-width: 809px) {
+  .group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
