@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { PageCover } from '../../shared/page-cover/page-cover';
+import { AiTutor } from '../../shared/ai-tutor/ai-tutor';
 import { ActionLink } from '../../shared/action-link';
 import { RevealOnEnter } from '../../shared/motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
@@ -13,7 +14,7 @@ interface Tier {
   available: boolean;
 }
 
-const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladderHeading: string; ladderLead: string; note: string; tiers: Tier[]; explore: string; exploreTo: string }> = {
+const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladderHeading: string; ladderLead: string; note: string; tiers: Tier[]; explore: string; exploreTo: string; lessonHeading: string; lessonLead: string; steps: string[] }> = {
   es: {
     coverAlt: 'Personas adultas aprendiendo con una computadora.',
     title: 'Cursos en línea',
@@ -29,6 +30,13 @@ const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladder
     ],
     explore: 'Probar el mini-curso',
     exploreTo: '/actividades/primer-prompt',
+    lessonHeading: 'Lección 0: tu primer prompt en 5 minutos',
+    lessonLead: 'Así se siente un curso aquí: una idea, un ejemplo inventado y práctica inmediata con el tutor.',
+    steps: [
+      'Lee la fórmula: tarea + tema + formato.',
+      'Escríbele al tutor y pide tu primera lista.',
+      'Pide un cambio y observa qué pasa con la respuesta.',
+    ],
   },
   en: {
     coverAlt: 'Adults learning with a computer.',
@@ -45,10 +53,17 @@ const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladder
     ],
     explore: 'Try the mini-course',
     exploreTo: '/actividades/first-prompt',
+    lessonHeading: 'Lesson 0: your first prompt in 5 minutes',
+    lessonLead: 'This is what a course feels like here: one idea, one made-up example, and instant practice with the tutor.',
+    steps: [
+      'Read the formula: task + topic + format.',
+      'Write to the tutor and ask for your first list.',
+      'Ask for a change and watch what happens to the answer.',
+    ],
   },
 };
 
-@Component({selector: 'app-courses', imports: [PageCover, ActionLink, RevealOnEnter], templateUrl: './courses.html', styleUrl: './courses.css', changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-courses', imports: [PageCover, AiTutor, ActionLink, RevealOnEnter], templateUrl: './courses.html', styleUrl: './courses.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class Courses {
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

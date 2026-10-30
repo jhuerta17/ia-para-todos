@@ -22,4 +22,16 @@
       </div>
     </div>
   </section>
+  <section class="lesson" aria-labelledby="lesson-title">
+    <div class="wrap">
+      <h2 id="lesson-title" appRevealOnEnter>{{ c().lessonHeading }}</h2>
+      <p class="lead" appRevealOnEnter>{{ c().lessonLead }}</p>
+      <ol appRevealOnEnter>
+        @for (step of c().steps; track $index) {
+          <li>{{ step }}</li>
+        }
+      </ol>
+      <app-ai-tutor />
+    </div>
+  </section>
 </main>

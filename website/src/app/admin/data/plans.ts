@@ -159,6 +159,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'mini-lesson',
         title: 'One interactive mini-lesson',
         detail: 'Five-minute "try it now" lesson powered by the tutor as the format proof.',
+        done: true,
       },
       {
         id: 'waitlist-wired',
