@@ -28,6 +28,8 @@ export interface DemoImpactMonth {
   attendees: number;
   volunteers: number;
   satisfaction: number;
+  /** % of attendees reporting improved confidence that month. */
+  confidence: number;
 }
 
 const DAY_MS = 86_400_000;
@@ -78,9 +80,10 @@ const SUPPORTER_DEFS: SupporterDef[] = [
   { id: 'd10', name: 'Ana Torres', type: 'Individual', total: 500, sinceOffsetMonths: 5, status: 'Lapsed' },
 ];
 
-/** Monthly volunteers and satisfaction, oldest month first. */
+/** Monthly volunteers, satisfaction, and confidence, oldest month first. */
 const VOLUNTEERS_BY_MONTH = [4, 5, 5, 7, 8, 9];
 const SATISFACTION_BY_MONTH = [92, 94, 93, 95, 96, 97];
+const CONFIDENCE_BY_MONTH = [71, 76, 74, 81, 84, 88];
 
 /**
  * Deterministic synthetic operating data for admin demo mode. Pure
@@ -138,6 +141,7 @@ export function demoImpactMonths(workshops: DemoWorkshop[], now = Date.now()): D
       attendees: 0,
       volunteers: VOLUNTEERS_BY_MONTH[5 - i],
       satisfaction: SATISFACTION_BY_MONTH[5 - i],
+      confidence: CONFIDENCE_BY_MONTH[5 - i],
     });
   }
   const byKey = new Map(months.map((month) => [month.key, month]));

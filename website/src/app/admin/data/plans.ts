@@ -103,6 +103,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'impact-story',
         title: 'Impact trend over 6 months',
         detail: 'Reach and confidence curves a real program would be proud of (labeled demo).',
+        done: true,
       },
       {
         id: 'supporters-story',
