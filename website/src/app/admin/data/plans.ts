@@ -41,6 +41,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'honesty-labels',
         title: 'Keep every synthetic figure labeled',
         detail: 'Demo banner plus sample/illustrative labels everywhere; zero fake claims of real operations.',
+        done: true,
       },
       {
         id: 'plans-tracker-live',

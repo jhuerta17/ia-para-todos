@@ -308,6 +308,22 @@ for (const path of ADMIN_PATHS) {
   writeFileSync(file, html);
 }
 
+// 17. Honesty guard: no public page claims real operations, and the
+// stories pages keep their invented-examples disclaimer.
+const BANNED_CLAIMS = ['501(c)(3)', '501c3', 'testimonios de', 'testimonials from', 'talleres realizados', 'workshops delivered', 'han asistido', 'have attended', 'nuestros donantes', 'our donors'];
+for (const { path } of routes) {
+  const file = path === '' ? join(publish, 'index.html') : join(publish, path, 'index.html');
+  if (!existsSync(file)) continue; // missing output is covered by check 4
+  const html = readFileSync(file, 'utf8').toLowerCase();
+  for (const phrase of BANNED_CLAIMS) {
+    if (html.includes(phrase)) fail(`/${path || ''} claims real operations: ${phrase}`);
+  }
+}
+for (const [page, marker] of [['historias/index.html', 'inventados'], ['en/stories/index.html', 'Made-up examples']]) {
+  const html = readFileSync(join(publish, page), 'utf8');
+  if (!html.includes(marker)) fail(`${page} lost the invented-examples disclaimer`);
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);
