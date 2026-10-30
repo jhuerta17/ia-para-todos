@@ -44,6 +44,8 @@ Cada taller incluye orientación sobre precisión de la IA, privacidad, segurida
 > - **Aún no hemos formado ninguna alianza formal.**
 > - **No hemos registrado una organización sin fines de lucro** y **no** somos una organización incorporada, una 501(c)(3) reconocida por el IRS, una organización benéfica registrada ni una organización exenta de impuestos establecida. Ningún contenido de este repositorio debe interpretarse en ese sentido.
 > - Todos los planes, declaraciones y futuros planes de estudio en este repositorio son **borradores de trabajo**, no documentos finalizados ni aprobados por una junta.
+>
+> El sitio bilingüe, el portal de administración y el tutor de IA en `website/` son una **muestra del sprint de demostración** de cómo podría verse el programa después de seis meses (ver [alcance de la demo](docs/demo/scope.md)). Las cifras del modo demo son simuladas y están etiquetadas; no describen operaciones reales.
 
 ## Hoja de ruta planeada
 
@@ -59,7 +61,8 @@ ia-para-todos/
 ├── README.md / README.es.md   # Descripción bilingüe del proyecto (estás aquí)
 ├── CONTRIBUTING.md             # Cómo contribuir
 ├── docs/                       # Documentación (organización, estrategia, sin fines
-│                               # de lucro, ruta, operaciones, seguridad, marca)
+│                               # de lucro, ruta, operaciones, seguridad, marca, demo)
+├── website/                    # Sitio bilingüe, portal admin, tutor IA, funciones
 ├── workshops/                  # Planes de estudio (borradores pendientes de piloto)
 ├── templates/                  # Plantillas de difusión, retroalimentación
 ├── assets/                     # Recursos de marca y medios (planeado)

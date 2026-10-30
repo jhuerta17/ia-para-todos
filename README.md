@@ -45,6 +45,8 @@ Every workshop includes guidance on AI accuracy, privacy, safety, and independen
 > - We have **not yet formed any formal partnerships**.
 > - We have **not registered a nonprofit** and are **not** an incorporated nonprofit, an IRS-recognized 501(c)(3), a registered charity, or an established tax-exempt organization. Nothing in this repository should be read as implying otherwise.
 > - All plans, statements, and future curricula in this repository are **working drafts**, not finalized or board-approved documents.
+>
+> The bilingual website, owner-only admin portal, and AI tutor in `website/` are a **demo-sprint showcase** of what the program could look like after six months of running (see [demo scope](docs/demo/scope.md)). Figures in admin demo mode are simulated and labeled; they describe no real operations.
 
 ## Planned roadmap
 
@@ -60,7 +62,8 @@ ia-para-todos/
 ├── README.md / README.es.md   # Bilingual project overview (you are here)
 ├── CONTRIBUTING.md             # How to contribute
 ├── docs/                       # Documentation (organization, strategy, nonprofit,
-│                               # roadmap, operations, safety, brand)
+│                               # roadmap, operations, safety, brand, demo)
+├── website/                    # Bilingual site, admin portal, AI tutor, functions
 ├── workshops/                  # Workshop curricula (drafts pending pilot)
 ├── templates/                  # Outreach, feedback, and planning templates
 ├── assets/                     # Brand and media assets (planned)

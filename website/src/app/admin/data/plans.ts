@@ -190,6 +190,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'docs-honest',
         title: 'README + docs match reality',
         detail: 'Demo state described honestly; nothing implies real workshops happened.',
+        done: true,
       },
       {
         id: 'next-steps',
