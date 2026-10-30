@@ -13,22 +13,22 @@ const copy: Record<Lang, { communityTitle: string; communityLead: string; commun
     communityLead: 'Todas las personas son bienvenidas. Queremos aprender juntos y acompañar a quienes dan sus primeros pasos con la tecnología.',
     community: [
       'La iniciativa es inclusiva y no sectaria; los talleres no contienen contenido religioso. Puedes expresar tu interés en facilitar, acompañar, traducir o difundir.',
-      'El formulario de abajo es una práctica local. Usa datos inventados: nada se envía, se guarda, te suscribe ni te registra como participante o colaborador.',
+      'Completa el formulario con tus datos para que podamos contactarte. Solo los usamos para hablar de colaboración.',
     ],
     workshopsTitle: 'Participa',
     workshopsLead: 'Explora cómo participar en un taller.',
-    workshops: ['El formulario es una práctica local. Usa datos inventados: nada se envía, se guarda, te suscribe ni te registra. Los talleres son gratuitos y usan herramientas gratuitas.'],
+    workshops: ['Completa el formulario con tus datos para que podamos contactarte. Los talleres son gratuitos y usan herramientas gratuitas.'],
   },
   en: {
     communityTitle: 'Learn in community',
     communityLead: 'Everyone is welcome. We want to learn together and support people taking their first steps with technology.',
     community: [
       'The initiative is inclusive and nonsectarian; workshops contain no religious content. You can express your interest in facilitating, guiding, translating, or sharing.',
-      'The form below is a local practice. Use made-up data: nothing is sent, saved, subscribed, or registered as a participant or collaborator.',
+      'Complete the form with your details so we can contact you. We only use them to talk about collaboration.',
     ],
     workshopsTitle: 'Participate',
     workshopsLead: 'Explore how to take part in a workshop.',
-    workshops: ['The form is a local practice. Use made-up data: nothing is sent, saved, subscribed, or registered. Workshops are free and use free tools.'],
+    workshops: ['Complete the form with your details so we can contact you. Workshops are free and use free tools.'],
   },
 };
 

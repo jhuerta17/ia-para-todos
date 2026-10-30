@@ -4,16 +4,19 @@
   } @else {<h2 id="participation-title" class="visually-hidden">{{ c().hiddenHeading }}</h2>}
   <div class="columns">
     <ol class="steps">@for (step of steps(); track step.title; let index = $index) {<li appRevealOnEnter><app-icon [name]="step.icon" /><div><h3>{{ step.title }}</h3><p>{{ step.text }}</p></div><span class="number">0{{ index + 1 }}</span></li>}</ol>
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate autocomplete="off" appRevealOnEnter>
+    <form [formGroup]="form" [attr.name]="formName()" data-netlify="true" netlify-honeypot="bot-field" (ngSubmit)="submit()" novalidate autocomplete="off" appRevealOnEnter>
       <h3>{{ context() === 'community' ? c().collaborate : c().participate }}</h3><p class="form-note">{{ c().note }}</p>
-      <label for="demo-name">{{ c().name }}</label><input id="demo-name" required formControlName="name" [placeholder]="c().namePh" maxlength="100" [attr.aria-invalid]="invalid('name')" aria-describedby="name-error" />
+      <input type="hidden" name="language" [value]="language.lang()" />
+      <p class="visually-hidden" aria-hidden="true"><label>{{ c().honeypot }}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+      <label for="contact-name">{{ c().name }}</label><input id="contact-name" name="name" required formControlName="name" [placeholder]="c().namePh" maxlength="100" [attr.aria-invalid]="invalid('name')" aria-describedby="name-error" />
       <p id="name-error" class="error">@if (invalid('name')) { {{ c().nameError }} }</p>
-      <div class="field-row"><div><label for="demo-email">{{ c().email }}</label><input id="demo-email" required type="email" formControlName="email" [placeholder]="c().emailPh" maxlength="200" [attr.aria-invalid]="invalid('email')" aria-describedby="email-error" /><p id="email-error" class="error">@if (invalid('email')) { {{ c().emailError }} }</p></div><div><label for="demo-phone">{{ c().phone }}</label><input id="demo-phone" type="tel" formControlName="phone" maxlength="30" /></div></div>
-      <label for="demo-workshop">{{ context() === 'community' ? c().collaborateWay : c().interest }} *</label><select id="demo-workshop" required formControlName="workshop" [attr.aria-invalid]="invalid('workshop')" aria-describedby="workshop-error"><option value="">{{ c().choose }}</option>@for (choice of choices(); track choice) {<option>{{ choice }}</option>}</select><p id="workshop-error" class="error">@if (invalid('workshop')) { {{ c().interestError }} }</p>
-      <label for="demo-message">{{ c().message }}</label><textarea id="demo-message" formControlName="message" rows="3" maxlength="1000"></textarea>
-      <label class="consent"><input type="checkbox" required formControlName="consent" [attr.aria-invalid]="invalid('consent')" aria-describedby="consent-error" /><span>{{ c().consent }}</span></label><p id="consent-error" class="error">@if (invalid('consent')) { {{ c().consentError }} }</p>
-      <button class="submit" type="submit"><span>{{ c().submit }}</span><app-icon name="arrow-right" /></button>
+      <div class="field-row"><div><label for="contact-email">{{ c().email }}</label><input id="contact-email" name="email" required type="email" formControlName="email" [placeholder]="c().emailPh" maxlength="200" [attr.aria-invalid]="invalid('email')" aria-describedby="email-error" /><p id="email-error" class="error">@if (invalid('email')) { {{ c().emailError }} }</p></div><div><label for="contact-phone">{{ c().phone }}</label><input id="contact-phone" name="phone" type="tel" formControlName="phone" [placeholder]="c().phonePh" maxlength="30" /></div></div>
+      <label for="contact-workshop">{{ context() === 'community' ? c().collaborateWay : c().interest }} *</label><select id="contact-workshop" name="interest" required formControlName="workshop" [attr.aria-invalid]="invalid('workshop')" aria-describedby="workshop-error"><option value="">{{ c().choose }}</option>@for (choice of choices(); track choice) {<option>{{ choice }}</option>}</select><p id="workshop-error" class="error">@if (invalid('workshop')) { {{ c().interestError }} }</p>
+      <label for="contact-message">{{ c().message }}</label><textarea id="contact-message" name="message" formControlName="message" rows="3" maxlength="1000" [placeholder]="c().messagePh"></textarea>
+      <label class="consent"><input type="checkbox" name="consent" required formControlName="consent" [attr.aria-invalid]="invalid('consent')" aria-describedby="consent-error" /><span>{{ c().consent }}</span></label><p id="consent-error" class="error">@if (invalid('consent')) { {{ c().consentError }} }</p>
+      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().submit }}</span><app-icon name="arrow-right" /></button>
       <p class="result" role="status">@if (complete()) { {{ c().result }} }</p>
+      <p class="error" role="alert">@if (failed()) { {{ c().failed }} }</p>
     </form>
   </div>
 </section>

@@ -116,6 +116,36 @@ for (const asset of ['/images/social/og-banner-1200x630.jpg', '/images/social/og
 if (existsSync(join(publish, '404', 'index.html'))) fail('unexpected 404/index.html output');
 if (existsSync(join(publish, 'en', '404', 'index.html'))) fail('unexpected en/404/index.html output');
 
+// 8. Netlify Forms detection: every prerendered form carries its name,
+// detection attribute, honeypot, and named fields; no demo-form copy remains.
+const formPages = [
+  ['index.html', 'participate'],
+  ['comunidad/index.html', 'collaborate'],
+  ['participar/index.html', 'participate'],
+  ['en/index.html', 'participate'],
+  ['en/community/index.html', 'collaborate'],
+  ['en/participate/index.html', 'participate'],
+];
+for (const [page, name] of formPages) {
+  const html = readFileSync(join(publish, page), 'utf8');
+  const formTags = [...html.matchAll(/<form[^>]*>/g)].map(match => match[0]);
+  if (!formTags.some(form => form.includes(`name="${name}"`) && form.includes('data-netlify="true"') && form.includes('netlify-honeypot="bot-field"'))) {
+    fail(`${page} lacks a detectable Netlify form named ${name}`);
+  }
+  for (const field of ['name="language"', 'name="bot-field"', 'name="name"', 'name="email"', 'name="interest"', 'name="consent"']) {
+    if (!html.includes(field)) fail(`${page} form ${name} lacks ${field}`);
+  }
+}
+for (const { path } of routes) {
+  const file = path === '' ? join(publish, 'index.html') : join(publish, path, 'index.html');
+  const html = readFileSync(file, 'utf8');
+  const forms = [...html.matchAll(/<form[^>]*>/g)].map(match => match[0]);
+  if (!forms.some(form => form.includes('name="newsletter"') && form.includes('data-netlify="true"'))) fail(`/${path || ''} lacks the newsletter form`);
+  for (const leftover of ['no se enviaron datos', 'Demostración: no', 'práctica local', 'local practice', 'de prueba', 'Test email', 'Test name']) {
+    if (html.includes(leftover)) fail(`/${path || ''} still mentions demo-form copy: ${leftover}`);
+  }
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);

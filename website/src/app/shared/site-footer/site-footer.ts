@@ -8,8 +8,8 @@ import { Language } from '../../i18n/language';
 import { Lang, StaticKey } from '../../i18n/lang';
 
 const copy = {
-  es: { home: 'IA para todos, inicio', identity: 'Aprender IA en español, desde cero y en comunidad. Talleres gratuitos en español.', newsHeading: 'Sigamos aprendiendo', newsLead: 'Demostración del boletín: nada se guarda ni te suscribe.', newsLabel: 'Correo de prueba', newsPh: 'nombre@ejemplo.com', newsError: 'Escribe un correo válido de prueba.', newsButton: 'Probar demostración', newsResult: 'Demostración: no se enviaron datos. No hay ninguna suscripción.', explore: 'Explora', exploreNav: 'Navegación del pie de página', info: 'Información', infoNav: 'Información del sitio', talk: 'Conversemos', talkLead: 'Todos los canales de contacto, en un solo lugar.', aboutContact: 'Sobre el contacto', copyright: '©2026 IA para todos. Todos los derechos reservados.' },
-  en: { home: 'AI for everyone, home', identity: 'Learn AI in Spanish, from scratch and in community. Free workshops in Spanish.', newsHeading: 'Keep learning', newsLead: 'Newsletter demonstration: nothing is saved and you are not subscribed.', newsLabel: 'Test email', newsPh: 'name@example.com', newsError: 'Write a valid test email.', newsButton: 'Try demonstration', newsResult: 'Demonstration: no data was sent. There is no subscription.', explore: 'Explore', exploreNav: 'Footer navigation', info: 'Information', infoNav: 'Site information', talk: 'Let’s talk', talkLead: 'Every contact channel, in one place.', aboutContact: 'About contact', copyright: '©2026 AI for everyone. All rights reserved.' },
+  es: { home: 'IA para todos, inicio', identity: 'Aprender IA en español, desde cero y en comunidad. Talleres gratuitos en español.', newsHeading: 'Sigamos aprendiendo', newsLead: 'Recibe novedades sobre talleres y recursos. Sin spam.', newsLabel: 'Correo electrónico', newsPh: 'nombre@ejemplo.com', newsError: 'Escribe un correo válido.', newsButton: 'Suscribirme', newsSending: 'Enviando…', newsResult: '¡Gracias por suscribirte! Te avisaremos de las novedades.', newsFailed: 'No pudimos completar la suscripción. Inténtalo de nuevo.', honeypot: 'No completar este campo', explore: 'Explora', exploreNav: 'Navegación del pie de página', info: 'Información', infoNav: 'Información del sitio', talk: 'Conversemos', talkLead: 'Todos los canales de contacto, en un solo lugar.', aboutContact: 'Sobre el contacto', copyright: '©2026 IA para todos. Todos los derechos reservados.' },
+  en: { home: 'AI for everyone, home', identity: 'Learn AI in Spanish, from scratch and in community. Free workshops in Spanish.', newsHeading: 'Keep learning', newsLead: 'Get news about workshops and resources. No spam.', newsLabel: 'Email', newsPh: 'name@example.com', newsError: 'Write a valid email.', newsButton: 'Subscribe', newsSending: 'Sending…', newsResult: 'Thanks for subscribing! We’ll keep you posted.', newsFailed: 'We could not complete the subscription. Please try again.', honeypot: 'Do not fill in this field', explore: 'Explore', exploreNav: 'Footer navigation', info: 'Information', infoNav: 'Site information', talk: 'Let’s talk', talkLead: 'Every contact channel, in one place.', aboutContact: 'About contact', copyright: '©2026 AI for everyone. All rights reserved.' },
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
@@ -25,6 +25,8 @@ export class SiteFooter {
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
   protected readonly complete = signal(false);
+  protected readonly failed = signal(false);
+  protected readonly sending = signal(false);
   protected readonly email = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] });
   protected readonly navigation = computed(() => NAVIGATION.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
   protected readonly info = computed(() => INFO.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
@@ -33,5 +35,23 @@ export class SiteFooter {
       if (event instanceof NavigationEnd) { this.email.reset(); this.complete.set(false); }
     });
   }
-  protected submit(event: Event): void { event.preventDefault(); this.complete.set(false); this.email.markAsTouched(); if (this.email.valid) { this.complete.set(true); this.email.reset(); } }
+  protected async submit(event: Event): Promise<void> {
+    event.preventDefault();
+    this.complete.set(false);
+    this.failed.set(false);
+    this.email.markAsTouched();
+    if (this.email.invalid || this.sending()) return;
+    this.sending.set(true);
+    try {
+      const body = new URLSearchParams({ 'form-name': 'newsletter', 'bot-field': '', language: this.language.lang(), email: this.email.value.trim() });
+      const response = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() });
+      if (!response.ok) throw new Error(`Netlify Forms responded ${response.status}`);
+      this.complete.set(true);
+      this.email.reset();
+    } catch {
+      this.failed.set(true);
+    } finally {
+      this.sending.set(false);
+    }
+  }
 }
