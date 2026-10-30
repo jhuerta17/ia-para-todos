@@ -94,6 +94,7 @@ export const routes: Routes = [
       { path: 'workshops', loadComponent: () => import('./admin/pages/admin-workshops/admin-workshops').then(module => module.AdminWorkshops), title: 'Workshops · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'impact', loadComponent: () => import('./admin/pages/admin-impact/admin-impact').then(module => module.AdminImpact), title: 'Impact · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'supporters', loadComponent: () => import('./admin/pages/admin-supporters/admin-supporters').then(module => module.AdminSupporters), title: 'Supporters · AI for everyone', data: { lang: 'en', admin: true } },
+      { path: 'plans', loadComponent: () => import('./admin/pages/admin-plans/admin-plans').then(module => module.AdminPlans), title: 'Plans · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'sign-in', loadComponent: () => import('./admin/pages/admin-access/admin-access').then(module => module.AdminAccess), title: 'Admin sign-in · AI for everyone', data: { lang: 'en', admin: true, adminLogin: true, bare: true } },
     ],
   },

@@ -45,6 +45,23 @@
   <p class="sr-only">Loading the summary…</p>
 }
 
+<a
+  routerLink="/admin/plans"
+  class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 rounded-2xl border border-gray-200 bg-white p-5 transition-colors hover:bg-gray-50 md:p-6 dark:border-gray-800 dark:bg-white/3 dark:hover:bg-white/5"
+>
+  <div>
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">Business plans</h2>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ plans().done }} of {{ plans().total }} done · {{ plans().doing }} in progress</p>
+  </div>
+  <div class="flex min-w-52 flex-1 items-center gap-3">
+    <div class="h-2 flex-1 rounded-full bg-gray-200 dark:bg-gray-800" role="presentation">
+      <div class="h-2 rounded-full bg-brand-500" [style.width.%]="plans().pct"></div>
+    </div>
+    <span class="text-sm font-bold text-gray-800 tabular-nums dark:text-white/90">{{ plans().pct }}%</span>
+  </div>
+  <span class="text-sm font-medium text-brand-600 dark:text-brand-400">Open tracker →</span>
+</a>
+
 @if (buckets(); as data) {
   <div class="mt-6 grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-3">
     <section aria-label="Request trend" class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 xl:col-span-2 dark:border-gray-800 dark:bg-white/3">

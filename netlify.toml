@@ -27,8 +27,8 @@
     Cache-Control = "public, max-age=0, must-revalidate"
 
 # Admin gating (role rules run before the catch-all): the overview,
-# inbox, workshops, impact, and supporters pages serve their prerendered
-# shells only to Identity users whose JWT carries the admin role;
+# inbox, workshops, impact, supporters, and plans pages serve their
+# prerendered shells only to Identity users whose JWT carries the admin role;
 # everyone else falls through to the 404 rule. /admin/sign-in stays
 # public so the owner can sign in.
 [[redirects]]
@@ -132,6 +132,27 @@
 [[redirects]]
   from = "/admin/supporters/index.html"
   to = "/admin/supporters/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/plans"
+  to = "/admin/plans/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/plans/"
+  to = "/admin/plans/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/plans/index.html"
+  to = "/admin/plans/index.html"
   status = 200
   force = true
   conditions = { Role = ["admin"] }

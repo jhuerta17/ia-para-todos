@@ -10,6 +10,7 @@ login. English UI, light mode, same brand as the public site.
 - Workshops (admin role): `/admin/workshops`
 - Impact (admin role): `/admin/impact`
 - Supporters (admin role): `/admin/supporters`
+- Plans (admin role): `/admin/plans`
 
 Access is enforced in three layers: Netlify edge role rules
 (`netlify.toml`), the in-app route guard, and the Function, which
@@ -61,6 +62,12 @@ confirmation links are detected site-wide and rerouted to
   contribution ledger. These three pages have no live store yet: they
   show honest empty states until their backends exist, and full
   example content in demo mode (below).
+- **Plans** is the business roadmap tracker: every strategy goal as a
+  checkable plan grouped by area, with per-group and overall
+  progress. Statuses cycle Not started → In progress → Done and
+  persist per browser (localStorage); the Dashboard shows the
+  overall progress strip. Progress is per-device until a shared
+  team store replaces it.
 - **Sign out** is in the account menu (top right).
 
 ## Demo mode

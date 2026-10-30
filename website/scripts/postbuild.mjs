@@ -152,7 +152,7 @@ for (const { path } of routes) {
 
 // 9. Admin routes prerender as English shells: present but uncrawlable,
 // with no public chrome, forms, canonicals, or hreflang peers.
-const ADMIN_PATHS = ['admin', 'admin/requests', 'admin/workshops', 'admin/impact', 'admin/supporters', 'admin/sign-in'];
+const ADMIN_PATHS = ['admin', 'admin/requests', 'admin/workshops', 'admin/impact', 'admin/supporters', 'admin/plans', 'admin/sign-in'];
 for (const path of ADMIN_PATHS) {
   const file = join(publish, path, 'index.html');
   const label = `/${path} [admin]`;

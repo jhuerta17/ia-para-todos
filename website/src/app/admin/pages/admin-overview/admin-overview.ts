@@ -7,6 +7,7 @@ import { ADMIN_ICONS } from '../../shared/icons';
 import { BadgeComponent } from '../../shared/ui/badge/badge.component';
 import type { BadgeColor } from '../../shared/ui/badge/badge.component';
 import { DemoState } from '../../data/demo-state';
+import { PlansState } from '../../data/plans-state';
 import { FORM_BADGE_COLORS, FORM_LABELS, SubmissionForm } from '../../data/submissions';
 import { SubmissionsService } from '../../data/submissions.service';
 import { bucketByMonth, monthDeltas } from '../../data/analytics';
@@ -49,6 +50,7 @@ export class AdminOverview {
   protected readonly loadError = inject(SubmissionsService).error;
   private readonly data = inject(SubmissionsService);
   private readonly demo = inject(DemoState);
+  protected readonly plans = inject(PlansState).overall;
 
   constructor() {
     // Prerendering keeps the skeleton; the browser loads real data.
