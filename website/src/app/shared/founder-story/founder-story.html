@@ -1,0 +1,28 @@
+<section aria-labelledby="founder-title">
+  <div class="wrap">
+    <h2 id="founder-title" appRevealOnEnter>{{ c().heading }}</h2>
+    <div class="card" appRevealOnEnter>
+      <div class="portrait">
+        <!-- Founder photo swap: add website/public/images/founder-jaime-480.webp and
+             founder-jaime-960.webp, then replace this monogram with:
+             <img src="/images/founder-jaime-960.webp" srcset="/images/founder-jaime-480.webp 480w, /images/founder-jaime-960.webp 960w" sizes="280px" alt="Jaime Huerta Cruz" width="960" height="960" loading="lazy" /> -->
+        <span class="monogram" aria-hidden="true">JH</span>
+        <p class="name">{{ c().name }}</p>
+        <p class="role">{{ c().role }}</p>
+      </div>
+      <div class="story">
+        @for (paragraph of c().paragraphs; track $index) {
+          <p>{{ paragraph }}</p>
+        }
+        <blockquote>
+          <p>“{{ c().quote }}”</p>
+          <cite>— {{ c().quoteBy }}</cite>
+        </blockquote>
+        <div class="actions">
+          <app-action-link to="/talleres" [label]="c().attend" />
+          <app-action-link to="/participar" [label]="c().help" tone="warm" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

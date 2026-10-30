@@ -72,6 +72,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'stories-honest',
         title: 'Stories page without fake testimonials',
         detail: 'Founder story plus illustrative examples labeled as such until real pilot stories exist.',
+        done: true,
       },
       {
         id: 'copy-pass',
