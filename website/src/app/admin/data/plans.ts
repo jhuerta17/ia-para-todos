@@ -140,6 +140,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'ai-fallback',
         title: 'Graceful no-key fallback',
         detail: 'Without an API key the tutor shows labeled sample replies instead of errors.',
+        done: true,
       },
     ],
   },

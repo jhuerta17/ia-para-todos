@@ -11,6 +11,7 @@
     "install:chromium": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers npx -y playwright@1.64.1 install chromium",
     "verify:forms": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-forms.headless.mjs",
     "verify:forms:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-forms.headless.mjs",
+    "verify:ai": "node scripts/verify-ai-assist.mjs",
     "verify:admin": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-admin.headless.mjs",
     "verify:admin:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-admin.headless.mjs",
     "watch": "ng build --watch --configuration development"
