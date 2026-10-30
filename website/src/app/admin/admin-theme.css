@@ -1,9 +1,10 @@
 /* Admin design tokens, vendored from TailAdmin's Tailwind v4 theme
  * (MIT, see THIRD_PARTY_NOTICES.md) with the site brand applied.
  * Compiled WITHOUT Preflight by `npm run build:admin-css` (runs as
- * prebuild) into public/admin-theme.css, which the admin shell lazy-loads
- * via <link> so public visitors never download it. Brand scale derives
- * from the site accent #4a1c00.
+ * prebuild) into public/admin-theme.css, which only admin routes reference
+ * (early-loader in index.html plus the admin shell ensure one
+ * render-blocking <link>) so public visitors never download it. Brand
+ * scale derives from the site accent #4a1c00.
  *
  * Cascade design (light-only admin beside hand-written public CSS):
  * utilities stay UNLAYERED so they beat the public stylesheet's element

@@ -57,6 +57,26 @@
   </script>
   <link rel="preload" href="fonts/libre-baskerville/libre-baskerville-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/instrument-sans/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+  // Admin theme before first paint: /admin/* markup depends on the
+  // side-built Tailwind sheet, so request it while the head still parses
+  // (render-blocking, no flash of unstyled content). Public routes return
+  // early and download nothing extra. This runs before the parser reaches
+  // any SSR-serialized copy, so the admin shell dedupes by id and exactly
+  // one link survives.
+  (function () {
+    try {
+      var path = location.pathname;
+      if (path !== '/admin' && path.indexOf('/admin/') !== 0) return;
+      if (document.getElementById('admin-theme')) return;
+      var link = document.createElement('link');
+      link.id = 'admin-theme';
+      link.rel = 'stylesheet';
+      link.href = '/admin-theme.css';
+      document.head.appendChild(link);
+    } catch (error) { /* unstyled admin still works; the shell retries */ }
+  })();
+  </script>
 </head>
 <body>
   <app-root></app-root>

@@ -81,6 +81,11 @@ async function main() {
       const heading = await page.locator('h1').first().textContent();
       const fields = await page.locator('#admin-email, #admin-password').count();
       check('sign-in renders login form', (heading ?? '').includes('Admin sign-in') && fields === 2, heading ?? '(no h1)');
+      // Styled-first-paint guard: exactly one theme link after JS boot
+      // (early-loader + SSR copy deduped) with utilities applied.
+      const themeLinks = await page.locator('head link#admin-theme').count();
+      const signinBg = await page.locator('.admin-root').first().evaluate((el) => getComputedStyle(el).backgroundColor).catch(() => '(none)');
+      check('sign-in keeps one theme link with utilities applied', themeLinks === 1 && signinBg === 'rgb(255, 255, 255)', `${themeLinks} link(s), bg=${signinBg}`);
       await page.screenshot({ path: join(evidence, 'signin.png') });
       await page.close();
     }
@@ -292,9 +297,15 @@ async function main() {
       await page.goto(`${base}/admin/sign-in`, { waitUntil: 'domcontentloaded' });
       const form = await page.locator('form').count();
       check('no-js sign-in renders static form', form >= 1, `${form} form(s)`);
+      // FOUC guard: with JS disabled the early-loader cannot run, so this
+      // proves the theme link is render-blocking in the initial HTML.
+      const themeLink = await page.locator('head link#admin-theme[rel="stylesheet"]').count();
+      check('no-js sign-in ships render-blocking admin CSS', themeLink === 1, `${themeLink} link(s)`);
       await page.goto(`${base}/`, { waitUntil: 'domcontentloaded' });
       const home = await page.locator('h1').first().textContent();
       check('public home unaffected', (home ?? '').length > 0, (home ?? '(none)').slice(0, 40));
+      const homeTheme = await page.locator('head link#admin-theme').count();
+      check('public home ships no admin CSS', homeTheme === 0, `${homeTheme} link(s)`);
       await page.close();
       await context.close();
     }

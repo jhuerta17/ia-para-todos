@@ -1,5 +1,5 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { afterNextRender, Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AdminSidebarService } from '../../core/sidebar.service';
 import { AdminBackdrop } from '../admin-backdrop/admin-backdrop';
@@ -28,16 +28,25 @@ export class AdminLayout {
     this.isHovered$ = this.sidebar.isHovered$;
     this.isMobileOpen$ = this.sidebar.isMobileOpen$;
     const document = inject(DOCUMENT);
-    // Admin Tailwind is a lazily loaded side-built asset (see
-    // build:admin-css), so public visitors never download it.
-    afterNextRender(() => {
-      if (document.getElementById('admin-theme')) return;
+    // Admin Tailwind is a side-built asset (see build:admin-css) that only
+    // admin routes reference, so public visitors never download it. Inject
+    // synchronously: on the server this serializes a render-blocking <link>
+    // into the prerendered admin HTML (no unstyled first paint), and on
+    // client-side navigation it starts the fetch before this shell renders.
+    // The head early-loader in index.html cannot see the SSR-serialized link
+    // (it runs earlier in the parse), so dedupe here and keep exactly one.
+    const existing = document.querySelectorAll('link#admin-theme');
+    if (existing.length === 0) {
       const link = document.createElement('link');
       link.id = 'admin-theme';
       link.rel = 'stylesheet';
       link.href = '/admin-theme.css';
       document.head.appendChild(link);
-    });
+    } else {
+      existing.forEach((link, index) => {
+        if (index > 0) link.remove();
+      });
+    }
   }
 
   /** Bare pages (sign-in) render without the sidebar/header shell. */

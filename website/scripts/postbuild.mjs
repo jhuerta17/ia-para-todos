@@ -256,6 +256,26 @@ if (!globalBundle) {
   fail(`${globalBundle} leaks admin Tailwind utilities into the initial bundle`);
 }
 
+// 15. Admin first paint is styled (FOUC guard): every prerendered admin
+// shell carries the render-blocking theme link in its initial HTML, the
+// source template early-loads it for client-shell admin hits, and the
+// public home page never references it.
+for (const path of ADMIN_PATHS) {
+  const file = join(publish, path, 'index.html');
+  if (!existsSync(file)) continue; // missing output is covered by check 9
+  const html = readFileSync(file, 'utf8');
+  const head = html.slice(0, html.indexOf('</head>'));
+  if (!head.includes('id="admin-theme"') || !head.includes('/admin-theme.css')) {
+    fail(`/${path} [admin] lacks the render-blocking admin-theme link (FOUC regression)`);
+  }
+}
+if (!template.includes("getElementById('admin-theme')") || !template.includes('/admin-theme.css')) {
+  fail('src/index.html lost the admin early-loader: client-shell admin hits would flash unstyled');
+}
+if (/<link[^>]*admin-theme/.test(home)) {
+  fail('public home links admin-theme: public visitors would download admin CSS');
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);
