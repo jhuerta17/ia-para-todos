@@ -4,11 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "build:admin-css": "tailwindcss -i src/app/admin/admin-theme.css -o public/admin-theme.css --minify",
+    "prebuild": "npm run build:admin-css",
     "build": "ng build",
     "postbuild": "node scripts/postbuild.mjs",
     "install:chromium": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers npx -y playwright@1.64.1 install chromium",
     "verify:forms": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-forms.headless.mjs",
     "verify:forms:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-forms.headless.mjs",
+    "verify:admin": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-admin.headless.mjs",
+    "verify:admin:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-admin.headless.mjs",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
@@ -22,6 +26,8 @@
     "@angular/platform-server": "22.2.1",
     "@angular/router": "22.2.1",
     "@angular/ssr": "22.2.1",
+    "@netlify/identity": "2.0.0",
+    "gotrue-js": "1.0.1",
     "rxjs": "7.8.2",
     "tslib": "2.8.1"
   },
@@ -29,7 +35,9 @@
     "@angular/build": "22.2.1",
     "@angular/cli": "22.2.1",
     "@angular/compiler-cli": "22.2.1",
+    "@tailwindcss/cli": "4.3.3",
     "playwright-core": "1.64.1",
+    "tailwindcss": "4.3.3",
     "typescript": "6.0.3"
   }
 }

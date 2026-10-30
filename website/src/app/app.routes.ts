@@ -1,3 +1,4 @@
+import { adminGuard, adminGuardChild } from './admin/auth/admin-guard';
 import { informationPages } from './data/information-pages';
 import { resourceDetails } from './data/resource-details';
 import { activityDetails } from './data/activity-details';
@@ -83,5 +84,15 @@ export const routes: Routes = [
   ...detailRoutes('es'),
   ...staticRoutes('en'),
   ...detailRoutes('en'),
+  {
+    path: 'admin', loadComponent: () => import('./admin/layout/admin-layout/admin-layout').then(module => module.AdminLayout),
+    canActivate: [adminGuard],
+    canActivateChild: [adminGuardChild],
+    children: [
+      { path: '', loadComponent: () => import('./admin/pages/admin-overview/admin-overview').then(module => module.AdminOverview), title: 'Panel de administración · IA para todos', data: { lang: 'es', admin: true } },
+      { path: 'solicitudes', loadComponent: () => import('./admin/pages/admin-inbox/admin-inbox').then(module => module.AdminInbox), title: 'Solicitudes · IA para todos', data: { lang: 'es', admin: true } },
+      { path: 'acceso', loadComponent: () => import('./admin/pages/admin-access/admin-access').then(module => module.AdminAccess), title: 'Acceso de administración · IA para todos', data: { lang: 'es', admin: true, adminLogin: true, bare: true } },
+    ],
+  },
   { path: '**', loadComponent: () => import('./pages/not-found/not-found').then(module => module.NotFound), title: 'Página no encontrada · IA para todos' },
 ];

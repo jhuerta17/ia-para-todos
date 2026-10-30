@@ -3,7 +3,7 @@
 // Route entries come from the same data modules as the Angular router config,
 // SITE_URL in src/app/shared/metadata/site.ts is the only canonical host,
 // and both language arrays share index pairing for hreflang.
-import { copyFileSync, existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SITE_URL } from '../src/app/shared/metadata/site.ts';
@@ -42,8 +42,8 @@ for (const lang of LANGS) {
 }
 const canonical = (route) => (route === '' ? `${SITE_URL}/` : `${SITE_URL}/${route}`);
 
-// 1. robots.txt: allow-by-default launch, absolute sitemap URL.
-writeFileSync(join(publish, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+// 1. robots.txt: allow-by-default launch, admin excluded, absolute sitemap URL.
+writeFileSync(join(publish, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
 // 2. sitemap.xml: canonical indexable URLs only, with reciprocal hreflang.
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${routes
@@ -54,6 +54,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://w
   })
   .join('\n')}\n</urlset>\n`;
 writeFileSync(join(publish, 'sitemap.xml'), sitemap);
+if (sitemap.includes('/admin')) fail('sitemap leaks admin routes');
 
 // 3. 404.html from the client shell so Netlify can serve the branded
 // recovery page with a real 404 status for unknown paths.
@@ -146,9 +147,51 @@ for (const { path } of routes) {
   }
 }
 
+// 9. Admin routes prerender as Spanish shells: present but uncrawlable,
+// with no public chrome, forms, canonicals, or hreflang peers.
+const ADMIN_PATHS = ['admin', 'admin/solicitudes', 'admin/acceso'];
+for (const path of ADMIN_PATHS) {
+  const file = join(publish, path, 'index.html');
+  const label = `/${path} [admin]`;
+  if (!existsSync(file)) {
+    fail(`missing prerendered output for ${label}: ${file}`);
+    continue;
+  }
+  const html = readFileSync(file, 'utf8');
+  if (!/<h1[\s>]/.test(html)) fail(`${label} has no rendered <h1>`);
+  if (!html.includes('<html lang="es">')) fail(`${label} lacks <html lang="es">`);
+  if (!html.includes('name="robots"') || !html.includes('content="noindex, nofollow"')) fail(`${label} lacks noindex, nofollow`);
+  if (html.includes('rel="canonical"')) fail(`${label} must not set a canonical`);
+  if (html.includes('hreflang=')) fail(`${label} must not set hreflang alternates`);
+  if (html.includes('name="newsletter"') || html.includes('<app-site-header')) fail(`${label} renders public chrome`);
+}
+
+// 10. Admin function ships with the workspace Netlify deploys.
+if (!existsSync(join(root, 'netlify', 'functions', 'submissions.mts'))) {
+  fail('missing netlify/functions/submissions.mts: the inbox backend would not deploy');
+}
+
+// 11. Tailwind wiring: the admin theme side-build exists, carries the
+// compiled utilities, and stays out of the global stylesheet.
+const themeFile = join(publish, 'admin-theme.css');
+if (!existsSync(themeFile)) {
+  fail('missing admin-theme.css: build:admin-css did not emit the side-built asset');
+} else {
+  const theme = readFileSync(themeFile, 'utf8');
+  for (const marker of ['.font-sans', '.menu-item', '--color-brand-800']) {
+    if (!theme.includes(marker)) fail(`admin-theme.css lacks compiled output (${marker})`);
+  }
+}
+const globalBundle = readdirSync(publish).find((file) => /^styles.*\.css$/.test(file));
+if (!globalBundle) {
+  fail('missing built styles bundle');
+} else if (readFileSync(join(publish, globalBundle), 'utf8').includes('.font-sans')) {
+  fail(`${globalBundle} leaks admin Tailwind utilities into the initial bundle`);
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log(`postbuild: ok (${routes.length} routes, sitemap + robots + 404.html)`);
+console.log(`postbuild: ok (${routes.length} public + ${ADMIN_PATHS.length} admin routes, sitemap + robots + 404.html)`);

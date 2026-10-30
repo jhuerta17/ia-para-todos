@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /bazel-out
+/public/admin-theme.css
 
 # Node
 /node_modules

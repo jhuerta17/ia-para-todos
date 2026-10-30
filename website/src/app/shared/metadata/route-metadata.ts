@@ -49,7 +49,10 @@ export class RouteMetadata {
     const lang = this.language.lang();
     const descriptions = DESCRIPTIONS[lang];
     const key = typeof data['key'] === 'string' ? data['key'] : '';
-    const description: string = data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
+    const admin = data['admin'] === true;
+    const description: string = admin
+      ? 'Panel de administración de IA para todos. Acceso restringido.'
+      : data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
     const title = typeof route.title === 'string' ? route.title : BRAND_NAME[lang];
     const image = DEFAULT_SOCIAL_IMAGE[lang];
     this.document.documentElement.lang = lang;
@@ -73,6 +76,12 @@ export class RouteMetadata {
       this.title.setTitle(NOT_FOUND_TITLE[lang]);
       this.meta.updateTag({ property: 'og:url', content: SITE_URL });
       this.meta.updateTag({ name: 'robots', content: 'noindex, follow' });
+      this.removeCanonical();
+      this.removeAlternates();
+    } else if (admin) {
+      const url = this.router.url.split(/[?#]/)[0] || '/';
+      this.meta.updateTag({ property: 'og:url', content: `${SITE_URL}${url}` });
+      this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
       this.removeCanonical();
       this.removeAlternates();
     } else {

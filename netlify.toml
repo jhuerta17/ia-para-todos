@@ -20,6 +20,58 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
     X-Frame-Options = "DENY"
 
+# The admin theme is a stable-name side-built asset: always revalidate.
+[[headers]]
+  for = "/admin-theme.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Admin gating (role rules run before the catch-all): the overview and
+# inbox serve their prerendered shells only to Identity users whose JWT
+# carries the admin role; everyone else falls through to the 404 rule.
+# /admin/acceso stays public so the owner can sign in.
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/index.html"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/solicitudes"
+  to = "/admin/solicitudes/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/solicitudes/"
+  to = "/admin/solicitudes/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/solicitudes/index.html"
+  to = "/admin/solicitudes/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
 # Custom 404: Netlify serves existing prerendered files first (no force),
 # so this only catches unknown paths. 404.html is the client shell, which
 # boots the branded Angular recovery page for visitors with JavaScript.

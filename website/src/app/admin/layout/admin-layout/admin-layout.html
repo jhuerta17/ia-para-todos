@@ -1,0 +1,23 @@
+@if (isBare()) {
+  <router-outlet />
+} @else {
+  <div class="admin-root min-h-screen bg-gray-50 font-sans text-gray-800 xl:flex dark:bg-gray-900 dark:text-gray-200">
+    <div>
+      <app-admin-sidebar />
+      <app-admin-backdrop />
+    </div>
+    <div
+      class="flex-1 transition-all duration-300 ease-in-out"
+      [ngClass]="{
+        'xl:ms-[290px]': (isExpanded$ | async) || (isHovered$ | async),
+        'xl:ms-[90px]': !(isExpanded$ | async) && !(isHovered$ | async),
+        'ms-0': (isMobileOpen$ | async)
+      }"
+    >
+      <app-admin-header />
+      <main class="mx-auto w-full max-w-(--breakpoint-2xl) p-4 md:p-6">
+        <router-outlet />
+      </main>
+    </div>
+  </div>
+}

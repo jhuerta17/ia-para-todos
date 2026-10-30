@@ -22,6 +22,18 @@ export class App {
   private readonly language = inject(Language);
   protected readonly skipLabel = computed(() => this.language.lang() === 'es' ? 'Saltar al contenido' : 'Skip to content');
 
+  protected isAdminRoute(): boolean {
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    return route.data['admin'] === true;
+  }
+
+  private isAdminLoginRoute(): boolean {
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    return route.data['adminLogin'] === true;
+  }
+
   private routeLanguage(): Lang {
     let route = this.router.routerState.snapshot.root;
     while (route.firstChild) route = route.firstChild;
@@ -38,6 +50,14 @@ export class App {
   }
 
   protected onPageActivated(): void {
+    // Identity emails land on the site root with a token fragment; route
+    // them to the access page, which consumes invite, recovery, and
+    // confirmation tokens. Server prerendering never sees a fragment.
+    const hash = this.document.defaultView?.location.hash ?? '';
+    if (hash.includes('_token=') && !this.isAdminLoginRoute()) {
+      this.router.navigate(['/admin/acceso'], { fragment: hash.replace(/^#/, '') });
+      return;
+    }
     this.language.set(this.routeLanguage());
     this.metadata.update();
     if (this.initialActivation) {
