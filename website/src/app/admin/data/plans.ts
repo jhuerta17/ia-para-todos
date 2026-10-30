@@ -35,6 +35,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'demo-data-6mo',
         title: 'Extend demo data to 6 months',
         detail: 'Submissions, workshops, impact, and supporters read like half a year of steady operations.',
+        done: true,
       },
       {
         id: 'honesty-labels',

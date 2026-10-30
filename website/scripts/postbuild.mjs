@@ -213,8 +213,8 @@ for (const path of ADMIN_PATHS) {
   const NOW = Date.UTC(2026, 9, 30);
   const workshops = demoWorkshops(NOW);
   if (workshops.length !== 8) fail(`demo content drift: expected 8 workshops, got ${workshops.length}`);
-  if (workshops[0]?.title !== 'Create with AI: photos and video') fail('demo content drift: workshop order changed');
-  if (workshops[workshops.length - 1]?.title !== 'AI basics for families') fail('demo content drift: workshop range changed');
+  if (workshops[0]?.title !== 'IA para Padres y Familias') fail('demo content drift: workshop order changed');
+  if (workshops[workshops.length - 1]?.title !== 'Introducción a la IA') fail('demo content drift: workshop range changed');
   const registered = workshops.reduce((sum, workshop) => sum + workshop.registered, 0);
   if (registered !== 195) fail(`demo content drift: expected 195 registered, got ${registered}`);
   const venues = new Set(workshops.map((workshop) => workshop.location));
@@ -222,10 +222,13 @@ for (const path of ADMIN_PATHS) {
   for (const venue of venues) {
     if (!dfw.has(venue)) fail(`demo content drift: unexpected venue ${venue}`);
   }
-  const supporters = demoSupporters();
+  const supporters = demoSupporters(NOW);
   if (supporters.length !== 10) fail(`demo content drift: expected 10 supporters, got ${supporters.length}`);
   if (demoSupporterTotal() !== 119500) fail(`demo content drift: expected $119,500 raised, got ${demoSupporterTotal()}`);
   if (supporters[0]?.name !== 'Fundación Lumen') fail('demo content drift: supporter order changed');
+  const byId = new Map(supporters.map((supporter) => [supporter.id, supporter]));
+  if (byId.get('d1')?.since !== 'Mar 2026') fail('demo content drift: supporter tenure changed');
+  if (byId.get('d9')?.since !== 'Sep 2026') fail('demo content drift: supporter tenure changed');
   const months = demoImpactMonths(workshops, NOW);
   if (months.length !== 6) fail(`demo content drift: expected 6 impact months, got ${months.length}`);
   const attendees = months.reduce((sum, month) => sum + month.attendees, 0);
