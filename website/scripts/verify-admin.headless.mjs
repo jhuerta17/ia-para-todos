@@ -399,7 +399,7 @@ async function main() {
       await page.locator('aside').first().getByRole('link', { name: 'Supporters' }).click();
       await page.waitForURL('**/admin/supporters', { timeout: 10000 });
       const supporterRows = await page.locator('tbody tr').count();
-      const raised = await page.getByText('MX$119,500', { exact: true }).isVisible().catch(() => false);
+      const raised = await page.getByText('$119,500', { exact: true }).isVisible().catch(() => false);
       check('demo supporters render ledger + total', supporterRows === 10 && raised, `${supporterRows} rows`);
       await page.screenshot({ path: join(evidence, 'demo-supporters.png'), fullPage: true });
       await page.close();

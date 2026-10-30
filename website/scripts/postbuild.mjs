@@ -217,9 +217,14 @@ for (const path of ADMIN_PATHS) {
   if (workshops[workshops.length - 1]?.title !== 'AI basics for families') fail('demo content drift: workshop range changed');
   const registered = workshops.reduce((sum, workshop) => sum + workshop.registered, 0);
   if (registered !== 195) fail(`demo content drift: expected 195 registered, got ${registered}`);
+  const venues = new Set(workshops.map((workshop) => workshop.location));
+  const dfw = new Set(['Oak Cliff Community Center', 'Fort Worth Public Library', 'Arlington Community Center', 'Online session']);
+  for (const venue of venues) {
+    if (!dfw.has(venue)) fail(`demo content drift: unexpected venue ${venue}`);
+  }
   const supporters = demoSupporters();
   if (supporters.length !== 10) fail(`demo content drift: expected 10 supporters, got ${supporters.length}`);
-  if (demoSupporterTotal() !== 119500) fail(`demo content drift: expected MX$119,500 raised, got ${demoSupporterTotal()}`);
+  if (demoSupporterTotal() !== 119500) fail(`demo content drift: expected $119,500 raised, got ${demoSupporterTotal()}`);
   if (supporters[0]?.name !== 'Fundación Lumen') fail('demo content drift: supporter order changed');
   const months = demoImpactMonths(workshops, NOW);
   if (months.length !== 6) fail(`demo content drift: expected 6 impact months, got ${months.length}`);

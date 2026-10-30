@@ -14,7 +14,7 @@ const TYPE_BADGES: Record<DemoSupporterType, 'primary' | 'info' | 'success'> = {
 
 const TYPE_ORDER: DemoSupporterType[] = ['Foundation', 'Business', 'Individual'];
 
-const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
+const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
 // Supporter ledger. Demo mode shows synthetic contributions; without a
 // connected store the live view is an honest empty state.

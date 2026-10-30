@@ -82,7 +82,7 @@ Forms submissions: only the dashboard's data source changes.
   quote them as real operations, in screenshots or otherwise.
 - **Contents:** 227 form submissions (95 participate, 18 collaborate,
   114 newsletter), 8 workshops, 6 impact months, 10 supporters
-  (MX$119,500 raised). Same input always yields the same output.
+  ($119,500 raised). Same input always yields the same output.
 
 ## Post-deploy verification
 

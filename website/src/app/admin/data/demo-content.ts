@@ -14,7 +14,7 @@ export interface DemoSupporter {
   id: string;
   name: string;
   type: DemoSupporterType;
-  /** Lifetime contributions, in MXN. */
+  /** Lifetime contributions, in USD. */
   total: number;
   since: string;
   status: 'Active' | 'Lapsed';
@@ -40,20 +40,20 @@ interface WorkshopDef {
 }
 
 const WORKSHOP_DEFS: WorkshopDef[] = [
-  { title: 'AI basics for families', offsetDays: -168, location: 'Roma Sur Community Center', registered: 24, capacity: 30, level: 'Beginner' },
-  { title: 'Spotting misinformation with AI tools', offsetDays: -140, location: 'Juárez Public Library', registered: 31, capacity: 35, level: 'All levels' },
+  { title: 'AI basics for families', offsetDays: -168, location: 'Oak Cliff Community Center', registered: 24, capacity: 30, level: 'Beginner' },
+  { title: 'Spotting misinformation with AI tools', offsetDays: -140, location: 'Fort Worth Public Library', registered: 31, capacity: 35, level: 'All levels' },
   { title: 'AI for homework help', offsetDays: -112, location: 'Online session', registered: 28, capacity: 30, level: 'Beginner' },
-  { title: 'Online safety and AI scams', offsetDays: -84, location: 'Roma Sur Community Center', registered: 42, capacity: 45, level: 'All levels' },
-  { title: 'AI tools for job seekers', offsetDays: -56, location: 'Doctores Community Center', registered: 26, capacity: 30, level: 'Intermediate' },
-  { title: 'AI basics for seniors', offsetDays: -28, location: 'Juárez Public Library', registered: 19, capacity: 25, level: 'Beginner' },
+  { title: 'Online safety and AI scams', offsetDays: -84, location: 'Oak Cliff Community Center', registered: 42, capacity: 45, level: 'All levels' },
+  { title: 'AI tools for job seekers', offsetDays: -56, location: 'Arlington Community Center', registered: 26, capacity: 30, level: 'Intermediate' },
+  { title: 'AI basics for seniors', offsetDays: -28, location: 'Fort Worth Public Library', registered: 19, capacity: 25, level: 'Beginner' },
   { title: 'AI for small business', offsetDays: 12, location: 'Online session', registered: 17, capacity: 30, level: 'Intermediate' },
-  { title: 'Create with AI: photos and video', offsetDays: 33, location: 'Roma Sur Community Center', registered: 8, capacity: 30, level: 'All levels' },
+  { title: 'Create with AI: photos and video', offsetDays: 33, location: 'Oak Cliff Community Center', registered: 8, capacity: 30, level: 'All levels' },
 ];
 
 const SUPPORTERS: DemoSupporter[] = [
   { id: 'd1', name: 'Fundación Lumen', type: 'Foundation', total: 40000, since: 'Mar 2026', status: 'Active' },
   { id: 'd2', name: 'Fundación Camino', type: 'Foundation', total: 25000, since: 'May 2026', status: 'Active' },
-  { id: 'd3', name: 'Café Roma', type: 'Business', total: 20000, since: 'Jun 2026', status: 'Active' },
+  { id: 'd3', name: 'Oak Cliff Café', type: 'Business', total: 20000, since: 'Jun 2026', status: 'Active' },
   { id: 'd4', name: 'Taller Hernández', type: 'Business', total: 12000, since: 'Jul 2026', status: 'Active' },
   { id: 'd5', name: 'Librería Gandiño', type: 'Business', total: 5000, since: 'Aug 2026', status: 'Lapsed' },
   { id: 'd6', name: 'María González', type: 'Individual', total: 8000, since: 'May 2026', status: 'Active' },
