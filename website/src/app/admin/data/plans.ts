@@ -91,6 +91,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'inbox-story',
         title: 'Inbox reads like 6 months of intake',
         detail: 'Believable mix of participate/collaborate/newsletter volume and interests.',
+        done: true,
       },
       {
         id: 'workshops-story',

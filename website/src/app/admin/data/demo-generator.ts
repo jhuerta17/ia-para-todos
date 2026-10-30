@@ -37,6 +37,14 @@ const PARTICIPATE_MESSAGES = [
   'Me interesa para ayudar a mis hijos con la tarea.',
   '¿El taller es en persona o en línea?',
   'Quiero entender cómo funciona el asistente de voz.',
+  'Quiero aprender a usar la IA para buscar trabajo.',
+  '¿Puedo llevar a mi esposo al taller?',
+  'Me cuesta usar el teléfono, ¿me pueden ayudar?',
+  'Quiero aprender a detectar mensajes falsos.',
+  '¿Dan constancia al terminar el taller?',
+  'Me interesa el taller para padres de familia.',
+  'Quiero usar la IA para mi pequeño negocio.',
+  '¿Los talleres son en fin de semana?',
 ];
 
 const COLLABORATE_MESSAGES = [
@@ -46,6 +54,12 @@ const COLLABORATE_MESSAGES = [
   'Puedo traducir materiales al inglés.',
   'Soy maestra jubilada y quiero participar.',
   'Puedo ayudar con el registro de asistentes.',
+  'Soy voluntario en mi iglesia y puedo correr la voz.',
+  'Tenemos un salón con proyector disponible.',
+  'Puedo cuidar niños durante los talleres.',
+  'Trabajo en una biblioteca y me interesa el programa.',
+  'Puedo prestar sillas y mesas para las sesiones.',
+  'Soy estudiante y necesito horas de servicio social.',
 ];
 
 const ascii = (value: string): string =>
