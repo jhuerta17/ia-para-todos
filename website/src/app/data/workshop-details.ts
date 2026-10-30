@@ -381,23 +381,34 @@ const curriculum: Record<Lang, Record<string, (typeof curriculumEs)['introduccio
   en: curriculumEn,
 };
 
-const meta: Record<Lang, { status: string; parentLabel: string; duration: string; device: string }> = {
-  es: { status: 'Taller gratuito', parentLabel: 'Volver a talleres', duration: 'Duración', device: 'Dispositivo' },
-  en: { status: 'Free workshop', parentLabel: 'Back to workshops', duration: 'Duration', device: 'Device' },
+const meta: Record<Lang, { status: string; parentLabel: string; duration: string; device: string; format: string; formatValue: string; series: string }> = {
+  es: { status: 'Taller gratuito', parentLabel: 'Volver a talleres', duration: 'Duración', device: 'Dispositivo', format: 'Formato', formatValue: 'Presencial y en línea', series: 'Taller' },
+  en: { status: 'Free workshop', parentLabel: 'Back to workshops', duration: 'Duration', device: 'Device', format: 'Format', formatValue: 'In person and online', series: 'Workshop' },
 };
 
 /** Workshop details per language. Arrays share index pairing with `workshops`. */
 function build(lang: Lang): ContentDetail[] {
-  return workshops[lang].map(workshop => ({
-    ...workshop,
-    status: meta[lang].status,
-    parent: '/talleres',
-    parentLabel: meta[lang].parentLabel,
-    facts: [
-      { value: '90–120 min', label: meta[lang].duration },
-      { value: lang === 'es' ? 'Teléfono' : 'Phone', label: meta[lang].device },
-    ],
-    ...curriculum[lang][workshop.slug],
-  }));
+  const list = workshops[lang];
+  return list.map((workshop, index) => {
+    const prev = index > 0 ? list[index - 1] : undefined;
+    const next = index < list.length - 1 ? list[index + 1] : undefined;
+    return {
+      ...workshop,
+      status: meta[lang].status,
+      parent: '/talleres',
+      parentLabel: meta[lang].parentLabel,
+      facts: [
+        { value: '90–120 min', label: meta[lang].duration },
+        { value: lang === 'es' ? 'Teléfono' : 'Phone', label: meta[lang].device },
+        { value: meta[lang].formatValue, label: meta[lang].format },
+      ],
+      series: {
+        position: `${meta[lang].series} ${index + 1} ${lang === 'es' ? 'de' : 'of'} ${list.length}`,
+        ...(prev ? { prev: { url: `/talleres/${prev.slug}`, title: prev.shortTitle } } : {}),
+        ...(next ? { next: { url: `/talleres/${next.slug}`, title: next.shortTitle } } : {}),
+      },
+      ...curriculum[lang][workshop.slug],
+    };
+  });
 }
 export const workshopDetails: Record<Lang, ContentDetail[]> = { es: build('es'), en: build('en') };

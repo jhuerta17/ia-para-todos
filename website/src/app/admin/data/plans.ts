@@ -60,6 +60,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'workshops-complete',
         title: 'Complete workshop detail pages',
         detail: 'All four workshops read as a real running series with clear what, where, and who.',
+        done: true,
       },
       {
         id: 'activities-resources',
