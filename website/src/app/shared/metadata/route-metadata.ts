@@ -10,12 +10,12 @@ const DESCRIPTIONS: Record<Lang, Record<string, string>> = {
   es: {
     home: 'Iniciativa comunitaria: talleres gratuitos en español para aprender inteligencia artificial desde cero, con tu teléfono.',
     talleres: 'Cuatro talleres de IA en español: primeros pasos, vida diaria, trabajo y negocios, y padres y familias.',
-    nosotros: 'Conoce la misión y el enfoque comunitario de IA para todos, una iniciativa educativa en español.',
-    comunidad: 'Formas de colaborar con IA para todos: facilitación, acompañamiento, traducción y difusión.',
+    nosotros: 'Conoce la misión y el enfoque comunitario de IA Para Todos, una iniciativa educativa en español.',
+    comunidad: 'Formas de colaborar con IA Para Todos: facilitación, acompañamiento, traducción y difusión.',
     participar: 'Cuéntanos en qué taller te gustaría participar. Usamos tus datos solo para contactarte.',
     historias: 'Cinco escenarios de aprendizaje inventados para imaginar cómo practicar con IA. Ejemplos ilustrativos, no testimonios.',
-    contacto: 'Contacto de IA para todos, iniciativa educativa en español en Dallas–Fort Worth.',
-    '**': 'No encontramos esa página. Vuelve al inicio o explora los talleres de IA para todos.',
+    contacto: 'Contacto de IA Para Todos, iniciativa educativa en español en Dallas–Fort Worth.',
+    '**': 'No encontramos esa página. Vuelve al inicio o explora los talleres de IA Para Todos.',
   },
   en: {
     home: 'Community initiative: free workshops in Spanish to learn artificial intelligence from scratch, with your phone.',

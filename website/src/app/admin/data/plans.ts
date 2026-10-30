@@ -78,6 +78,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'copy-pass',
         title: 'Spanish-first copy pass',
         detail: 'Fix typos, unify voice-and-tone, check EN parity on key pages.',
+        done: true,
       },
     ],
   },

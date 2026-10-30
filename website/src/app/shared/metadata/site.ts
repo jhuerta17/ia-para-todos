@@ -15,7 +15,7 @@ export const DEFAULT_SOCIAL_IMAGE: Record<Lang, { path: string; width: number; h
     path: '/images/social/og-banner-1200x630.jpg',
     width: 1200,
     height: 630,
-    alt: 'IA para todos: talleres gratuitos en español para aprender inteligencia artificial desde cero.',
+    alt: 'IA Para Todos: talleres gratuitos en español para aprender inteligencia artificial desde cero.',
   },
   en: {
     path: '/images/social/og-banner-en-1200x630.jpg',
