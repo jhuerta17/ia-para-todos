@@ -3,7 +3,7 @@
 h2 { font-size: var(--text-section); margin-bottom: 36px; }
 .card { display: grid; grid-template-columns: 280px 1fr; gap: 48px; padding: 48px; border-radius: 30px; background: var(--color-cool); }
 .portrait { text-align: center; align-self: start; }
-.monogram { display: grid; place-items: center; width: 180px; height: 180px; margin: 0 auto; border-radius: 50%; background: var(--color-accent); color: white; font: 400 64px var(--font-heading); }
+.portrait img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; }
 .name { font-size: 22px; margin: 20px 0 0; }
 .role { font-size: 16px; margin: 8px 0 0; }
 .story p { line-height: 1.8; margin: 0 0 20px; }
@@ -12,5 +12,5 @@ blockquote p { font-size: 20px; margin: 0 0 8px; }
 cite { font-style: normal; font-size: 16px; }
 .actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; }
 .actions app-action-link { width: 240px; max-width: 100%; }
-@media (max-width: 809px) { .wrap { padding-top: 48px; } .card { grid-template-columns: 1fr; gap: 32px; padding: 28px 20px; } .monogram { width: 140px; height: 140px; font-size: 48px; } .actions { flex-direction: column; } }
+@media (max-width: 809px) { .wrap { padding-top: 48px; } .card { grid-template-columns: 1fr; gap: 32px; padding: 28px 20px; } .portrait img { width: 140px; height: 140px; } .actions { flex-direction: column; } }
 @media (prefers-reduced-motion: no-preference) { .motion-ready { transition: opacity var(--duration-reveal), transform var(--duration-reveal); } .motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } }
