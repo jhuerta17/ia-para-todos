@@ -1,0 +1,25 @@
+<main id="main-content" tabindex="-1">
+  <app-page-cover image="community-learning" [alt]="c().coverAlt" [title]="c().title" [summary]="c().lead" />
+  <section class="ladder" aria-labelledby="ladder-title">
+    <div class="wrap">
+      <h2 id="ladder-title" appRevealOnEnter>{{ c().ladderHeading }}</h2>
+      <p class="lead" appRevealOnEnter>{{ c().ladderLead }}</p>
+      <ol>
+        @for (tier of c().tiers; track tier.name; let index = $index) {
+          <li appRevealOnEnter>
+            <span class="step" aria-hidden="true">{{ index + 1 }}</span>
+            <div>
+              <h3>{{ tier.name }}</h3>
+              <p>{{ tier.summary }}</p>
+              <p class="meta"><strong>{{ tier.price }}</strong> · <span>{{ tier.status }}</span></p>
+            </div>
+          </li>
+        }
+      </ol>
+      <p class="note" appRevealOnEnter>{{ c().note }}</p>
+      <div class="actions" appRevealOnEnter>
+        <app-action-link [to]="c().exploreTo" [label]="c().explore" />
+      </div>
+    </div>
+  </section>
+</main>

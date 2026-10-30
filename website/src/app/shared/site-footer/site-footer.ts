@@ -13,11 +13,11 @@ const copy = {
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
-  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', recursos: 'Recursos', comunidad: 'Comunidad', participar: 'Participar', actividades: 'Actividades', historias: 'Historias', contacto: 'Contacto', privacidad: 'Privacidad', terminos: 'Acerca del sitio', seguridad: 'Uso responsable' },
-  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', participar: 'Participate', actividades: 'Activities', historias: 'Stories', contacto: 'Contact', privacidad: 'Privacy', terminos: 'About this site', seguridad: 'Responsible use' },
+  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', cursos: 'Cursos', recursos: 'Recursos', comunidad: 'Comunidad', participar: 'Participar', actividades: 'Actividades', historias: 'Historias', contacto: 'Contacto', privacidad: 'Privacidad', terminos: 'Acerca del sitio', seguridad: 'Uso responsable' },
+  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', cursos: 'Courses', recursos: 'Resources', comunidad: 'Community', participar: 'Participate', actividades: 'Activities', historias: 'Stories', contacto: 'Contact', privacidad: 'Privacy', terminos: 'About this site', seguridad: 'Responsible use' },
 };
 
-const NAVIGATION: StaticKey[] = ['home', 'nosotros', 'talleres', 'recursos', 'comunidad', 'participar'];
+const NAVIGATION: StaticKey[] = ['home', 'nosotros', 'talleres', 'cursos', 'recursos', 'comunidad', 'participar'];
 const INFO: StaticKey[] = ['privacidad', 'terminos', 'seguridad'];
 
 @Component({selector: 'app-site-footer', imports: [RouterLink, BrandMark, Icon, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})

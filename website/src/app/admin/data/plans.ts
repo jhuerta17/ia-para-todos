@@ -153,6 +153,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'course-landing',
         title: 'Online-courses teaser section',
         detail: 'The ladder (free mini-course → Trabajo → Negocio → Facilitador) with a waitlist form.',
+        done: true,
       },
       {
         id: 'mini-lesson',

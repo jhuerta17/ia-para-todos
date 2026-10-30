@@ -15,11 +15,11 @@ const copy = {
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
-  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', recursos: 'Recursos', comunidad: 'Comunidad', actividades: 'Actividades', historias: 'Historias', privacidad: 'Privacidad', terminos: 'Acerca de', seguridad: 'Seguridad', contacto: 'Contacto', participar: 'Participar' },
-  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', actividades: 'Activities', historias: 'Stories', privacidad: 'Privacy', terminos: 'About', seguridad: 'Safety', contacto: 'Contact', participar: 'Participate' },
+  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', recursos: 'Recursos', comunidad: 'Comunidad', actividades: 'Actividades', historias: 'Historias', privacidad: 'Privacidad', terminos: 'Acerca de', seguridad: 'Seguridad', contacto: 'Contacto', participar: 'Participar', cursos: 'Cursos' },
+  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', actividades: 'Activities', historias: 'Stories', privacidad: 'Privacy', terminos: 'About', seguridad: 'Safety', contacto: 'Contact', participar: 'Participate', cursos: 'Courses' },
 };
 
-const PRIMARY: StaticKey[] = ['nosotros', 'talleres', 'recursos'];
+const PRIMARY: StaticKey[] = ['nosotros', 'talleres', 'cursos', 'recursos'];
 const EXPLORE: StaticKey[] = ['home', 'comunidad', 'actividades', 'historias', 'privacidad', 'terminos', 'seguridad'];
 
 @Component({

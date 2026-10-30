@@ -32,7 +32,7 @@ for (const [name, es, en] of pairs) {
   if (es.length !== en.length) fail(`${name}: es has ${es.length} entries, en has ${en.length}; index pairing broken`);
 }
 
-const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'historias', 'contacto'];
+const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'historias', 'contacto', 'cursos'];
 // Route records with their language peer for hreflang.
 const routes = [];
 for (const lang of LANGS) {
