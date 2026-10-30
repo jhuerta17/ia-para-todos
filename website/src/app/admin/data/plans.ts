@@ -178,6 +178,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'deploy-green',
         title: 'Production deploy is green',
         detail: 'Netlify build passes, all verify scripts ok, links and forms checked live.',
+        done: true,
       },
       {
         id: 'demo-script',
