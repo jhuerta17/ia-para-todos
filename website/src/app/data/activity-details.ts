@@ -17,20 +17,48 @@ const practices: Record<Lang, string[][]> = {
   ],
 };
 
-const meta: Record<Lang, { status: string; parentLabel: string; focus: string; practice: string; practiceValue: string; device: string; deviceValue: string; intro: string; practiceHeading: string; needsHeading: string; needs: string; dataHeading: string; data: string; gallery: string[] }> = {
+const tryIt: Record<Lang, string[]> = {
+  es: [
+    'Escribe: “Dame tres ideas sencillas para una cena entre semana. Explícalas con palabras fáciles y en lista numerada”. Luego pide: “Convierte la idea uno en una lista de compras corta”. Compara cómo cambia la respuesta.',
+    'Escribe: “Un grupo de madres y padres quiere organizar turnos de transporte escolar ficticios. Propón una tabla sencilla con días y horarios”. Revisa que los horarios tengan sentido y redacta un mensaje breve para proponerlos.',
+    'Escribe: “Actúa como entrevistadora para un puesto ficticio de atención al cliente. Hazme una pregunta a la vez y espera mi respuesta”. Responde con experiencia inventada y pide una sugerencia para mejorar.',
+    'Escribe: “Inventa un mensaje sospechoso de premio inesperado para practicar”. Sin abrir enlaces ni usar datos reales, anota las señales de alerta y explica en voz alta cómo lo verificarías.',
+  ],
+  en: [
+    'Write: “Give me three simple weeknight dinner ideas. Explain them in easy words as a numbered list.” Then ask: “Turn idea one into a short shopping list.” Compare how the answer changes.',
+    'Write: “A group of parents wants to organize fictional school carpool shifts. Suggest a simple table with days and times.” Check that the times make sense and draft a short message to propose them.',
+    'Write: “Act as an interviewer for a fictional customer-service job. Ask me one question at a time and wait for my answer.” Answer with made-up experience and ask for one suggestion to improve.',
+    'Write: “Invent a suspicious unexpected-prize message for practice.” Without opening links or using real data, note the warning signs and explain out loud how you would verify it.',
+  ],
+};
+
+const galleries: Record<Lang, { image: string; alt: string }[][]> = {
+  es: [
+    [{ image: 'peer-support', alt: 'Dos personas revisando apuntes y una computadora.' }, { image: 'guided-practice', alt: 'Aprendizaje acompañado con una computadora.' }],
+    [{ image: 'accessible-technology', alt: 'Dos personas compartiendo información en un teléfono.' }, { image: 'everyday-phone', alt: 'Tres mujeres mirando juntas la pantalla de un teléfono.' }],
+    [{ image: 'collaboration', alt: 'Dos personas conversando con un teléfono y una computadora.' }, { image: 'work-business', alt: 'Personas preparando pedidos junto a una computadora.' }],
+    [{ image: 'family-phone', alt: 'Una madre y su hijo mirando un teléfono en casa.' }, { image: 'family-learning', alt: 'Una madre y su hija usando una computadora en casa.' }],
+  ],
+  en: [
+    [{ image: 'peer-support', alt: 'Two people reviewing notes and a computer.' }, { image: 'guided-practice', alt: 'Guided learning with a computer.' }],
+    [{ image: 'accessible-technology', alt: 'Two people sharing information on a phone.' }, { image: 'everyday-phone', alt: 'Three women looking together at a phone screen.' }],
+    [{ image: 'collaboration', alt: 'Two people talking with a phone and a computer.' }, { image: 'work-business', alt: 'People preparing orders next to a computer.' }],
+    [{ image: 'family-phone', alt: 'A mother and her son looking at a phone at home.' }, { image: 'family-learning', alt: 'A mother and daughter using a computer at home.' }],
+  ],
+};
+
+const meta: Record<Lang, { status: string; parentLabel: string; focus: string; practice: string; practiceValue: string; device: string; deviceValue: string; intro: string; practiceHeading: string; needsHeading: string; needs: string; dataHeading: string; data: string }> = {
   es: {
     status: 'Actividad guiada', parentLabel: 'Volver a actividades', focus: 'Enfoque', practice: 'Práctica', practiceValue: 'Guiada',
     device: 'Dispositivo', deviceValue: 'Teléfono', intro: 'Una práctica cercana a tu vida', practiceHeading: 'Lo que practicarías',
     needsHeading: 'Qué necesitas', needs: 'Un teléfono inteligente y ganas de preguntar. Hay alternativas impresas, demostraciones guiadas o trabajo en pareja si falta dispositivo, cuenta o conexión.',
     dataHeading: 'Con datos inventados', data: 'Usamos nombres, mensajes y situaciones ficticios. No compartas información personal ni documentos reales en las herramientas. Esta actividad es para personas adultas.',
-    gallery: ['Aprendizaje acompañado con una computadora.', 'Dos personas revisando apuntes.'],
   },
   en: {
     status: 'Guided activity', parentLabel: 'Back to activities', focus: 'Focus', practice: 'Practice', practiceValue: 'Guided',
     device: 'Device', deviceValue: 'Phone', intro: 'A practice close to your life', practiceHeading: 'What you would practice',
     needsHeading: 'What you need', needs: 'A smartphone and curiosity. There are printed alternatives, guided demonstrations, or pair work if a device, account, or connection is missing.',
     dataHeading: 'With made-up data', data: 'We use fictional names, messages, and situations. Do not share personal information or real documents in the tools. This activity is for adults.',
-    gallery: ['Guided learning with a computer.', 'Two people reviewing notes.'],
   },
 };
 
@@ -45,7 +73,8 @@ function build(lang: Lang): ContentDetail[] {
       { heading: meta[lang].needsHeading, paragraphs: [meta[lang].needs] },
       { heading: meta[lang].dataHeading, paragraphs: [meta[lang].data] },
     ],
-    gallery: index === 0 ? [{ image: 'guided-practice', alt: meta[lang].gallery[0] }, { image: 'peer-support', alt: meta[lang].gallery[1] }] : undefined,
+    practice: tryIt[lang][index],
+    gallery: galleries[lang][index],
   }));
 }
 export const activityDetails: Record<Lang, ContentDetail[]> = { es: build('es'), en: build('en') };

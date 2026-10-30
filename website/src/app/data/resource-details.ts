@@ -74,15 +74,17 @@ const articlesEn = [
 
 const articles: Record<Lang, typeof articlesEs> = { es: articlesEs, en: articlesEn };
 
-const meta: Record<Lang, { status: string; parentLabel: string }> = {
-  es: { status: 'Recurso educativo', parentLabel: 'Volver a recursos' },
-  en: { status: 'Learning resource', parentLabel: 'Back to resources' },
+const meta: Record<Lang, { status: string; parentLabel: string; level: string; levelValue: string; format: string; formatValue: string }> = {
+  es: { status: 'Recurso educativo', parentLabel: 'Volver a recursos', level: 'Nivel', levelValue: 'Principiante', format: 'Formato', formatValue: 'Guía' },
+  en: { status: 'Learning resource', parentLabel: 'Back to resources', level: 'Level', levelValue: 'Beginner', format: 'Format', formatValue: 'Guide' },
 };
 
 /** Resource details per language. Arrays share index pairing with `resources`. */
 function build(lang: Lang): ContentDetail[] {
   return resources[lang].map((resource, index) => ({
-    ...resource, status: meta[lang].status, parent: '/recursos', parentLabel: meta[lang].parentLabel, ...articles[lang][index],
+    ...resource, status: meta[lang].status, parent: '/recursos', parentLabel: meta[lang].parentLabel,
+    facts: [{ value: meta[lang].levelValue, label: meta[lang].level }, { value: meta[lang].formatValue, label: meta[lang].format }],
+    ...articles[lang][index],
   }));
 }
 export const resourceDetails: Record<Lang, ContentDetail[]> = { es: build('es'), en: build('en') };

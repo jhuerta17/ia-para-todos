@@ -66,6 +66,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'activities-resources',
         title: 'Finish activities + resources depth',
         detail: 'Every card opens something useful; no dead ends or thin pages.',
+        done: true,
       },
       {
         id: 'stories-honest',
