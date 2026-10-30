@@ -16,10 +16,10 @@
       'justify-start': (isExpanded$ | async) || (isHovered$ | async)
     }"
   >
-    <a routerLink="/admin" aria-label="Panel de administración" class="flex items-center gap-3">
+    <a routerLink="/admin" aria-label="Admin dashboard" class="flex items-center gap-3">
       <app-brand-mark style="--logo-size: 2rem" />
       @if ((isExpanded$ | async) || (isHovered$ | async) || (isMobileOpen$ | async)) {
-        <span class="font-display text-lg leading-tight font-bold text-gray-900 dark:text-white">IA para todos</span>
+        <span class="font-display text-lg leading-tight font-bold text-gray-900 dark:text-white">{{ brand }}</span>
       }
     </a>
   </div>

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AdminSidebarService } from '../../core/sidebar.service';
 import { AdminUserDropdown } from '../admin-user-dropdown/admin-user-dropdown';
+import { BRAND_NAME } from '../../../i18n/lang';
 import { BrandMark } from '../../../shared/brand-mark';
 
 // Adapted from TailAdmin's AppHeader (see THIRD_PARTY_NOTICES.md):
@@ -14,6 +15,7 @@ import { BrandMark } from '../../../shared/brand-mark';
   templateUrl: './admin-header.html',
 })
 export class AdminHeader {
+  protected readonly brand = BRAND_NAME.en;
   isApplicationMenuOpen = false;
   readonly isMobileOpen$;
 

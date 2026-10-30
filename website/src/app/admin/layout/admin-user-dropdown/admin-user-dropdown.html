@@ -5,12 +5,12 @@
     (click)="toggleDropdown($event)"
     [attr.aria-expanded]="isOpen"
     aria-haspopup="menu"
-    aria-label="Menú de la cuenta"
+    aria-label="Account menu"
   >
     <span class="me-3 flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-brand-800 font-display text-lg font-bold text-white">
       {{ initial() }}
     </span>
-    <span class="me-1 block text-sm font-medium">{{ user()?.name ?? 'Administración' }}</span>
+    <span class="me-1 block text-sm font-medium">{{ user()?.name ?? 'Admin' }}</span>
     <svg
       class="size-5 text-gray-500 duration-200 dark:text-gray-400"
       [ngClass]="isOpen ? 'rotate-180' : 'rotate-0'"
@@ -38,10 +38,10 @@
     >
       <div class="px-3 py-2">
         <span class="block text-sm font-medium text-gray-700 dark:text-gray-400">
-          {{ user()?.name ?? 'Administración' }}
+          {{ user()?.name ?? 'Admin' }}
         </span>
         <span class="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">
-          {{ user()?.email ?? 'Acceso restringido' }}
+          {{ user()?.email ?? 'Restricted access' }}
         </span>
       </div>
 
@@ -68,8 +68,31 @@
           <path d="M14 4h6v6M20 4 11 13" />
           <path d="M20 14v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
         </svg>
-        Ver sitio
+        View site
       </a>
+
+      <button
+        type="button"
+        (click)="toggleDemo()"
+        role="menuitem"
+        class="group/dropdown-menu-item relative flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-start text-sm font-medium text-gray-700 outline-hidden transition-colors duration-200 select-none hover:bg-gray-100 hover:text-gray-700 focus:bg-gray-100 focus:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300"
+      >
+        <svg
+          class="size-6 shrink-0 text-gray-500 group-hover/dropdown-menu-item:text-gray-700 dark:text-gray-400 dark:group-hover/dropdown-menu-item:text-gray-300"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v10a2 2 0 0 1-2 2H5m6-12v10m0 0h10a2 2 0 0 0 2-2V9m-12 4H5" />
+        </svg>
+        {{ demo.enabled() ? 'Exit demo data' : 'View demo data' }}
+      </button>
 
       <div class="-mx-3 my-1.5 h-px bg-gray-100 dark:bg-gray-700"></div>
 
@@ -93,7 +116,7 @@
         >
           <path d="M4 12h7.75M8 8l-3.998 4 3.997 4M9.75 4.996V4.25a1.5 1.5 0 011.5-1.5h6a1.5 1.5 0 011.5 1.5v15.5a1.5 1.5 0 01-1.5 1.5h-6a1.5 1.5 0 01-1.5-1.5V19" />
         </svg>
-        Cerrar sesión
+        Sign out
       </button>
     </div>
   }

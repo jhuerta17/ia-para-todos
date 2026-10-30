@@ -4,7 +4,7 @@
       <button
         type="button"
         (click)="handleToggle()"
-        aria-label="Mostrar u ocultar el menú"
+        aria-label="Show or hide the menu"
         class="inline-flex size-10 items-center justify-center rounded-[10px] border border-gray-300 bg-transparent text-gray-500 shadow-theme-xs transition-all hover:bg-gray-50 hover:text-gray-800 lg:size-11 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-white"
         [ngClass]="{ 'bg-gray-100 dark:bg-white/3': isMobileOpen$ | async }"
       >
@@ -29,15 +29,15 @@
         }
       </button>
 
-      <a routerLink="/admin" aria-label="Panel de administración" class="flex items-center gap-2 xl:hidden">
+      <a routerLink="/admin" aria-label="Admin dashboard" class="flex items-center gap-2 xl:hidden">
         <app-brand-mark style="--logo-size: 1.75rem" />
-        <span class="font-display text-base font-bold text-gray-900 dark:text-white">IA para todos</span>
+        <span class="font-display text-base font-bold text-gray-900 dark:text-white">{{ brand }}</span>
       </a>
 
       <button
         type="button"
         (click)="toggleApplicationMenu()"
-        aria-label="Mostrar u ocultar el menú de cuenta"
+        aria-label="Show or hide the account menu"
         class="inline-flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 xl:hidden dark:text-gray-400 dark:hover:bg-gray-800"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">

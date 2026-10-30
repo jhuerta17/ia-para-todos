@@ -6,6 +6,9 @@
 import { copyFileSync, existsSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { generateDemoSubmissions } from '../src/app/admin/data/demo-generator.ts';
+import { bucketByMonth, monthDeltas } from '../src/app/admin/data/analytics.ts';
+import { demoImpactMonths, demoSupporters, demoSupporterTotal, demoWorkshops } from '../src/app/admin/data/demo-content.ts';
 import { SITE_URL } from '../src/app/shared/metadata/site.ts';
 import { LANGS, PATHS } from '../src/app/i18n/lang.ts';
 import { workshops } from '../src/app/data/workshops.ts';
@@ -147,9 +150,9 @@ for (const { path } of routes) {
   }
 }
 
-// 9. Admin routes prerender as Spanish shells: present but uncrawlable,
+// 9. Admin routes prerender as English shells: present but uncrawlable,
 // with no public chrome, forms, canonicals, or hreflang peers.
-const ADMIN_PATHS = ['admin', 'admin/solicitudes', 'admin/acceso'];
+const ADMIN_PATHS = ['admin', 'admin/requests', 'admin/workshops', 'admin/impact', 'admin/supporters', 'admin/sign-in'];
 for (const path of ADMIN_PATHS) {
   const file = join(publish, path, 'index.html');
   const label = `/${path} [admin]`;
@@ -159,19 +162,78 @@ for (const path of ADMIN_PATHS) {
   }
   const html = readFileSync(file, 'utf8');
   if (!/<h1[\s>]/.test(html)) fail(`${label} has no rendered <h1>`);
-  if (!html.includes('<html lang="es">')) fail(`${label} lacks <html lang="es">`);
+  if (!html.includes('<html lang="en">')) fail(`${label} lacks <html lang="en">`);
   if (!html.includes('name="robots"') || !html.includes('content="noindex, nofollow"')) fail(`${label} lacks noindex, nofollow`);
   if (html.includes('rel="canonical"')) fail(`${label} must not set a canonical`);
   if (html.includes('hreflang=')) fail(`${label} must not set hreflang alternates`);
   if (html.includes('name="newsletter"') || html.includes('<app-site-header')) fail(`${label} renders public chrome`);
 }
 
-// 10. Admin function ships with the workspace Netlify deploys.
+// 10. Demo generator is deterministic: fixed input, exact output.
+{
+  const NOW = Date.UTC(2026, 9, 30);
+  const first = generateDemoSubmissions(NOW);
+  const second = generateDemoSubmissions(NOW);
+  if (JSON.stringify(first) !== JSON.stringify(second)) fail('demo generator is not deterministic');
+  if (first.length !== 227) fail(`demo generator drift: expected 227 rows, got ${first.length}`);
+  if (first[0]?.createdAt !== '2026-10-29T22:59:42.180Z' || first[first.length - 1]?.createdAt !== '2026-05-02T08:16:24.980Z') {
+    fail('demo generator drift: boundary dates changed');
+  }
+  const forms = new Set(first.map((row) => row.form));
+  for (const form of ['participate', 'collaborate', 'newsletter']) {
+    if (!forms.has(form)) fail(`demo generator drift: form ${form} missing`);
+  }
+}
+
+// 11. Analytics bucketing is exact on fixed input (mid-month UTC dates
+// stay in-month under any host timezone).
+{
+  const rows = [
+    { form: 'participate', createdAt: '2026-10-15T12:00:00.000Z' },
+    { form: 'participate', createdAt: '2026-09-15T12:00:00.000Z' },
+    { form: 'newsletter', createdAt: '2026-09-15T12:00:00.000Z' },
+    { form: 'collaborate', createdAt: 'not-a-date' },
+    { form: 'newsletter', createdAt: '2025-01-15T12:00:00.000Z' },
+  ];
+  const buckets = bucketByMonth(rows, 6, Date.UTC(2026, 9, 30));
+  const compact = buckets.map((b) => [b.label, b.participate, b.collaborate, b.newsletter, b.total].join(':'));
+  const expected = [
+    'May:0:0:0:0', 'Jun:0:0:0:0', 'Jul:0:0:0:0', 'Aug:0:0:0:0',
+    'Sep:1:0:1:2', 'Oct:1:0:0:1',
+  ];
+  if (JSON.stringify(compact) !== JSON.stringify(expected)) fail(`analytics drift: ${compact.join(' | ')}`);
+  const deltas = monthDeltas(rows, Date.UTC(2026, 9, 30));
+  if (deltas.participate.current !== 1 || deltas.participate.previous !== 1) fail('analytics drift: participate delta');
+  if (deltas.collaborate.current !== 0 || deltas.collaborate.previous !== 0) fail('analytics drift: collaborate delta');
+  if (deltas.newsletter.current !== 0 || deltas.newsletter.previous !== 1) fail('analytics drift: newsletter delta');
+}
+
+// 12. Demo content is deterministic: fixed input, exact output.
+{
+  const NOW = Date.UTC(2026, 9, 30);
+  const workshops = demoWorkshops(NOW);
+  if (workshops.length !== 8) fail(`demo content drift: expected 8 workshops, got ${workshops.length}`);
+  if (workshops[0]?.title !== 'Create with AI: photos and video') fail('demo content drift: workshop order changed');
+  if (workshops[workshops.length - 1]?.title !== 'AI basics for families') fail('demo content drift: workshop range changed');
+  const registered = workshops.reduce((sum, workshop) => sum + workshop.registered, 0);
+  if (registered !== 195) fail(`demo content drift: expected 195 registered, got ${registered}`);
+  const supporters = demoSupporters();
+  if (supporters.length !== 10) fail(`demo content drift: expected 10 supporters, got ${supporters.length}`);
+  if (demoSupporterTotal() !== 119500) fail(`demo content drift: expected MX$119,500 raised, got ${demoSupporterTotal()}`);
+  if (supporters[0]?.name !== 'Fundación Lumen') fail('demo content drift: supporter order changed');
+  const months = demoImpactMonths(workshops, NOW);
+  if (months.length !== 6) fail(`demo content drift: expected 6 impact months, got ${months.length}`);
+  const attendees = months.reduce((sum, month) => sum + month.attendees, 0);
+  if (attendees !== 170) fail(`demo content drift: expected 170 attendees, got ${attendees}`);
+  if (months[months.length - 1]?.volunteers !== 9) fail('demo content drift: volunteer series changed');
+}
+
+// 13. Admin function ships with the workspace Netlify deploys.
 if (!existsSync(join(root, 'netlify', 'functions', 'submissions.mts'))) {
   fail('missing netlify/functions/submissions.mts: the inbox backend would not deploy');
 }
 
-// 11. Tailwind wiring: the admin theme side-build exists, carries the
+// 14. Tailwind wiring: the admin theme side-build exists, carries the
 // compiled utilities, and stays out of the global stylesheet.
 const themeFile = join(publish, 'admin-theme.css');
 if (!existsSync(themeFile)) {

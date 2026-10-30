@@ -1,0 +1,59 @@
+@if (grandTotal() === 0) {
+  <p class="py-10 text-center text-sm text-gray-500 dark:text-gray-400">No requests in this period yet.</p>
+} @else {
+  <svg
+    [attr.viewBox]="'0 0 ' + width + ' ' + height"
+    class="h-auto w-full"
+    role="img"
+    [attr.aria-label]="summary()"
+    preserveAspectRatio="xMidYMid meet"
+  >
+    @for (tick of ticks(); track tick.value) {
+      <line
+        x1="44"
+        [attr.x2]="width - 16"
+        [attr.y1]="tick.y"
+        [attr.y2]="tick.y"
+        class="stroke-gray-200 dark:stroke-gray-800"
+        stroke-width="1"
+      />
+      <text x="34" [attr.y]="tick.y + 4" text-anchor="end" class="fill-gray-500 text-xs dark:fill-gray-400">
+        {{ tick.value }}
+      </text>
+    }
+    @for (bar of bars(); track $index) {
+      <g>
+        <title>{{ bar.title }}</title>
+        @for (segment of bar.segments; track segment.form) {
+          <rect
+            [attr.x]="bar.x"
+            [attr.y]="segment.y"
+            [attr.width]="bar.width"
+            [attr.height]="segment.height"
+            [attr.rx]="segment.rounded ? 4 : 0"
+            [class]="FILL[segment.form]"
+          />
+        }
+      </g>
+    }
+    @for (bucket of buckets(); track bucket.key; let i = $index) {
+      <text
+        [attr.x]="44 + scale().slot * i + scale().slot / 2"
+        [attr.y]="bottom + 22"
+        text-anchor="middle"
+        class="fill-gray-500 text-xs dark:fill-gray-400"
+      >
+        {{ bucket.label }}
+      </text>
+    }
+  </svg>
+  <ul class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+    @for (item of totals(); track item.form) {
+      <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+        <span class="h-2.5 w-2.5 rounded-full {{ DOT[item.form] }}"></span>
+        {{ item.label }}
+        <span class="font-semibold text-gray-800 dark:text-white/90">{{ item.total }}</span>
+      </li>
+    }
+  </ul>
+}

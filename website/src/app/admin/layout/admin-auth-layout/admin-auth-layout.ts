@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { BRAND_NAME } from '../../../i18n/lang';
 import { BrandMark } from '../../../shared/brand-mark';
 
 // Adapted from TailAdmin's AuthPageLayout (see THIRD_PARTY_NOTICES.md):
@@ -10,4 +11,6 @@ import { BrandMark } from '../../../shared/brand-mark';
   imports: [BrandMark, RouterModule],
   templateUrl: './admin-auth-layout.html',
 })
-export class AdminAuthLayout {}
+export class AdminAuthLayout {
+  protected readonly brand = BRAND_NAME.en;
+}

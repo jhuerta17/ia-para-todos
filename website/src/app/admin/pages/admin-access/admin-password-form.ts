@@ -15,7 +15,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   `,
 })
 export class AdminPasswordForm {
-  @Input() submitLabel = 'Guardar contraseña';
+  @Input() submitLabel = 'Save password';
   @Output() submitted = new EventEmitter<string>();
 
   protected readonly submitting = signal(false);
@@ -35,16 +35,16 @@ export class AdminPasswordForm {
   protected passwordError(): string {
     const control = this.form.get('password');
     if (!control || !control.errors || !(control.dirty || control.touched)) return '';
-    if (control.errors['required']) return 'La contraseña es obligatoria.';
-    if (control.errors['minlength']) return 'Usa al menos 8 caracteres.';
+    if (control.errors['required']) return 'Password is required.';
+    if (control.errors['minlength']) return 'Use at least 8 characters.';
     return '';
   }
 
   protected confirmError(): string {
     const control = this.form.get('confirm');
     if (!control || !(control.dirty || control.touched)) return '';
-    if (control.errors?.['required']) return 'Confirma tu contraseña.';
-    if (this.form.get('password')?.value !== control.value) return 'Las contraseñas no coinciden.';
+    if (control.errors?.['required']) return 'Confirm your password.';
+    if (this.form.get('password')?.value !== control.value) return 'Passwords do not match.';
     return '';
   }
 

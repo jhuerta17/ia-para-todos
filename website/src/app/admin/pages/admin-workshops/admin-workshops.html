@@ -1,0 +1,90 @@
+<app-admin-breadcrumb pageTitle="Workshops" />
+
+@if (!ready()) {
+  <div class="animate-pulse space-y-4" aria-hidden="true">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+      @for (n of [1, 2, 3]; track n) {
+        <div class="h-24 rounded-2xl bg-gray-100 dark:bg-gray-800"></div>
+      }
+    </div>
+    <div class="h-64 rounded-2xl bg-gray-100 dark:bg-gray-800"></div>
+  </div>
+  <p class="sr-only">Loading workshops…</p>
+} @else if (!demo()) {
+  <div class="rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center dark:border-gray-800 dark:bg-white/3">
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-white/90">No workshops yet</h2>
+    <p class="mx-auto mt-2 max-w-md text-sm text-gray-500 dark:text-gray-400">
+      Workshop scheduling will appear here once it is connected.
+    </p>
+    <button
+      type="button"
+      (click)="previewDemo()"
+      class="mt-3 text-sm font-medium text-brand-600 underline underline-offset-4 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
+    >
+      Preview with demo data
+    </button>
+  </div>
+} @else {
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/3">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Workshops</p>
+      <p class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">{{ summary().total }}</p>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/3">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Registered attendees</p>
+      <p class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">{{ summary().registered }}</p>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/3">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Upcoming</p>
+      <p class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">{{ summary().upcoming }}</p>
+    </div>
+  </div>
+
+  <div class="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pt-4 pb-3 sm:px-6 dark:border-gray-800 dark:bg-white/3">
+    <h2 class="mb-4 px-2 text-lg font-semibold text-gray-800 sm:px-0 dark:text-white/90">Schedule</h2>
+    <div class="max-w-full overflow-x-auto">
+      <table app-table class="w-full text-start">
+        <thead app-table-header class="border-y border-gray-100 dark:border-gray-800">
+          <tr app-table-row>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Workshop</th>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Location</th>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Attendees</th>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
+          </tr>
+        </thead>
+        <tbody app-table-body class="divide-y divide-gray-100 dark:divide-gray-800">
+          @for (workshop of workshops(); track workshop.id) {
+            <tr app-table-row>
+              <td app-table-cell class="py-3">
+                <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ workshop.title }}</p>
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{ workshop.level }}</span>
+              </td>
+              <td app-table-cell class="py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                {{ fullDate(workshop.startsAt) }}
+              </td>
+              <td app-table-cell class="py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{{ workshop.location }}</td>
+              <td app-table-cell class="py-3">
+                <div class="flex min-w-36 items-center gap-2">
+                  <div class="h-1.5 flex-1 rounded-full bg-gray-200 dark:bg-gray-800" role="presentation">
+                    <div class="h-1.5 rounded-full bg-brand-500" [style.width.%]="capacityPct(workshop)"></div>
+                  </div>
+                  <span class="text-xs whitespace-nowrap text-gray-500 tabular-nums dark:text-gray-400">
+                    {{ workshop.registered }}/{{ workshop.capacity }}
+                  </span>
+                </div>
+              </td>
+              <td app-table-cell class="py-3">
+                @if (isPast(workshop)) {
+                  <app-badge size="sm" color="success">Completed</app-badge>
+                } @else {
+                  <app-badge size="sm" color="info">Scheduled</app-badge>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+}

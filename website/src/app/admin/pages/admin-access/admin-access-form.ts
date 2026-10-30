@@ -47,10 +47,10 @@ export class AdminAccessForm {
     const control = this.form.get(field);
     if (!control || !control.errors) return '';
     if (field === 'email') {
-      if (control.errors['required']) return 'El correo es obligatorio.';
-      if (control.errors['email']) return 'Escribe un correo válido.';
+      if (control.errors['required']) return 'Email is required.';
+      if (control.errors['email']) return 'Enter a valid email.';
     }
-    if (field === 'password' && control.errors['required']) return 'La contraseña es obligatoria.';
+    if (field === 'password' && control.errors['required']) return 'Password is required.';
     return '';
   }
 

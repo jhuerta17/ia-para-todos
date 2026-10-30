@@ -5,13 +5,13 @@
     [attr.data-invalid]="isInvalid('email') ? 'true' : null"
   >
     <label class="mb-1.5 block flex w-fit gap-2 text-sm leading-snug font-medium text-gray-700 select-none dark:text-gray-400" for="admin-email">
-      Correo <span class="text-red-500" aria-hidden="true">*</span>
+      Email <span class="text-red-500" aria-hidden="true">*</span>
     </label>
     <input
       id="admin-email"
       formControlName="email"
       type="email"
-      placeholder="nombre@ejemplo.com"
+      placeholder="name@example.com"
       autocomplete="email"
       class="h-11 w-full min-w-0 rounded-[10px] border border-gray-300 bg-white px-4 py-2.5 text-sm font-normal text-gray-800 shadow-theme-xs transition-colors outline-hidden placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-500 dark:focus:border-brand-500/40"
       [class.border-red-500]="isInvalid('email')"
@@ -30,7 +30,7 @@
     [attr.data-invalid]="isInvalid('password') ? 'true' : null"
   >
     <label class="mb-1.5 block flex w-fit gap-2 text-sm leading-snug font-medium text-gray-700 select-none dark:text-gray-400" for="admin-password">
-      Contraseña <span class="text-red-500" aria-hidden="true">*</span>
+      Password <span class="text-red-500" aria-hidden="true">*</span>
     </label>
     <div
       class="group/input-group relative flex h-11 w-full min-w-0 items-center rounded-[10px] border border-gray-300 bg-white shadow-theme-xs transition-colors outline-hidden focus-within:border-brand-300 focus-within:ring-3 focus-within:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:focus-within:border-brand-500/40"
@@ -42,7 +42,7 @@
         id="admin-password"
         formControlName="password"
         [type]="showPassword ? 'text' : 'password'"
-        placeholder="Escribe tu contraseña"
+        placeholder="Enter your password"
         autocomplete="current-password"
         class="h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-4 py-2.5 text-sm font-normal text-gray-800 shadow-none outline-hidden placeholder:text-gray-400 focus:outline-hidden dark:text-white/90 dark:placeholder:text-gray-500"
         [attr.aria-invalid]="isInvalid('password') ? 'true' : null"
@@ -51,7 +51,7 @@
         <button
           type="button"
           (click)="showPassword = !showPassword"
-          [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
           class="flex size-7 items-center justify-center rounded-md p-0 text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-white"
         >
           @if (showPassword) {
@@ -91,7 +91,7 @@
       [disabled]="submitting()"
       class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-brand-500 px-5 py-3 text-sm font-medium text-white shadow-theme-xs transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-brand-200 dark:disabled:bg-brand-800"
     >
-      {{ submitting() ? 'Entrando…' : 'Entrar' }}
+      {{ submitting() ? 'Signing in…' : 'Sign in' }}
     </button>
   </div>
 </form>

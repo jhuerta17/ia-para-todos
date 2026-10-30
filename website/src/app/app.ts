@@ -55,7 +55,7 @@ export class App {
     // confirmation tokens. Server prerendering never sees a fragment.
     const hash = this.document.defaultView?.location.hash ?? '';
     if (hash.includes('_token=') && !this.isAdminLoginRoute()) {
-      this.router.navigate(['/admin/acceso'], { fragment: hash.replace(/^#/, '') });
+      this.router.navigate(['/admin/sign-in'], { fragment: hash.replace(/^#/, '') });
       return;
     }
     this.language.set(this.routeLanguage());

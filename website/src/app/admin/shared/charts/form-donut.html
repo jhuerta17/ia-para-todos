@@ -1,0 +1,39 @@
+@if (total() === 0) {
+  <p class="py-10 text-center text-sm text-gray-500 dark:text-gray-400">No requests to break down yet.</p>
+} @else {
+  <div class="flex flex-col items-center gap-6">
+    <svg viewBox="0 0 160 160" class="h-40 w-40 shrink-0" role="img" [attr.aria-label]="summary()">
+      <circle cx="80" cy="80" [attr.r]="radius" fill="none" class="stroke-gray-200 dark:stroke-gray-800" stroke-width="26" />
+      @for (slice of slices(); track slice.form) {
+        @if (slice.count > 0) {
+          <circle
+            cx="80"
+            cy="80"
+            [attr.r]="radius"
+            fill="none"
+            [class]="STROKE[slice.form]"
+            stroke-width="26"
+            [attr.stroke-dasharray]="slice.dasharray"
+            [attr.stroke-dashoffset]="slice.dashoffset"
+            stroke-linecap="butt"
+            transform="rotate(-90 80 80)"
+          >
+            <title>{{ slice.label }}: {{ slice.count }} ({{ slice.pct }}%)</title>
+          </circle>
+        }
+      }
+      <text x="80" y="76" text-anchor="middle" class="fill-gray-800 text-2xl font-bold dark:fill-white">{{ total() }}</text>
+      <text x="80" y="96" text-anchor="middle" class="fill-gray-500 text-xs dark:fill-gray-400">requests</text>
+    </svg>
+    <ul class="w-full max-w-55 space-y-3">
+      @for (slice of slices(); track slice.form) {
+        <li class="flex items-center gap-2.5 text-sm">
+          <span class="h-2.5 w-2.5 shrink-0 rounded-full {{ DOT[slice.form] }}"></span>
+          <span class="text-gray-600 dark:text-gray-300">{{ slice.label }}</span>
+          <span class="ml-auto font-semibold text-gray-800 tabular-nums dark:text-white/90">{{ slice.count }}</span>
+          <span class="w-10 text-right text-gray-500 tabular-nums dark:text-gray-400">{{ slice.pct }}%</span>
+        </li>
+      }
+    </ul>
+  </div>
+}

@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { AdminBreadcrumb } from '../../layout/admin-breadcrumb/admin-breadcrumb';
 import { BadgeComponent } from '../../shared/ui/badge/badge.component';
+import { DemoState } from '../../data/demo-state';
 import { FORM_BADGE_COLORS, FORM_LABELS, SubmissionForm } from '../../data/submissions';
 import { SubmissionsService } from '../../data/submissions.service';
 import { TABLE_IMPORTS } from '../../shared/ui/table/table.directive';
@@ -9,7 +10,7 @@ import { TABLE_IMPORTS } from '../../shared/ui/table/table.directive';
 type Filter = SubmissionForm | 'all';
 
 const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'Todas' },
+  { id: 'all', label: 'All' },
   { id: 'participate', label: FORM_LABELS.participate },
   { id: 'collaborate', label: FORM_LABELS.collaborate },
   { id: 'newsletter', label: FORM_LABELS.newsletter },
@@ -27,6 +28,7 @@ export class AdminInbox {
   protected readonly loadError = inject(SubmissionsService).error;
   protected readonly truncated = inject(SubmissionsService).truncated;
   private readonly data = inject(SubmissionsService);
+  private readonly demo = inject(DemoState);
   protected readonly filter = signal<Filter>('all');
   protected readonly filters = FILTERS;
 
@@ -37,6 +39,10 @@ export class AdminInbox {
 
   protected retry(): void {
     void this.data.retry();
+  }
+
+  protected previewDemo(): void {
+    this.demo.enable();
   }
 
   protected readonly visible = computed(() => {
@@ -62,7 +68,7 @@ export class AdminInbox {
   protected fullDate(iso: string): string {
     const date = new Date(iso);
     if (Number.isNaN(date.getTime())) return iso;
-    return date.toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' });
+    return date.toLocaleDateString('en', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
   protected excerpt(message: string | null): string {

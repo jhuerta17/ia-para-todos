@@ -51,7 +51,7 @@ export class RouteMetadata {
     const key = typeof data['key'] === 'string' ? data['key'] : '';
     const admin = data['admin'] === true;
     const description: string = admin
-      ? 'Panel de administración de IA para todos. Acceso restringido.'
+      ? 'AI for everyone admin panel. Restricted access.'
       : data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
     const title = typeof route.title === 'string' ? route.title : BRAND_NAME[lang];
     const image = DEFAULT_SOCIAL_IMAGE[lang];

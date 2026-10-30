@@ -19,7 +19,7 @@ const checkAdmin = (adminLogin: boolean, returnParam: string | undefined, url: s
     const clean = url.split(/[?#]/)[0];
     if (clean !== '/admin') queryParams['return'] = clean;
     if (session.user()) queryParams['denied'] = '1';
-    return router.createUrlTree(['/admin/acceso'], { queryParams });
+    return router.createUrlTree(['/admin/sign-in'], { queryParams });
   });
 };
 

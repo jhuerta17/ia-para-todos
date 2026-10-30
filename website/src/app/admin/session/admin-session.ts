@@ -9,11 +9,11 @@ export interface AdminUser {
 type GoTrueClient = import('gotrue-js').default;
 type GoTrueUser = import('gotrue-js').User;
 
-const LOGIN_FAILED = 'El correo o la contraseña no son correctos.';
-const UNCONFIRMED = 'Debes aceptar la invitación desde tu correo antes de entrar.';
-const FORBIDDEN = 'Esta cuenta no tiene permisos de administración.';
-const UNREACHABLE = 'No pudimos conectar con el servicio de acceso. Inténtalo de nuevo.';
-const LINK_EXPIRED = 'Este enlace caducó o ya se usó. Pide uno nuevo e inténtalo de nuevo.';
+const LOGIN_FAILED = 'Incorrect email or password.';
+const UNCONFIRMED = 'Accept the invitation from your email before signing in.';
+const FORBIDDEN = 'This account does not have admin access.';
+const UNREACHABLE = 'Could not reach the sign-in service. Try again.';
+const LINK_EXPIRED = 'This link expired or was already used. Request a new one and try again.';
 
 const isAdmin = (user: GoTrueUser | null): boolean => !!user?.app_metadata?.roles?.includes('admin');
 
@@ -68,7 +68,7 @@ export class AdminSession {
     this.current = null;
     this.user.set(null);
     this.restorePromise = Promise.resolve(false);
-    if (navigate) await this.router.navigate(['/admin/acceso']);
+    if (navigate) await this.router.navigate(['/admin/sign-in']);
   }
 
   /** Fresh JWT for admin API calls; clears the session when unrefreshable. */

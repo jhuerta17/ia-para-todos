@@ -64,7 +64,7 @@ export class AdminAccess {
       await this.session.login(credentials.email, credentials.password);
       await this.router.navigateByUrl(this.returnTarget());
     } catch (error) {
-      this.loginForm?.reportFailure(error instanceof Error ? error.message : 'No pudimos iniciar sesión.');
+      this.loginForm?.reportFailure(error instanceof Error ? error.message : 'Could not sign in.');
     }
   }
 
@@ -77,7 +77,7 @@ export class AdminAccess {
       }
       await this.router.navigateByUrl(this.returnTarget());
     } catch (error) {
-      this.passwordForm?.reportFailure(error instanceof Error ? error.message : 'No pudimos guardar tu contraseña.');
+      this.passwordForm?.reportFailure(error instanceof Error ? error.message : 'Could not save your password.');
     }
   }
 
@@ -92,7 +92,7 @@ export class AdminAccess {
       await this.session.requestRecovery(this.requestForm.getRawValue().email);
       this.mode.set('request-sent');
     } catch {
-      this.requestError.set('No pudimos enviar el correo. Inténtalo de nuevo.');
+      this.requestError.set('Could not send the email. Try again.');
     } finally {
       this.requesting.set(false);
     }
@@ -110,7 +110,7 @@ export class AdminAccess {
       this.mode.set('confirmed');
     } catch (error) {
       this.clearFragment();
-      this.confirmError.set(error instanceof Error ? error.message : 'No pudimos confirmar tu correo.');
+      this.confirmError.set(error instanceof Error ? error.message : 'Could not confirm your email.');
       this.mode.set('login');
     }
   }

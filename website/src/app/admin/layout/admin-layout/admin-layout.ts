@@ -3,6 +3,7 @@ import { afterNextRender, Component, HostListener, inject } from '@angular/core'
 import { Router, RouterModule } from '@angular/router';
 import { AdminSidebarService } from '../../core/sidebar.service';
 import { AdminBackdrop } from '../admin-backdrop/admin-backdrop';
+import { AdminDemoBanner } from '../admin-demo-banner/admin-demo-banner';
 import { AdminHeader } from '../admin-header/admin-header';
 import { AdminSidebar } from '../admin-sidebar/admin-sidebar';
 
@@ -11,7 +12,7 @@ import { AdminSidebar } from '../admin-sidebar/admin-sidebar';
 // focus management, admin scope class for the vendored base styles.
 @Component({
   selector: 'app-admin-layout',
-  imports: [CommonModule, RouterModule, AdminHeader, AdminSidebar, AdminBackdrop],
+  imports: [CommonModule, RouterModule, AdminDemoBanner, AdminHeader, AdminSidebar, AdminBackdrop],
   templateUrl: './admin-layout.html',
 })
 export class AdminLayout {

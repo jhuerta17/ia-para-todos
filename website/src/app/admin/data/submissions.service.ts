@@ -1,5 +1,8 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { inject, Injectable, effect, PLATFORM_ID, signal, untracked } from '@angular/core';
 import { AdminSession } from '../session/admin-session';
+import { generateDemoSubmissions } from './demo-generator';
+import { DemoState } from './demo-state';
 import { Submission, SubmissionForm } from './submissions';
 
 const ENDPOINT = '/.netlify/functions/submissions';
@@ -28,7 +31,11 @@ export class SubmissionsService {
 
   private flight: Promise<void> | null = null;
 
-  constructor(private readonly session: AdminSession) {
+  constructor(
+    private readonly session: AdminSession,
+    private readonly demo: DemoState,
+  ) {
+    const platform = inject(PLATFORM_ID);
     effect(() => {
       if (!this.session.user()) {
         this.rows.set(null);
@@ -36,10 +43,24 @@ export class SubmissionsService {
         this.error.set(null);
       }
     });
+    effect(() => {
+      if (this.demo.enabled()) {
+        this.rows.set(generateDemoSubmissions(Date.now()));
+        this.truncated.set(false);
+        this.error.set(null);
+      } else if (!isPlatformServer(platform)) {
+        this.rows.set(null);
+        untracked(() => void this.load());
+      }
+    });
   }
 
   load(): Promise<void> {
     if (this.rows() !== null) return Promise.resolve();
+    if (this.demo.enabled()) {
+      this.rows.set(generateDemoSubmissions(Date.now()));
+      return Promise.resolve();
+    }
     if (!this.flight) this.flight = this.doLoad().finally(() => (this.flight = null));
     return this.flight;
   }
@@ -61,7 +82,7 @@ export class SubmissionsService {
     try {
       response = await fetch(ENDPOINT, { headers: { Authorization: `Bearer ${token}` } });
     } catch {
-      this.error.set('No pudimos conectar con el servidor. Inténtalo de nuevo.');
+      this.error.set('Could not reach the server. Try again.');
       return;
     }
     if (response.status === 401 || response.status === 403) {
@@ -69,19 +90,19 @@ export class SubmissionsService {
       return;
     }
     if (!response.ok) {
-      this.error.set('No pudimos cargar las solicitudes. Inténtalo de nuevo.');
+      this.error.set('Could not load the requests. Try again.');
       return;
     }
     let payload: unknown;
     try {
       payload = await response.json();
     } catch {
-      this.error.set('El servidor devolvió una respuesta inválida. Inténtalo de nuevo.');
+      this.error.set('The server returned an invalid response. Try again.');
       return;
     }
     const list = (payload as { submissions?: unknown })?.submissions;
     if (!Array.isArray(list)) {
-      this.error.set('El servidor devolvió una respuesta inválida. Inténtalo de nuevo.');
+      this.error.set('The server returned an invalid response. Try again.');
       return;
     }
     const rows = list.filter(isRow).map((row) => ({

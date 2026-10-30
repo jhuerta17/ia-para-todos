@@ -14,9 +14,9 @@ export interface Submission {
 }
 
 export const FORM_LABELS: Record<SubmissionForm, string> = {
-  participate: 'Participa',
-  collaborate: 'Colabora',
-  newsletter: 'Boletín',
+  participate: 'Participate',
+  collaborate: 'Collaborate',
+  newsletter: 'Newsletter',
 };
 
 export const FORM_BADGE_COLORS: Record<SubmissionForm, 'primary' | 'info' | 'success'> = {

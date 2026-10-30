@@ -3,6 +3,7 @@ import { Component, computed, ElementRef, HostListener, inject, OnDestroy, OnIni
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AdminDropdownService } from '../../core/dropdown.service';
+import { DemoState } from '../../data/demo-state';
 import { AdminSession } from '../../session/admin-session';
 
 // Slimmed from TailAdmin's UserDropdown (see THIRD_PARTY_NOTICES.md):
@@ -17,6 +18,7 @@ export class AdminUserDropdown implements OnInit, OnDestroy {
   private readonly element = inject(ElementRef);
   private readonly dropdowns = inject(AdminDropdownService);
   private readonly session = inject(AdminSession);
+  protected readonly demo = inject(DemoState);
   private readonly sub = new Subscription();
 
   protected readonly dropdownId = 'admin-user-dropdown';
@@ -48,6 +50,11 @@ export class AdminUserDropdown implements OnInit, OnDestroy {
   signOut(): void {
     this.closeDropdown();
     this.session.signOut();
+  }
+
+  toggleDemo(): void {
+    this.closeDropdown();
+    this.demo.toggle();
   }
 
   @HostListener('document:click', ['$event'])

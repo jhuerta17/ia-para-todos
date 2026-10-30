@@ -20,7 +20,7 @@
         >
           <path d="M15 18l-6-6 6-6" />
         </svg>
-        Volver al sitio
+        Back to site
       </a>
     </div>
 
@@ -29,12 +29,12 @@
         @switch (mode()) {
           @case ('login') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Acceso de administración</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Escribe tu correo y contraseña para entrar al panel.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Admin sign-in</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Enter your email and password to open the dashboard.</p>
             </div>
             @if (denied()) {
               <div role="alert" class="mb-5 rounded-[10px] border border-red-500/30 bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-500/10 dark:text-red-400">
-                Esta cuenta no tiene permisos de administración.
+                This account does not have admin access.
               </div>
             }
             @if (confirmError(); as message) {
@@ -44,27 +44,27 @@
             }
             <app-admin-access-form (submitted)="authenticate($event)" />
             <p class="mt-5 text-center text-sm text-gray-700 sm:text-start dark:text-gray-400">
-              ¿Olvidaste tu contraseña?
+              Forgot your password?
               <button type="button" (click)="mode.set('request')" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                Recupérala por correo
+                Recover it by email
               </button>
             </p>
           }
           @case ('request') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Recuperar contraseña</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Te enviamos un enlace para crear una contraseña nueva.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Recover password</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">We will email you a link to create a new password.</p>
             </div>
             <form [formGroup]="requestForm" (ngSubmit)="submitRecoveryRequest()" class="space-y-5" novalidate>
               <div role="group" class="group/field flex w-full flex-col gap-2 *:w-full">
                 <label class="mb-1.5 block flex w-fit gap-2 text-sm leading-snug font-medium text-gray-700 select-none dark:text-gray-400" for="admin-recovery-email">
-                  Correo <span class="text-red-500" aria-hidden="true">*</span>
+                  Email <span class="text-red-500" aria-hidden="true">*</span>
                 </label>
                 <input
                   id="admin-recovery-email"
                   formControlName="email"
                   type="email"
-                  placeholder="nombre@ejemplo.com"
+                  placeholder="name@example.com"
                   autocomplete="email"
                   class="h-11 w-full min-w-0 rounded-[10px] border border-gray-300 bg-white px-4 py-2.5 text-sm font-normal text-gray-800 shadow-theme-xs transition-colors outline-hidden placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/20 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-500 dark:focus:border-brand-500/40"
                 />
@@ -80,55 +80,55 @@
                   [disabled]="requesting()"
                   class="inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-brand-500 px-5 py-3 text-sm font-medium text-white shadow-theme-xs transition-all hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-brand-200 dark:disabled:bg-brand-800"
                 >
-                  {{ requesting() ? 'Enviando…' : 'Enviar enlace' }}
+                  {{ requesting() ? 'Sending…' : 'Send link' }}
                 </button>
               </div>
             </form>
             <p class="mt-5 text-center text-sm text-gray-700 sm:text-start dark:text-gray-400">
               <button type="button" (click)="showLogin()" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                Volver al acceso
+                Back to sign-in
               </button>
             </p>
           }
           @case ('request-sent') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Revisa tu correo</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Si la dirección existe, recibirás un enlace para crear una contraseña nueva.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Check your email</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">If the address exists, you will receive a link to create a new password.</p>
             </div>
             <p class="text-center text-sm text-gray-700 sm:text-start dark:text-gray-400">
               <button type="button" (click)="showLogin()" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                Volver al acceso
+                Back to sign-in
               </button>
             </p>
           }
           @case ('invite') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Aceptar invitación</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Crea tu contraseña para activar tu acceso de administración.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Accept invitation</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Create your password to activate your admin access.</p>
             </div>
-            <app-admin-password-form submitLabel="Activar acceso" (submitted)="submitPassword($event)" />
+            <app-admin-password-form submitLabel="Activate access" (submitted)="submitPassword($event)" />
           }
           @case ('recovery') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Nueva contraseña</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Escribe una contraseña nueva para tu acceso.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">New password</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Enter a new password for your access.</p>
             </div>
-            <app-admin-password-form submitLabel="Guardar contraseña" (submitted)="submitPassword($event)" />
+            <app-admin-password-form submitLabel="Save password" (submitted)="submitPassword($event)" />
           }
           @case ('confirming') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Confirmando…</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Estamos confirmando tu correo.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Confirming…</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Confirming your email.</p>
             </div>
           }
           @case ('confirmed') {
             <div class="mb-5 sm:mb-8">
-              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Correo confirmado</h1>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Tu correo quedó confirmado. Ya puedes entrar al panel.</p>
+              <h1 class="mb-2 text-title-lg font-semibold text-gray-800 dark:text-white/90">Email confirmed</h1>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Your email is confirmed. You can now enter the dashboard.</p>
             </div>
             <p class="text-center text-sm text-gray-700 sm:text-start dark:text-gray-400">
               <button type="button" (click)="showLogin()" class="text-brand-500 hover:text-brand-600 dark:text-brand-400">
-                Entrar al panel
+                Enter the dashboard
               </button>
             </p>
           }

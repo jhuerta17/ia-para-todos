@@ -26,10 +26,11 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Admin gating (role rules run before the catch-all): the overview and
-# inbox serve their prerendered shells only to Identity users whose JWT
-# carries the admin role; everyone else falls through to the 404 rule.
-# /admin/acceso stays public so the owner can sign in.
+# Admin gating (role rules run before the catch-all): the overview,
+# inbox, workshops, impact, and supporters pages serve their prerendered
+# shells only to Identity users whose JWT carries the admin role;
+# everyone else falls through to the 404 rule. /admin/sign-in stays
+# public so the owner can sign in.
 [[redirects]]
   from = "/admin"
   to = "/admin/index.html"
@@ -52,22 +53,85 @@
   conditions = { Role = ["admin"] }
 
 [[redirects]]
-  from = "/admin/solicitudes"
-  to = "/admin/solicitudes/index.html"
+  from = "/admin/requests"
+  to = "/admin/requests/index.html"
   status = 200
   force = true
   conditions = { Role = ["admin"] }
 
 [[redirects]]
-  from = "/admin/solicitudes/"
-  to = "/admin/solicitudes/index.html"
+  from = "/admin/requests/"
+  to = "/admin/requests/index.html"
   status = 200
   force = true
   conditions = { Role = ["admin"] }
 
 [[redirects]]
-  from = "/admin/solicitudes/index.html"
-  to = "/admin/solicitudes/index.html"
+  from = "/admin/requests/index.html"
+  to = "/admin/requests/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/workshops"
+  to = "/admin/workshops/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/workshops/"
+  to = "/admin/workshops/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/workshops/index.html"
+  to = "/admin/workshops/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/impact"
+  to = "/admin/impact/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/impact/"
+  to = "/admin/impact/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/impact/index.html"
+  to = "/admin/impact/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/supporters"
+  to = "/admin/supporters/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/supporters/"
+  to = "/admin/supporters/index.html"
+  status = 200
+  force = true
+  conditions = { Role = ["admin"] }
+
+[[redirects]]
+  from = "/admin/supporters/index.html"
+  to = "/admin/supporters/index.html"
   status = 200
   force = true
   conditions = { Role = ["admin"] }
