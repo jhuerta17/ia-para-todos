@@ -6,6 +6,7 @@
     <ol class="steps">@for (step of steps(); track step.title; let index = $index) {<li appRevealOnEnter><app-icon [name]="step.icon" /><div><h3>{{ step.title }}</h3><p>{{ step.text }}</p></div><span class="number">0{{ index + 1 }}</span></li>}</ol>
     <form [formGroup]="form" [attr.name]="formName()" method="POST" data-netlify="true" netlify-honeypot="bot-field" (ngSubmit)="submit()" novalidate autocomplete="off" appRevealOnEnter>
       <h3>{{ context() === 'community' ? c().collaborate : c().participate }}</h3><p class="form-note">{{ c().note }}</p>
+      <input type="hidden" name="form-name" [value]="formName()" />
       <input type="hidden" name="language" [value]="language.lang()" />
       <p class="visually-hidden" aria-hidden="true"><label>{{ c().honeypot }}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
       <label for="contact-name">{{ c().name }}</label><input id="contact-name" name="name" required formControlName="name" [placeholder]="c().namePh" maxlength="100" [attr.aria-invalid]="invalid('name')" aria-describedby="name-error" />
