@@ -22,7 +22,8 @@ export class CommunityInvitation {
   private readonly section = viewChild.required<ElementRef<HTMLElement>>('section');
   private readonly copy = viewChild.required<ElementRef<HTMLElement>>('copy');
   protected readonly moving = signal(false);
-  protected readonly spread = signal(1);
+  protected readonly progress = signal(1);
+  protected readonly copyVisible = computed(() => this.progress() > 0.55);
   private readonly language = inject(Language);
   protected readonly c = computed(() => text[this.language.lang()]);
   protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
@@ -35,15 +36,15 @@ export class CommunityInvitation {
       let frame = 0;
       const update = () => {
         frame = 0;
-        const offset = window.innerWidth >= 810 ? 30 : 0;
+        const offset = window.innerWidth >= 810 ? 30 : 64;
         const height = window.innerHeight - offset;
-        const enabled = !preference.matches && height >= 800 && this.copy().nativeElement.offsetHeight + 380 <= height;
+        const enabled = !preference.matches;
         this.moving.set(enabled);
-        if (!enabled) { this.spread.set(0); return; }
+        if (!enabled) { this.progress.set(1); return; }
         const section = this.section().nativeElement;
         const distance = Math.max(1, section.offsetHeight - height);
         const progress = Math.max(0, Math.min(1, (offset - section.getBoundingClientRect().top) / distance));
-        this.spread.set(1 - progress);
+        this.progress.set(progress);
       };
       const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
       const observer = new ResizeObserver(schedule);

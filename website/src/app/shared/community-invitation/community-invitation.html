@@ -1,11 +1,11 @@
-<section #section [class.motion-enabled]="moving()" [style.--spread]="spread()" aria-labelledby="community-invitation-title">
+<section #section [class.motion-enabled]="moving()" [style.--progress]="progress()" aria-labelledby="community-invitation-title">
   <div class="collage">
     <div class="photographs" aria-hidden="true">
       @for (photograph of photographs; track photograph; let index = $index) {
         <img [class]="'photo photo-' + index" [src]="'/images/' + photograph + '-480.webp'" alt="" width="480" height="480" loading="lazy" />
       }
     </div>
-    <div #copy class="invitation-copy">
+    <div #copy class="invitation-copy" [attr.inert]="copyVisible() ? null : ''" [attr.aria-hidden]="copyVisible() ? null : 'true'">
       <h2 id="community-invitation-title">{{ c().heading }}</h2>
       <p>{{ c().lead }}</p>
       <app-action-link to="/participar" [label]="c().participate" />

@@ -33,40 +33,45 @@ app-action-link { display: block; width: 174px; margin: 20px auto 0; }
   .photo-7 { left: calc(50% - 50px); bottom: 0; }
 }
 @media print { :host { padding-block: 40px; } .collage { min-height: 0; } .photographs { display: none; } }
-@media (min-width: 600px) and (max-width: 809px) {
-  .photo-0, .photo-5 { left: calc(50% - 220px); }
-  .photo-2, .photo-6 { right: calc(50% - 220px); }
-  .photo-3 { left: calc(50% - 285px); top: 360px; width: 100px; height: 100px; }
-  .photo-4 { right: calc(50% - 285px); top: 360px; width: 100px; height: 100px; }
-}
+/* Geometry and opacity follow the same reversible scroll progress. */
 @media (prefers-reduced-motion: no-preference) {
-  .motion-enabled { position: relative; height: calc((100svh - 30px) * 1.7); }
-  .motion-enabled .collage { position: sticky; top: 30px; min-height: 0; height: calc(100svh - 30px); }
-  .motion-enabled .caption { position: absolute; bottom: -44px; width: 100%; }
-  .motion-enabled .photo { transform: translate(calc(var(--travel-x, 0px) * var(--spread)), calc(var(--travel-y, 0px) * var(--spread))); }
-  .motion-enabled .photo-0 { top: 9%; --travel-x: -24px; --travel-y: -40px; }
-  .motion-enabled .photo-1 { --travel-y: -40px; }
-  .motion-enabled .photo-2 { top: 9%; --travel-x: 24px; --travel-y: -40px; }
-  .motion-enabled .photo-3 { top: calc(50% - 88px); --travel-x: -40px; }
-  .motion-enabled .photo-4 { top: calc(50% - 88px); --travel-x: 40px; }
-  .motion-enabled .photo-5 { bottom: 9%; --travel-x: -24px; --travel-y: 40px; }
-  .motion-enabled .photo-6 { bottom: 9%; --travel-x: 24px; --travel-y: 40px; }
-  .motion-enabled .photo-7 { --travel-y: 40px; }
+.motion-enabled { position: relative; height: calc((100svh - 30px) * 2); }
+.motion-enabled .collage { position: sticky; top: 30px; min-height: 0; height: calc(100svh - 30px); container-type: size; }
+.motion-enabled .caption { position: absolute; bottom: -44px; width: 100%; }
+.motion-enabled .photo {
+ --start-size: min(450px, 72cqw, 65cqh); --end-size: min(176px, 22cqw, 23cqh); --x: 0cqw; --y: 0cqh;
+ width: calc(var(--start-size) * (1 - var(--progress)) + var(--end-size) * var(--progress));
+ height: auto; aspect-ratio: 1;
+ left: calc(50% + var(--x) * var(--progress)); top: calc(50% + var(--y) * var(--progress)); right: auto; bottom: auto;
+ transform: translate(-50%, -50%); border-radius: 17%;
+}
+.motion-enabled .photo-0, .motion-enabled .photo-2, .motion-enabled .photo-5, .motion-enabled .photo-6 { --end-size: min(123px, 16cqw, 17cqh); }
+.motion-enabled .photo-0 { --x: -28cqw; --y: -31cqh; }
+.motion-enabled .photo-1 { --y: -37cqh; z-index: 2; }
+.motion-enabled .photo-2 { --x: 28cqw; --y: -31cqh; }
+.motion-enabled .photo-3 { --x: -38cqw; }
+.motion-enabled .photo-4 { --x: 38cqw; }
+.motion-enabled .photo-5 { --x: -28cqw; --y: 31cqh; }
+.motion-enabled .photo-6 { --x: 28cqw; --y: 31cqh; }
+.motion-enabled .photo-7 { --y: 37cqh; }
+.motion-enabled .invitation-copy { width: min(350px, 48cqw); opacity: clamp(0, calc((var(--progress) - .5) * 2), 1); }
 }
 @media (max-width: 809px) and (prefers-reduced-motion: no-preference) {
-  .motion-enabled { height: 170svh; }
-  .motion-enabled .collage { top: 0; height: 100svh; }
-  .motion-enabled .photo { --travel-x: 0px; --travel-y: -16px; }
-  .motion-enabled .photo-0, .motion-enabled .photo-2 { top: 60px; }
-  .motion-enabled .photo-3, .motion-enabled .photo-4 { top: 140px; --travel-x: 0px; --travel-y: -16px; }
-  .motion-enabled .photo-5, .motion-enabled .photo-6 { bottom: 60px; --travel-y: 16px; }
-  .motion-enabled .photo-7 { --travel-y: 16px; }
+.motion-enabled { height: calc((100svh - 64px) * 2); }
+.motion-enabled .collage { top: 64px; height: calc(100svh - 64px); }
+.motion-enabled .photo { --end-size: min(110px, 23cqw, 18cqh); }
+.motion-enabled .photo-0, .motion-enabled .photo-2, .motion-enabled .photo-5, .motion-enabled .photo-6 { --end-size: min(80px, 18cqw, 13cqh); }
+.motion-enabled .photo-3, .motion-enabled .photo-4 { --end-size: min(90px, 15cqw, 15cqh); }
+.motion-enabled .photo-3 { --x: -41cqw; }
+.motion-enabled .photo-4 { --x: 41cqw; }
+.motion-enabled .invitation-copy { width: 66cqw; }
+.motion-enabled h2 { font-size: clamp(20px, 6cqw, 28px); }
+.motion-enabled .invitation-copy p { font-size: clamp(14px, 4cqw, 17px); line-height: 1.4; margin-block: 12px; }
+.motion-enabled app-action-link { max-width: 100%; margin-top: 12px; }
 }
 @media print {
-  section.motion-enabled { height: auto; }
-  .motion-enabled .collage { position: relative; top: auto; height: auto; min-height: 0; }
-  .motion-enabled .caption { position: static; }
-}
-@media (min-width: 810px) and (max-width: 1000px) {
-  .motion-enabled .photo { --travel-x: 0px; }
+section.motion-enabled { height: auto; }
+.motion-enabled .collage { position: relative; top: auto; height: auto; min-height: 0; }
+.motion-enabled .invitation-copy { opacity: 1; }
+.motion-enabled .caption { position: static; }
 }
