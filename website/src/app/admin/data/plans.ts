@@ -134,6 +134,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'ai-triage',
         title: 'AI intake triage in inbox',
         detail: 'Auto-categorize plus drafted Spanish replies for one-click send (demo-safe).',
+        done: true,
       },
       {
         id: 'ai-fallback',
