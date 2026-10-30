@@ -4,6 +4,8 @@ export interface PlanItem {
   id: string;
   title: string;
   detail: string;
+  /** True once the step is finished in code; localStorage can still override per browser. */
+  done?: boolean;
 }
 
 export interface PlanGroup {
@@ -27,6 +29,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'lock-scope',
         title: 'Lock the 5-day demo scope',
         detail: 'Public site + admin showcase as a 6-month nonprofit; no real outreach, no legal entity, no live programs.',
+        done: true,
       },
       {
         id: 'demo-data-6mo',
@@ -41,7 +44,8 @@ export const PLAN_GROUPS: PlanGroup[] = [
       {
         id: 'plans-tracker-live',
         title: 'Plans tracker live in admin',
-        detail: 'This page: the roadmap visible and checkable from the portal. Mark this one done first.',
+        detail: 'This page: the roadmap visible and checkable from the portal.',
+        done: true,
       },
     ],
   },

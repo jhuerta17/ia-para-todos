@@ -64,10 +64,11 @@ confirmation links are detected site-wide and rerouted to
   example content in demo mode (below).
 - **Plans** is the business roadmap tracker: every strategy goal as a
   checkable plan grouped by area, with per-group and overall
-  progress. Statuses cycle Not started → In progress → Done and
-  persist per browser (localStorage); the Dashboard shows the
-  overall progress strip. Progress is per-device until a shared
-  team store replaces it.
+  progress. Finished steps ship as Done from code (`done: true` in
+  `plans.ts`); statuses cycle Not started → In progress → Done and
+  per-browser overrides persist in localStorage, with Reset
+  restoring the shipped statuses. The Dashboard shows the overall
+  progress strip.
 - **Sign out** is in the account menu (top right).
 
 ## Demo mode
