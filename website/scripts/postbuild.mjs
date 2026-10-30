@@ -276,6 +276,35 @@ if (/<link[^>]*admin-theme/.test(home)) {
   fail('public home links admin-theme: public visitors would download admin CSS');
 }
 
+// 16. Admin font preloads are static (parser-inserted): the semibold/bold
+// weights ride with the 400s instead of swapping late. Script-injected
+// font preloads do NOT match fetches from the media="print" stylesheet
+// twin (Chromium refetches: 7 hits for 5 faces), so stamp them into the
+// prerendered admin HTML here; public pages stay untouched.
+const ADMIN_FONTS = [
+  'fonts/instrument-sans/instrument-sans-latin-500-normal.woff2',
+  'fonts/instrument-sans/instrument-sans-latin-600-normal.woff2',
+  'fonts/libre-baskerville/libre-baskerville-latin-700-normal.woff2',
+];
+for (const href of ADMIN_FONTS) {
+  if (!existsSync(join(publish, href))) fail(`missing publish font ${href}`);
+}
+for (const path of ADMIN_PATHS) {
+  const file = join(publish, path, 'index.html');
+  if (!existsSync(file)) continue; // missing output is covered by check 9
+  let html = readFileSync(file, 'utf8');
+  if (html.includes(ADMIN_FONTS[0])) continue; // idempotent reruns stamp once
+  const anchor = html.indexOf('instrument-sans-latin-400-normal.woff2');
+  if (anchor === -1) {
+    fail(`/${path} [admin] lacks the 400 preload anchor for admin font preloads`);
+    continue;
+  }
+  const tagEnd = html.indexOf('>', anchor) + 1;
+  const links = ADMIN_FONTS.map((href) => `  <link rel="preload" href="${href}" as="font" type="font/woff2" crossorigin>`).join('\n');
+  html = `${html.slice(0, tagEnd)}\n${links}${html.slice(tagEnd)}`;
+  writeFileSync(file, html);
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);

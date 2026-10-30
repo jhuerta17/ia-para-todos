@@ -1,8 +1,8 @@
-@if (!isAdminRoute()) {
+@if (!isAdmin()) {
 <a class="skip-link" href="#main-content" (click)="skipToContent($event)">{{ skipLabel() }}</a>
 <app-site-header />
 }
 <router-outlet (activate)="onPageActivated()" />
-@if (!isAdminRoute()) {
+@if (!isAdmin()) {
 <app-site-footer />
 }

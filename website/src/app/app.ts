@@ -1,8 +1,8 @@
 import { RouteMetadata } from './shared/metadata/route-metadata';
 import { SiteFooter } from './shared/site-footer/site-footer';
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, Component, computed, inject, Injector } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { afterNextRender, Component, computed, inject, Injector, signal } from '@angular/core';
+import { NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
 import { SiteHeader } from './shared/site-header/site-header';
 import { Language } from './i18n/language';
 import { Lang } from './i18n/lang';
@@ -21,11 +21,28 @@ export class App {
   private readonly router = inject(Router);
   private readonly language = inject(Language);
   protected readonly skipLabel = computed(() => this.language.lang() === 'es' ? 'Saltar al contenido' : 'Skip to content');
+  protected readonly isAdmin = signal(false);
 
-  protected isAdminRoute(): boolean {
+  constructor() {
+    // The first client render lands before the initial navigation
+    // completes, when the router snapshot is still empty: seed from the
+    // URL so admin loads never flash the public header/footer (and the
+    // client render matches the prerendered shell for hydration).
+    this.isAdmin.set(this.detectAdminRoute());
+    // Root outlives the app; no teardown needed.
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.isAdmin.set(this.detectAdminRoute());
+      }
+    });
+  }
+
+  private detectAdminRoute(): boolean {
     let route = this.router.routerState.snapshot.root;
     while (route.firstChild) route = route.firstChild;
-    return route.data['admin'] === true;
+    if (route.data['admin'] === true) return true;
+    const path = this.document.defaultView?.location.pathname ?? this.router.url.split(/[?#]/)[0];
+    return path === '/admin' || path.startsWith('/admin/');
   }
 
   private isAdminLoginRoute(): boolean {

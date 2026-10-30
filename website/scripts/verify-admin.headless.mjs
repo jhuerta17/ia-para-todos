@@ -440,6 +440,42 @@ async function main() {
       await fresh.close();
     }
 
+    // ---- 15. Sign-in loads without a public-chrome flash ----
+    {
+      // Slow resources stretch the window between first client render and
+      // initial-navigation completion, when the router snapshot is empty.
+      // Sees the regression as <app-site-header>/<app-site-footer> in the DOM.
+      const page = await browser.newPage();
+      page.on('pageerror', (error) => pageErrors.push(`signin-flash: ${error.message}`));
+      await page.route('**/*.{woff2,js,css}', async (route) => {
+        await new Promise((r) => setTimeout(r, 400));
+        return route.continue();
+      });
+      await page.goto(`${base}/admin/sign-in`, { waitUntil: 'domcontentloaded' });
+      const seen = new Set();
+      for (let i = 0; i < 40; i++) {
+        const found = await page.evaluate(() => ['app-site-header', 'app-site-footer', 'app-admin-header', 'app-admin-sidebar'].filter((s) => document.querySelector(s)));
+        for (const tag of found) seen.add(tag);
+        if (seen.size === 0) await page.waitForTimeout(100);
+        else break;
+      }
+      check('sign-in never renders public/admin chrome during load', seen.size === 0, [...seen].join(',') || 'clean');
+      await page.goto(`${base}/admin/sign-in`, { waitUntil: 'networkidle' });
+      const heading = await page.locator('h1').first().textContent();
+      check('throttled sign-in still settles on login form', (heading ?? '').includes('Admin sign-in'), heading ?? '(no h1)');
+      // Admin-only font preloads: the sign-in weights arrive with the static
+      // 400s instead of swapping late; public pages stay untouched.
+      const adminPreloads = await page.evaluate(() => [...document.querySelectorAll('link[rel="preload"][as="font"]')].map((l) => l.getAttribute('href')));
+      const want = ['instrument-sans-latin-500-normal', 'instrument-sans-latin-600-normal', 'libre-baskerville-latin-700-normal'];
+      const missing = want.filter((w) => !adminPreloads.some((h) => h.includes(w)));
+      check('sign-in preloads its semibold/bold weights', missing.length === 0, missing.join(',') || `${adminPreloads.length} preload(s)`);
+      await page.goto(`${base}/`, { waitUntil: 'domcontentloaded' });
+      const homePreloads = await page.evaluate(() => [...document.querySelectorAll('link[rel="preload"][as="font"]')].map((l) => l.getAttribute('href')));
+      const leaked = homePreloads.filter((h) => want.some((w) => h.includes(w)));
+      check('public home skips admin font preloads', leaked.length === 0, leaked.join(',') || `${homePreloads.length} preload(s)`);
+      await page.close();
+    }
+
     check('no page errors', pageErrors.length === 0, pageErrors.join(' | ').slice(0, 300));
   } finally {
     await browser.close();
