@@ -1,6 +1,43 @@
-<footer><div class="columns"><div class="identity"><a class="brand" [routerLink]="language.path('home')" [attr.aria-label]="c().home"><app-brand-mark /><span>{{ language.brand() }}</span></a><p>{{ c().identity }}</p>
-<form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" (submit)="submit($event)" novalidate autocomplete="off"><h2>{{ c().newsHeading }}</h2><p>{{ c().newsLead }}</p><input type="hidden" name="form-name" value="newsletter" /><input type="hidden" name="language" [value]="language.lang()" /><p class="visually-hidden" aria-hidden="true"><label>{{ c().honeypot }}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p><label for="newsletter-email">{{ c().newsLabel }}</label><input id="newsletter-email" name="email" type="email" required [formControl]="email" [placeholder]="c().newsPh" maxlength="200" [attr.aria-invalid]="email.touched && email.invalid" aria-describedby="newsletter-error" /><p id="newsletter-error" class="error">@if (email.touched && email.invalid) { {{ c().newsError }} }</p><button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().newsSending : c().newsButton }}</span><app-icon name="arrow-right" /></button><p class="result" role="status">@if (complete()) { {{ c().newsResult }} }</p><p class="error" role="alert">@if (failed()) { {{ c().newsFailed }} }</p></form></div>
-<nav [attr.aria-label]="c().exploreNav"><h2>{{ c().explore }}</h2>@for (link of navigation(); track link.path) {<a [routerLink]="link.path">{{ link.label }}</a>}</nav>
-<nav [attr.aria-label]="c().infoNav"><h2>{{ c().info }}</h2>@for (link of info(); track link.path) {<a [routerLink]="link.path">{{ link.label }}</a>}</nav>
-<div class="contact"><h2>{{ c().talk }}</h2><app-icon name="mail" /><p>{{ c().talkLead }}</p><a [routerLink]="language.path('contacto')">{{ c().aboutContact }} <app-icon name="arrow-up-right" /></a></div></div>
-<div class="bottom"><span>{{ c().copyright }}</span></div></footer>
+<footer>
+  <div class="main-band">
+    <div class="identity">
+      <a class="brand" [routerLink]="language.path('home')" [attr.aria-label]="c().home"><app-brand-mark /><span>{{ language.brand() }}</span></a>
+      <p>{{ c().identity }}</p>
+    </div>
+    <nav [attr.aria-label]="c().exploreNav">
+      <h2>{{ c().learn }}</h2>
+      @for (link of learning(); track link.path) { <a [routerLink]="link.path">{{ link.label }}</a> }
+    </nav>
+    <nav [attr.aria-label]="c().communityNav">
+      <h2>{{ c().community }}</h2>
+      @for (link of community(); track link.path) { <a [routerLink]="link.path">{{ link.label }}</a> }
+    </nav>
+  </div>
+  <form class="newsletter" name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" (submit)="submit($event)" novalidate>
+    <div class="newsletter-copy"><h2>{{ c().newsHeading }}</h2><p>{{ c().newsLead }}</p></div>
+    <input type="hidden" name="form-name" value="newsletter" />
+    <input type="hidden" name="language" [value]="language.lang()" />
+    <p class="honeypot" hidden aria-hidden="true"><label>{{ c().honeypot }}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+    <div class="signup">
+      <div class="email-field">
+        <label for="newsletter-email">{{ c().newsLabel }}</label>
+        <input id="newsletter-email" name="email" type="email" required [formControl]="email" [placeholder]="c().newsPh" maxlength="200" autocomplete="email" [attr.aria-invalid]="email.touched && email.invalid" [attr.aria-describedby]="email.touched && email.invalid ? 'newsletter-error' : null" />
+      </div>
+      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().newsSending : c().newsButton }}</span><app-icon name="arrow-right" /></button>
+      @if (email.touched && email.invalid) { <p id="newsletter-error" class="error">{{ c().newsError }}</p> }
+      <div class="feedback" role="status">@if (complete()) { <p class="result">{{ c().newsResult }}</p> }</div>
+      <div class="feedback" role="alert">@if (failed()) { <p class="error">{{ c().newsFailed }}</p> }</div>
+    </div>
+  </form>
+  <div class="utility-band">
+    <span class="copyright">{{ c().copyright }}</span>
+    <nav [attr.aria-label]="c().infoNav">@for (link of info(); track link.path) { <a [routerLink]="link.path">{{ link.label }}</a> }</nav>
+    <nav class="language" [attr.aria-label]="c().language">
+      @if (language.lang() === 'es') {
+        <span lang="es" aria-current="true">Español</span><span class="separator" aria-hidden="true">/</span><a lang="en" [routerLink]="alternate().url" [attr.aria-label]="alternate().aria">English</a>
+      } @else {
+        <a lang="es" [routerLink]="alternate().url" [attr.aria-label]="alternate().aria">Español</a><span class="separator" aria-hidden="true">/</span><span lang="en" aria-current="true">English</span>
+      }
+    </nav>
+  </div>
+</footer>

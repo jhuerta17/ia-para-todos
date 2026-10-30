@@ -1,5 +1,44 @@
-:host { display: block; padding: 120px 40px 40px; } footer { max-width: 1040px; margin: auto; } .columns { display: grid; grid-template-columns: 345fr 140fr 180fr 200fr; gap: 50px; } .columns > * { min-width: 0; } .brand { display: flex; align-items: center; gap: 10px; font: 400 26px/1.4 var(--font-heading); text-decoration: none; } .brand app-brand-mark { --logo-size: 32px; }
-h2 { font-size: 20px; margin-bottom: 24px; } p { font-size: 16px; margin: 16px 0 0; } nav a { display: block; margin: 0 0 20px; font-size: 16px; text-decoration: none; } a:hover { color: var(--color-accent); text-decoration: underline; } .contact > app-icon { --icon-size: 22px; color: var(--color-accent); } .contact a { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; font-size: 14px; } .contact a app-icon { --icon-size: 16px; }
-form { margin-top: 36px; background: var(--color-cool); padding: 24px; border-radius: 30px; } form h2 { margin-bottom: 12px; } form p { font-size: 14px; } .bottom { border-top: 1px solid var(--color-border); margin-top: 70px; padding-top: 30px; display: flex; justify-content: flex-end; } .bottom span { font-size: 12px; }
-@media (max-width: 1100px) { .columns { grid-template-columns: 2fr 1fr 1fr; gap: 32px; } .contact { grid-column: 2 / -1; } .identity { grid-row: span 2; } }
-@media (max-width: 809px) { :host { padding: 70px 20px 30px; } .columns { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 40px 24px; } .identity { grid-column: 1 / -1; grid-row: auto; } form { max-width: 420px; } .contact { grid-column: 1 / -1; max-width: 400px; } .brand { font-size: 26px; } .bottom { display: block; margin-top: 40px; } }
+:host { display: block; padding: 48px 40px 24px; background: var(--color-warm); }
+footer { max-width: 1040px; margin: auto; }
+a { text-decoration: none; }
+a:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+.main-band { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 64px; }
+.main-band > *, .newsletter > *, .signup > * { min-width: 0; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font: 400 26px/1.4 var(--font-heading); }
+.brand app-brand-mark { --logo-size: 32px; }
+h2 { margin: 0 0 10px; font-size: 18px; }
+p { margin: 0; font-size: 14px; line-height: 1.6; }
+.identity p { max-width: 300px; margin-top: 12px; }
+.main-band nav a { display: flex; align-items: center; min-height: 36px; width: fit-content; font-size: 14px; }
+.newsletter { display: grid; grid-template-columns: 1fr 1.3fr; align-items: center; gap: 40px; margin-top: 24px; padding-block: 24px; border-block: 1px solid var(--color-border); }
+.newsletter h2 { margin-bottom: 6px; }
+.signup { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 0 12px; }
+.signup label { margin: 0 0 6px; font-size: 13px; }
+.signup .submit { width: auto; min-height: 44px; margin: 0; gap: 16px; }
+.signup > .error, .feedback { grid-column: 1 / -1; }
+.feedback:empty { display: none; }
+.feedback .result, .feedback .error { margin-top: 8px; }
+.honeypot[hidden] { display: none !important; }
+.utility-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 20px; padding-top: 16px; font-size: 12px; }
+.utility-band nav { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.utility-band a, .language > span { display: inline-flex; align-items: center; min-height: 44px; }
+.utility-band .language { gap: 8px; }
+.language [aria-current] { font-weight: 600; }
+.language a { text-decoration: underline; text-underline-offset: 4px; }
+.separator { opacity: .45; }
+@media (max-width: 809px) {
+  :host { padding: 40px 24px 24px; }
+  .main-band { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .identity { grid-column: 1 / -1; }
+  .identity p { max-width: 420px; }
+  .main-band nav a { min-height: 44px; }
+  .newsletter { grid-template-columns: 1fr; gap: 16px; }
+  .utility-band { align-items: flex-start; }
+  .copyright { flex-basis: 100%; }
+  .utility-band nav { gap: 0 16px; }
+}
+@media (max-width: 479px) {
+  .signup { grid-template-columns: 1fr; gap: 12px; }
+  .signup .submit { width: 100%; }
+}

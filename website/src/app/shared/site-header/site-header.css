@@ -1,10 +1,10 @@
 :host { position: fixed; inset: 0 0 auto; z-index: 50; display: flex; justify-content: center; padding: 9px 24px; pointer-events: none; }
-.site-header { display: flex; align-items: center; gap: 32px; min-height: 48px; padding: 2px 2px 2px 12px; border-radius: 22px; box-shadow: 0 0 0 1px rgb(0 0 0 / 2%); background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); pointer-events: auto; }
+.site-header { display: flex; align-items: center; gap: 28px; min-height: 48px; padding: 2px 2px 2px 12px; border-radius: 22px; box-shadow: 0 0 0 1px rgb(0 0 0 / 2%); background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); pointer-events: auto; }
 a { text-decoration: none; }
 .brand { display: flex; align-items: center; gap: 8px; white-space: nowrap; font: 400 20px/1.4 var(--font-heading); }
 .brand app-brand-mark { --logo-size: 28px; }
-.desktop-nav { display: flex; align-items: center; gap: 16px; }
-.desktop-nav > a, button { font-size: 18px; line-height: 24px; }
+.desktop-nav { display: flex; align-items: center; gap: 20px; }
+.desktop-nav > a, button { font-size: 16px; line-height: 24px; }
 button { color: inherit; cursor: pointer; }
 .disclosure { position: relative; }
 .disclosure > button { display: flex; align-items: center; gap: 6px; padding: 10px 0; border: 0; background: transparent; }
@@ -12,17 +12,12 @@ button { color: inherit; cursor: pointer; }
 button[aria-expanded='true'] > app-icon { transform: rotate(180deg); }
 .desktop-nav > a, .disclosure > button { transition: color var(--duration-fast); }
 a:hover, .disclosure > button:hover, .active { color: var(--color-accent); }
-.dropdown { position: absolute; top: calc(100% + 10px); left: -16px; min-width: 190px; padding: 12px; border-radius: 20px; background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); box-shadow: var(--shadow-card); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), visibility var(--duration-fast); }
-.dropdown::before { content: ''; position: absolute; inset: -12px 0 100%; }
+.dropdown { position: absolute; top: calc(100% + 10px); left: -16px; min-width: 190px; padding: 12px; border-radius: 20px; background: #fffdf9; backdrop-filter: blur(10px); box-shadow: var(--shadow-card); opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), visibility var(--duration-fast); }
 .dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
-.dropdown > a { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 10px; font-size: var(--text-small); }
+.dropdown > a { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px; border-radius: 10px; font-size: var(--text-small); }
 .dropdown > a:hover { background: var(--color-warm); }
-.contact-panel { left: auto; right: 0; width: 310px; padding: 20px; font-size: var(--text-small); }
-.contact-panel p { margin: 0 0 14px; }
-.contact-panel > span { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.contact-panel > a { padding-inline: 0; }
 .mobile-toggle, .mobile-panel { display: none; }
-@media (max-width: 1299px) {
+@media (max-width: 1023px) {
   :host { display: block; padding: 0; }
   .site-header { position: relative; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0; min-height: 64px; padding: 16px 24px; border-radius: 0; background: transparent; backdrop-filter: none; }
   .site-header::before { content: ''; position: absolute; z-index: -1; inset: 0; border-radius: 0 0 48px 48px; background: rgb(255 255 255 / 60%); backdrop-filter: blur(10px); }
@@ -36,4 +31,17 @@ a:hover, .disclosure > button:hover, .active { color: var(--color-accent); }
   .mobile-panel.open > nav { max-height: calc(100dvh - 96px); overflow-y: auto; padding-block: 24px 16px; }
   .mobile-panel a { flex: none; min-height: 32px; padding-block: 4px; font-size: var(--text-small); line-height: 24px; }
   .mobile-panel app-action-link { flex: none; margin-top: 8px; }
+}
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+@media (max-width: 1023px) {
+  .site-header::before { background: rgb(255 253 249 / 96%); }
+  .mobile-toggle { width: 44px; height: 44px; }
+  .mobile-group > button { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; border: 0; padding: 10px 0; background: transparent; text-align: left; }
+  .mobile-group app-icon { --icon-size: 16px; }
+  .mobile-panel a { display: flex; align-items: center; min-height: 44px; }
+  .accordion-links { padding-left: 16px; border-left: 1px solid var(--color-border); }
+  .accordion-links[hidden] { display: none; }
+  .mobile-language { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 8px; margin-top: 8px; border-top: 1px solid var(--color-border); font-size: 14px; }
+  .mobile-language a { text-decoration: underline; text-underline-offset: 4px; }
 }

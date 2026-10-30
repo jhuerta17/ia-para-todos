@@ -1,50 +1,47 @@
 <header class="site-header" [class.expanded]="expanded()">
   <a class="brand" [routerLink]="language.path('home')" [attr.aria-label]="c().home">
-    <app-brand-mark />
-    <span>{{ language.brand() }}</span>
+    <app-brand-mark /><span>{{ language.brand() }}</span>
   </a>
   <nav class="desktop-nav" [attr.aria-label]="c().nav">
-    <div class="disclosure" (mouseenter)="hoverDisclosure('explore', exploreToggle)" (mouseleave)="disclosure.set(null)" (focusout)="leaveDisclosure($event)">
-      <button #exploreToggle type="button" aria-controls="explore-links" [attr.aria-expanded]="disclosure() === 'explore'" (click)="toggleDisclosure('explore', exploreToggle)">
-        {{ c().explore }} <app-icon name="chevron-down" />
-      </button>
-      <div id="explore-links" class="dropdown" [class.open]="disclosure() === 'explore'" [attr.inert]="disclosure() !== 'explore' ? '' : null">
-        @for (link of explore(); track link.path) {
-          <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">{{ link.label }}</a>
-        }
+    @for (group of groups(); track group.id) {
+      <div class="disclosure" (focusout)="leaveDisclosure($event)">
+        <button #groupToggle type="button" [class.active]="group.active" [attr.aria-controls]="group.id + '-links'" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, groupToggle)">
+          {{ group.label }} <app-icon name="chevron-down" />
+        </button>
+        <div [id]="group.id + '-links'" class="dropdown" [class.open]="disclosure() === group.id" [attr.inert]="disclosure() !== group.id ? '' : null">
+          @for (link of group.links; track link.path) {
+            <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">{{ link.label }}</a>
+          }
+        </div>
       </div>
-    </div>
+    }
     @for (link of primary(); track link.path) {
       <a [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page">{{ link.label }}</a>
     }
-    <div class="disclosure" (mouseenter)="hoverDisclosure('contact', contactToggle)" (mouseleave)="disclosure.set(null)" (focusout)="leaveDisclosure($event)">
-      <button #contactToggle type="button" aria-controls="contact-panel" [attr.aria-expanded]="disclosure() === 'contact'" (click)="toggleDisclosure('contact', contactToggle)">
-        {{ c().contact }} <app-icon name="chevron-down" />
-      </button>
-      <div id="contact-panel" class="dropdown contact-panel" [class.open]="disclosure() === 'contact'" [attr.inert]="disclosure() !== 'contact' ? '' : null">
-        <p>{{ c().panel }}</p>
-        <span><app-icon name="mail" /> {{ c().mail }}</span>
-        <span><app-icon name="phone" /> {{ c().phone }}</span>
-        <a [routerLink]="language.path('contacto')">{{ c().viewContact }} <app-icon name="arrow-up-right" /></a>
-      </div>
-    </div>
-    <a class="lang-switch" [routerLink]="alternate().url" [attr.aria-label]="alternate().aria">{{ alternate().label }}</a>
-    @if (!participationPage()) {
-      <app-action-link to="/participar" [label]="c().participate" />
-    }
+    @if (!participationPage()) { <app-action-link to="/participar" [label]="c().participate" /> }
   </nav>
   <button #mobileToggle class="mobile-toggle" type="button" [attr.aria-label]="expanded() ? c().closeMenu : c().openMenu" aria-controls="mobile-links" [attr.aria-expanded]="expanded()" (click)="toggleMobile()">
     <app-icon [name]="expanded() ? 'x' : 'menu-2'" />
   </button>
   <div id="mobile-links" class="mobile-panel" [class.open]="expanded()" [attr.inert]="!expanded() ? '' : null">
     <nav [attr.aria-label]="c().mobileNav">
-      @for (link of mobileLinks(); track link.path) {
-        <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="dismiss()">{{ link.label }}</a>
+      @for (group of groups(); track group.id) {
+        <div class="mobile-group">
+          <button #accordionToggle type="button" [class.active]="group.active" [attr.aria-controls]="'mobile-' + group.id" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, accordionToggle)">
+            {{ group.label }} <app-icon name="chevron-down" />
+          </button>
+          <div class="accordion-links" [id]="'mobile-' + group.id" [hidden]="disclosure() !== group.id" [attr.inert]="disclosure() !== group.id ? '' : null">
+            @for (link of group.links; track link.path) {
+              <a [routerLink]="link.path" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="dismiss()">{{ link.label }}</a>
+            }
+          </div>
+        </div>
       }
-      <a class="lang-switch" [routerLink]="alternate().url" [attr.aria-label]="alternate().aria" (click)="dismiss()">{{ alternate().label }}</a>
-      @if (!participationPage()) {
-        <app-action-link to="/participar" [label]="c().participate" tone="warm" (click)="dismiss()" />
+      @for (link of primary(); track link.path) {
+        <a [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="dismiss()">{{ link.label }}</a>
       }
+      <div class="mobile-language"><span>{{ c().language }}</span><a [routerLink]="alternate().url" [attr.aria-label]="alternate().aria" (click)="dismiss()">{{ alternate().label }}</a></div>
+      @if (!participationPage()) { <app-action-link to="/participar" [label]="c().participate" tone="warm" (click)="dismiss()" /> }
     </nav>
   </div>
 </header>

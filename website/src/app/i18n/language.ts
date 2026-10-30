@@ -36,6 +36,8 @@ export class Language {
   localize(esPath: string): string {
     if (this.lang() === 'es') return esPath;
     if (esPath === '/') return '/en';
+    const section = (Object.keys(PATHS) as StaticKey[]).find(key => esPath === `/${PATHS[key].es}`);
+    if (section) return sectionUrl(section, 'en');
     for (const key of ['talleres', 'actividades', 'recursos'] as const) {
       const prefix = `/${PATHS[key].es}`;
       if (esPath === prefix || esPath.startsWith(`${prefix}/`)) {

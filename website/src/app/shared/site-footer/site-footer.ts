@@ -8,8 +8,8 @@ import { Language } from '../../i18n/language';
 import { Lang, StaticKey } from '../../i18n/lang';
 
 const copy = {
-  es: { home: 'IA para todos, inicio', identity: 'Aprender IA en español, desde cero y en comunidad. Talleres gratuitos en español.', newsHeading: 'Sigamos aprendiendo', newsLead: 'Recibe novedades sobre talleres y recursos. Sin spam.', newsLabel: 'Correo electrónico', newsPh: 'nombre@ejemplo.com', newsError: 'Escribe un correo válido.', newsButton: 'Suscribirme', newsSending: 'Enviando…', newsResult: '¡Gracias por suscribirte! Te avisaremos de las novedades.', newsFailed: 'No pudimos completar la suscripción. Inténtalo de nuevo.', honeypot: 'No completar este campo', explore: 'Explora', exploreNav: 'Navegación del pie de página', info: 'Información', infoNav: 'Información del sitio', talk: 'Conversemos', talkLead: 'Todos los canales de contacto, en un solo lugar.', aboutContact: 'Sobre el contacto', copyright: '©2026 IA para todos. Todos los derechos reservados.' },
-  en: { home: 'AI for everyone, home', identity: 'Learn AI in Spanish, from scratch and in community. Free workshops in Spanish.', newsHeading: 'Keep learning', newsLead: 'Get news about workshops and resources. No spam.', newsLabel: 'Email', newsPh: 'name@example.com', newsError: 'Write a valid email.', newsButton: 'Subscribe', newsSending: 'Sending…', newsResult: 'Thanks for subscribing! We’ll keep you posted.', newsFailed: 'We could not complete the subscription. Please try again.', honeypot: 'Do not fill in this field', explore: 'Explore', exploreNav: 'Footer navigation', info: 'Information', infoNav: 'Site information', talk: 'Let’s talk', talkLead: 'Every contact channel, in one place.', aboutContact: 'About contact', copyright: '©2026 AI for everyone. All rights reserved.' },
+  es: { home: 'IA para todos, inicio', identity: 'Talleres gratuitos para aprender IA en español, desde cero y en comunidad.', newsHeading: 'Sigamos aprendiendo', newsLead: 'Recibe novedades sobre talleres y recursos. Sin spam.', newsLabel: 'Correo electrónico', newsPh: 'nombre@ejemplo.com', newsError: 'Escribe un correo válido.', newsButton: 'Suscribirme', newsSending: 'Enviando…', newsResult: '¡Gracias por suscribirte! Te avisaremos de las novedades.', newsFailed: 'No pudimos completar la suscripción. Inténtalo de nuevo.', honeypot: 'No completar este campo', learn: 'Aprender', community: 'Comunidad', communityNav: 'Comunidad e iniciativa', language: 'Idioma', exploreNav: 'Navegación del pie de página', infoNav: 'Información del sitio', copyright: '©2026 IA para todos. Todos los derechos reservados.' },
+  en: { home: 'AI for everyone, home', identity: 'Free workshops to learn AI in Spanish, from scratch and in community.', newsHeading: 'Keep learning', newsLead: 'Get news about workshops and resources. No spam.', newsLabel: 'Email', newsPh: 'name@example.com', newsError: 'Write a valid email.', newsButton: 'Subscribe', newsSending: 'Sending…', newsResult: 'Thanks for subscribing! We’ll keep you posted.', newsFailed: 'We could not complete the subscription. Please try again.', honeypot: 'Do not fill in this field', learn: 'Learn', community: 'Community', communityNav: 'Community and initiative', language: 'Language', exploreNav: 'Footer navigation', infoNav: 'Site information', copyright: '©2026 AI for everyone. All rights reserved.' },
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
@@ -17,7 +17,8 @@ const labels: Record<Lang, Record<StaticKey, string>> = {
   en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', cursos: 'Courses', recursos: 'Resources', comunidad: 'Community', participar: 'Participate', actividades: 'Activities', historias: 'Stories', contacto: 'Contact', privacidad: 'Privacy', terminos: 'About this site', seguridad: 'Responsible use' },
 };
 
-const NAVIGATION: StaticKey[] = ['home', 'nosotros', 'talleres', 'cursos', 'recursos', 'comunidad', 'participar'];
+const LEARN: StaticKey[] = ['talleres', 'cursos', 'recursos', 'actividades'];
+const COMMUNITY: StaticKey[] = ['nosotros', 'comunidad', 'historias', 'contacto', 'participar'];
 const INFO: StaticKey[] = ['privacidad', 'terminos', 'seguridad'];
 
 @Component({selector: 'app-site-footer', imports: [RouterLink, BrandMark, Icon, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})
@@ -28,11 +29,13 @@ export class SiteFooter {
   protected readonly failed = signal(false);
   protected readonly sending = signal(false);
   protected readonly email = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] });
-  protected readonly navigation = computed(() => NAVIGATION.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
+  protected readonly learning = computed(() => LEARN.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
+  protected readonly community = computed(() => COMMUNITY.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
+  protected readonly alternate = signal(this.language.alternate());
   protected readonly info = computed(() => INFO.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
   constructor() {
     inject(Router).events.pipe(takeUntilDestroyed()).subscribe(event => {
-      if (event instanceof NavigationEnd) { this.email.reset(); this.complete.set(false); }
+      if (event instanceof NavigationEnd) { this.email.reset(); this.complete.set(false); this.failed.set(false); this.alternate.set(this.language.alternate()); }
     });
   }
   protected async submit(event: Event): Promise<void> {

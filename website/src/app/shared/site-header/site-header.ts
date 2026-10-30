@@ -7,11 +7,11 @@ import { BrandMark } from '../brand-mark';
 import { Language } from '../../i18n/language';
 import { Lang, StaticKey } from '../../i18n/lang';
 
-type Disclosure = 'explore' | 'contact' | null;
+type Disclosure = 'learn' | 'community' | null;
 
 const copy = {
-  es: { home: 'IA para todos, inicio', nav: 'Navegación principal', explore: 'Explorar', contact: 'Contacto', panel: 'Encuentra nuestros canales de contacto.', mail: 'Correo: por definir', phone: 'Teléfono: por definir', viewContact: 'Ver contacto', participate: 'Participar', openMenu: 'Abrir navegación', closeMenu: 'Cerrar navegación', mobileNav: 'Navegación móvil' },
-  en: { home: 'AI for everyone, home', nav: 'Main navigation', explore: 'Explore', contact: 'Contact', panel: 'Find our contact channels.', mail: 'Email: to be defined', phone: 'Phone: to be defined', viewContact: 'View contact', participate: 'Participate', openMenu: 'Open navigation', closeMenu: 'Close navigation', mobileNav: 'Mobile navigation' },
+  es: { home: 'IA para todos, inicio', nav: 'Navegación principal', learn: 'Aprender', community: 'Comunidad', participate: 'Participar', openMenu: 'Abrir navegación', closeMenu: 'Cerrar navegación', mobileNav: 'Navegación móvil', language: 'Idioma' },
+  en: { home: 'AI for everyone, home', nav: 'Main navigation', learn: 'Learn', community: 'Community', participate: 'Participate', openMenu: 'Open navigation', closeMenu: 'Close navigation', mobileNav: 'Mobile navigation', language: 'Language' },
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
@@ -19,8 +19,9 @@ const labels: Record<Lang, Record<StaticKey, string>> = {
   en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', actividades: 'Activities', historias: 'Stories', privacidad: 'Privacy', terminos: 'About', seguridad: 'Safety', contacto: 'Contact', participar: 'Participate', cursos: 'Courses' },
 };
 
-const PRIMARY: StaticKey[] = ['nosotros', 'talleres', 'cursos', 'recursos'];
-const EXPLORE: StaticKey[] = ['home', 'comunidad', 'actividades', 'historias', 'privacidad', 'terminos', 'seguridad'];
+const PRIMARY: StaticKey[] = ['nosotros', 'contacto'];
+const LEARN: StaticKey[] = ['talleres', 'cursos', 'recursos', 'actividades'];
+const COMMUNITY: StaticKey[] = ['comunidad', 'historias'];
 
 @Component({
   selector: 'app-site-header',
@@ -45,8 +46,11 @@ export class SiteHeader {
   protected readonly disclosure = signal<Disclosure>(null);
   protected readonly participationPage = signal(this.onParticipationPage(this.router.url));
   protected readonly primary = computed(() => PRIMARY.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
-  protected readonly explore = computed(() => EXPLORE.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] })));
-  protected readonly mobileLinks = computed(() => [...this.explore().slice(0, 1), ...this.primary(), ...this.explore().slice(1), { path: this.language.path('contacto'), label: labels[this.language.lang()].contacto }]);
+  protected readonly currentUrl = signal(this.router.url);
+  protected readonly groups = computed(() => [
+    { id: 'learn' as const, label: this.c().learn, links: this.links(LEARN), active: this.isGroupActive(LEARN) },
+    { id: 'community' as const, label: this.c().community, links: this.links(COMMUNITY), active: this.isGroupActive(COMMUNITY) },
+  ]);
   protected readonly alternate = signal(this.language.alternate());
 
   private onParticipationPage(url: string): boolean {
@@ -58,6 +62,7 @@ export class SiteHeader {
     this.router.events.pipe(takeUntilDestroyed()).subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.dismiss();
+        this.currentUrl.set(event.urlAfterRedirects);
         this.participationPage.set(this.onParticipationPage(event.urlAfterRedirects));
         this.alternate.set(this.language.alternate());
       }
@@ -74,9 +79,13 @@ export class SiteHeader {
     this.disclosure.update(value => value === name ? null : name);
   }
 
-  protected hoverDisclosure(name: Disclosure, trigger: HTMLButtonElement): void {
-    this.activeTrigger = trigger;
-    this.disclosure.set(name);
+  private links(keys: StaticKey[]) {
+    return keys.map(key => ({ path: this.language.path(key), label: labels[this.language.lang()][key] }));
+  }
+
+  private isGroupActive(keys: StaticKey[]): boolean {
+    const url = this.currentUrl().split(/[?#]/)[0];
+    return keys.some(key => url === this.language.path(key) || url.startsWith(`${this.language.path(key)}/`));
   }
 
   protected leaveDisclosure(event: FocusEvent): void {
@@ -90,8 +99,10 @@ export class SiteHeader {
     this.expanded.set(false);
     this.disclosure.set(null);
     if (restoreFocus) {
-      if (wasExpanded) this.mobileToggle()?.nativeElement.focus();
-      else if (wasDisclosure) this.activeTrigger?.focus();
+      if (wasDisclosure) {
+        this.activeTrigger?.focus();
+        if (wasExpanded) this.expanded.set(true);
+      } else if (wasExpanded) this.mobileToggle()?.nativeElement.focus();
     }
   }
 
