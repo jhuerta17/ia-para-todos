@@ -1,0 +1,19 @@
+<section class="waitlist" aria-labelledby="waitlist-title" appRevealOnEnter>
+  <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field" (submit)="submit($event)" novalidate autocomplete="off">
+    <h2 id="waitlist-title">{{ c().heading }}</h2>
+    <p class="lead">{{ c().lead }}</p>
+    <input type="hidden" name="form-name" value="newsletter" />
+    <input type="hidden" name="language" [value]="language.lang()" />
+    <input type="hidden" name="interest" [value]="c().interest" />
+    <p class="visually-hidden" aria-hidden="true"><label>{{ c().honeypot }}<input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+    <div class="row">
+      <label for="waitlist-email">{{ c().label }}</label>
+      <input id="waitlist-email" name="email" type="email" required [formControl]="email" [placeholder]="c().ph" maxlength="200"
+        [attr.aria-invalid]="email.touched && email.invalid" aria-describedby="waitlist-error" />
+      <p id="waitlist-error" class="error">@if (email.touched && email.invalid) { {{ c().error }} }</p>
+      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().button }}</span></button>
+    </div>
+    <p class="result" role="status">@if (complete()) { {{ c().result }} }</p>
+    <p class="error" role="alert">@if (failed()) { {{ c().failed }} }</p>
+  </form>
+</section>

@@ -165,6 +165,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'waitlist-wired',
         title: 'Waitlist capture works',
         detail: 'Signups land in the inbox like any other form; confirm what the admin sees.',
+        done: true,
       },
     ],
   },

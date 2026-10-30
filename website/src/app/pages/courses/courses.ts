@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { PageCover } from '../../shared/page-cover/page-cover';
 import { AiTutor } from '../../shared/ai-tutor/ai-tutor';
+import { CourseWaitlist } from '../../shared/course-waitlist/course-waitlist';
 import { ActionLink } from '../../shared/action-link';
 import { RevealOnEnter } from '../../shared/motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
@@ -63,7 +64,7 @@ const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladder
   },
 };
 
-@Component({selector: 'app-courses', imports: [PageCover, AiTutor, ActionLink, RevealOnEnter], templateUrl: './courses.html', styleUrl: './courses.css', changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-courses', imports: [PageCover, AiTutor, CourseWaitlist, ActionLink, RevealOnEnter], templateUrl: './courses.html', styleUrl: './courses.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class Courses {
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
