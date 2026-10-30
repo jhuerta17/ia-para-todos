@@ -196,6 +196,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'next-steps',
         title: 'Real-world next-steps doc',
         detail: 'What happens after the demo: outreach, pilot, entity — the on-ramp to doing it for real.',
+        done: true,
       },
     ],
   },
