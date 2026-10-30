@@ -184,6 +184,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'demo-script',
         title: 'Five-minute demo script',
         detail: 'Public site → lived-in admin → AI tutor → plans: the story in order.',
+        done: true,
       },
       {
         id: 'docs-honest',
