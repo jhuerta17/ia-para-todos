@@ -10,5 +10,4 @@
   </div>
   <div class="controls"><button type="button" [attr.aria-label]="c().prev" (click)="move(-1)"><app-icon name="arrow-left" /></button><div class="dots">@for (story of stories(); track story.title; let index = $index) {<button type="button" [attr.aria-label]="c().show + ' ' + (index + 1) + ': ' + story.title" [attr.aria-current]="active() === index ? 'true' : null" (click)="active.set(index)"><span></span></button>}</div><button type="button" [attr.aria-label]="c().next" (click)="move(1)"><app-icon name="arrow-right" /></button></div>
   <p class="announcement" aria-live="polite" aria-atomic="true">{{ c().example }} {{ active() + 1 }} {{ c().of }} 5: {{ stories()[active()].title }}.</p>
-  <p class="caption">{{ caption() }}</p>
 </section>

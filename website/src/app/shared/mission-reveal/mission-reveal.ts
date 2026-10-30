@@ -21,8 +21,8 @@ const sentences: Record<Lang, string[]> = {
 };
 
 const chrome = {
-  es: { mission: 'Nuestra misión', portraits: 'Retratos ilustrativos de archivo', photo: 'Fotografía ilustrativa de personas adultas alrededor de una computadora.' },
-  en: { mission: 'Our mission', portraits: 'Illustrative stock portraits', photo: 'Illustrative photo of adults around a computer.' },
+  es: { mission: 'Nuestra misión', portraits: 'Retratos', photo: 'Personas adultas alrededor de una computadora.' },
+  en: { mission: 'Our mission', portraits: 'Portraits', photo: 'Adults around a computer.' },
 };
 
 @Component({

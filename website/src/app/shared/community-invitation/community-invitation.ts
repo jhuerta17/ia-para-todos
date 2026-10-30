@@ -2,7 +2,6 @@ import { DOCUMENT } from '@angular/common';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ActionLink } from '../action-link';
 import { Language } from '../../i18n/language';
-import { PHOTO_NOTE } from '../../i18n/lang';
 
 const text = {
   es: { heading: 'Ven como eres; aquí se aprende con calma.', lead: 'Si hablas español y tienes curiosidad, este lugar es para ti. Queremos crear un espacio abierto a todas las personas, sin importar sus creencias.', participate: 'Participar' },
@@ -26,7 +25,6 @@ export class CommunityInvitation {
   protected readonly copyVisible = computed(() => this.progress() > 0.55);
   private readonly language = inject(Language);
   protected readonly c = computed(() => text[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
 
   constructor() {
     afterNextRender(() => {

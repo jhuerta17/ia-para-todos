@@ -50,12 +50,6 @@ export function detailUrl(kind: DetailKind, slug: string, lang: Lang): string {
   return `/${PATHS[kind][lang]}/${slug}`;
 }
 
-/** Shared stock-photo note (singular caption/alt, plural caption). */
-export const PHOTO_NOTE: Record<Lang, { single: string; plural: string }> = {
-  es: { single: 'Fotografía ilustrativa de archivo.', plural: 'Fotografías ilustrativas de archivo.' },
-  en: { single: 'Illustrative stock photo.', plural: 'Illustrative stock photos.' },
-};
-
 /** The peer URL of a localized absolute path (adds or strips the `/en` prefix
  * for static routes; detail peers are resolved by index at the call site). */
 export function staticPeer(url: string): string {

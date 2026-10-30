@@ -8,7 +8,6 @@ import { Icon } from '../../shared/icon';
 import { FaqSection } from '../../shared/faq-section/faq-section';
 import { RevealOnEnter } from '../../shared/motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
-import { PHOTO_NOTE } from '../../i18n/lang';
 
 interface Entry { slug: string; title: string; category: string; summary: string; image: string; }
 interface Catalog { kind: 'activities' | 'resources'; title: string; summary: string; image: string; status: string; entries: Entry[]; }
@@ -25,7 +24,6 @@ export class CatalogPage {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
   private readonly data = toSignal(this.route.data, { initialValue: this.route.snapshot.data });
   private readonly params = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
   protected readonly catalog = computed(() => this.data()['catalog'] as Catalog);

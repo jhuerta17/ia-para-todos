@@ -7,11 +7,10 @@ import { WorkshopCard } from '../../shared/workshop-card/workshop-card';
 import { FaqSection } from '../../shared/faq-section/faq-section';
 import { Icon } from '../../shared/icon';
 import { Language } from '../../i18n/language';
-import { PHOTO_NOTE } from '../../i18n/lang';
 
 const copy = {
-  es: { photo: 'Fotografía ilustrativa de personas adultas reunidas alrededor de una computadora.', title: 'Talleres', lead: 'Aprende a usar la IA en español, desde cero y con tu teléfono. Cuatro temas para practicar a tu ritmo y en comunidad.', catalog: 'Explora los talleres', search: 'Buscar talleres', placeholder: 'Nombre o tema', clear: 'Limpiar búsqueda', topics: 'Temas', all: 'Todos', one: 'taller', many: 'talleres', emptyTitle: 'No encontramos talleres con esos filtros', emptyLead: 'Prueba otro nombre o tema, o vuelve a ver los cuatro talleres.', reset: 'Restablecer búsqueda' },
-  en: { photo: 'Illustrative photo of adults gathered around a computer.', title: 'Workshops', lead: 'Learn to use AI in Spanish, from scratch and with your phone. Four topics to practice at your pace and in community.', catalog: 'Explore the workshops', search: 'Search workshops', placeholder: 'Name or topic', clear: 'Clear search', topics: 'Topics', all: 'All', one: 'workshop', many: 'workshops', emptyTitle: 'We found no workshops with those filters', emptyLead: 'Try another name or topic, or see all four workshops again.', reset: 'Reset search' },
+  es: { photo: 'Personas adultas reunidas alrededor de una computadora.', title: 'Talleres', lead: 'Aprende a usar la IA en español, desde cero y con tu teléfono. Cuatro temas para practicar a tu ritmo y en comunidad.', catalog: 'Explora los talleres', search: 'Buscar talleres', placeholder: 'Nombre o tema', clear: 'Limpiar búsqueda', topics: 'Temas', all: 'Todos', one: 'taller', many: 'talleres', emptyTitle: 'No encontramos talleres con esos filtros', emptyLead: 'Prueba otro nombre o tema, o vuelve a ver los cuatro talleres.', reset: 'Restablecer búsqueda' },
+  en: { photo: 'Adults gathered around a computer.', title: 'Workshops', lead: 'Learn to use AI in Spanish, from scratch and with your phone. Four topics to practice at your pace and in community.', catalog: 'Explore the workshops', search: 'Search workshops', placeholder: 'Name or topic', clear: 'Clear search', topics: 'Topics', all: 'All', one: 'workshop', many: 'workshops', emptyTitle: 'We found no workshops with those filters', emptyLead: 'Try another name or topic, or see all four workshops again.', reset: 'Reset search' },
 };
 
 @Component({
@@ -27,7 +26,6 @@ export class WorkshopList {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
   private readonly parameters = toSignal(this.route.queryParamMap, { initialValue: this.route.snapshot.queryParamMap });
   protected readonly entries = computed(() => workshops[this.language.lang()]);
   protected readonly categories = computed(() => [this.c().all, ...new Set(this.entries().map(workshop => workshop.category))]);

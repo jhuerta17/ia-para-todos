@@ -7,7 +7,6 @@ import { ActionLink } from '../../shared/action-link';
 import { Icon } from '../../shared/icon';
 import { RevealOnEnter } from '../../shared/motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
-import { PHOTO_NOTE } from '../../i18n/lang';
 
 const copy = {
   es: { agenda: 'Agenda', agendaCaption: 'Bloques del taller · 100 minutos más margen para preguntas', time: 'Tiempo', practice: 'Práctica', tryIt: 'Pruébalo con un ejemplo inventado', verifyElsewhere: 'Verifícalo en otro lado', verifyLead: 'Compara la respuesta con otra fuente o una persona de confianza. Si algo importa, no lo des por cierto solo porque lo dice la IA.', closing: 'Aprender con calma y con cuidado', closingLead: 'Practica con datos inventados y evita compartir información personal.' },
@@ -20,6 +19,5 @@ export class ContentDetail {
   private readonly data = toSignal(this.route.data, { initialValue: this.route.snapshot.data });
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].single);
   protected readonly detail = computed(() => this.data()['detail'] as Detail);
 }

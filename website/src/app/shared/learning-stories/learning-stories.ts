@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal } f
 import { Icon } from '../icon';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
-import { Lang, PHOTO_NOTE } from '../../i18n/lang';
+import type { Lang } from '../../i18n/lang';
 
 const copy = {
-  es: { pageTitle: 'Historias ilustrativas', sectionTitle: 'Cómo podría ayudarte la IA', lead: 'Ejemplos inventados para imaginar lo que podrías practicar. No son testimonios ni describen resultados reales.', region: 'Ejemplos de aprendizaje', carousel: 'carrusel', badge: 'Ejemplo ilustrativo', of: 'de', prev: 'Ejemplo anterior', next: 'Ejemplo siguiente', show: 'Mostrar ejemplo', example: 'Ejemplo' },
-  en: { pageTitle: 'Illustrated stories', sectionTitle: 'How AI could help you', lead: 'Made-up examples to imagine what you could practice. Not testimonials, and they describe no real results.', region: 'Learning examples', carousel: 'carousel', badge: 'Illustrative example', of: 'of', prev: 'Previous example', next: 'Next example', show: 'Show example', example: 'Example' },
+  es: { pageTitle: 'Historias', sectionTitle: 'Cómo podría ayudarte la IA', lead: 'Ejemplos inventados para imaginar lo que podrías practicar. No son testimonios ni describen resultados reales.', region: 'Ejemplos de aprendizaje', carousel: 'carrusel', badge: 'Ejemplo', of: 'de', prev: 'Ejemplo anterior', next: 'Ejemplo siguiente', show: 'Mostrar ejemplo', example: 'Ejemplo' },
+  en: { pageTitle: 'Stories', sectionTitle: 'How AI could help you', lead: 'Made-up examples to imagine what you could practice. Not testimonials, and they describe no real results.', region: 'Learning examples', carousel: 'carousel', badge: 'Example', of: 'of', prev: 'Previous example', next: 'Next example', show: 'Show example', example: 'Example' },
 };
 
 const stories: Record<Lang, { title: string; text: string; image: string }[]> = {
@@ -33,7 +33,6 @@ export class LearningStories {
   private touchStart = 0;
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].plural);
   protected readonly stories = computed(() => stories[this.language.lang()]);
   protected position(index: number): number { const distance = (index - this.active() + this.stories().length) % this.stories().length; return distance > 2 ? distance - this.stories().length : distance; }
   protected move(direction: number): void { this.active.update(value => (value + direction + this.stories().length) % this.stories().length); }

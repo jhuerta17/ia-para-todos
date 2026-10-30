@@ -4,8 +4,8 @@ import { Language } from '../../i18n/language';
 import { Lang } from '../../i18n/lang';
 
 const copy = {
-  es: { region: 'Roles de colaboración', carousel: 'carrusel', track: 'Cuatro roles. Usa las flechas del teclado o desliza para explorar. Inicio y Fin van a los extremos.', eyebrow: 'Rol', note: 'Retratos ilustrativos de archivo; no representan a personas del equipo.', prev: 'Ver rol anterior', next: 'Ver siguiente rol' },
-  en: { region: 'Collaboration roles', carousel: 'carousel', track: 'Four roles. Use the keyboard arrows or swipe to explore. Home and End go to the extremes.', eyebrow: 'Role', note: 'Illustrative stock portraits; they do not depict team members.', prev: 'View previous role', next: 'View next role' },
+  es: { region: 'Roles de colaboración', carousel: 'carrusel', track: 'Cuatro roles. Usa las flechas del teclado o desliza para explorar. Inicio y Fin van a los extremos.', eyebrow: 'Rol', prev: 'Ver rol anterior', next: 'Ver siguiente rol' },
+  en: { region: 'Collaboration roles', carousel: 'carousel', track: 'Four roles. Use the keyboard arrows or swipe to explore. Home and End go to the extremes.', eyebrow: 'Role', prev: 'View previous role', next: 'View next role' },
 };
 
 const roles: Record<Lang, { title: string; description: string; portrait: string }[]> = {

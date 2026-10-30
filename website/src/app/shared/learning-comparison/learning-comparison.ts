@@ -3,8 +3,8 @@ import { Icon } from '../icon';
 import { Language } from '../../i18n/language';
 
 const copy = {
-  es: { community: 'En comunidad', home: 'En casa', and: 'y', compare: 'Comparar escenas de aprendizaje', help: 'Fotografías ilustrativas de aprendizaje en comunidad y en casa. Arrastra el control o usa las flechas. Inicio y Fin muestran cada escena completa. No representa resultados antes y después.' },
-  en: { community: 'In community', home: 'At home', and: 'and', compare: 'Compare learning scenes', help: 'Illustrative photos of learning in community and at home. Drag the control or use the arrows. Home and End show each full scene. It does not show before-and-after results.' },
+  es: { community: 'En comunidad', home: 'En casa', and: 'y', compare: 'Comparar escenas de aprendizaje', help: 'Fotografías de aprendizaje en comunidad y en casa. Arrastra el control o usa las flechas. Inicio y Fin muestran cada escena completa. No representa resultados antes y después.' },
+  en: { community: 'In community', home: 'At home', and: 'and', compare: 'Compare learning scenes', help: 'Photos of learning in community and at home. Drag the control or use the arrows. Home and End show each full scene. It does not show before-and-after results.' },
 };
 
 @Component({

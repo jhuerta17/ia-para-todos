@@ -16,7 +16,7 @@ export const informationPages: Record<Lang, InformationPage[]> = {
       { heading: 'Prácticas educativas', paragraphs: ['Los ejercicios usan datos ficticios. No se pide información médica, financiera, migratoria o legal real. La retroalimentación es anónima.'] },
     ] },
     { path: 'terminos', title: 'Acerca de este sitio', intro: 'Información sobre esta iniciativa educativa.', sections: [
-      { heading: 'Lo que puedes hacer aquí', paragraphs: ['Puedes leer los talleres, recorrer ejemplos ilustrativos y practicar con formularios locales usando datos inventados. Esto no abre una inscripción, una suscripción, un puesto de voluntariado ni un pago.'] },
+      { heading: 'Lo que puedes hacer aquí', paragraphs: ['Puedes leer los talleres, recorrer ejemplos y practicar con formularios locales usando datos inventados. Esto no abre una inscripción, una suscripción, un puesto de voluntariado ni un pago.'] },
       { heading: 'Aprendizaje, sin promesas de resultados', paragraphs: ['Cada taller anuncia sus objetivos y tiempos en su página. No se ofrecen garantías de empleo, certificaciones, clientes ni resultados personales. Los escenarios y fotografías son ilustrativos, no testimonios.'] },
     ] },
     { path: 'seguridad', title: 'Aprender con cuidado', intro: 'Hábitos sencillos para practicar con IA y pensar antes de compartir.', sections: [
@@ -34,7 +34,7 @@ export const informationPages: Record<Lang, InformationPage[]> = {
       { heading: 'Learning practices', paragraphs: ['Exercises use fictional data. Medical, financial, immigration, or legal information is never requested. Feedback is anonymous.'] },
     ] },
     { path: 'en/terms', title: 'About this site', intro: 'Information about this educational initiative.', sections: [
-      { heading: 'What you can do here', paragraphs: ['You can read the workshops, browse illustrative examples, and practice with local forms using made-up data. This opens no registration, subscription, volunteer position, or payment.'] },
+      { heading: 'What you can do here', paragraphs: ['You can read the workshops, browse examples, and practice with local forms using made-up data. This opens no registration, subscription, volunteer position, or payment.'] },
       { heading: 'Learning, with no promises of results', paragraphs: ['Each workshop announces its goals and timing on its page. There are no guarantees of jobs, certifications, clients, or personal results. Scenarios and photographs are illustrative, not testimonials.'] },
     ] },
     { path: 'en/safety', title: 'Learn with care', intro: 'Simple habits for practicing with AI and thinking before sharing.', sections: [

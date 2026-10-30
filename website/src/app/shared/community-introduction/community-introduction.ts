@@ -5,7 +5,6 @@ import { BrandMark } from '../brand-mark';
 import { Icon } from '../icon';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
-import { PHOTO_NOTE } from '../../i18n/lang';
 
 const copy = {
   es: { heading: 'Una iniciativa de vecinos para vecinos', quote: 'Aprender juntos, con paciencia y honestidad, abre puertas para toda la familia.', rolesHeading: 'Formas de colaborar', roles: 'Puedes ayudar a facilitar talleres, acompañar prácticas, traducir o difundir la iniciativa.', meet: 'Conocer la iniciativa', photo: 'Un grupo de personas adultas reunidas alrededor de una computadora.' },
@@ -24,5 +23,4 @@ export class CommunityIntroduction {
   readonly compact = input(false);
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly caption = computed(() => PHOTO_NOTE[this.language.lang()].single);
 }

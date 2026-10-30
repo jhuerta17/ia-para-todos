@@ -16,8 +16,8 @@ import { IntroCards } from '../shared/intro-cards/intro-cards';
 import { Language } from '../i18n/language';
 
 const copy = {
-  es: { photo: 'Fotografía ilustrativa de personas adultas compartiendo un momento con tecnología.', title: 'Inteligencia artificial para todos.', lead: 'Talleres gratuitos en español para aprender IA desde cero, con tu teléfono.', explore: 'Explorar talleres', initiative: 'La iniciativa' },
-  en: { photo: 'Illustrative photo of adults sharing a moment with technology.', title: 'Artificial intelligence for everyone.', lead: 'Free workshops in Spanish to learn AI from scratch, with your phone.', explore: 'Explore workshops', initiative: 'The initiative' },
+  es: { photo: 'Personas adultas compartiendo un momento con tecnología.', title: 'Inteligencia artificial para todos.', lead: 'Talleres gratuitos en español para aprender IA desde cero, con tu teléfono.', explore: 'Explorar talleres', initiative: 'La iniciativa' },
+  en: { photo: 'Adults sharing a moment with technology.', title: 'Artificial intelligence for everyone.', lead: 'Free workshops in Spanish to learn AI from scratch, with your phone.', explore: 'Explore workshops', initiative: 'The initiative' },
 };
 
 @Component({

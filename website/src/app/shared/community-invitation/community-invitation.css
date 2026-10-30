@@ -15,7 +15,6 @@ app-action-link { display: block; width: 174px; margin: 20px auto 0; }
 .photo-5 { width: 123px; height: 123px; left: calc(50% - 274px); bottom: 100px; }
 .photo-6 { width: 123px; height: 123px; right: calc(50% - 304px); bottom: 100px; }
 .photo-7 { left: calc(50% - 88px); bottom: 0; }
-.caption { margin: 24px 0 0; font-size: 12px; text-align: center; }
 @media (max-width: 809px) {
   :host { padding: 60px 20px; }
   .collage { min-height: 960px; }
@@ -37,7 +36,6 @@ app-action-link { display: block; width: 174px; margin: 20px auto 0; }
 @media (prefers-reduced-motion: no-preference) {
 .motion-enabled { position: relative; height: calc((100svh - 30px) * 2); }
 .motion-enabled .collage { position: sticky; top: 30px; min-height: 0; height: calc(100svh - 30px); container-type: size; }
-.motion-enabled .caption { position: absolute; bottom: -44px; width: 100%; }
 .motion-enabled .photo {
  --start-size: min(450px, 72cqw, 65cqh); --end-size: min(176px, 22cqw, 23cqh); --x: 0cqw; --y: 0cqh;
  width: calc(var(--start-size) * (1 - var(--progress)) + var(--end-size) * var(--progress));
@@ -73,5 +71,4 @@ app-action-link { display: block; width: 174px; margin: 20px auto 0; }
 section.motion-enabled { height: auto; }
 .motion-enabled .collage { position: relative; top: auto; height: auto; min-height: 0; }
 .motion-enabled .invitation-copy { opacity: 1; }
-.motion-enabled .caption { position: static; }
 }

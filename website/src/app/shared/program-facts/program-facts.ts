@@ -7,8 +7,8 @@ import { Lang } from '../../i18n/lang';
 import { LearningComparison } from '../learning-comparison/learning-comparison';
 
 const copy = {
-  es: { section: 'Un programa pensado para ti', pause: 'Pausar movimiento del programa', resume: 'Reanudar movimiento del programa', topics: 'Temas', fromScratch: 'Para aprender desde cero.', portraits: 'Retratos ilustrativos', photo: 'Fotografía ilustrativa de una práctica con acompañamiento.', duration: 'Duración', free: 'Sin costo', participation: 'Participación', noPaidTools: 'Sin herramientas de pago.', participate: 'Participar', examples: 'Ejemplos de práctica, no testimonios', practiceExample: 'Ejemplo de práctica' },
-  en: { section: 'A program designed for you', pause: 'Pause program movement', resume: 'Resume program movement', topics: 'Topics', fromScratch: 'To learn from scratch.', portraits: 'Illustrative portraits', photo: 'Illustrative photo of guided practice with support.', duration: 'Duration', free: 'Free', participation: 'Participation', noPaidTools: 'No paid tools.', participate: 'Participate', examples: 'Practice examples, not testimonials', practiceExample: 'Practice example' },
+  es: { section: 'Un programa pensado para ti', pause: 'Pausar movimiento del programa', resume: 'Reanudar movimiento del programa', topics: 'Temas', fromScratch: 'Para aprender desde cero.', photo: 'Una práctica con acompañamiento.', duration: 'Duración', free: 'Sin costo', participation: 'Participación', noPaidTools: 'Sin herramientas de pago.', participate: 'Participar', examples: 'Ejemplos de práctica, no testimonios', practiceExample: 'Ejemplo de práctica' },
+  en: { section: 'A program designed for you', pause: 'Pause program movement', resume: 'Resume program movement', topics: 'Topics', fromScratch: 'To learn from scratch.', photo: 'Guided practice with support.', duration: 'Duration', free: 'Free', participation: 'Participation', noPaidTools: 'No paid tools.', participate: 'Participate', examples: 'Practice examples, not testimonials', practiceExample: 'Practice example' },
 };
 
 const examples: Record<Lang, { text: string; category: string }[]> = {

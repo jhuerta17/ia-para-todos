@@ -13,13 +13,13 @@ const TITLES: Record<Lang, Record<StaticKey, string>> = {
   es: {
     home: 'IA para todos', talleres: 'Talleres · IA para todos', actividades: 'Actividades · IA para todos',
     recursos: 'Recursos para aprender · IA para todos', nosotros: 'Nosotros · IA para todos', comunidad: 'Comunidad · IA para todos',
-    participar: 'Participa · IA para todos', historias: 'Historias ilustrativas · IA para todos', contacto: 'Contacto · IA para todos',
+    participar: 'Participa · IA para todos', historias: 'Historias · IA para todos', contacto: 'Contacto · IA para todos',
     privacidad: '', terminos: '', seguridad: '',
   },
   en: {
     home: 'AI for everyone', talleres: 'Workshops · AI for everyone', actividades: 'Activities · AI for everyone',
     recursos: 'Resources for learning · AI for everyone', nosotros: 'About us · AI for everyone', comunidad: 'Community · AI for everyone',
-    participar: 'Participate · AI for everyone', historias: 'Illustrated stories · AI for everyone', contacto: 'Contact · AI for everyone',
+    participar: 'Participate · AI for everyone', historias: 'Stories · AI for everyone', contacto: 'Contact · AI for everyone',
     privacidad: '', terminos: '', seguridad: '',
   },
 };

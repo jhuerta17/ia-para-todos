@@ -8,7 +8,6 @@
     }
   </ul>
   <div class="toolbar">
-    <p>{{ c().note }}</p>
     <div class="controls">
       <button type="button" [attr.aria-label]="c().prev" [disabled]="atStart()" (click)="move(-1)"><app-icon name="arrow-left" /></button>
       <button type="button" [attr.aria-label]="c().next" [disabled]="atEnd()" (click)="move(1)"><app-icon name="arrow-right" /></button>

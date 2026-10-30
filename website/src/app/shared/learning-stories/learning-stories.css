@@ -9,7 +9,7 @@ h3 { font-size: 40px; color: white; margin-top: 12px; } .copy p { margin: 12px 0
 .controls { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 24px; }
 button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--color-accent); background: transparent; color: var(--color-accent); border-radius: 50%; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast); } button:hover { background: var(--color-accent); color: white; }
 .dots { display: flex; } .dots button { width: 32px; border: 0; } .dots span { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: .3; } .dots [aria-current] span { opacity: 1; transform: scale(1.4); }
-.caption { font-size: 12px; text-align: center; margin-bottom: 0; } .announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (max-width: 809px) { :host { padding-block: 60px; border-radius: 36px; } header { margin-bottom: 36px; } .carousel { height: 540px; } article { width: calc(100% - 64px); } .copy { padding: 24px; } h3 { font-size: 28px; } .copy p { font-size: 16px; } .controls { gap: 8px; } }
 @media (prefers-reduced-motion: no-preference) { header.motion-ready { transition: opacity var(--duration-reveal), transform var(--duration-reveal); } header.motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } }
 @media (prefers-reduced-motion: reduce) { article { transition: none; } }

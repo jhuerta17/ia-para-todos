@@ -23,14 +23,14 @@ const meta: Record<Lang, { status: string; parentLabel: string; focus: string; p
     device: 'Dispositivo', deviceValue: 'Teléfono', intro: 'Una práctica cercana a tu vida', practiceHeading: 'Lo que practicarías',
     needsHeading: 'Qué necesitas', needs: 'Un teléfono inteligente y ganas de preguntar. Hay alternativas impresas, demostraciones guiadas o trabajo en pareja si falta dispositivo, cuenta o conexión.',
     dataHeading: 'Con datos inventados', data: 'Usamos nombres, mensajes y situaciones ficticios. No compartas información personal ni documentos reales en las herramientas. Esta actividad es para personas adultas.',
-    gallery: ['Escena ilustrativa de aprendizaje acompañado con una computadora.', 'Escena ilustrativa de dos personas revisando apuntes.'],
+    gallery: ['Aprendizaje acompañado con una computadora.', 'Dos personas revisando apuntes.'],
   },
   en: {
     status: 'Guided activity', parentLabel: 'Back to activities', focus: 'Focus', practice: 'Practice', practiceValue: 'Guided',
     device: 'Device', deviceValue: 'Phone', intro: 'A practice close to your life', practiceHeading: 'What you would practice',
     needsHeading: 'What you need', needs: 'A smartphone and curiosity. There are printed alternatives, guided demonstrations, or pair work if a device, account, or connection is missing.',
     dataHeading: 'With made-up data', data: 'We use fictional names, messages, and situations. Do not share personal information or real documents in the tools. This activity is for adults.',
-    gallery: ['Illustrative scene of guided learning with a computer.', 'Illustrative scene of two people reviewing notes.'],
+    gallery: ['Guided learning with a computer.', 'Two people reviewing notes.'],
   },
 };
 
