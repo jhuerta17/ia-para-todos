@@ -24,10 +24,15 @@ export class AdminWorkshops {
   protected readonly summary = computed(() => {
     const workshops = this.workshops();
     const upcoming = workshops.filter((workshop) => Date.parse(workshop.startsAt) > this.now);
+    const rated = workshops.filter((workshop) => workshop.satisfaction !== null);
     return {
       total: workshops.length,
       registered: workshops.reduce((sum, workshop) => sum + workshop.registered, 0),
       upcoming: upcoming.length,
+      satisfaction:
+        rated.length === 0
+          ? null
+          : Math.round(rated.reduce((sum, workshop) => sum + (workshop.satisfaction ?? 0), 0) / rated.length),
     };
   });
 

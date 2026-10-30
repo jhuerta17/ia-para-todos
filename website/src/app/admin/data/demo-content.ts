@@ -6,6 +6,8 @@ export interface DemoWorkshop {
   registered: number;
   capacity: number;
   level: string;
+  /** Post-session satisfaction %, or null for upcoming sessions. */
+  satisfaction: number | null;
 }
 
 export type DemoSupporterType = 'Individual' | 'Business' | 'Foundation';
@@ -37,18 +39,20 @@ interface WorkshopDef {
   registered: number;
   capacity: number;
   level: string;
+  satisfaction: number | null;
 }
 
 // Sessions cycle the real four-workshop series, as a running program would.
+// Past satisfaction rises unevenly, as real feedback does.
 const WORKSHOP_DEFS: WorkshopDef[] = [
-  { title: 'Introducción a la IA', offsetDays: -168, location: 'Oak Cliff Community Center', registered: 24, capacity: 30, level: 'Beginner' },
-  { title: 'IA para Padres y Familias', offsetDays: -140, location: 'Fort Worth Public Library', registered: 31, capacity: 35, level: 'All levels' },
-  { title: 'IA para la Vida Diaria', offsetDays: -112, location: 'Online session', registered: 28, capacity: 30, level: 'Beginner' },
-  { title: 'Introducción a la IA', offsetDays: -84, location: 'Oak Cliff Community Center', registered: 42, capacity: 45, level: 'All levels' },
-  { title: 'IA para el Trabajo y los Negocios', offsetDays: -56, location: 'Arlington Community Center', registered: 26, capacity: 30, level: 'Intermediate' },
-  { title: 'IA para la Vida Diaria', offsetDays: -28, location: 'Fort Worth Public Library', registered: 19, capacity: 25, level: 'Beginner' },
-  { title: 'IA para el Trabajo y los Negocios', offsetDays: 12, location: 'Online session', registered: 17, capacity: 30, level: 'Intermediate' },
-  { title: 'IA para Padres y Familias', offsetDays: 33, location: 'Oak Cliff Community Center', registered: 8, capacity: 30, level: 'All levels' },
+  { title: 'Introducción a la IA', offsetDays: -168, location: 'Oak Cliff Community Center', registered: 24, capacity: 30, level: 'Beginner', satisfaction: 89 },
+  { title: 'IA para Padres y Familias', offsetDays: -140, location: 'Fort Worth Public Library', registered: 31, capacity: 35, level: 'All levels', satisfaction: 91 },
+  { title: 'IA para la Vida Diaria', offsetDays: -112, location: 'Online session', registered: 28, capacity: 30, level: 'Beginner', satisfaction: 93 },
+  { title: 'Introducción a la IA', offsetDays: -84, location: 'Oak Cliff Community Center', registered: 42, capacity: 45, level: 'All levels', satisfaction: 92 },
+  { title: 'IA para el Trabajo y los Negocios', offsetDays: -56, location: 'Arlington Community Center', registered: 26, capacity: 30, level: 'Intermediate', satisfaction: 95 },
+  { title: 'IA para la Vida Diaria', offsetDays: -28, location: 'Fort Worth Public Library', registered: 19, capacity: 25, level: 'Beginner', satisfaction: 96 },
+  { title: 'IA para el Trabajo y los Negocios', offsetDays: 12, location: 'Online session', registered: 17, capacity: 30, level: 'Intermediate', satisfaction: null },
+  { title: 'IA para Padres y Familias', offsetDays: 33, location: 'Oak Cliff Community Center', registered: 8, capacity: 30, level: 'All levels', satisfaction: null },
 ];
 
 interface SupporterDef {
@@ -96,6 +100,7 @@ export function demoWorkshops(now = Date.now()): DemoWorkshop[] {
       registered: def.registered,
       capacity: def.capacity,
       level: def.level,
+      satisfaction: def.satisfaction,
     };
   }).sort((a, b) => Date.parse(b.startsAt) - Date.parse(a.startsAt));
 }

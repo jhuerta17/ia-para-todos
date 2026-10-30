@@ -97,6 +97,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'workshops-story',
         title: 'Past + upcoming workshop sessions',
         detail: 'Schedule shows history and momentum, not an empty calendar.',
+        done: true,
       },
       {
         id: 'impact-story',
