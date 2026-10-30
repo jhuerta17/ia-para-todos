@@ -75,6 +75,7 @@ function build(lang: Lang): ContentDetail[] {
     ],
     practice: tryIt[lang][index],
     gallery: galleries[lang][index],
+    ...(index === 0 ? { tutor: true } : {}),
   }));
 }
 export const activityDetails: Record<Lang, ContentDetail[]> = { es: build('es'), en: build('en') };

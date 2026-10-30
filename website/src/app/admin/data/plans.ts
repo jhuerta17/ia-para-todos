@@ -128,6 +128,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'ai-tutor-one',
         title: 'Spanish tutor on one activity page',
         detail: 'Flagship demo: guided beginner-safe practice powered by the Muse API.',
+        done: true,
       },
       {
         id: 'ai-triage',

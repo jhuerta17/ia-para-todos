@@ -1,0 +1,27 @@
+<section class="tutor" aria-labelledby="tutor-title" appRevealOnEnter>
+  <h2 id="tutor-title">{{ c().heading }}</h2>
+  <p class="lead">{{ c().lead }}</p>
+  <div class="chat" role="log" aria-live="polite" aria-label="{{ c().heading }}">
+    <div class="bubble ai"><p>{{ greeting().text }}</p></div>
+    @for (message of messages(); track $index) {
+      <div class="bubble" [class.user]="message.from === 'user'" [class.ai]="message.from === 'ai'">
+        @if (message.demo) {
+          <span class="sample">{{ c().sample }}</span>
+        }
+        <p>{{ message.text }}</p>
+      </div>
+    }
+    @if (sending()) {
+      <div class="bubble ai thinking"><p>{{ c().thinking }}</p></div>
+    }
+  </div>
+  @if (failed()) {
+    <p class="error" role="alert">{{ c().error }}</p>
+  }
+  <div class="composer">
+    <input #box type="text" [attr.aria-label]="c().placeholder" [placeholder]="c().placeholder" maxlength="2000" autocomplete="off"
+      (keydown.enter)="send(box.value); box.value = ''" [disabled]="sending()" />
+    <button type="button" (click)="send(box.value); box.value = ''" [disabled]="sending()">{{ c().send }}</button>
+  </div>
+  <p class="privacy">{{ c().privacy }}</p>
+</section>
