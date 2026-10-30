@@ -19,6 +19,9 @@ export interface DemoSupporter {
   /** Lifetime contributions, in USD. */
   total: number;
   since: string;
+  /** Most recent gift, in USD. */
+  lastAmount: number;
+  lastSince: string;
   status: 'Active' | 'Lapsed';
 }
 
@@ -64,21 +67,30 @@ interface SupporterDef {
   total: number;
   /** Months before `now` the support started; keeps the story evergreen. */
   sinceOffsetMonths: number;
+  lastAmount: number;
+  /** Months before `now` the most recent gift arrived. */
+  lastOffsetMonths: number;
   status: 'Active' | 'Lapsed';
 }
 
 const SUPPORTER_DEFS: SupporterDef[] = [
-  { id: 'd1', name: 'Fundación Lumen', type: 'Foundation', total: 40000, sinceOffsetMonths: 7, status: 'Active' },
-  { id: 'd2', name: 'Fundación Camino', type: 'Foundation', total: 25000, sinceOffsetMonths: 5, status: 'Active' },
-  { id: 'd3', name: 'Oak Cliff Café', type: 'Business', total: 20000, sinceOffsetMonths: 4, status: 'Active' },
-  { id: 'd4', name: 'Taller Hernández', type: 'Business', total: 12000, sinceOffsetMonths: 3, status: 'Active' },
-  { id: 'd5', name: 'Librería Gandiño', type: 'Business', total: 5000, sinceOffsetMonths: 2, status: 'Lapsed' },
-  { id: 'd6', name: 'María González', type: 'Individual', total: 8000, sinceOffsetMonths: 5, status: 'Active' },
-  { id: 'd7', name: 'Jorge Mendoza', type: 'Individual', total: 4500, sinceOffsetMonths: 4, status: 'Active' },
-  { id: 'd8', name: 'Lucía Fernández', type: 'Individual', total: 3000, sinceOffsetMonths: 3, status: 'Active' },
-  { id: 'd9', name: 'Carlos Ruiz', type: 'Individual', total: 1500, sinceOffsetMonths: 1, status: 'Active' },
-  { id: 'd10', name: 'Ana Torres', type: 'Individual', total: 500, sinceOffsetMonths: 5, status: 'Lapsed' },
+  { id: 'd1', name: 'Fundación Lumen', type: 'Foundation', total: 40000, sinceOffsetMonths: 7, lastAmount: 10000, lastOffsetMonths: 1, status: 'Active' },
+  { id: 'd2', name: 'Fundación Camino', type: 'Foundation', total: 25000, sinceOffsetMonths: 5, lastAmount: 10000, lastOffsetMonths: 2, status: 'Active' },
+  { id: 'd3', name: 'Oak Cliff Café', type: 'Business', total: 20000, sinceOffsetMonths: 4, lastAmount: 2500, lastOffsetMonths: 0, status: 'Active' },
+  { id: 'd4', name: 'Taller Hernández', type: 'Business', total: 12000, sinceOffsetMonths: 3, lastAmount: 1500, lastOffsetMonths: 1, status: 'Active' },
+  { id: 'd5', name: 'Librería Gandiño', type: 'Business', total: 5000, sinceOffsetMonths: 2, lastAmount: 500, lastOffsetMonths: 4, status: 'Lapsed' },
+  { id: 'd6', name: 'María González', type: 'Individual', total: 8000, sinceOffsetMonths: 5, lastAmount: 1000, lastOffsetMonths: 0, status: 'Active' },
+  { id: 'd7', name: 'Jorge Mendoza', type: 'Individual', total: 4500, sinceOffsetMonths: 4, lastAmount: 500, lastOffsetMonths: 2, status: 'Active' },
+  { id: 'd8', name: 'Lucía Fernández', type: 'Individual', total: 3000, sinceOffsetMonths: 3, lastAmount: 500, lastOffsetMonths: 1, status: 'Active' },
+  { id: 'd9', name: 'Carlos Ruiz', type: 'Individual', total: 1500, sinceOffsetMonths: 1, lastAmount: 1500, lastOffsetMonths: 1, status: 'Active' },
+  { id: 'd10', name: 'Ana Torres', type: 'Individual', total: 500, sinceOffsetMonths: 5, lastAmount: 500, lastOffsetMonths: 5, status: 'Lapsed' },
 ];
+
+const monthLabel = (now: number, offsetMonths: number): string => {
+  const cursor = new Date(now);
+  const date = new Date(cursor.getFullYear(), cursor.getMonth() - offsetMonths, 1);
+  return date.toLocaleDateString('en', { month: 'short', year: 'numeric' });
+};
 
 /** Monthly volunteers, satisfaction, and confidence, oldest month first. */
 const VOLUNTEERS_BY_MONTH = [4, 5, 5, 7, 8, 9];
@@ -109,18 +121,16 @@ export function demoWorkshops(now = Date.now()): DemoWorkshop[] {
 }
 
 export function demoSupporters(now = Date.now()): DemoSupporter[] {
-  const cursor = new Date(now);
-  return SUPPORTER_DEFS.map((def) => {
-    const date = new Date(cursor.getFullYear(), cursor.getMonth() - def.sinceOffsetMonths, 1);
-    return {
-      id: def.id,
-      name: def.name,
-      type: def.type,
-      total: def.total,
-      since: date.toLocaleDateString('en', { month: 'short', year: 'numeric' }),
-      status: def.status,
-    };
-  }).sort((a, b) => b.total - a.total);
+  return SUPPORTER_DEFS.map((def) => ({
+    id: def.id,
+    name: def.name,
+    type: def.type,
+    total: def.total,
+    since: monthLabel(now, def.sinceOffsetMonths),
+    lastAmount: def.lastAmount,
+    lastSince: monthLabel(now, def.lastOffsetMonths),
+    status: def.status,
+  })).sort((a, b) => b.total - a.total);
 }
 
 export function demoSupporterTotal(): number {

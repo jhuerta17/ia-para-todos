@@ -56,6 +56,7 @@
             <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Type</th>
             <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Since</th>
             <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Total</th>
+            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Latest gift</th>
             <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
           </tr>
         </thead>
@@ -69,6 +70,9 @@
               <td app-table-cell class="py-3 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">{{ supporter.since }}</td>
               <td app-table-cell class="py-3 text-sm font-medium text-gray-800 tabular-nums dark:text-white/90">
                 {{ formatMoney(supporter.total) }}
+              </td>
+              <td app-table-cell class="py-3 text-sm whitespace-nowrap text-gray-500 tabular-nums dark:text-gray-400">
+                {{ formatMoney(supporter.lastAmount) }} · {{ supporter.lastSince }}
               </td>
               <td app-table-cell class="py-3">
                 @if (supporter.status === 'Active') {

@@ -109,6 +109,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'supporters-story',
         title: 'Supporters ledger with history',
         detail: 'Sample contributions and sponsors showing community backing (labeled demo).',
+        done: true,
       },
     ],
   },
