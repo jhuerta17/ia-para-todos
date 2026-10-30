@@ -122,6 +122,7 @@ export const PLAN_GROUPS: PlanGroup[] = [
         id: 'ai-proxy',
         title: 'Muse API proxy function',
         detail: 'Server-side key, rate limits, PII strip, cost logging; never called from the browser.',
+        done: true,
       },
       {
         id: 'ai-tutor-one',

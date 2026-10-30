@@ -13,7 +13,7 @@ Welcome to the IA Para Todos documentation. The seven-part setup is **complete**
 | `operations/` | [workshop-checklist.md](operations/workshop-checklist.md) · [venue-requirements.md](operations/venue-requirements.md) · [facilitator-guide.md](operations/facilitator-guide.md) · [volunteer-onboarding.md](operations/volunteer-onboarding.md) · [outreach-process.md](operations/outreach-process.md) · [budget-template.md](operations/budget-template.md) · [impact-measurement.md](operations/impact-measurement.md) |
 | `safety/` | [responsible-ai.md](safety/responsible-ai.md) · [privacy-guidelines.md](safety/privacy-guidelines.md) · [participant-safeguarding.md](safety/participant-safeguarding.md) · [accessibility.md](safety/accessibility.md) |
 | `brand/` | [brand-guidelines.md](brand/brand-guidelines.md) · [voice-and-tone.md](brand/voice-and-tone.md) · [messaging.md](brand/messaging.md) |
-| `demo/` | [scope.md](demo/scope.md) · [honesty-audit.md](demo/honesty-audit.md) |
+| `demo/` | [scope.md](demo/scope.md) · [honesty-audit.md](demo/honesty-audit.md) · [ai-setup.md](demo/ai-setup.md) |
 
 Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · [`scripts/`](../scripts/validate-docs.sh) (`bootstrap.sh`, `validate-docs.sh`) · [`.github/`](../.github/PULL_REQUEST_TEMPLATE.md) (issue/PR templates, docs-check workflow) · `assets/` (brand/media files, planned once visual identity is decided).
 

@@ -236,9 +236,12 @@ for (const path of ADMIN_PATHS) {
   if (months[months.length - 1]?.volunteers !== 9) fail('demo content drift: volunteer series changed');
 }
 
-// 13. Admin function ships with the workspace Netlify deploys.
+// 13. Functions ship with the workspace Netlify deploys.
 if (!existsSync(join(root, 'netlify', 'functions', 'submissions.mts'))) {
   fail('missing netlify/functions/submissions.mts: the inbox backend would not deploy');
+}
+if (!existsSync(join(root, 'netlify', 'functions', 'ai-assist.mts'))) {
+  fail('missing netlify/functions/ai-assist.mts: the AI proxy would not deploy');
 }
 
 // 14. Tailwind wiring: the admin theme side-build exists, carries the
