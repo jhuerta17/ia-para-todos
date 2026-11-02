@@ -15,7 +15,7 @@
     "verify:admin": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-admin.headless.mjs",
     "verify:admin:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-admin.headless.mjs",
     "watch": "ng build --watch --configuration development",
-    "verify:ai:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/ai-assist.mts netlify/functions/ai-session.mts netlify/functions/ai-control.mts netlify/lib/ai-security.mts"
+    "verify:ai:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/ai-assist.mts netlify/functions/ai-status.mts netlify/functions/ai-control.mts netlify/lib/ai-security.mts"
   },
   "private": true,
   "packageManager": "npm@11.13.0",
@@ -28,6 +28,7 @@
     "@angular/platform-server": "22.2.1",
     "@angular/router": "22.2.1",
     "@angular/ssr": "22.2.1",
+    "@netlify/blobs": "11.1.7",
     "@netlify/identity": "2.0.0",
     "gotrue-js": "1.0.1",
     "rxjs": "7.8.2",

@@ -1,8 +1,8 @@
 import type { Config, Context } from '@netlify/functions';
 import * as security from '../lib/ai-security.mts';
 
-// The only inference doorway. Live AI requires explicit production activation,
-// verified sessions/admin identity, and an atomic shared budget reservation.
+// Live AI uses a shared admin switch and simple per-instance limits.
+// These limits intentionally do not enforce a global dollar budget.
 //
 // POST { task: 'tutor' | 'triage', lang: 'es' | 'en',
 //        history: [{ role: 'user' | 'assistant', content: string }],
@@ -81,15 +81,16 @@ export function parseReply(payload: unknown): string | null {
 }
 
 export interface Dependencies {
-  db: security.Redis;
+  control: security.LiveControl;
+  limits: security.LocalLimits;
   fetch: typeof fetch;
   getUser: typeof security.adminUser;
   now: () => number;
 }
-const defaults: Dependencies = { db: security.redis, fetch: (...args) => fetch(...args), getUser: security.adminUser, now: Date.now };
+const defaults: Dependencies = { control: security.liveControl, limits: new security.LocalLimits(), fetch: (...args) => fetch(...args), getUser: security.adminUser, now: Date.now };
 
 function validate(body: Record<string, unknown>): { task: Task; lang: Lang; input: string; history: Turn[] } {
-  if (Object.keys(body).some(key => !['task', 'lang', 'input', 'history'].includes(key))) throw new security.HttpError(400, 'unsupported_field');
+  if (Object.keys(body).some(key => !['task', 'lang', 'input', 'history', 'acknowledged'].includes(key))) throw new security.HttpError(400, 'unsupported_field');
   if (body['task'] !== 'tutor' && body['task'] !== 'triage') throw new security.HttpError(400, 'invalid_task');
   if (body['lang'] !== 'es' && body['lang'] !== 'en') throw new security.HttpError(400, 'invalid_language');
   if (typeof body['input'] !== 'string' || !body['input'].trim() || body['input'].length > MAX_INPUT) throw new security.HttpError(400, 'invalid_input');
@@ -110,58 +111,35 @@ export function createHandler(deps: Dependencies = defaults) {
     try {
       if (req.method !== 'POST') return security.json({ reason: 'method_not_allowed' }, 405, { Allow: 'POST' });
       if (!security.allowedOrigin(req)) throw new security.HttpError(403, 'origin_not_allowed');
-      const { task, lang, input, history } = validate(await security.readJSON(req));
+      const awaitedBody = await security.readJSON(req);
+      const { task, lang, input, history } = validate(awaitedBody);
       // Authenticate triage even when live AI is disabled or no API key is set.
-      const admin = task === 'triage' ? await security.requireAdmin(deps.getUser) : null;
+      if (task === 'triage') await security.requireAdmin(deps.getUser);
       const sample = (reason: string) => {
         security.audit(context, { task, reason, demo: true });
         return security.json({ reply: buildSampleReply(task, lang, input), demo: true, reason });
       };
       if (!security.liveConfigured(context)) return sample('unavailable');
-      const ip = security.ipHash(context);
-      const sid = task === 'tutor' ? security.sessionId(req) : `admin:${admin!.id}`;
-      if (!sid) return sample('verification_required');
+      try { if (!await deps.control.read()) return sample('paused'); } catch { return sample('unavailable'); }
+      if (task === 'tutor' && (awaitedBody['acknowledged'] !== true)) return sample('acknowledgement_required');
       const now = deps.now();
-      const { day, month, retryAt } = security.periods(now);
-      const rid = security.requestId();
-      const model = security.MODELS[task];
-      const reserved = security.INPUT_TOKEN_CAP * model.input + security.OUTPUT_TOKEN_CAP * model.output;
-      const keys = [security.PREFIX + 'ledger', security.PREFIX + 'control', security.PREFIX + 'leases',
-        security.PREFIX + 'session:' + sid, security.PREFIX + 'minute:' + sid, security.PREFIX + 'daily:' + day + ':' + sid,
-        security.PREFIX + 'ip-minute:' + ip, security.PREFIX + 'ip-day:' + day + ':' + ip, security.PREFIX + 'reservation:' + rid];
-      let admission: unknown;
-      try { admission = await security.evalScript(deps.db, security.ADMIT, keys, [now, day, month, reserved, rid, ip, task === 'tutor' ? '1' : '0']); }
-      catch { return sample('unavailable'); }
-      if (!Array.isArray(admission) || typeof admission[0] !== 'string') return sample('unavailable');
-      const reason = admission[0];
-      if (reason !== 'ok') {
-        if (['busy', 'cooldown', 'allowance_exhausted'].includes(reason)) {
-          security.audit(context, { task, reason, demo: true });
-          const retry = reason === 'allowance_exhausted' ? retryAt : new Date(now + 60000).toISOString();
-          return security.json({ reason, retryAt: retry, remaining: reason === 'allowance_exhausted' ? 0 : undefined }, 429,
-            { 'Retry-After': String(Math.max(1, Math.ceil((Date.parse(retry) - now) / 1000))) });
-        }
-        return sample(reason);
+      const admission = deps.limits.admit(context.ip, now);
+      if (!admission.allowed) {
+        const reason = admission.reason ?? 'unavailable';
+        if (!admission.retryAt) return sample(reason);
+        security.audit(context, { task, reason, demo: true });
+        return security.json({ reason, retryAt: admission.retryAt }, 429,
+          { 'Retry-After': String(Math.max(1, Math.ceil((Date.parse(admission.retryAt) - now) / 1000))) });
       }
-      let actual = -1;
-      let usageInput = -1, usageOutput = -1;
+      const model = security.MODELS[task];
       let reply: string | null = null;
-      let failure = 'upstream_unavailable';
-      // The same Responses request is used for exact token preflight and generation.
-      // Reserve the full input cap BEFORE either call; generation requires a verified count <= cap.
-      const payload = { model: model.name, instructions: SYSTEMS[task][lang],
+      let usageInput = -1, usageOutput = -1;
+      const payload = { model, instructions: SYSTEMS[task][lang],
         input: [...history, { role: 'user', content: input }], tools: [] };
       const signal = AbortSignal.timeout(20000);
       const headers = { Authorization: `Bearer ${security.env('META_MUSE_API_KEY')}`, 'Content-Type': 'application/json' };
       try {
-        const countResponse = await deps.fetch('https://api.meta.ai/v1/responses/input_tokens', {
-          method: 'POST', headers, body: JSON.stringify(payload), signal, redirect: 'error',
-        });
-        if (!countResponse.ok) throw new Error('token_count_unavailable');
-        const count = (await countResponse.json() as { input_tokens?: unknown }).input_tokens;
-        if (!Number.isSafeInteger(count) || (count as number) <= 0 || (count as number) > security.INPUT_TOKEN_CAP) throw new Error('token_count_invalid');
-        // Recheck emergency state after preflight. No retry if the result is uncertain.
-        if (await deps.db(['HGET', security.PREFIX + 'control', 'enabled']) !== '1') throw new Error('disabled');
+        if (!await deps.control.read()) return sample('paused');
         const response = await deps.fetch('https://api.meta.ai/v1/responses', {
           method: 'POST', headers, signal, redirect: 'error',
           body: JSON.stringify({ ...payload, max_output_tokens: security.OUTPUT_TOKEN_CAP, store: false }),
@@ -172,20 +150,14 @@ export function createHandler(deps: Dependencies = defaults) {
         const uin = usage?.['input_tokens'], uout = usage?.['output_tokens'];
         if (Number.isSafeInteger(uin) && Number.isSafeInteger(uout) && (uin as number) >= 0 && (uout as number) >= 0) {
           usageInput = uin as number; usageOutput = uout as number;
-          actual = usageInput * model.input + usageOutput * model.output;
-          // Any mismatch with the enforced token bounds disables further inference.
-          if (usageInput > security.INPUT_TOKEN_CAP || usageOutput > security.OUTPUT_TOKEN_CAP) actual = reserved + 1;
         }
         reply = responseText(result);
-      } catch { /* Keep the full reservation on any uncertain provider failure. Never log error bodies. */ }
-      try {
-        const settled = await security.evalScript(deps.db, security.SETTLE, [keys[0], keys[8], keys[2], keys[1]], [actual, now + 90000]);
-        if (settled !== 1) { reply = null; failure = 'unavailable'; }
-      } catch { reply = null; failure = 'unavailable'; }
-      security.audit(context, { task, model: model.name, reservationId: rid, reserved, charged: actual < 0 ? reserved : actual,
-        inputTokens: usageInput, outputTokens: usageOutput, reason: reply ? 'ok' : failure, demo: !reply });
+      } catch { /* No retries and no provider error bodies in logs. */ }
+      finally { admission.release?.(); }
+      security.audit(context, { task, model, inputTokens: usageInput, outputTokens: usageOutput,
+        reason: reply ? 'ok' : 'upstream_unavailable', demo: !reply });
       return security.json({ reply: reply ?? buildSampleReply(task, lang, input), demo: !reply,
-        reason: reply ? undefined : failure, remaining: admission[1] });
+        reason: reply ? undefined : 'upstream_unavailable', remaining: admission.remaining });
     } catch (error) {
       if (error instanceof security.HttpError) {
         security.audit(context, { reason: error.message, status: error.status });

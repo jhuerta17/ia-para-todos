@@ -2,15 +2,13 @@
   <h2 id="tutor-title">{{ c().heading }}</h2>
   <p class="lead">{{ c().lead }}</p>
   <p class="privacy" role="status">{{ status() }}</p>
-  @if (remaining() !== null) { <p class="privacy">{{ c().remaining }} {{ remaining() }}</p> }
-  @if (available() && !verified()) {
+  @if (available() && reason() === 'acknowledgement_required') {
     <div class="verification">
       <p>{{ c().disclosure }}</p>
       <label><input #consent type="checkbox" [checked]="acknowledged()" (change)="acknowledged.set(consent.checked)" /> {{ c().acknowledge }}</label>
-      <button type="button" (click)="verify()" [disabled]="!acknowledged() || verifying()">{{ c().verify }}</button>
+      <button type="button" (click)="enable()" [disabled]="!acknowledged()">{{ c().verify }}</button>
     </div>
   }
-  <div #challenge></div>
   <div class="chat" role="log" aria-live="polite" aria-label="{{ c().heading }}">
     <div class="bubble ai"><p>{{ greeting().text }}</p></div>
     @for (message of messages(); track $index) {
