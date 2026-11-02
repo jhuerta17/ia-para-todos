@@ -45,3 +45,6 @@ temp/
 
 # Local tooling (installed browsers for headless verification)
 .playwright-browsers/
+
+# Local Netlify deployment metadata
+.netlify/

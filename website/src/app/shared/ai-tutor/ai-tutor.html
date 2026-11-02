@@ -1,6 +1,16 @@
 <section class="tutor" aria-labelledby="tutor-title" appRevealOnEnter>
   <h2 id="tutor-title">{{ c().heading }}</h2>
   <p class="lead">{{ c().lead }}</p>
+  <p class="privacy" role="status">{{ status() }}</p>
+  @if (remaining() !== null) { <p class="privacy">{{ c().remaining }} {{ remaining() }}</p> }
+  @if (available() && !verified()) {
+    <div class="verification">
+      <p>{{ c().disclosure }}</p>
+      <label><input #consent type="checkbox" [checked]="acknowledged()" (change)="acknowledged.set(consent.checked)" /> {{ c().acknowledge }}</label>
+      <button type="button" (click)="verify()" [disabled]="!acknowledged() || verifying()">{{ c().verify }}</button>
+    </div>
+  }
+  <div #challenge></div>
   <div class="chat" role="log" aria-live="polite" aria-label="{{ c().heading }}">
     <div class="bubble ai"><p>{{ greeting().text }}</p></div>
     @for (message of messages(); track $index) {
@@ -15,9 +25,6 @@
       <div class="bubble ai thinking"><p>{{ c().thinking }}</p></div>
     }
   </div>
-  @if (failed()) {
-    <p class="error" role="alert">{{ c().error }}</p>
-  }
   <div class="composer">
     <input #box type="text" [attr.aria-label]="c().placeholder" [placeholder]="c().placeholder" maxlength="2000" autocomplete="off"
       (keydown.enter)="send(box.value); box.value = ''" [disabled]="sending()" />

@@ -1,5 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
+import { AdminSession } from '../../session/admin-session';
 import { AdminBreadcrumb } from '../../layout/admin-breadcrumb/admin-breadcrumb';
 import { BadgeComponent } from '../../shared/ui/badge/badge.component';
 import { DemoState } from '../../data/demo-state';
@@ -34,6 +35,7 @@ export class AdminInbox {
   protected readonly loadError = inject(SubmissionsService).error;
   protected readonly truncated = inject(SubmissionsService).truncated;
   private readonly data = inject(SubmissionsService);
+  private readonly session = inject(AdminSession);
   private readonly demo = inject(DemoState);
   protected readonly filter = signal<Filter>('all');
   protected readonly filters = FILTERS;
@@ -94,9 +96,9 @@ export class AdminInbox {
     this.drafts.set({ ...this.drafts(), [row.id]: { status: 'loading' } });
     try {
       const summary = `${this.formLabel(row.form)}${row.interest ? ` (${row.interest})` : ''}: ${row.message ?? '(no message)'}`;
-      const response = await fetch('/.netlify/functions/ai-assist', {
+      const response = await fetch('/api/ai-assist', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', Authorization: `Bearer ${await this.session.jwt()}` },
         body: JSON.stringify({
           task: 'triage',
           lang: row.language === 'en' ? 'en' : 'es',

@@ -1,22 +1,16 @@
-import type { Context } from '@netlify/functions';
+import type { Config, Context } from '@netlify/functions';
+import * as security from '../lib/ai-security.mts';
 
-// AI assist proxy: the single server-side doorway to the Muse API for
-// the public tutor and the admin triage drafts. API keys never reach
-// the browser; without META_MUSE_API_KEY it answers labeled sample
-// replies so the demo works with no account. See docs/demo/ai-setup.md.
+// The only inference doorway. Live AI requires explicit production activation,
+// verified sessions/admin identity, and an atomic shared budget reservation.
 //
 // POST { task: 'tutor' | 'triage', lang: 'es' | 'en',
 //        history: [{ role: 'user' | 'assistant', content: string }],
-//        input: string, context?: string }
+//        input: string }
 // -> { reply: string, demo: boolean }
 
-const API_URL = (process.env['META_MUSE_API_URL'] ?? 'https://api.meta.ai/v1').replace(/\/+$/, '');
-const MODEL = process.env['META_MUSE_MODEL'] ?? 'muse-spark-1.3-contributor';
 const MAX_INPUT = 2000;
 const MAX_HISTORY = 6;
-const MAX_TOKENS = 400;
-const RATE_WINDOW_MS = 60_000;
-const RATE_MAX = 20;
 
 type Task = 'tutor' | 'triage';
 type Lang = 'es' | 'en';
@@ -71,8 +65,8 @@ export function buildSampleReply(task: Task, lang: Lang, input: string): string 
       : `Thanks for your message! We read it carefully: “${short}”. We will follow up soon with next steps. Meanwhile, feel free to explore the free workshops on this site.`;
   }
   return lang === 'es'
-    ? `¡Buen intento! Para practicar con tu ejemplo (“${short}”), prueba esta fórmula: tarea + tema + formato. Por ejemplo: “Dame 3 ideas para una cena saludable, en lista numerada y con palabras fáciles”. Practica siempre con datos inventados. Esta es una respuesta de ejemplo: conecta la API para tutoria en vivo.`
-    : `Good try! To practice with your example (“${short}”), try this formula: task + topic + format. For example: “Give me 3 healthy dinner ideas, as a numbered list in simple words.” Always practice with made-up data. This is a sample reply: connect the API for live tutoring.`;
+    ? `¡Buen intento! Para practicar con tu ejemplo (“${short}”), prueba esta fórmula: tarea + tema + formato. Por ejemplo: “Dame 3 ideas para una cena saludable, en lista numerada y con palabras fáciles”. Practica siempre con datos inventados. Esta es una respuesta de ejemplo.`
+    : `Good try! To practice with your example (“${short}”), try this formula: task + topic + format. For example: “Give me 3 healthy dinner ideas, as a numbered list in simple words.” Always practice with made-up data. This is a sample reply.`;
 }
 
 /** Extract the assistant text from a chat-completions payload. Pure. */
@@ -86,72 +80,125 @@ export function parseReply(payload: unknown): string | null {
   return null;
 }
 
-// Best-effort per-IP rate limit (per function instance).
-const hits = new Map<string, { count: number; reset: number }>();
-
-function limited(ip: string): boolean {
-  const now = Date.now();
-  const entry = hits.get(ip);
-  if (!entry || now >= entry.reset) {
-    hits.set(ip, { count: 1, reset: now + RATE_WINDOW_MS });
-    return false;
-  }
-  entry.count += 1;
-  return entry.count > RATE_MAX;
+export interface Dependencies {
+  db: security.Redis;
+  fetch: typeof fetch;
+  getUser: typeof security.adminUser;
+  now: () => number;
 }
+const defaults: Dependencies = { db: security.redis, fetch: (...args) => fetch(...args), getUser: security.adminUser, now: Date.now };
 
-async function liveReply(task: Task, lang: Lang, history: Turn[], input: string, key: string): Promise<string | null> {
-  const started = Date.now();
-  try {
-    const response = await fetch(`${API_URL}/chat/completions`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, messages: buildMessages(task, lang, history, input), max_tokens: MAX_TOKENS, temperature: 0.6 }),
-      signal: AbortSignal.timeout(20_000),
-    });
-    if (!response.ok) {
-      console.error(`ai-assist: upstream ${response.status} for task ${task}`);
-      return null;
+function validate(body: Record<string, unknown>): { task: Task; lang: Lang; input: string; history: Turn[] } {
+  if (Object.keys(body).some(key => !['task', 'lang', 'input', 'history'].includes(key))) throw new security.HttpError(400, 'unsupported_field');
+  if (body['task'] !== 'tutor' && body['task'] !== 'triage') throw new security.HttpError(400, 'invalid_task');
+  if (body['lang'] !== 'es' && body['lang'] !== 'en') throw new security.HttpError(400, 'invalid_language');
+  if (typeof body['input'] !== 'string' || !body['input'].trim() || body['input'].length > MAX_INPUT) throw new security.HttpError(400, 'invalid_input');
+  const history = body['history'] ?? [];
+  if (!Array.isArray(history) || history.length > MAX_HISTORY || history.some(turn => !cleanTurn(turn) || typeof turn.content !== 'string' || turn.content.length > MAX_INPUT || Object.keys(turn).some(k => !['role', 'content'].includes(k)))) throw new security.HttpError(400, 'invalid_history');
+  return { task: body['task'], lang: body['lang'], input: scrubPII(body['input']), history: history.map(cleanTurn) as Turn[] };
+}
+function responseText(payload: Record<string, unknown>): string | null {
+  const output = payload['output'];
+  if (!Array.isArray(output)) return null;
+  const text = output.filter(item => item?.type === 'message' && item?.role === 'assistant')
+    .flatMap(item => Array.isArray(item.content) ? item.content : [])
+    .filter(item => item?.type === 'output_text' && typeof item?.text === 'string').map(item => item.text).join('\n').trim();
+  return text ? text.slice(0, 2000) : null;
+}
+export function createHandler(deps: Dependencies = defaults) {
+  return async (req: Request, context: Context): Promise<Response> => {
+    try {
+      if (req.method !== 'POST') return security.json({ reason: 'method_not_allowed' }, 405, { Allow: 'POST' });
+      if (!security.allowedOrigin(req)) throw new security.HttpError(403, 'origin_not_allowed');
+      const { task, lang, input, history } = validate(await security.readJSON(req));
+      // Authenticate triage even when live AI is disabled or no API key is set.
+      const admin = task === 'triage' ? await security.requireAdmin(deps.getUser) : null;
+      const sample = (reason: string) => {
+        security.audit(context, { task, reason, demo: true });
+        return security.json({ reply: buildSampleReply(task, lang, input), demo: true, reason });
+      };
+      if (!security.liveConfigured(context)) return sample('unavailable');
+      const ip = security.ipHash(context);
+      const sid = task === 'tutor' ? security.sessionId(req) : `admin:${admin!.id}`;
+      if (!sid) return sample('verification_required');
+      const now = deps.now();
+      const { day, month, retryAt } = security.periods(now);
+      const rid = security.requestId();
+      const model = security.MODELS[task];
+      const reserved = security.INPUT_TOKEN_CAP * model.input + security.OUTPUT_TOKEN_CAP * model.output;
+      const keys = [security.PREFIX + 'ledger', security.PREFIX + 'control', security.PREFIX + 'leases',
+        security.PREFIX + 'session:' + sid, security.PREFIX + 'minute:' + sid, security.PREFIX + 'daily:' + day + ':' + sid,
+        security.PREFIX + 'ip-minute:' + ip, security.PREFIX + 'ip-day:' + day + ':' + ip, security.PREFIX + 'reservation:' + rid];
+      let admission: unknown;
+      try { admission = await security.evalScript(deps.db, security.ADMIT, keys, [now, day, month, reserved, rid, ip, task === 'tutor' ? '1' : '0']); }
+      catch { return sample('unavailable'); }
+      if (!Array.isArray(admission) || typeof admission[0] !== 'string') return sample('unavailable');
+      const reason = admission[0];
+      if (reason !== 'ok') {
+        if (['busy', 'cooldown', 'allowance_exhausted'].includes(reason)) {
+          security.audit(context, { task, reason, demo: true });
+          const retry = reason === 'allowance_exhausted' ? retryAt : new Date(now + 60000).toISOString();
+          return security.json({ reason, retryAt: retry, remaining: reason === 'allowance_exhausted' ? 0 : undefined }, 429,
+            { 'Retry-After': String(Math.max(1, Math.ceil((Date.parse(retry) - now) / 1000))) });
+        }
+        return sample(reason);
+      }
+      let actual = -1;
+      let usageInput = -1, usageOutput = -1;
+      let reply: string | null = null;
+      let failure = 'upstream_unavailable';
+      // The same Responses request is used for exact token preflight and generation.
+      // Reserve the full input cap BEFORE either call; generation requires a verified count <= cap.
+      const payload = { model: model.name, instructions: SYSTEMS[task][lang],
+        input: [...history, { role: 'user', content: input }], tools: [] };
+      const signal = AbortSignal.timeout(20000);
+      const headers = { Authorization: `Bearer ${security.env('META_MUSE_API_KEY')}`, 'Content-Type': 'application/json' };
+      try {
+        const countResponse = await deps.fetch('https://api.meta.ai/v1/responses/input_tokens', {
+          method: 'POST', headers, body: JSON.stringify(payload), signal, redirect: 'error',
+        });
+        if (!countResponse.ok) throw new Error('token_count_unavailable');
+        const count = (await countResponse.json() as { input_tokens?: unknown }).input_tokens;
+        if (!Number.isSafeInteger(count) || (count as number) <= 0 || (count as number) > security.INPUT_TOKEN_CAP) throw new Error('token_count_invalid');
+        // Recheck emergency state after preflight. No retry if the result is uncertain.
+        if (await deps.db(['HGET', security.PREFIX + 'control', 'enabled']) !== '1') throw new Error('disabled');
+        const response = await deps.fetch('https://api.meta.ai/v1/responses', {
+          method: 'POST', headers, signal, redirect: 'error',
+          body: JSON.stringify({ ...payload, max_output_tokens: security.OUTPUT_TOKEN_CAP, store: false }),
+        });
+        if (!response.ok) throw new Error('upstream_unavailable');
+        const result = await response.json() as Record<string, unknown>;
+        const usage = result['usage'] as Record<string, unknown> | undefined;
+        const uin = usage?.['input_tokens'], uout = usage?.['output_tokens'];
+        if (Number.isSafeInteger(uin) && Number.isSafeInteger(uout) && (uin as number) >= 0 && (uout as number) >= 0) {
+          usageInput = uin as number; usageOutput = uout as number;
+          actual = usageInput * model.input + usageOutput * model.output;
+          // Any mismatch with the enforced token bounds disables further inference.
+          if (usageInput > security.INPUT_TOKEN_CAP || usageOutput > security.OUTPUT_TOKEN_CAP) actual = reserved + 1;
+        }
+        reply = responseText(result);
+      } catch { /* Keep the full reservation on any uncertain provider failure. Never log error bodies. */ }
+      try {
+        const settled = await security.evalScript(deps.db, security.SETTLE, [keys[0], keys[8], keys[2], keys[1]], [actual, now + 90000]);
+        if (settled !== 1) { reply = null; failure = 'unavailable'; }
+      } catch { reply = null; failure = 'unavailable'; }
+      security.audit(context, { task, model: model.name, reservationId: rid, reserved, charged: actual < 0 ? reserved : actual,
+        inputTokens: usageInput, outputTokens: usageOutput, reason: reply ? 'ok' : failure, demo: !reply });
+      return security.json({ reply: reply ?? buildSampleReply(task, lang, input), demo: !reply,
+        reason: reply ? undefined : failure, remaining: admission[1] });
+    } catch (error) {
+      if (error instanceof security.HttpError) {
+        security.audit(context, { reason: error.message, status: error.status });
+        return security.json({ reason: error.message }, error.status);
+      }
+      security.audit(context, { reason: 'unavailable', demo: true });
+      return security.json({ reason: 'unavailable' }, 503);
     }
-    const payload = (await response.json()) as unknown;
-    const usage = (payload as Record<string, unknown>)['usage'] as Record<string, unknown> | undefined;
-    console.log(
-      `ai-assist: task=${task} model=${MODEL} ms=${Date.now() - started} ` +
-        `prompt=${String(usage?.['prompt_tokens'] ?? '?')} completion=${String(usage?.['completion_tokens'] ?? '?')}`,
-    );
-    return parseReply(payload);
-  } catch (error) {
-    console.error(`ai-assist: upstream failed: ${error instanceof Error ? error.message : error}`);
-    return null;
-  }
+  };
 }
-
-export default async (req: Request, _context: Context): Promise<Response> => {
-  if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-  if (limited(ip)) return new Response('Too many requests', { status: 429 });
-
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return new Response('Bad request', { status: 400 });
-  }
-  if (typeof body !== 'object' || body === null) return new Response('Bad request', { status: 400 });
-  const record = body as Record<string, unknown>;
-  if (record['task'] !== 'tutor' && record['task'] !== 'triage') return new Response('Bad request', { status: 400 });
-  if (record['lang'] !== 'es' && record['lang'] !== 'en') return new Response('Bad request', { status: 400 });
-  if (typeof record['input'] !== 'string' || record['input'].trim() === '') return new Response('Bad request', { status: 400 });
-  const history = Array.isArray(record['history']) ? record['history'].map(cleanTurn).filter((turn): turn is Turn => turn !== null) : [];
-  const task = record['task'] as Task;
-  const lang = record['lang'] as Lang;
-  const input = (record['input'] as string).slice(0, MAX_INPUT);
-
-  const key = process.env['META_MUSE_API_KEY'];
-  if (key && key.trim() !== '') {
-    const reply = await liveReply(task, lang, history, input, key.trim());
-    if (reply) return Response.json({ reply, demo: false });
-    // Upstream failed: fall through to a labeled sample reply.
-  }
-  return Response.json({ reply: buildSampleReply(task, lang, input), demo: true });
+export default createHandler();
+// Keep a plain object initializer: Netlify's static parser ignores named exports wrapped in `satisfies`.
+export const config: Config = {
+  path: '/api/ai-assist',
+  rateLimit: { action: 'rate_limit', windowLimit: 60, windowSize: 60, aggregateBy: ['ip', 'domain'] },
 };

@@ -1,3 +1,4 @@
+import { AiUsage } from '../../shared/ai-usage';
 import { isPlatformServer } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -42,7 +43,7 @@ function deltaBadge(current: number, previous: number): { deltaText: string; del
 }
 @Component({
   selector: 'app-admin-overview',
-  imports: [RouterModule, AdminBreadcrumb, AdminSafeHtmlPipe, BadgeComponent, TrendChart, FormDonut, ...TABLE_IMPORTS],
+  imports: [AiUsage, RouterModule, AdminBreadcrumb, AdminSafeHtmlPipe, BadgeComponent, TrendChart, FormDonut, ...TABLE_IMPORTS],
   templateUrl: './admin-overview.html',
 })
 export class AdminOverview {
