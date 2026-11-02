@@ -31,7 +31,7 @@
   </form>
   <div class="utility-band">
     <span class="copyright">{{ c().copyright }}</span>
-    <nav [attr.aria-label]="c().infoNav">@for (link of info(); track link.path) { <a [routerLink]="link.path">{{ link.label }}</a> }</nav>
+    <nav [attr.aria-label]="c().infoNav">@for (link of info(); track link.path) { <a [routerLink]="link.path">{{ link.label }}</a> }<a routerLink="/admin">{{ c().admin }}</a></nav>
     <nav class="language" [attr.aria-label]="c().language">
       @if (language.lang() === 'es') {
         <span lang="es" aria-current="true">Español</span><span class="separator" aria-hidden="true">/</span><a lang="en" [routerLink]="alternate().url" [attr.aria-label]="alternate().aria">English</a>
