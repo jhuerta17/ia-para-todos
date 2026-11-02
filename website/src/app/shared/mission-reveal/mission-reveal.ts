@@ -4,7 +4,7 @@ import { BrandMark } from '../brand-mark';
 import { Language } from '../../i18n/language';
 import { Lang } from '../../i18n/lang';
 
-type Token = { kind: 'word'; text: string } | { kind: 'logo' | 'portraits' | 'photo' };
+type Token = { kind: 'word'; text: string } | { kind: 'logo' | 'photos' | 'photo' };
 const words = (text: string): Token[] => text.split(' ').map(text => ({ kind: 'word', text }));
 
 const sentences: Record<Lang, string[]> = {
@@ -21,8 +21,8 @@ const sentences: Record<Lang, string[]> = {
 };
 
 const chrome = {
-  es: { mission: 'Nuestra misión', portraits: 'Retratos', photo: 'Personas adultas alrededor de una computadora.' },
-  en: { mission: 'Our mission', portraits: 'Portraits', photo: 'Adults around a computer.' },
+  es: { mission: 'Nuestra misión', photos: 'Aprender en comunidad', photo: 'Personas adultas alrededor de una computadora.' },
+  en: { mission: 'Our mission', photos: 'Learning in community', photo: 'Adults around a computer.' },
 };
 
 @Component({
@@ -48,7 +48,7 @@ export class MissionReveal {
       ...words(lines[0]),
       { kind: 'logo' },
       ...words(lines[1]),
-      { kind: 'portraits' },
+      { kind: 'photos' },
       ...words(lines[2]),
       { kind: 'photo' },
     ] as Token[];

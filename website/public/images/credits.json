@@ -56,48 +56,6 @@
     "illustrative": true
   },
   {
-    "key": "portrait-01",
-    "id": "2362887",
-    "source": "https://www.pexels.com/photo/portrait-photo-of-woman-smiling-2362887/",
-    "photographer": "nappy",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-02",
-    "id": "12311528",
-    "source": "https://www.pexels.com/photo/portrait-of-smiling-man-12311528/",
-    "photographer": "Joseph Eulo",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-03",
-    "id": "20603347",
-    "source": "https://www.pexels.com/photo/portrait-of-smiling-woman-20603347/",
-    "photographer": "BYB BYB",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
     "key": "community-learning",
     "id": "7983574",
     "source": "https://www.pexels.com/photo/elderly-people-learning-about-computers-7983574/",
@@ -122,90 +80,6 @@
     "focalPoint": {
       "x": 50,
       "y": 50
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-04",
-    "id": "6270159",
-    "source": "https://www.pexels.com/photo/close-up-photo-of-a-smiling-man-6270159/",
-    "photographer": "Artem Podrez",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-05",
-    "id": "6667746",
-    "source": "https://www.pexels.com/photo/portrait-of-an-elderly-man-smiling-6667746/",
-    "photographer": "Kampus Production",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-06",
-    "id": "36904756",
-    "source": "https://www.pexels.com/photo/portrait-of-a-smiling-senior-woman-outdoors-36904756/",
-    "photographer": "Becca Correia",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-07",
-    "id": "21615747",
-    "source": "https://www.pexels.com/photo/face-of-elderly-woman-21615747/",
-    "photographer": "Litoon dev",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-08",
-    "id": "6816181",
-    "source": "https://www.pexels.com/photo/elderly-man-smiling-6816181/",
-    "photographer": "Michelle Zallouaa",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
-    },
-    "illustrative": true
-  },
-  {
-    "key": "portrait-09",
-    "id": "5698208",
-    "source": "https://www.pexels.com/photo/an-elderly-man-smiling-5698208/",
-    "photographer": "Tima Miroshnichenko",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Retrato ilustrativo; no representa a una persona participante de la iniciativa.",
-    "focalPoint": {
-      "x": 50,
-      "y": 35
     },
     "illustrative": true
   },

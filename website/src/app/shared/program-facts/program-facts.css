@@ -5,7 +5,7 @@ section { max-width: var(--content-width); margin-inline: auto; display: grid; g
 .tile { border-radius: 40px; overflow: hidden; box-shadow: var(--shadow-card); }
 .orbit { position: relative; min-height: 554px; display: grid; place-items: center; background: var(--color-warm); }
 .orbit-track { position: absolute; inset: 0; }
-.portrait { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); width: 81px; height: 81px; object-fit: cover; object-position: 50% 35%; border: 3px solid white; border-radius: 50%; box-shadow: var(--shadow-card); }
+.photo { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); width: 81px; height: 81px; object-fit: cover; object-position: 50% 35%; border: 3px solid white; border-radius: 50%; box-shadow: var(--shadow-card); }
 .orbit-copy { position: relative; max-width: 250px; text-align: center; pointer-events: none; }
 .number { font: 400 56px/1.3 var(--font-heading); }
 h2 { font-size: 30.08px; }

@@ -8,18 +8,18 @@ const copy = {
   en: { region: 'Collaboration roles', carousel: 'carousel', track: 'Four roles. Use the keyboard arrows or swipe to explore. Home and End go to the extremes.', eyebrow: 'Role', prev: 'View previous role', next: 'View next role' },
 };
 
-const roles: Record<Lang, { title: string; description: string; portrait: string }[]> = {
+const roles: Record<Lang, { title: string; description: string; image: string }[]> = {
   es: [
-    { title: 'Facilitar talleres', description: 'Explicar con palabras sencillas y guiar ejercicios paso a paso.', portrait: '01' },
-    { title: 'Acompañar prácticas', description: 'Escuchar preguntas y apoyar a cada persona a su ritmo.', portrait: '02' },
-    { title: 'Traducir contenidos', description: 'Ayudar a que las instrucciones sean claras y accesibles.', portrait: '03' },
-    { title: 'Compartir la iniciativa', description: 'Acercar la iniciativa a vecinos, familias y espacios comunitarios.', portrait: '04' },
+    { title: 'Facilitar talleres', description: 'Explicar con palabras sencillas y guiar ejercicios paso a paso.', image: 'guided-practice' },
+    { title: 'Acompañar prácticas', description: 'Escuchar preguntas y apoyar a cada persona a su ritmo.', image: 'peer-support' },
+    { title: 'Traducir contenidos', description: 'Ayudar a que las instrucciones sean claras y accesibles.', image: 'accessible-technology' },
+    { title: 'Compartir la iniciativa', description: 'Acercar la iniciativa a vecinos, familias y espacios comunitarios.', image: 'collaboration' },
   ],
   en: [
-    { title: 'Facilitate workshops', description: 'Explain in simple words and guide step-by-step exercises.', portrait: '01' },
-    { title: 'Guide practice', description: 'Listen to questions and support each person at their pace.', portrait: '02' },
-    { title: 'Translate content', description: 'Help keep instructions clear and accessible.', portrait: '03' },
-    { title: 'Share the initiative', description: 'Bring the initiative to neighbors, families, and community spaces.', portrait: '04' },
+    { title: 'Facilitate workshops', description: 'Explain in simple words and guide step-by-step exercises.', image: 'guided-practice' },
+    { title: 'Guide practice', description: 'Listen to questions and support each person at their pace.', image: 'peer-support' },
+    { title: 'Translate content', description: 'Help keep instructions clear and accessible.', image: 'accessible-technology' },
+    { title: 'Share the initiative', description: 'Bring the initiative to neighbors, families, and community spaces.', image: 'collaboration' },
   ],
 };
 

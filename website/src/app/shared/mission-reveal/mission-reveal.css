@@ -6,9 +6,9 @@ section { --sticky-top: 270px; position: relative; height: 2608px; padding: 100p
 .token { display: inline-block; vertical-align: middle; }
 .animated .token { opacity: calc(.2 + .8 * var(--reveal)); filter: blur(calc(2px * (1 - var(--reveal)))); }
 .token app-brand-mark { --logo-size: 48px; margin: 0 4px; }
-.portraits { display: inline-flex; vertical-align: middle; }
-.portraits img { width: 40px; height: 44px; border: 1px solid white; border-radius: 14px; object-fit: cover; object-position: 50% 35%; box-shadow: var(--shadow-card); }
-.portraits img + img { margin-left: -3px; }
+.photos { display: inline-flex; vertical-align: middle; }
+.photos img { width: 40px; height: 44px; border: 1px solid white; border-radius: 14px; object-fit: cover; object-position: 50% 35%; box-shadow: var(--shadow-card); }
+.photos img + img { margin-left: -3px; }
 .community-photo { display: inline-block; width: 166px; height: 110px; object-fit: cover; border-radius: 16px; box-shadow: var(--shadow-card); }
 section.unpinned { height: auto; padding-block: 80px; }
 .unpinned .scroll-space { height: auto; }

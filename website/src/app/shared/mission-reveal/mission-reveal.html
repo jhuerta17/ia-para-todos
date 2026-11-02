@@ -7,11 +7,11 @@
             @switch (token.kind) {
               @case ('word') { {{ token.text }} }
               @case ('logo') { <app-brand-mark /> }
-              @case ('portraits') {
-                <span class="portraits" role="img" [attr.aria-label]="c().portraits">
-                  <img src="/images/portrait-01-96.webp" alt="" width="40" height="44" loading="lazy" />
-                  <img src="/images/portrait-02-96.webp" alt="" width="40" height="44" loading="lazy" />
-                  <img src="/images/portrait-03-96.webp" alt="" width="40" height="44" loading="lazy" />
+              @case ('photos') {
+                <span class="photos" role="img" [attr.aria-label]="c().photos">
+                  <img src="/images/community-learning-480.webp" alt="" width="40" height="44" loading="lazy" />
+                  <img src="/images/peer-support-480.webp" alt="" width="40" height="44" loading="lazy" />
+                  <img src="/images/collaboration-480.webp" alt="" width="40" height="44" loading="lazy" />
                 </span>
               }
               @case ('photo') { <img class="community-photo" src="/images/community-group-480.webp" [alt]="c().photo" width="166" height="110" loading="lazy" /> }

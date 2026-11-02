@@ -47,11 +47,14 @@ export class ProgramFacts {
   protected readonly pageHidden = signal(false);
   protected readonly count = signal(4);
 
-  protected readonly portraits = Array.from({ length: 9 }, (_, i) => ({
-    image: `/images/portrait-${String(i + 1).padStart(2, '0')}-256.webp`,
-    start: i * 100 / 9,
-    x: 50 + 35 * Math.cos(i * 2 * Math.PI / 9),
-    y: 50 + 39 * Math.sin(i * 2 * Math.PI / 9),
+  protected readonly photos = [
+    'community-group', 'peer-support', 'everyday-phone', 'family-learning', 'collaboration',
+    'family-phone', 'community-learning', 'accessible-technology', 'work-business',
+  ].map((key, i, all) => ({
+    image: `/images/${key}-480.webp`,
+    start: i * 100 / all.length,
+    x: 50 + 35 * Math.cos(i * 2 * Math.PI / all.length),
+    y: 50 + 39 * Math.sin(i * 2 * Math.PI / all.length),
   }));
   protected toggleMotion(): void {
     this.elapsed = 1200;
