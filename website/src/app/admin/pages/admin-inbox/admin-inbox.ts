@@ -21,6 +21,7 @@ const FILTERS: { id: Filter; label: string }[] = [
   { id: 'participate', label: FORM_LABELS.participate },
   { id: 'collaborate', label: FORM_LABELS.collaborate },
   { id: 'newsletter', label: FORM_LABELS.newsletter },
+  { id: 'donate', label: FORM_LABELS.donate },
 ];
 
 // Full submissions inbox: per-form filters plus the message table.

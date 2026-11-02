@@ -12,6 +12,7 @@ const copy: Record<Lang, { title: string; lead: string; paragraphs: string[] }> 
     lead: 'IA Para Todos es una iniciativa comunitaria que ofrece talleres gratuitos en español para aprender a usar la inteligencia artificial en la vida diaria, el trabajo y la familia. Nuestras sesiones son para principiantes, solo requieren un teléfono inteligente y no tienen ningún costo.',
     paragraphs: [
       'Queremos reducir la brecha digital con talleres prácticos y accesibles. El enfoque inicial son personas adultas hispanohablantes que empiezan desde cero, especialmente en Dallas–Fort Worth.',
+      'Todos los cursos y talleres son gratuitos para la comunidad y seguirán siéndolo. Como iniciativa sin fines de lucro, empresas y donaciones externas cubren los costos.',
       'La iniciativa es inclusiva y no sectaria. Todas las personas son bienvenidas, sin importar sus creencias; los talleres no contienen contenido religioso. Nos importa aprender con paciencia, verificar la información y cuidar la privacidad.',
       'Estamos en etapa exploratoria: aún no realizamos talleres oficiales ni formamos alianzas formales, y no somos una organización sin fines de lucro registrada.',
     ],
@@ -21,6 +22,7 @@ const copy: Record<Lang, { title: string; lead: string; paragraphs: string[] }> 
     lead: 'IA Para Todos (AI for Everyone) is a community initiative offering free Spanish-language workshops that help adults understand and use artificial intelligence in daily life, work, and family. Sessions are beginner-friendly, smartphone-only, and always free.',
     paragraphs: [
       'We want to close the digital divide with hands-on, accessible workshops. The initial focus is Spanish-speaking adults starting from zero, especially in Dallas–Fort Worth.',
+      'Every course and workshop is free for the community and will stay that way. As a nonprofit initiative, companies and external donations cover the costs.',
       'The initiative is inclusive and nonsectarian. Everyone is welcome, whatever their beliefs; workshops contain no religious content. We care about learning patiently, verifying information, and protecting privacy.',
       'We are in the exploratory stage: we have not yet held official workshops or formed formal partnerships, and we are not a registered nonprofit.',
     ],

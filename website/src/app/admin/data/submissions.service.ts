@@ -6,7 +6,7 @@ import { DemoState } from './demo-state';
 import { Submission, SubmissionForm } from './submissions';
 
 const ENDPOINT = '/.netlify/functions/submissions';
-const KNOWN_FORMS: readonly string[] = ['participate', 'collaborate', 'newsletter'];
+const KNOWN_FORMS: readonly string[] = ['participate', 'collaborate', 'newsletter', 'donate'];
 
 const isRow = (value: unknown): value is Submission => {
   if (typeof value !== 'object' || value === null) return false;

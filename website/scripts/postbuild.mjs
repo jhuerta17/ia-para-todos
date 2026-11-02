@@ -32,7 +32,7 @@ for (const [name, es, en] of pairs) {
   if (es.length !== en.length) fail(`${name}: es has ${es.length} entries, en has ${en.length}; index pairing broken`);
 }
 
-const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'historias', 'contacto', 'cursos'];
+const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'historias', 'contacto', 'cursos', 'donar'];
 // Route records with their language peer for hreflang.
 const routes = [];
 for (const lang of LANGS) {
@@ -126,9 +126,11 @@ const formPages = [
   ['index.html', 'participate'],
   ['comunidad/index.html', 'collaborate'],
   ['participar/index.html', 'participate'],
+  ['donar/index.html', 'donate'],
   ['en/index.html', 'participate'],
   ['en/community/index.html', 'collaborate'],
   ['en/participate/index.html', 'participate'],
+  ['en/donate/index.html', 'donate'],
 ];
 for (const [page, name] of formPages) {
   const html = readFileSync(join(publish, page), 'utf8');

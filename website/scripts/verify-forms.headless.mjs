@@ -81,6 +81,8 @@ async function main() {
       { key: 'participate-es', url: '/participar', form: 'participate', interest: 'Vida diaria', message: 'Quiero practicar desde cero.', success: 'Hemos recibido tu mensaje', sending: 'Enviando', consent: true },
       { key: 'participate-en', url: '/en/participate', form: 'participate', interest: 'Everyday life', message: 'I want to practice from scratch.', success: 'We received your message', sending: 'Sending', consent: true },
       { key: 'collaborate-es', url: '/comunidad', form: 'collaborate', interest: 'Traducir contenidos', message: 'Quiero practicar desde cero.', success: 'Hemos recibido tu mensaje', sending: 'Enviando', consent: true },
+      { key: 'donate-es', url: '/donar', form: 'donate', interest: 'Patrocinio empresarial', message: 'Queremos apoyar como empresa.', success: 'Hemos recibido tu mensaje', sending: 'Enviando', consent: true },
+      { key: 'donate-en', url: '/en/donate', form: 'donate', interest: 'Company sponsorship', message: 'We want to support as a company.', success: 'We received your message', sending: 'Sending', consent: true },
       { key: 'newsletter-es', url: '/', form: 'newsletter', success: 'Gracias por suscribirte', sending: 'Enviando', consent: false },
       { key: 'newsletter-en', url: '/en', form: 'newsletter', success: 'Thanks for subscribing', sending: 'Sending', consent: false },
     ];
@@ -189,7 +191,7 @@ async function main() {
     }
 
     // ---- 4. Responsiveness + performance observation (no thresholds) ----
-    for (const [key, url] of [['home', '/'], ['participate', '/participar'], ['home-en', '/en']]) {
+    for (const [key, url] of [['home', '/'], ['participate', '/participar'], ['donate', '/donar'], ['home-en', '/en']]) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
       let requests = 0;
       page.on('request', () => { requests += 1; });

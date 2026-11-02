@@ -1,0 +1,17 @@
+<main id="main-content" tabindex="-1">
+  <app-page-cover image="collaboration" icon="users" [alt]="c().coverAlt" [title]="c().title" [summary]="c().summary" />
+  <section class="panel" aria-labelledby="ways-title">
+    <header appRevealOnEnter>
+      <h2 id="ways-title">{{ c().waysHeading }}</h2>
+      <p>{{ c().waysLead }}</p>
+    </header>
+    <div class="ways" appRevealOnEnter>
+      @for (way of c().ways; track way.title) {
+        <div class="way"><app-icon [name]="way.icon" /><div><h3>{{ way.title }}</h3><p>{{ way.description }}</p></div></div>
+      }
+      <p class="note">{{ c().waysNote }}</p>
+    </div>
+  </section>
+  <app-participation-section [page]="true" context="donate" />
+  <app-faq-section [heading]="c().faqHeading" [lead]="c().faqLead" [items]="c().faq" />
+</main>

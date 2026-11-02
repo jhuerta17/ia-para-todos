@@ -11,7 +11,7 @@
             <div>
               <h3>{{ tier.name }}</h3>
               <p>{{ tier.summary }}</p>
-              <p class="meta"><strong>{{ tier.price }}</strong> · <span>{{ tier.status }}</span></p>
+              <p class="meta"><strong>{{ c().free }}</strong> · <span>{{ tier.status }}</span></p>
             </div>
           </li>
         }
@@ -19,6 +19,7 @@
       <p class="note" appRevealOnEnter>{{ c().note }}</p>
       <div class="actions" appRevealOnEnter>
         <app-action-link [to]="c().exploreTo" [label]="c().explore" />
+        <app-action-link to="/donar" [label]="c().donate" />
       </div>
     </div>
   </section>

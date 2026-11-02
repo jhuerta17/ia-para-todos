@@ -16,6 +16,7 @@ const TITLES: Record<Lang, Record<StaticKey, string>> = {
     recursos: 'Recursos para aprender · IA para todos', nosotros: 'Nosotros · IA para todos', comunidad: 'Comunidad · IA para todos',
     participar: 'Participa · IA para todos', historias: 'Historias · IA para todos', contacto: 'Contacto · IA para todos',
     cursos: 'Cursos en línea · IA para todos',
+    donar: 'Donar · IA para todos',
     privacidad: '', terminos: '', seguridad: '',
   },
   en: {
@@ -23,6 +24,7 @@ const TITLES: Record<Lang, Record<StaticKey, string>> = {
     recursos: 'Resources for learning · AI for everyone', nosotros: 'About us · AI for everyone', comunidad: 'Community · AI for everyone',
     participar: 'Participate · AI for everyone', historias: 'Stories · AI for everyone', contacto: 'Contact · AI for everyone',
     cursos: 'Online courses · AI for everyone',
+    donar: 'Donate · AI for everyone',
     privacidad: '', terminos: '', seguridad: '',
   },
 };
@@ -55,6 +57,7 @@ function staticRoutes(lang: Lang): Routes {
     { path: PATHS.historias[lang], loadComponent: () => import('./pages/stories/stories').then(module => module.Stories), title: TITLES[lang].historias, data: { lang, key: 'historias', pair: pair('historias') } },
     { path: PATHS.contacto[lang], loadComponent: () => import('./pages/contact/contact').then(module => module.Contact), title: TITLES[lang].contacto, data: { lang, key: 'contacto', pair: pair('contacto') } },
     { path: PATHS.cursos[lang], loadComponent: () => import('./pages/courses/courses').then(module => module.Courses), title: TITLES[lang].cursos, data: { lang, key: 'cursos', pair: pair('cursos') } },
+    { path: PATHS.donar[lang], loadComponent: () => import('./pages/donate/donate').then(module => module.Donate), title: TITLES[lang].donar, data: { lang, key: 'donar', pair: pair('donar') } },
     ...informationPages[lang].map((information, index) => ({ path: information.path, loadComponent: () => import('./pages/information/information').then(module => module.Information), title: `${information.title} · ${brand}`, data: { lang, pair: `/${informationPages[other][index].path}`, information } })),
   ];
 }

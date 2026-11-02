@@ -10,24 +10,25 @@ import type { Lang } from '../../i18n/lang';
 interface Tier {
   name: string;
   summary: string;
-  price: string;
   status: string;
   available: boolean;
 }
 
-const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladderHeading: string; ladderLead: string; note: string; tiers: Tier[]; explore: string; exploreTo: string; lessonHeading: string; lessonLead: string; steps: string[] }> = {
+const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladderHeading: string; ladderLead: string; free: string; note: string; donate: string; tiers: Tier[]; explore: string; exploreTo: string; lessonHeading: string; lessonLead: string; steps: string[] }> = {
   es: {
     coverAlt: 'Personas adultas aprendiendo con una computadora.',
     title: 'Cursos en línea',
-    lead: 'Lleva los talleres a tu ritmo: lecciones cortas en español, con práctica guiada por IA. Empieza gratis.',
+    lead: 'Lleva los talleres a tu ritmo: lecciones cortas en español, con práctica guiada por IA. Siempre gratis.',
     ladderHeading: 'El camino',
     ladderLead: 'Del primer prompt a facilitar talleres en tu comunidad.',
-    note: 'Los cursos de pago están en preparación; el mini-curso gratuito ya funciona.',
+    free: 'Gratis',
+    note: 'Todos los cursos son gratuitos para la comunidad y seguirán siéndolo. Empresas y donaciones hacen esto posible.',
+    donate: 'Apoyar con una donación',
     tiers: [
-      { name: 'Mini-curso gratuito', summary: 'Tu primer prompt en 5 minutos, con el tutor de práctica.', price: 'Gratis', status: 'Disponible ahora', available: true },
-      { name: 'IA para el Trabajo', summary: 'Currículum, mensajes profesionales y entrevistas.', price: '$49', status: 'Próximamente', available: false },
-      { name: 'IA para tu Negocio', summary: 'Anuncios, clientes y organización, con sesiones en vivo.', price: '$99', status: 'Próximamente', available: false },
-      { name: 'Facilitador Certificado', summary: 'Enseña los talleres en tu comunidad.', price: '$149', status: 'Próximamente', available: false },
+      { name: 'Mini-curso gratuito', summary: 'Tu primer prompt en 5 minutos, con el tutor de práctica.', status: 'Disponible ahora', available: true },
+      { name: 'IA para el Trabajo', summary: 'Currículum, mensajes profesionales y entrevistas.', status: 'En preparación', available: false },
+      { name: 'IA para tu Negocio', summary: 'Anuncios, clientes y organización, con sesiones en vivo.', status: 'En preparación', available: false },
+      { name: 'Facilitador Certificado', summary: 'Enseña los talleres en tu comunidad.', status: 'En preparación', available: false },
     ],
     explore: 'Probar el mini-curso',
     exploreTo: '/actividades/primer-prompt',
@@ -42,15 +43,17 @@ const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladder
   en: {
     coverAlt: 'Adults learning with a computer.',
     title: 'Online courses',
-    lead: 'Take the workshops at your pace: short lessons in Spanish, with AI-guided practice. Start free.',
+    lead: 'Take the workshops at your pace: short lessons in Spanish, with AI-guided practice. Always free.',
     ladderHeading: 'The path',
     ladderLead: 'From your first prompt to facilitating workshops in your community.',
-    note: 'Paid courses are in preparation; the free mini-course already works.',
+    free: 'Free',
+    note: 'Every course is free for the community and will stay that way. Companies and donations make this possible.',
+    donate: 'Support with a donation',
     tiers: [
-      { name: 'Free mini-course', summary: 'Your first prompt in 5 minutes, with the practice tutor.', price: 'Free', status: 'Available now', available: true },
-      { name: 'AI for Work', summary: 'Résumés, professional messages, and interviews.', price: '$49', status: 'Coming soon', available: false },
-      { name: 'AI for your Business', summary: 'Ads, customers, and organization, with live sessions.', price: '$99', status: 'Coming soon', available: false },
-      { name: 'Certified Facilitator', summary: 'Teach the workshops in your community.', price: '$149', status: 'Coming soon', available: false },
+      { name: 'Free mini-course', summary: 'Your first prompt in 5 minutes, with the practice tutor.', status: 'Available now', available: true },
+      { name: 'AI for Work', summary: 'Résumés, professional messages, and interviews.', status: 'In preparation', available: false },
+      { name: 'AI for your Business', summary: 'Ads, customers, and organization, with live sessions.', status: 'In preparation', available: false },
+      { name: 'Certified Facilitator', summary: 'Teach the workshops in your community.', status: 'In preparation', available: false },
     ],
     explore: 'Try the mini-course',
     exploreTo: '/actividades/first-prompt',

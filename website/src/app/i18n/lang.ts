@@ -19,7 +19,7 @@ export const OG_LOCALE: Record<Lang, string> = {
 /** Static section keys (Spanish key names are internal identifiers only). */
 export type StaticKey =
   | 'home' | 'talleres' | 'actividades' | 'recursos' | 'nosotros' | 'comunidad'
-  | 'participar' | 'historias' | 'contacto' | 'cursos' | 'privacidad' | 'terminos' | 'seguridad';
+  | 'participar' | 'historias' | 'contacto' | 'cursos' | 'donar' | 'privacidad' | 'terminos' | 'seguridad';
 
 /** Full route path per section and language (no leading slash). */
 export const PATHS: Record<StaticKey, Record<Lang, string>> = {
@@ -33,6 +33,7 @@ export const PATHS: Record<StaticKey, Record<Lang, string>> = {
   historias: { es: 'historias', en: 'en/stories' },
   contacto: { es: 'contacto', en: 'en/contact' },
   cursos: { es: 'cursos', en: 'en/courses' },
+  donar: { es: 'donar', en: 'en/donate' },
   privacidad: { es: 'privacidad', en: 'en/privacy' },
   terminos: { es: 'terminos', en: 'en/terms' },
   seguridad: { es: 'seguridad', en: 'en/safety' },

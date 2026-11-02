@@ -6,11 +6,19 @@ import { Language } from '../../i18n/language';
 import { Lang } from '../../i18n/lang';
 
 const copy = {
-  es: { heading: 'Aprendamos paso a paso', lead: 'Cuéntanos tu interés. Usamos tus datos solo para contactarte sobre talleres y actividades.', hiddenHeading: 'Formulario de contacto y pasos', collaborate: 'Colaboración', participate: 'Participa', note: 'Los campos con * son obligatorios.', name: 'Nombre *', namePh: 'Tu nombre', nameError: 'Este campo es obligatorio.', email: 'Correo electrónico *', emailPh: 'nombre@ejemplo.com', emailError: 'Escribe un correo válido, por ejemplo nombre@ejemplo.com.', phone: 'Teléfono (opcional)', phonePh: '(555) 000-0000', interest: 'Taller de interés', collaborateWay: 'Forma de colaborar', choose: 'Selecciona una opción', interestError: 'Elige una opción de interés.', message: 'Mensaje (opcional)', messagePh: '¿Qué te gustaría practicar?', consent: 'Acepto que usen mis datos para contactarme sobre talleres y actividades. *', consentError: 'Debes aceptar para enviar el formulario.', submit: 'Enviar', sending: 'Enviando…', result: '¡Gracias! Hemos recibido tu mensaje y te contactaremos pronto.', failed: 'No pudimos enviar el formulario. Inténtalo de nuevo.', honeypot: 'No completar este campo' },
-  en: { heading: 'Let’s learn step by step', lead: 'Tell us about your interest. We use your data only to contact you about workshops and activities.', hiddenHeading: 'Contact form and steps', collaborate: 'Collaborate', participate: 'Participate', note: 'Fields with * are required.', name: 'Name *', namePh: 'Your name', nameError: 'This field is required.', email: 'Email *', emailPh: 'name@example.com', emailError: 'Write a valid email, for example name@example.com.', phone: 'Phone (optional)', phonePh: '(555) 000-0000', interest: 'Workshop of interest', collaborateWay: 'Way to collaborate', choose: 'Choose an option', interestError: 'Choose an option of interest.', message: 'Message (optional)', messagePh: 'What would you like to practice?', consent: 'I agree that my data will be used to contact me about workshops and activities. *', consentError: 'You must accept to send the form.', submit: 'Send', sending: 'Sending…', result: 'Thanks! We received your message and will contact you soon.', failed: 'We could not send the form. Please try again.', honeypot: 'Do not fill in this field' },
+  es: { heading: 'Aprendamos paso a paso', lead: 'Cuéntanos tu interés. Usamos tus datos solo para contactarte sobre talleres y actividades.', hiddenHeading: 'Formulario de contacto y pasos', collaborate: 'Colaboración', participate: 'Participa', donate: 'Donar', note: 'Los campos con * son obligatorios.', name: 'Nombre *', namePh: 'Tu nombre', nameError: 'Este campo es obligatorio.', email: 'Correo electrónico *', emailPh: 'nombre@ejemplo.com', emailError: 'Escribe un correo válido, por ejemplo nombre@ejemplo.com.', phone: 'Teléfono (opcional)', phonePh: '(555) 000-0000', interest: 'Taller de interés', collaborateWay: 'Forma de colaborar', supportWay: 'Forma de apoyo', choose: 'Selecciona una opción', interestError: 'Elige una opción de interés.', message: 'Mensaje (opcional)', messagePh: '¿Qué te gustaría practicar?', consent: 'Acepto que usen mis datos para contactarme sobre talleres y actividades. *', consentError: 'Debes aceptar para enviar el formulario.', submit: 'Enviar', sending: 'Enviando…', result: '¡Gracias! Hemos recibido tu mensaje y te contactaremos pronto.', failed: 'No pudimos enviar el formulario. Inténtalo de nuevo.', honeypot: 'No completar este campo' },
+  en: { heading: 'Let’s learn step by step', lead: 'Tell us about your interest. We use your data only to contact you about workshops and activities.', hiddenHeading: 'Contact form and steps', collaborate: 'Collaborate', participate: 'Participate', donate: 'Donate', note: 'Fields with * are required.', name: 'Name *', namePh: 'Your name', nameError: 'This field is required.', email: 'Email *', emailPh: 'name@example.com', emailError: 'Write a valid email, for example name@example.com.', phone: 'Phone (optional)', phonePh: '(555) 000-0000', interest: 'Workshop of interest', collaborateWay: 'Way to collaborate', supportWay: 'Way to support', choose: 'Choose an option', interestError: 'Choose an option of interest.', message: 'Message (optional)', messagePh: 'What would you like to practice?', consent: 'I agree that my data will be used to contact me about workshops and activities. *', consentError: 'You must accept to send the form.', submit: 'Send', sending: 'Sending…', result: 'Thanks! We received your message and will contact you soon.', failed: 'We could not send the form. Please try again.', honeypot: 'Do not fill in this field' },
 };
 
-const steps: Record<Lang, Record<'workshops' | 'community', { title: string; text: string; icon: IconName }[]>> = {
+/** Copy overrides applied on top of the base copy for the donate context. */
+const donateCopy = {
+  es: { heading: 'Apoya la causa', lead: 'Cuéntanos cómo te gustaría apoyar. Usamos tus datos solo para coordinar tu donación.', hiddenHeading: 'Formulario de donaciones y pasos', messagePh: '¿Cómo te gustaría apoyar?', consent: 'Acepto que usen mis datos para contactarme sobre mi donación. *', result: '¡Gracias! Hemos recibido tu mensaje y te contactaremos pronto para coordinar tu apoyo.' },
+  en: { heading: 'Support the cause', lead: 'Tell us how you would like to support. We use your data only to coordinate your donation.', hiddenHeading: 'Donations form and steps', messagePh: 'How would you like to support?', consent: 'I agree that my data will be used to contact me about my donation. *', result: 'Thanks! We received your message and will contact you soon to coordinate your support.' },
+};
+
+export type ParticipationContext = 'workshops' | 'community' | 'donate';
+
+const steps: Record<Lang, Record<ParticipationContext, { title: string; text: string; icon: IconName }[]>> = {
   es: {
     workshops: [
       { title: 'Elige tu interés', text: 'Explora los cuatro temas y elige lo que te gustaría practicar.', icon: 'book' },
@@ -20,6 +28,11 @@ const steps: Record<Lang, Record<'workshops' | 'community', { title: string; tex
     community: [
       { title: 'Imagina cómo ayudar', text: 'Facilitación, acompañamiento, traducción o difusión: elige el tuyo en el formulario.', icon: 'users' },
       { title: 'Completa el formulario', text: 'Cuéntanos cómo te gustaría colaborar.', icon: 'pencil' },
+      { title: 'Te contactamos', text: 'Revisamos cada mensaje y te escribimos pronto.', icon: 'shield-check' },
+    ],
+    donate: [
+      { title: 'Elige cómo apoyar', text: 'Donación individual, patrocinio empresarial o apoyo en especie.', icon: 'users' },
+      { title: 'Completa el formulario', text: 'Déjanos tus datos y te contactamos para coordinar.', icon: 'pencil' },
       { title: 'Te contactamos', text: 'Revisamos cada mensaje y te escribimos pronto.', icon: 'shield-check' },
     ],
   },
@@ -34,17 +47,24 @@ const steps: Record<Lang, Record<'workshops' | 'community', { title: string; tex
       { title: 'Complete the form', text: 'Tell us how you would like to collaborate.', icon: 'pencil' },
       { title: 'We contact you', text: 'We review every message and write back soon.', icon: 'shield-check' },
     ],
+    donate: [
+      { title: 'Choose how to support', text: 'Individual donation, company sponsorship, or in-kind support.', icon: 'users' },
+      { title: 'Complete the form', text: 'Leave your details and we will contact you to coordinate.', icon: 'pencil' },
+      { title: 'We contact you', text: 'We review every message and write back soon.', icon: 'shield-check' },
+    ],
   },
 };
 
-const choices: Record<Lang, Record<'workshops' | 'community', string[]>> = {
+const choices: Record<Lang, Record<ParticipationContext, string[]>> = {
   es: {
     workshops: ['Introducción a la IA', 'Vida diaria', 'Trabajo y negocios', 'Padres y familias'],
     community: ['Facilitar talleres', 'Acompañar prácticas', 'Traducir contenidos', 'Compartir la iniciativa'],
+    donate: ['Donación individual', 'Patrocinio empresarial', 'Apoyo en especie', 'Otra forma de apoyo'],
   },
   en: {
     workshops: ['Intro to AI', 'Everyday life', 'Work and business', 'Parents and families'],
     community: ['Facilitate workshops', 'Guide practice', 'Translate content', 'Share the initiative'],
+    donate: ['Individual donation', 'Company sponsorship', 'In-kind support', 'Another way to support'],
   },
 };
 
@@ -56,12 +76,22 @@ export class ParticipationSection {
   protected readonly failed = signal(false);
   protected readonly sending = signal(false);
   readonly page = input(false);
-  readonly context = input<'workshops' | 'community'>('workshops');
-  protected readonly c = computed(() => copy[this.language.lang()]);
+  readonly context = input<ParticipationContext>('workshops');
+  protected readonly c = computed(() => this.context() === 'donate'
+    ? { ...copy[this.language.lang()], ...donateCopy[this.language.lang()] }
+    : copy[this.language.lang()]);
   protected readonly choices = computed(() => choices[this.language.lang()][this.context()]);
   protected readonly steps = computed(() => steps[this.language.lang()][this.context()]);
+  protected readonly formTitle = computed(() => {
+    const context = this.context();
+    return context === 'community' ? this.c().collaborate : context === 'donate' ? this.c().donate : this.c().participate;
+  });
+  protected readonly interestLabel = computed(() => {
+    const context = this.context();
+    return context === 'community' ? this.c().collaborateWay : context === 'donate' ? this.c().supportWay : this.c().interest;
+  });
   /** Netlify Forms name. Rendered into the prerendered HTML for detection. */
-  protected readonly formName = computed(() => this.context() === 'community' ? 'collaborate' : 'participate');
+  protected readonly formName = computed(() => this.context() === 'donate' ? 'donate' : this.context() === 'community' ? 'collaborate' : 'participate');
   protected readonly form = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(/\S/)] }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),

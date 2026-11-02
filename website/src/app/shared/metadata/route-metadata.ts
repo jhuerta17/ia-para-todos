@@ -15,7 +15,8 @@ const DESCRIPTIONS: Record<Lang, Record<string, string>> = {
     participar: 'Cuéntanos en qué taller te gustaría participar. Usamos tus datos solo para contactarte.',
     historias: 'Cinco escenarios de aprendizaje inventados para imaginar cómo practicar con IA. Ejemplos ilustrativos, no testimonios.',
     contacto: 'Contacto de IA Para Todos, iniciativa educativa en español en Dallas–Fort Worth.',
-    cursos: 'Cursos en línea en español: mini-curso gratuito con tutor de IA y rutas de pago en preparación.',
+    cursos: 'Cursos en línea en español, siempre gratuitos: mini-curso con tutor de IA y más rutas gratuitas en preparación.',
+    donar: 'Dona a IA Para Todos: los cursos y talleres son gratuitos para la comunidad gracias a empresas y donaciones.',
     '**': 'No encontramos esa página. Vuelve al inicio o explora los talleres de IA Para Todos.',
   },
   en: {
@@ -26,7 +27,8 @@ const DESCRIPTIONS: Record<Lang, Record<string, string>> = {
     participar: 'Tell us which workshop you would like to join. We use your data only to contact you.',
     historias: 'Five fictional learning scenarios to imagine practicing with AI. Illustrative examples, not testimonials.',
     contacto: 'Contact AI for everyone, a Spanish-language educational initiative in Dallas–Fort Worth.',
-    cursos: 'Online courses in Spanish: free mini-course with an AI tutor, plus paid tracks in preparation.',
+    cursos: 'Online courses in Spanish, always free: mini-course with an AI tutor, plus more free tracks in preparation.',
+    donar: 'Donate to AI for everyone: courses and workshops stay free for the community thanks to companies and donations.',
     '**': 'We could not find that page. Go back home or explore the AI for everyone workshops.',
   },
 };

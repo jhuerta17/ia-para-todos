@@ -96,7 +96,7 @@ export class AdminOverview {
   });
 
   protected readonly formCounts = computed(() => {
-    const counts: Record<SubmissionForm, number> = { participate: 0, collaborate: 0, newsletter: 0 };
+    const counts: Record<SubmissionForm, number> = { participate: 0, collaborate: 0, newsletter: 0, donate: 0 };
     for (const row of this.submissions() ?? []) counts[row.form] += 1;
     return counts;
   });
