@@ -11,7 +11,7 @@ import type { Context } from '@netlify/functions';
 // -> { reply: string, demo: boolean }
 
 const API_URL = (process.env['META_MUSE_API_URL'] ?? 'https://api.meta.ai/v1').replace(/\/+$/, '');
-const MODEL = process.env['META_MUSE_MODEL'] ?? 'muse-spark';
+const MODEL = process.env['META_MUSE_MODEL'] ?? 'muse-spark-1.3-contributor';
 const MAX_INPUT = 2000;
 const MAX_HISTORY = 6;
 const MAX_TOKENS = 400;

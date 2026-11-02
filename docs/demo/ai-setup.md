@@ -23,7 +23,7 @@ serves both AI surfaces. Keys never reach the browser.
 |---|---|---|---|
 | `META_MUSE_API_KEY` | yes, for live | — | Bearer key from the Meta developer dashboard |
 | `META_MUSE_API_URL` | no | `https://api.meta.ai/v1` | Reported Model API base; verify officially |
-| `META_MUSE_MODEL` | no | `muse-spark` | Model id; check the dashboard for the current one |
+| `META_MUSE_MODEL` | no | `muse-spark-1.3-contributor` | Selected model; an environment override takes precedence over this default |
 
 Set the key, redeploy (functions read env at deploy), and both
 surfaces switch from labeled samples to live answers. No key, no
