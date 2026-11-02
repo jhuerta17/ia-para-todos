@@ -1,7 +1,9 @@
 import { createHash, randomUUID } from 'node:crypto';
 import type { Context } from '@netlify/functions';
 
-export const OUTPUT_TOKEN_CAP = 400;
+// Meta counts internal reasoning and visible text together. Keep room for both.
+export const OUTPUT_TOKEN_CAP = 1600;
+export const REASONING_EFFORT = 'minimal';
 export const MODELS = { tutor: 'muse-spark-1.3-contributor', triage: 'muse-spark-1.3' } as const;
 export const LIMITS = { perMinute: 20, perDay: 100, concurrent: 3, perIPConcurrent: 1 } as const;
 export const env = (name: string): string => {

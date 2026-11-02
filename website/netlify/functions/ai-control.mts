@@ -1,7 +1,9 @@
 import type { Context } from '@netlify/functions';
 import * as s from '../lib/ai-security.mts';
+import { createHandler } from './ai-assist.mts';
 
 export function createControlHandler(control: s.LiveControl = s.liveControl, getUser = s.adminUser, fetcher: typeof fetch = (...args) => fetch(...args)) {
+  const testTutor = createHandler({ control, limits: new s.LocalLimits(), fetch: fetcher, getUser, now: Date.now });
   return async (req: Request, context: Context): Promise<Response> => {
     try {
       if (!['GET', 'POST'].includes(req.method)) return s.json({ reason: 'method_not_allowed' }, 405, { Allow: 'GET, POST' });
@@ -12,7 +14,7 @@ export function createControlHandler(control: s.LiveControl = s.liveControl, get
       let diagnostics: Record<string, unknown> | undefined;
       if (req.method === 'POST') {
         const body = await s.readJSON(req);
-        if (Object.keys(body).some(key => key !== 'action') || !['enable', 'pause', 'check'].includes(String(body['action']))) throw new s.HttpError(400, 'invalid_action');
+        if (Object.keys(body).some(key => key !== 'action') || !['enable', 'pause', 'check', 'test'].includes(String(body['action']))) throw new s.HttpError(400, 'invalid_action');
         if (body['action'] === 'enable' && !s.liveConfigured(context)) throw new s.HttpError(409, 'api_key_missing');
         if (body['action'] === 'check') {
           diagnostics = { checkedAt: new Date().toISOString(), requestId: context.requestId ?? null,
@@ -43,6 +45,20 @@ export function createControlHandler(control: s.LiveControl = s.liveControl, get
               }
             } catch (error) { connection = 'unavailable'; diagnostics['networkError'] = error instanceof DOMException ? error.name : 'request_failed'; }
           }
+        } else if (body['action'] === 'test') {
+          // Exercise the same tutor handler, settings, switch, limits, and parser as courses.
+          const response = await testTutor(new Request(new URL('/api/ai-assist', req.url), {
+            method: 'POST', headers: { Origin: req.headers.get('origin')!, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ task: 'tutor', lang: 'es', history: [], acknowledged: true,
+              input: '¿Qué es un prompt? Responde con una frase sencilla.' }),
+          }), context);
+          const result = await response.json() as { reply?: string; demo?: boolean; reason?: string; retryAt?: string; generation?: Record<string, unknown> };
+          connection = response.ok && result.demo === false && !!result.reply?.trim() ? 'tutor_ok' : 'tutor_failed';
+          diagnostics = { checkedAt: new Date().toISOString(), requestId: context.requestId ?? null,
+            endpoint: 'https://api.meta.ai/v1/responses', model: s.MODELS.tutor,
+            reasoningEffort: s.REASONING_EFFORT, maxOutputTokens: s.OUTPUT_TOKEN_CAP,
+            tutorHttpStatus: response.status, demo: result.demo ?? null, reason: result.reason ?? null,
+            reply: result.reply ?? null, generation: result.generation ?? null, retryAt: result.retryAt ?? null };
         } else await control.write(body['action'] === 'enable');
         s.audit(context, { reason: `admin_${body['action']}` });
       }

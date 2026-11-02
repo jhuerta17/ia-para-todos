@@ -16,7 +16,7 @@ const control = { read: async () => live, write: async enabled => { live = enabl
 const provider = async (_url, init) => {
   calls++;
   const payload = JSON.parse(init.body);
-  assert.equal(payload.max_output_tokens, 400); assert.deepEqual(payload.tools, []); assert.equal(payload.store, false);
+  assert.equal(payload.max_output_tokens, 1600); assert.deepEqual(payload.reasoning, { effort: 'minimal' }); assert.deepEqual(payload.tools, []); assert.equal(payload.store, false);
   return Response.json({ output: [{ type: 'message', role: 'assistant', content: [{ type: 'output_text', text: 'A live reply' }] }], usage: { input_tokens: 100, output_tokens: 25 } });
 };
 const handler = (overrides = {}) => createHandler({ control, limits: new s.LocalLimits(), fetch: provider, getUser: admin, now: Date.now, ...overrides });
@@ -142,6 +142,34 @@ try {
     assert.equal(result.diagnostics.providerError.code, 'invalid_api_key');
     assert.equal(result.diagnostics.providerError.message, 'Unauthorized [redacted]');
     assert.ok(!JSON.stringify(result).includes('test-key'));
+  });
+  await check('admin tutor test uses actual tutor settings and reports real answers vs capped reasoning', async () => {
+    live = true;
+    const make = fetch => createControlHandler(control, admin, fetch);
+    const success = await (await make(provider)(post({ action: 'test' }), context)).json();
+    assert.equal(success.connection, 'tutor_ok'); assert.equal(success.diagnostics.demo, false);
+    assert.equal(success.diagnostics.reply, 'A live reply');
+    assert.equal(success.diagnostics.maxOutputTokens, 1600); assert.equal(success.diagnostics.reasoningEffort, 'minimal');
+    const reasoningOnly = async () => Response.json({ status: 'incomplete', incomplete_details: { reason: 'max_output_tokens' },
+      output: [{ type: 'reasoning', summary: [] }], usage: { input_tokens: 100, output_tokens: 1600, output_tokens_details: { reasoning_tokens: 1600 } } });
+    const failure = await (await make(reasoningOnly)(post({ action: 'test' }), context)).json();
+    assert.equal(failure.connection, 'tutor_failed'); assert.equal(failure.diagnostics.reason, 'provider_output_limit');
+    assert.equal(failure.diagnostics.demo, true);
+    assert.equal(failure.diagnostics.generation.reasoningTokens, 1600);
+    assert.equal(failure.diagnostics.generation.incompleteReason, 'max_output_tokens');
+    const noUser = createControlHandler(control, async () => null, async () => { throw new Error('must not call'); });
+    assert.equal((await noUser(post({ action: 'test' }), context)).status, 401);
+    live = false; calls = 0;
+    const paused = await (await make(provider)(post({ action: 'test' }), context)).json();
+    assert.equal(paused.diagnostics.reason, 'paused'); assert.equal(calls, 0);
+  });
+  await check('a reasoning item followed by assistant text is rendered as a live answer', async () => {
+    live = true;
+    const fetch = async () => Response.json({ status: 'completed', output: [
+      { type: 'reasoning', summary: [] }, { type: 'message', role: 'assistant', content: [{ type: 'output_text', text: 'Un prompt es una instrucción para la IA.' }] }
+    ], usage: { input_tokens: 100, output_tokens: 450, output_tokens_details: { reasoning_tokens: 400 } } });
+    const result = await (await handler({ fetch })(post(), context)).json();
+    assert.equal(result.demo, false); assert.equal(result.reply, 'Un prompt es una instrucción para la IA.');
   });
   await check('audit logs exclude prompts, replies, raw IPs and keys', async () => {
     const text = logs.join('\n');

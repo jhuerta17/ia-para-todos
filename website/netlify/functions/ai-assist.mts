@@ -136,8 +136,10 @@ export function createHandler(deps: Dependencies = defaults) {
       let usageInput = -1, usageOutput = -1;
       let failureReason = 'upstream_unavailable';
       let upstreamStatus = 0;
+      let reasoningTokens = -1;
+      let incompleteReason: string | null = null;
       const payload = { model, instructions: SYSTEMS[task][lang],
-        input: [...history, { role: 'user', content: input }], tools: [] };
+        input: [...history, { role: 'user', content: input }], tools: [], reasoning: { effort: security.REASONING_EFFORT } };
       const signal = AbortSignal.timeout(20000);
       const headers = { Authorization: `Bearer ${security.env('META_MUSE_API_KEY').trim()}`, 'Content-Type': 'application/json' };
       try {
@@ -158,14 +160,20 @@ export function createHandler(deps: Dependencies = defaults) {
         if (Number.isSafeInteger(uin) && Number.isSafeInteger(uout) && (uin as number) >= 0 && (uout as number) >= 0) {
           usageInput = uin as number; usageOutput = uout as number;
         }
+        const details = usage?.['output_tokens_details'] as Record<string, unknown> | undefined;
+        if (Number.isSafeInteger(details?.['reasoning_tokens'])) reasoningTokens = details!['reasoning_tokens'] as number;
+        const incomplete = result['incomplete_details'] as Record<string, unknown> | undefined;
+        const reportedReason = incomplete?.['reason'];
+        incompleteReason = typeof reportedReason === 'string' && ['max_output_tokens', 'content_filter', 'context_window_exceeded'].includes(reportedReason) ? reportedReason : null;
         reply = responseText(result);
         if (!reply) failureReason = result['status'] === 'incomplete' ? 'provider_output_limit' : 'provider_empty_response';
       } catch { /* No retries and no provider error bodies in logs. */ }
       finally { admission.release?.(); }
       security.audit(context, { task, model, inputTokens: usageInput, outputTokens: usageOutput,
-        upstreamStatus, reason: reply ? 'ok' : failureReason, demo: !reply });
+        reasoningTokens, upstreamStatus, incompleteReason: incompleteReason ?? 'none', reason: reply ? 'ok' : failureReason, demo: !reply });
       return security.json({ reply: reply ?? buildSampleReply(task, lang, input), demo: !reply,
-        reason: reply ? undefined : failureReason, remaining: admission.remaining });
+        reason: reply ? undefined : failureReason, remaining: admission.remaining,
+        generation: { upstreamStatus, incompleteReason, inputTokens: usageInput, outputTokens: usageOutput, reasoningTokens } });
     } catch (error) {
       if (error instanceof security.HttpError) {
         security.audit(context, { reason: error.message, status: error.status });

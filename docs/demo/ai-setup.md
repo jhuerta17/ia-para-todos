@@ -16,6 +16,11 @@ Open `/admin` → **AI practice**:
 
 - **Turn live AI on** lets public practice and admin drafts call Meta.
 - **Turn live AI off** switches both to labeled sample replies.
+- **Test tutor reply** sends a fixed, short Spanish question through the exact same
+  tutor handler as courses, respecting the saved switch and limits. Unlike the
+  catalog check, this generates one AI response and uses the provider allowance.
+  Its copyable report distinguishes a real answer from sample fallback and names
+  the generation model, token limit, reasoning effort, and failure reason.
 - **Refresh status** reads the saved switch again.
 - **Check AI connection** tests the saved key and configured models using Meta's
   read-only model catalog; it generates no AI response and does not change the switch.
@@ -50,7 +55,7 @@ The dashboard does not display spending totals or promise a dollar budget.
 | Netlify path throttle | 60 requests/minute per IP/domain on AI and status endpoints |
 | Incoming body | 32 KiB, checked while reading |
 | Input and history | 2,000 characters per turn; last 6 history turns |
-| Generated response | 400 tokens maximum, including reasoning |
+| Generated response | 1,600 tokens maximum, including reasoning; minimal reasoning effort |
 | Provider timeout | 20 seconds; no automatic retries |
 
 **These are best-effort limits, not hard spending caps.** Counters live in server
@@ -125,3 +130,9 @@ A manual production deploy can be replaced by the next push to `main`. Include
 these source changes before the next production push. Leave the saved switch off
 until you want to offer live practice; no live provider call is needed to test
 sample mode.
+
+The initial 400-token generation cap could be exhausted by Muse Spark's internal
+reasoning before it produced visible text (`provider_output_limit`). Generation
+now uses `reasoning.effort: minimal` and a bounded 1,600-token total; the short
+Spanish/English answer instructions remain. Catalog access alone does not verify
+that generation succeeds. Use Test tutor reply after the Git-triggered deploy.
