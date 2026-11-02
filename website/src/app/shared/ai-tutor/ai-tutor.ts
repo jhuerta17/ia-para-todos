@@ -16,6 +16,7 @@ const copy = {
     cooldown: 'Espera un momento para volver a usar la IA en vivo. Mientras tanto, practica con ejemplos.',
     allowance: 'Llegaste al límite de práctica en vivo de hoy. Puedes continuar con ejemplos.',
     unavailable: 'La práctica en vivo no está disponible. Puedes continuar con respuestas de ejemplo.',
+    connectionError: 'No pudimos conectar con el tutor en vivo. La respuesta de abajo es solo un ejemplo; inténtalo de nuevo más tarde.',
     paused: 'La práctica en vivo está apagada. Puedes continuar con respuestas de ejemplo.',
     ready: 'Práctica en vivo activada.',
     localSample: 'Para mejorar tu prompt, incluye tarea + tema + formato. Por ejemplo: “Dame 3 ideas para una cena saludable, en lista numerada y con palabras fáciles”. Practica con datos inventados. Esta es una respuesta de ejemplo.',
@@ -31,6 +32,7 @@ const copy = {
     cooldown: 'Please wait before using live AI again. You can practice with samples meanwhile.',
     allowance: 'You reached today’s live practice allowance. You can continue with samples.',
     unavailable: 'Live practice is unavailable. You can continue with sample replies.',
+    connectionError: 'We could not connect to the live tutor. The reply below is only a sample; please try again later.',
     paused: 'Live practice is turned off. You can continue with sample replies.',
     ready: 'Live practice enabled.',
     localSample: 'To improve your prompt, include task + topic + format. For example: “Give me 3 healthy dinner ideas, as a numbered list in simple words.” Practice with made-up data. This is a sample reply.',
@@ -51,6 +53,8 @@ export class AiTutor {
       case 'acknowledgement_required': return this.c().verification;
       case 'busy': case 'cooldown': return this.c().cooldown;
       case 'allowance_exhausted': return this.c().allowance;
+      case 'provider_authentication_failed': case 'provider_rate_limited': case 'upstream_unavailable':
+      case 'provider_output_limit': case 'provider_empty_response': return this.c().connectionError;
       case 'paused': return this.c().paused;
       case 'ok': return this.c().ready;
       default: return this.c().unavailable;
@@ -63,9 +67,9 @@ export class AiTutor {
     try {
       const response = await fetch('/api/ai-status', { signal: AbortSignal.timeout(5000) });
       if (!response.ok) throw new Error();
-      const payload = await response.json() as { live?: boolean };
+      const payload = await response.json() as { live?: boolean; reason?: string };
       this.available.set(payload.live === true);
-      this.reason.set(payload.live ? (this.acknowledged() ? 'ok' : 'acknowledgement_required') : 'paused');
+      this.reason.set(payload.live ? (this.acknowledged() ? 'ok' : 'acknowledgement_required') : (payload.reason ?? 'paused'));
     } catch { this.available.set(false); this.reason.set('unavailable'); }
   }
   protected enable(): void { if (this.acknowledged()) this.reason.set('ok'); }
@@ -80,7 +84,7 @@ export class AiTutor {
     try {
       if (Date.now() >= this.retryAt) await this.loadStatus();
       if (this.available() && this.acknowledged() && Date.now() >= this.retryAt) {
-        const history = prior.slice(-6).map(turn => ({ role: turn.from === 'user' ? 'user' : 'assistant', content: turn.text }));
+        const history = prior.filter(turn => !turn.demo).slice(-6).map(turn => ({ role: turn.from === 'user' ? 'user' : 'assistant', content: turn.text }));
         const response = await fetch('/api/ai-assist', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ task: 'tutor', lang: this.language.lang(), history, input, acknowledged: true }), signal: AbortSignal.timeout(30000),

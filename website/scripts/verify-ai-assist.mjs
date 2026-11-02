@@ -108,6 +108,41 @@ try {
     const switching = { read: async () => ++reads === 1, write: async () => {} };
     assert.equal((await (await handler({ control: switching })(post(), context)).json()).demo, true); assert.equal(calls, 0);
   });
+  await check('provider authentication/rate errors and empty output keep distinct safe reasons', async () => {
+    live = true;
+    for (const [status, reason] of [[401, 'provider_authentication_failed'], [403, 'provider_authentication_failed'], [429, 'provider_rate_limited'], [500, 'upstream_unavailable']]) {
+      const fetch = async () => Response.json({ error: { message: 'test-key A fictional example' } }, { status });
+      const result = await (await handler({ fetch })(post(), context)).json();
+      assert.equal(result.demo, true); assert.equal(result.reason, reason);
+    }
+    for (const [payload, reason] of [[{ output: [] }, 'provider_empty_response'], [{ status: 'incomplete', output: [] }, 'provider_output_limit']]) {
+      const result = await (await handler({ fetch: async () => Response.json(payload) })(post(), context)).json();
+      assert.equal(result.reason, reason);
+    }
+  });
+  await check('admin connection check is authenticated, does not generate AI or change switch', async () => {
+    live = true;
+    const unauthorized = createControlHandler(control, async () => null, async () => { throw new Error('must not call provider'); });
+    assert.equal((await unauthorized(post({ action: 'check' }), context)).status, 401);
+    for (const [status, data, expected] of [[401, {}, 'authentication_failed'], [403, {}, 'authentication_failed'], [503, {}, 'unavailable'],
+      [200, { data: [{ id: s.MODELS.tutor }, { id: s.MODELS.triage }] }, 'ok'], [200, { data: [] }, 'model_unavailable']]) {
+      const check = createControlHandler(control, admin, async (url, init) => {
+        assert.equal(url, 'https://api.meta.ai/v1/models'); assert.equal(init.body, undefined);
+        return Response.json(data, { status });
+      });
+      const result = await (await check(post({ action: 'check' }), context)).json();
+      assert.equal(result.connection, expected); assert.equal(live, true);
+    }
+    assert.equal(calls, 0);
+  });
+  await check('admin report contains provider diagnostics and redacts the credential', async () => {
+    const check = createControlHandler(control, admin, async () => Response.json({ error: { code: 'invalid_api_key', type: 'authentication_error', message: 'Unauthorized test-key', param: null } }, { status: 401 }));
+    const result = await (await check(post({ action: 'check' }), context)).json();
+    assert.equal(result.diagnostics.httpStatus, 401);
+    assert.equal(result.diagnostics.providerError.code, 'invalid_api_key');
+    assert.equal(result.diagnostics.providerError.message, 'Unauthorized [redacted]');
+    assert.ok(!JSON.stringify(result).includes('test-key'));
+  });
   await check('audit logs exclude prompts, replies, raw IPs and keys', async () => {
     const text = logs.join('\n');
     for (const value of ['A fictional example', 'A live reply', '192.0.2.1', 'test-key']) assert.ok(!text.includes(value));

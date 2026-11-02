@@ -134,17 +134,24 @@ export function createHandler(deps: Dependencies = defaults) {
       const model = security.MODELS[task];
       let reply: string | null = null;
       let usageInput = -1, usageOutput = -1;
+      let failureReason = 'upstream_unavailable';
+      let upstreamStatus = 0;
       const payload = { model, instructions: SYSTEMS[task][lang],
         input: [...history, { role: 'user', content: input }], tools: [] };
       const signal = AbortSignal.timeout(20000);
-      const headers = { Authorization: `Bearer ${security.env('META_MUSE_API_KEY')}`, 'Content-Type': 'application/json' };
+      const headers = { Authorization: `Bearer ${security.env('META_MUSE_API_KEY').trim()}`, 'Content-Type': 'application/json' };
       try {
         if (!await deps.control.read()) return sample('paused');
         const response = await deps.fetch('https://api.meta.ai/v1/responses', {
           method: 'POST', headers, signal, redirect: 'error',
           body: JSON.stringify({ ...payload, max_output_tokens: security.OUTPUT_TOKEN_CAP, store: false }),
         });
-        if (!response.ok) throw new Error('upstream_unavailable');
+        upstreamStatus = response.status;
+        if (!response.ok) {
+          failureReason = response.status === 401 || response.status === 403 ? 'provider_authentication_failed'
+            : response.status === 429 ? 'provider_rate_limited' : 'upstream_unavailable';
+          throw new Error('upstream_unavailable');
+        }
         const result = await response.json() as Record<string, unknown>;
         const usage = result['usage'] as Record<string, unknown> | undefined;
         const uin = usage?.['input_tokens'], uout = usage?.['output_tokens'];
@@ -152,12 +159,13 @@ export function createHandler(deps: Dependencies = defaults) {
           usageInput = uin as number; usageOutput = uout as number;
         }
         reply = responseText(result);
+        if (!reply) failureReason = result['status'] === 'incomplete' ? 'provider_output_limit' : 'provider_empty_response';
       } catch { /* No retries and no provider error bodies in logs. */ }
       finally { admission.release?.(); }
       security.audit(context, { task, model, inputTokens: usageInput, outputTokens: usageOutput,
-        reason: reply ? 'ok' : 'upstream_unavailable', demo: !reply });
+        upstreamStatus, reason: reply ? 'ok' : failureReason, demo: !reply });
       return security.json({ reply: reply ?? buildSampleReply(task, lang, input), demo: !reply,
-        reason: reply ? undefined : 'upstream_unavailable', remaining: admission.remaining });
+        reason: reply ? undefined : failureReason, remaining: admission.remaining });
     } catch (error) {
       if (error instanceof security.HttpError) {
         security.audit(context, { reason: error.message, status: error.status });

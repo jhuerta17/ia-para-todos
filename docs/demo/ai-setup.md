@@ -17,6 +17,18 @@ Open `/admin` → **AI practice**:
 - **Turn live AI on** lets public practice and admin drafts call Meta.
 - **Turn live AI off** switches both to labeled sample replies.
 - **Refresh status** reads the saved switch again.
+- **Check AI connection** tests the saved key and configured models using Meta's
+  read-only model catalog; it generates no AI response and does not change the switch.
+  Use **Copy connection report** to share the status, provider error, model names,
+  and timestamp for troubleshooting. The report excludes the API key.
+
+If the switch is on but replies are samples, check the connection. A configured
+key means a value exists, not that Meta accepts it. `authentication_failed` means
+Meta returned 401/403: replace `META_MUSE_API_KEY` with a valid Meta Model API key
+in this site's production Netlify environment, then redeploy. Never paste the key
+into chat. The tutor now explicitly explains live connection failures, and safe
+logs distinguish authentication, rate limiting, empty output, and output limits
+without including provider error bodies or private messages.
 
 The switch is stored in Netlify's built-in Blobs service, in the site-wide
 `ai-live-control-production` store at key `state`. No separate service/account or
