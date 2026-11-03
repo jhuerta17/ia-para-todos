@@ -55,8 +55,9 @@ export class Language {
       ? route.data['pair'] as string
       : staticPeer(route.routeConfig?.path === '**' ? this.router.url.split(/[?#]/)[0] : sectionUrl('home', 'es'));
     const lang = this.lang();
+    const privatePair = route.data['private'] === true && /^[a-f0-9]{64}$/.test(this.router.url.split('#')[1] ?? '') ? `${pair}#${this.router.url.split('#')[1]}` : pair;
     return lang === 'es'
-      ? { url: pair, label: 'English', aria: 'View this page in English' }
-      : { url: pair, label: 'Español', aria: 'Ver esta página en español' };
+      ? { url: privatePair, label: 'English', aria: 'View this page in English' }
+      : { url: privatePair, label: 'Español', aria: 'Ver esta página en español' };
   }
 }

@@ -1,0 +1,30 @@
+import { afterNextRender, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { Language } from '../i18n/language';
+import { WorkshopClient } from './workshop-client';
+import { workshopCopy } from './workshop-copy';
+@Component({selector:'app-workshop-preparation',imports:[RouterLink],styleUrl:'./workshop.css',template:`
+<main id="main-content" tabindex="-1" class="workshop-shell ws-reading"><header class="ws-heading"><h1>{{c().preparation}}</h1><p>{{c().prepLead}}</p></header>
+@if(en()){
+<section><h2>1. What is AI?</h2><p>Artificial intelligence finds patterns to generate text, images, or suggestions. It can help you start a task, but it can invent details and make mistakes. You decide what to trust and use.</p></section>
+<section><h2>2. Try one made-up example</h2><p>“Suggest three dinners with rice and vegetables for a fictional family of three. Use a short list.”</p><p>A useful request includes a task, some context, and the format you want. Think about how you would ask for a shorter list. You can do this on paper; no AI tool is required.</p></section>
+<section><h2>3. Protect your information</h2><ul><li>Practice with invented names and situations.</li><li>Keep passwords, bank details, medical records, and identifying information out of AI tools.</li><li>Check names, dates, amounts, and important claims with a reliable source.</li><li>Ask a trusted person or an appropriate professional when a decision has important consequences.</li></ul></section>
+<section><h2>4. What to expect and bring</h2><ul><li>We learn together with a facilitator and simple, practical exercises.</li><li>Bring a charged phone if you have one; check your session for equipment and accessibility details.</li><li>No paid tools, previous experience, portal account, or completed preparation are required.</li><li>You can ask for help or take a break. Contact the team if you need support with access or a reservation.</li></ul></section>
+}@else{
+<section><h2>1. ¿Qué es la IA?</h2><p>La inteligencia artificial encuentra patrones para generar textos, imágenes o sugerencias. Puede ayudarte a empezar una tarea, pero también puede inventar detalles y equivocarse. Tú decides qué creer y qué usar.</p></section>
+<section><h2>2. Prueba un ejemplo inventado</h2><p>“Sugiere tres cenas con arroz y verduras para una familia ficticia de tres personas. Usa una lista corta”.</p><p>Una instrucción útil incluye una tarea, un poco de contexto y el formato que quieres. Piensa cómo pedirías una lista más corta. Puedes hacerlo en papel; no necesitas una herramienta de IA.</p></section>
+<section><h2>3. Protege tu información</h2><ul><li>Practica con nombres y situaciones inventados.</li><li>No compartas contraseñas, datos bancarios, expedientes médicos ni información que identifique a alguien con herramientas de IA.</li><li>Verifica nombres, fechas, cantidades y afirmaciones importantes con una fuente confiable.</li><li>Consulta a una persona de confianza o a un profesional adecuado cuando una decisión tenga consecuencias importantes.</li></ul></section>
+<section><h2>4. Qué esperar y qué traer</h2><ul><li>Aprendemos en grupo con una persona facilitadora y ejercicios prácticos y sencillos.</li><li>Trae tu teléfono cargado si tienes uno; revisa los detalles de equipo y accesibilidad de tu sesión.</li><li>No necesitas herramientas de pago, experiencia previa, cuenta del portal ni completar esta preparación.</li><li>Puedes pedir ayuda o tomar un descanso. Contacta al equipo si necesitas apoyo para acceder o reservar.</li></ul></section>
+}
+<section class="ws-card"><h2>{{c().preparing}}</h2>
+@if(error()){<p role="alert" class="ws-error">{{c().error}}</p>}
+@if(client.session.user()){@if(completed()){<p class="ws-success" role="status">{{c().prepDone}}</p>}@else{<button type="button" class="ws-button" (click)="complete()" [disabled]="busy()">{{busy()?c().saving:c().complete}}</button>}}
+@else{<p>{{c().guestPrep}}</p><a routerLink="/portal/sign-in">{{c().signin}}</a>}
+</section><div class="ws-row"><a [routerLink]="en()?'/en/schedule':'/agenda'">{{c().browse}}</a><a [routerLink]="language.path('contacto')">{{en()?'Contact the team':'Contacta al equipo'}}</a></div></main>`})
+export class WorkshopPreparation {
+  protected readonly language=inject(Language);protected readonly en=computed(()=>this.language.lang()==='en');protected readonly c=computed(()=>workshopCopy[this.language.lang()]);
+  protected readonly client=inject(WorkshopClient);protected readonly completed=signal(false);protected readonly busy=signal(false);protected readonly error=signal(false);
+  constructor(){afterNextRender(()=>{void this.load();});}
+  private async load(){await this.client.session.restore();if(this.client.session.user())try{this.completed.set((await this.client.request<{completed:boolean}>('preparation')).completed);}catch{this.error.set(true);}}
+  protected async complete(){this.busy.set(true);this.error.set(false);try{this.completed.set((await this.client.request<{completed:boolean}>('preparation','POST',{})).completed);}catch{this.error.set(true);}finally{this.busy.set(false);}}
+}

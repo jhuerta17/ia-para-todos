@@ -74,3 +74,18 @@ Every workshop teaches: fictional practice data only; what never to share with A
 
 - [responsible-ai.md](responsible-ai.md) · [participant-safeguarding.md](participant-safeguarding.md)
 - [../../CONTRIBUTING.md](../../CONTRIBUTING.md) (privacy rules for contributors)
+
+## Workshop reservation exception
+
+Optional workshop reservations may collect a preferred name and either email or
+phone in private PostgreSQL, with adult and reservation-privacy acknowledgement.
+This does not require a student account or AI-practice consent. Use contact details
+only for booking coordination and manual follow-up, never identified attendance
+or marketing. Guests manage bookings with a private capability link; store only
+its hash, never log it, and never match contacts to attach a student account.
+
+Reservation personal data expires 30 days after session end, session cancellation,
+or reservation cancellation, whichever comes first. Expired records are denied
+immediately and purged daily. Account deletion clears linked booking details and
+releases seats. Keep only anonymous session totals afterward. See
+[workshop booking operations](../operations/workshop-bookings.md).

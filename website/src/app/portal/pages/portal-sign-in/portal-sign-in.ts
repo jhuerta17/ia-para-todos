@@ -71,6 +71,7 @@ export class PortalSignIn {
     const target = typeof params['return'] === 'string' ? params['return'] : '/portal';
     this.returnTarget.set(portalReturn(target));
     const fragment = new URLSearchParams(route.snapshot.fragment ?? '');
+    if (/^[a-f0-9]{64}$/.test(fragment.get('booking') ?? '')) this.returnTarget.set(portalReturn(`/reservas#${fragment.get('booking')}`));
     if (fragment.has('recovery_token') || fragment.has('confirmation_token') || fragment.has('email_change_token')) {
       void this.router.navigate([], { relativeTo: route, queryParamsHandling: 'preserve', fragment: undefined, replaceUrl: true });
     }

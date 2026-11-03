@@ -1,3 +1,4 @@
+import { ACCOUNT_PRIVACY_VERSION } from '../auth/account-policy';
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
@@ -69,7 +70,7 @@ export class UserSession {
   async signup(name: string, email: string, password: string, lang: Lang): Promise<void> {
     const auth = await this.client();
     try {
-      await auth.signup(email, password, { full_name: name, adult: true, privacy_version: '2026-11-03' });
+      await auth.signup(email, password, { full_name: name, adult: true, privacy_version: ACCOUNT_PRIVACY_VERSION });
     } catch (error) {
       throw new Error(this.signupMessage(error, lang));
     }

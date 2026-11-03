@@ -38,6 +38,7 @@ const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 
 const routes = [];
 for (const lang of LANGS) {
   const peer = lang === 'es' ? 'en' : 'es';
+  for (const [path, peerPath] of lang === 'es' ? [['agenda','en/schedule'],['preparacion','en/preparation']] : [['en/schedule','agenda'],['en/preparation','preparacion']]) routes.push({lang,path,peer:peerPath});
   for (const key of STATIC_KEYS) routes.push({ lang, path: PATHS[key][lang], peer: PATHS[key][peer] });
   informationPages[lang].forEach((page, index) => routes.push({ lang, path: page.path, peer: informationPages[peer][index].path }));
   workshops[lang].forEach((entry, index) => routes.push({ lang, path: `${PATHS.talleres[lang]}/${entry.slug}`, peer: `${PATHS.talleres[peer]}/${workshops[peer][index].slug}` }));

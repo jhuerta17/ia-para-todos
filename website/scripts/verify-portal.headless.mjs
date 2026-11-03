@@ -102,6 +102,11 @@ async function main() {
   }
   const contextFixtures = new WeakMap();
   async function stubPortal(page) {
+    await page.route('**/api/workshops/**',route=>{
+      const path=new URL(route.request().url()).pathname;
+      const body=path.endsWith('/sessions')?{sessions:[]}:path.endsWith('/mine')?{reservations:[]}:{completed:false};
+      return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(body)});
+    });
     if (!contextFixtures.has(page.context())) contextFixtures.set(page.context(), createPortalFixture());
     const fixture = contextFixtures.get(page.context());
     await page.route('**/api/portal/**', async route => {
@@ -616,7 +621,7 @@ async function main() {
       await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
       let blocked=true;
       await page.route('**/api/portal/profile',route=>route.fulfill({status:blocked?403:200,contentType:'application/json',body:JSON.stringify(blocked?{reason:'email_confirmation_required'}:{consented:false,privacyVersion:'2026-11-03'})}));
-      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      await page.goto(`${base}/portal/courses`,{waitUntil:'networkidle'});
       await page.getByRole('alert').filter({hasText:'Confirma tu correo'}).waitFor();
       await page.getByRole('button',{name:'EN',exact:true}).click();
       await page.getByRole('alert').filter({hasText:'Confirm your email'}).waitFor();
@@ -635,13 +640,13 @@ async function main() {
         if(route.request().method()==='POST')consented=route.request().postDataJSON().adult===true;
         return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({consented,privacyVersion:'2026-11-03'})});
       });
-      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      await page.goto(`${base}/portal/courses`,{waitUntil:'networkidle'});
       await page.getByRole('heading',{name:'Antes de comenzar',exact:true}).waitFor();
-      check('adult/privacy consent blocks portal data until accepted',!await page.getByRole('button',{name:'Continuar',exact:true}).isEnabled());
+      check('adult/privacy consent blocks learning data until accepted',!await page.getByRole('button',{name:'Continuar',exact:true}).isEnabled());
       await page.getByRole('checkbox').check();
       await page.getByRole('button',{name:'Continuar',exact:true}).click();
-      await page.getByRole('heading',{name:'Portal del estudiante',exact:true}).waitFor();
-      check('acceptance unlocks the portal',consented);
+      await page.getByRole('heading',{name:'Mis cursos',exact:true}).waitFor();
+      check('acceptance unlocks learning',consented);
       await page.close();
     }
 

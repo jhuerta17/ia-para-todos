@@ -201,3 +201,13 @@ body[data-page-transition='revealing'] main {
     transition: none;
   }
 }
+
+/* Reservation printouts retain the private management link without site chrome. */
+@media print {
+  body:has(app-workshop-manage) app-site-header,
+  body:has(app-workshop-manage) app-site-footer,
+  body:has(app-workshop-manage) .skip-link,
+  body:has(app-workshop-schedule input#reservation-link) app-site-header,
+  body:has(app-workshop-schedule input#reservation-link) app-site-footer,
+  body:has(app-workshop-schedule input#reservation-link) .skip-link { display: none !important; }
+}

@@ -1,3 +1,4 @@
+import { WorkshopAdmin } from '../../../workshops/workshop-admin';
 import { isPlatformServer } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID, signal } from '@angular/core';
 import { AdminBreadcrumb } from '../../layout/admin-breadcrumb/admin-breadcrumb';
@@ -6,11 +7,11 @@ import { DemoState } from '../../data/demo-state';
 import { DemoWorkshop, demoWorkshops } from '../../data/demo-content';
 import { TABLE_IMPORTS } from '../../shared/ui/table/table.directive';
 
-// Workshop schedule. Demo mode shows synthetic sessions; without a
-// connected store the live view is an honest empty state.
+// Demo mode retains synthetic sessions; the live view uses the persistent
+// workshop scheduler shared with the public site and student portal.
 @Component({
   selector: 'app-admin-workshops',
-  imports: [AdminBreadcrumb, BadgeComponent, ...TABLE_IMPORTS],
+  imports: [WorkshopAdmin, AdminBreadcrumb, BadgeComponent, ...TABLE_IMPORTS],
   templateUrl: './admin-workshops.html',
 })
 export class AdminWorkshops {

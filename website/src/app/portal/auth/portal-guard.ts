@@ -13,7 +13,8 @@ const checkPortal = (portalAuth: boolean, returnParam: string | undefined, url: 
     return session.restore().then((signedIn) => {
       if (!signedIn) return true;
       const target = typeof returnParam === 'string' ? returnParam : '/portal';
-      return router.createUrlTree([portalReturn(target)]);
+      const booking=new URLSearchParams(fragment ?? '').get('booking');
+      return router.parseUrl(portalReturn(booking && /^[a-f0-9]{64}$/.test(booking) ? `/reservas#${booking}` : target));
     });
   }
   return session.restore().then((signedIn) => {

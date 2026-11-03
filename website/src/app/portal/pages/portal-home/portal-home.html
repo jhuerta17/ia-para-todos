@@ -1,5 +1,6 @@
 <header class="overview-welcome"><p>{{c().greeting}}, {{session.user()?.name}}</p><h1>{{c().title}}</h1><p class="lead">{{c().lead}}</p></header>
-<div class="overview-grid"><section class="card" aria-labelledby="learning-title"><h2 id="learning-title">{{en()?'Your learning':'Tu aprendizaje'}}</h2>
+<app-workshop-student/>
+@if(client.consented() === true){<div class="overview-grid"><section class="card" aria-labelledby="learning-title"><h2 id="learning-title">{{en()?'Your learning':'Tu aprendizaje'}}</h2>
 @if(loadingProgress()){<p role="status">{{en()?'Loading your progress…':'Cargando tu progreso…'}}</p>}
 @else if(progressError()){<p role="alert">{{en()?'We could not load your progress.':'No pudimos cargar tu progreso.'}}</p><button class="overview-retry" (click)="loadProgress()">{{en()?'Try again':'Reintentar'}}</button>}
 @else{<app-badge color="primary">{{finished()?(en()?'Completed':'Completado'):(progress().enrolled?(en()?'In progress':'En curso'):(en()?'Get started':'Comienza aquí'))}}</app-badge><p>{{course().title}}</p><p class="overview-stat">{{progress().completed.length}} / {{course().lessons.length}}</p><p>{{en()?'Lessons completed':'Lecciones completadas'}}</p><progress [value]="progress().completed.length" [max]="course().lessons.length" [attr.aria-label]="en()?'Course progress':'Progreso del curso'"></progress>
@@ -10,3 +11,5 @@
 @else if(chats().length){<ul class="overview-list">@for(chat of chats();track chat.id){<li><a routerLink="/portal/chats" [queryParams]="{chat:chat.id}">{{chat.title || (en()?'New conversation':'Nueva conversación')}}</a></li>}</ul>}
 @else{<p>{{en()?'No conversations yet. Practice with a made-up example to begin.':'Todavía no tienes conversaciones. Comienza con un ejemplo inventado.'}}</p>}
 <p class="note">{{c().history}}</p><a routerLink="/portal/chats">{{c().tutor}} →</a></section></div>
+
+}@else{<section class="card"><h2>{{en()?'Keep learning after your workshop':'Sigue aprendiendo después de tu taller'}}</h2><p>{{en()?'Courses and saved AI practice are optional. Review their consent notice when you are ready.':'Los cursos y la práctica guardada con IA son opcionales. Revisa su aviso de consentimiento cuando quieras comenzar.'}}</p><a routerLink="/portal/courses">{{en()?'Explore learning and practice':'Explorar aprendizaje y práctica'}}</a></section>}

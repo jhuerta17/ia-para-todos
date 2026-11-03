@@ -1,3 +1,4 @@
+import { ACCOUNT_PRIVACY_VERSION } from '../../src/app/portal/auth/account-policy.ts';
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpError, env } from './ai-security.mts';
 import { transaction, type PortalPool, type Queryable } from './portal-db.mts';
@@ -45,15 +46,15 @@ export class PortalRepository {
       return { consented: !!profile.adult_attested_at && profile.privacy_version === PRIVACY_VERSION, privacyVersion: PRIVACY_VERSION };
     });
   }
-  async consent(user: Student) {
+  async consent(user: Student, version: typeof PRIVACY_VERSION | typeof ACCOUNT_PRIVACY_VERSION = PRIVACY_VERSION) {
     return transaction(this.pool, async db => {
       await ensureProfile(db, user, false);
       if (!user.roles?.includes('admin')) {
         if (!user.email) throw new HttpError(403, 'email_required');
         await reserveAdmission(db, emailHash(user.email), user.id, true);
       }
-      await db.query('UPDATE portal_profiles SET adult_attested_at=now(),privacy_version=$2 WHERE user_id=$1', [user.id, PRIVACY_VERSION]);
-      return { consented: true, privacyVersion: PRIVACY_VERSION };
+      await db.query('UPDATE portal_profiles SET adult_attested_at=now(),privacy_version=$2 WHERE user_id=$1', [user.id, version]);
+      return { consented: version === PRIVACY_VERSION, privacyVersion: version };
     });
   }
   async progress(user: Student, action: 'read' | 'enroll' | 'complete', lesson?: string) {

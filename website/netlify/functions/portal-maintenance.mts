@@ -1,9 +1,11 @@
 import type { Config } from '@netlify/functions';
 import { PortalRepository } from '../lib/portal-repository.mts';
+import { WorkshopRepository } from '../lib/workshop-repository.mts';
 import { portalPool } from '../lib/portal-db.mts';
 export default async () => {
   const repo = new PortalRepository(portalPool());
   await repo.purge();
+  await new WorkshopRepository(portalPool()).purge();
   const { admin } = await import('@netlify/identity');
   await repo.retryDeletions(async id => {
     try { await admin.deleteUser(id); }

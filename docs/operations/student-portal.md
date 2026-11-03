@@ -146,7 +146,7 @@ confirmation enabled. Server roles change on next login/token refresh.
 
 Live practice is limited to 20 admitted requests per student per UTC day. A
 shared student-AI ledger is capped at 25,000,000 microdollars ($25) per UTC month.
-Student practice requests live AI by default after verified account setup. Registration and the versioned portal consent notice disclose Meta Contributor training use in both languages. Existing accounts must accept `2026-11-03-meta-contributor-v1` once before using portal data; practice does not ask for consent again per conversation. The provider configuration, global AI switch, and usage limits still apply, and fallback replies remain labeled as samples.
+Student practice requests live AI by default after verified account setup. The versioned learning/practice consent notice discloses Meta Contributor training use in both languages. New workshop-focused accounts use a basic account acknowledgement at registration and accept AI consent separately when entering courses or saved practice. Existing accounts must accept `2026-11-03-meta-contributor-v1` once before using portal data; practice does not ask for consent again per conversation. The provider configuration, global AI switch, and usage limits still apply, and fallback replies remain labeled as samples.
 
 Day/month reset at 00:00 UTC. Sample replies do not consume live allowance.
 Admission reserves conservative input/output cost before any provider call,
@@ -234,3 +234,11 @@ the initial 202 response. Test deletion with disposable staging users only.
 On a bad release, disable signup/live first and fix forward with a corrective
 commit. Do not remove migrations or restore data snapshots as a routine app
 rollback. Re-run the relevant checks before the next main-branch deploy.
+
+## Workshop-first home
+
+The home page now prioritizes workshop reservations and optional preparation.
+Workshop booking and preparation use their own reservation acknowledgement and do
+not require Meta Contributor consent. The existing consent gate remains for
+course and saved-AI-practice pages. See [workshop bookings](workshop-bookings.md)
+for public guest booking, organizer management, retention, and staging checks.

@@ -7,7 +7,7 @@
   </ng-template>
   @if (authPage()) {
     <main class="auth-main" tabindex="-1">
-      <div class="auth-top"><a [routerLink]="language.path('home')">← {{language.lang()==='es'?'Volver al sitio':'Back to site'}}</a><ng-container [ngTemplateOutlet]="languages" /></div>
+      <div class="auth-top"><a [routerLink]="language.path('home')"><app-icon name="arrow-left"/> {{language.lang()==='es'?'Volver al sitio':'Back to site'}}</a><ng-container [ngTemplateOutlet]="languages" /></div>
       <div class="auth-form"><router-outlet /></div>
     </main>
     <aside class="auth-brand"><app-auth-brand [brand]="language.brand()" [sitePath]="language.path('home')" [backLabel]="language.lang()==='es'?'Volver al sitio':'Back to site'" [description]="language.lang()==='es'?'Tu espacio para aprender, practicar y seguir avanzando.':'Your space to learn, practice, and keep moving forward.'" /></aside>
@@ -16,19 +16,19 @@
     <aside id="student-navigation" class="sidebar" [attr.inert]="smallScreen() && !mobileOpen() ? '' : null" [class.mobile-open]="mobileOpen()" [attr.aria-label]="language.lang()==='es'?'Navegación del estudiante':'Student navigation'">
       <a routerLink="/portal" class="portal-brand"><app-brand-mark style="--logo-size:2rem" /><span>{{language.brand()}}</span></a>
       <p class="menu-label">{{language.lang()==='es'?'ESTUDIANTE':'STUDENT'}}</p>
-      <nav>@for(item of nav();track item.path){<a [routerLink]="item.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact:item.path==='/portal'}" ariaCurrentWhenActive="page" [attr.title]="item.label"><span aria-hidden="true" class="nav-icon">{{item.icon}}</span><span class="nav-label">{{item.label}}</span></a>}</nav>
-      <a class="back-site" [routerLink]="language.path('home')">← <span class="nav-label">{{language.lang()==='es'?'Volver al sitio':'Back to site'}}</span></a>
+      <nav>@for(item of nav();track item.path){<a [routerLink]="item.path" routerLinkActive="active" [routerLinkActiveOptions]="{exact:item.path==='/portal'}" ariaCurrentWhenActive="page" [attr.title]="item.label"><app-icon class="nav-icon" [name]="item.icon"/><span class="nav-label">{{item.label}}</span></a>}</nav>
+      <a class="back-site" [routerLink]="language.path('home')"><app-icon name="arrow-left"/> <span class="nav-label">{{language.lang()==='es'?'Volver al sitio':'Back to site'}}</span></a>
     </aside>
     <div class="workspace">
       <header class="portal-header">
-        <button class="mobile-toggle" type="button" (click)="toggleMobile()" [attr.aria-expanded]="mobileOpen()" aria-controls="student-navigation" [attr.aria-label]="language.lang()==='es'?'Menú de navegación':'Navigation menu'">☰</button>
-        <button class="desktop-toggle" type="button" (click)="collapsed.set(!collapsed())" [attr.aria-expanded]="!collapsed()" aria-controls="student-navigation" [attr.aria-label]="language.lang()==='es'?'Alternar barra lateral':'Toggle sidebar'">☰</button>
+        <button class="mobile-toggle" type="button" (click)="toggleMobile()" [attr.aria-expanded]="mobileOpen()" aria-controls="student-navigation" [attr.aria-label]="language.lang()==='es'?'Menú de navegación':'Navigation menu'"><app-icon name="menu-2"/></button>
+        <button class="desktop-toggle" type="button" (click)="collapsed.set(!collapsed())" [attr.aria-expanded]="!collapsed()" aria-controls="student-navigation" [attr.aria-label]="language.lang()==='es'?'Alternar barra lateral':'Toggle sidebar'"><app-icon name="menu-2"/></button>
         <span class="header-title">{{pageLabel()}}</span>
         <ng-container [ngTemplateOutlet]="languages" />
-        @if(session.user();as user){<details class="account-menu"><summary><span class="avatar">{{user.name.slice(0,1)}}</span><span class="user-name">{{user.name}}</span><span aria-hidden="true">⌄</span></summary><div><a routerLink="/portal/account">{{language.lang()==='es'?'Mi cuenta':'My account'}}</a><button class="signout" type="button" (click)="signOut()">{{c().signOut}}</button></div></details>}
+        @if(session.user();as user){<details class="account-menu"><summary><span class="avatar">{{user.name.slice(0,1)}}</span><span class="user-name">{{user.name}}</span><app-icon name="chevron-down"/></summary><div><a routerLink="/portal/account">{{language.lang()==='es'?'Mi cuenta':'My account'}}</a><button class="signout" type="button" (click)="signOut()">{{c().signOut}}</button></div></details>}
       </header>
       <main class="panel" tabindex="-1"><div class="page-heading"><span>{{pageLabel()}}</span><nav aria-label="Breadcrumb"><a routerLink="/portal">{{language.lang()==='es'?'Portal':'Portal'}}</a> / {{pageLabel()}}</nav></div>
-    @if (session.user() && client.consented() !== true && !accountPage()) {
+    @if (session.user() && client.consented() !== true && !accountPage() && !workshopHome()) {
       <section class="consent">
         <h1>{{ language.lang() === 'es' ? 'Antes de comenzar' : 'Before you begin' }}</h1>
         @if (profileError()) {

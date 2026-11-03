@@ -27,7 +27,7 @@ try {
   await local.initialise();await local.start();
   const connectionString=`postgres://portal_test:${password}@127.0.0.1:${port}/postgres`;
   const initial=await Promise.all([migratePortal({connectionString,directory:migrations}),migratePortal({connectionString,directory:migrations})]);
-  assert.equal(initial.reduce((sum,result)=>sum+result.length,0),1);
+  assert.equal(initial.reduce((sum,result)=>sum+result.length,0),(await readdir(migrations)).filter(name=>name.endsWith('.sql')).length);
   assert.equal((await migratePortal({connectionString,directory:migrations})).length,0);
   pool=createPortalPool(connectionString,10);
   const migrationFixtures=await mkdtemp(join(tmpdir(),'portal-migration-check-'));

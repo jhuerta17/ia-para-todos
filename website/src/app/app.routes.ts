@@ -50,6 +50,9 @@ function staticRoutes(lang: Lang): Routes {
   const brand = BRAND_NAME[lang];
   const pair = (key: StaticKey) => sectionUrl(key, other);
   return [
+    { path: lang === 'es' ? 'agenda' : 'en/schedule', loadComponent: () => import('./workshops/workshop-schedule').then(m=>m.WorkshopSchedule), title: lang === 'es' ? 'Próximos talleres · IA para todos' : 'Upcoming workshops · AI for everyone', data: {lang, pair:lang === 'es' ? '/en/schedule' : '/agenda'} },
+    { path: lang === 'es' ? 'preparacion' : 'en/preparation', loadComponent: () => import('./workshops/workshop-preparation').then(m=>m.WorkshopPreparation), title: lang === 'es' ? 'Antes de tu taller · IA para todos' : 'Before your workshop · AI for everyone', data: {lang, pair:lang === 'es' ? '/en/preparation' : '/preparacion'} },
+    { path: lang === 'es' ? 'reservas' : 'en/reservations', loadComponent: () => import('./workshops/workshop-manage').then(m=>m.WorkshopManage), title: lang === 'es' ? 'Mi reserva · IA para todos' : 'My reservation · AI for everyone', data: {lang, private:true, pair:lang === 'es' ? '/en/reservations' : '/reservas'} },
     { path: PATHS.home[lang], component: Home, title: TITLES[lang].home, data: { lang, key: 'home', pair: pair('home') } },
     { path: PATHS.talleres[lang], loadComponent: () => import('./pages/workshop-list/workshop-list').then(module => module.WorkshopList), title: TITLES[lang].talleres, data: { lang, key: 'talleres', pair: pair('talleres') } },
     { path: PATHS.actividades[lang], loadComponent: () => import('./pages/catalog-page/catalog-page').then(module => module.CatalogPage), title: TITLES[lang].actividades, data: { lang, key: 'actividades', pair: pair('actividades'), catalog: CATALOGS[lang].actividades } },

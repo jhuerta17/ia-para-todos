@@ -29,6 +29,7 @@ const startServer = () => new Promise((resolve) => {
   const server = createServer(async (req, res) => {
     try {
       const path = new URL(req.url, 'http://x').pathname;
+      if(path === '/api/workshops/admin/sessions'){res.writeHead(200,{'content-type':'application/json'});res.end(JSON.stringify({sessions:[]}));return;}
       let file = join(dist, path === '/' ? 'index.html' : decodeURIComponent(path));
       try {
         if (statSync(file).isDirectory()) file = join(file, 'index.html');

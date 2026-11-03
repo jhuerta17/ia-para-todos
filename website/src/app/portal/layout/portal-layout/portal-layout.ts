@@ -1,3 +1,4 @@
+import { Icon, type IconName } from '../../../shared/icon';
 import { AuthBrand } from '../../../shared/dashboard/auth-brand';
 import { NgTemplateOutlet } from '@angular/common';
 import { ensureDashboardTheme } from '../../../shared/dashboard/dashboard-theme';
@@ -21,7 +22,7 @@ export const PORTAL_LANG_KEY = 'portal-lang';
 
 @Component({
   selector: 'app-portal-layout',
-  imports: [BrandMark, RouterModule, NgTemplateOutlet, AuthBrand],
+  imports: [Icon, BrandMark, RouterModule, NgTemplateOutlet, AuthBrand],
   templateUrl: './portal-layout.html',
   styleUrl: './portal-layout.css',
 })
@@ -36,6 +37,7 @@ export class PortalLayout {
   protected readonly confirmationRequired = signal(false);
   protected readonly accepting = signal(false);
   protected readonly accountPage = signal(false);
+  protected readonly workshopHome = computed(() => this.currentPath() === '/portal');
   protected readonly adult = signal(false);
   protected readonly acceptError = signal(false);
   protected async loadProfile(): Promise<void> {
@@ -77,8 +79,8 @@ export class PortalLayout {
   protected readonly authPage = signal(false);
   protected readonly currentPath = signal('/portal');
   protected readonly nav = computed(() => this.language.lang() === 'es'
-    ? [{path:'/portal',label:'Resumen',icon:'◫'}, {path:'/portal/courses',label:'Mis cursos',icon:'▤'}, {path:'/portal/chats',label:'Práctica',icon:'◇'}, {path:'/portal/account',label:'Mi cuenta',icon:'○'}]
-    : [{path:'/portal',label:'Overview',icon:'◫'}, {path:'/portal/courses',label:'My courses',icon:'▤'}, {path:'/portal/chats',label:'Practice',icon:'◇'}, {path:'/portal/account',label:'My account',icon:'○'}]);
+    ? [{path:'/portal',label:'Resumen',icon:'calendar-event' as IconName}, {path:'/portal/courses',label:'Mis cursos',icon:'book' as IconName}, {path:'/portal/chats',label:'Práctica',icon:'sparkles' as IconName}, {path:'/portal/account',label:'Mi cuenta',icon:'users' as IconName}]
+    : [{path:'/portal',label:'Overview',icon:'calendar-event' as IconName}, {path:'/portal/courses',label:'My courses',icon:'book' as IconName}, {path:'/portal/chats',label:'Practice',icon:'sparkles' as IconName}, {path:'/portal/account',label:'My account',icon:'users' as IconName}]);
   protected readonly pageLabel = computed(() => [...this.nav()].reverse().find(item => this.currentPath() === item.path || this.currentPath().startsWith(item.path + '/'))?.label);
   private updateRoute(url: string): void {
     const path = url.split(/[?#]/)[0]!;

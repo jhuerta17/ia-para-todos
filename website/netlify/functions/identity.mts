@@ -1,3 +1,4 @@
+import { ACCOUNT_PRIVACY_VERSION } from '../../src/app/portal/auth/account-policy.ts';
 import type { UserValidateEvent, UserSignupEvent, UserDeletedEvent } from '@netlify/functions';
 import { env } from '../lib/ai-security.mts';
 import { portalPool } from '../lib/portal-db.mts';
@@ -9,17 +10,17 @@ export default {
   async userValidate(event: UserValidateEvent) {
     if (invited(event.user)) return;
     if (env('PORTAL_SIGNUP_ENABLED') !== 'true' || event.user.userMetadata?.['adult'] !== true ||
-        event.user.userMetadata?.['privacy_version'] !== PRIVACY_VERSION || !event.user.email) return event.deny();
+        ![ACCOUNT_PRIVACY_VERSION,PRIVACY_VERSION].includes(String(event.user.userMetadata?.['privacy_version'])) || !event.user.email) return event.deny();
     try { await transaction(portalPool(), db => reserveAdmission(db, emailHash(event.user.email!), event.user.id)); }
     catch { return event.deny(); }
   },
   async userSignup(event: UserSignupEvent) {
     if (invited(event.user)) return;
     if (!event.user.confirmedAt || event.user.userMetadata?.['adult'] !== true ||
-        event.user.userMetadata?.['privacy_version'] !== PRIVACY_VERSION || !event.user.email) return event.deny();
+        ![ACCOUNT_PRIVACY_VERSION,PRIVACY_VERSION].includes(String(event.user.userMetadata?.['privacy_version'])) || !event.user.email) return event.deny();
     try {
       const repo = new PortalRepository(portalPool());
-      await repo.consent({ ...event.user, roles: [] });
+      await repo.consent({ ...event.user, roles: [] },event.user.userMetadata?.['privacy_version'] === ACCOUNT_PRIVACY_VERSION ? ACCOUNT_PRIVACY_VERSION : PRIVACY_VERSION);
       // Browser metadata can never grant an administrative role.
       return { user: { ...event.user, appMetadata: { ...event.user.appMetadata, roles: ['student'] } } };
     } catch { return event.deny(); }

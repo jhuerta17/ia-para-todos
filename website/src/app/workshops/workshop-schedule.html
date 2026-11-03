@@ -1,0 +1,41 @@
+<ng-template #scheduleBody>
+<section class="workshop-shell" [class.ws-embedded]="embedded()" [attr.aria-label]="c().schedule">
+  <header class="ws-heading">@if(embedded()){<h2>{{c().schedule}}</h2>}@else{<h1>{{c().schedule}}</h1>}<p>{{c().intro}}</p></header>
+  @if(loading()){<p role="status">{{c().loading}}</p>}
+  @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" class="ws-button secondary" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
+  @if(result();as r){
+    <article class="ws-card ws-private" aria-live="polite"><h2>{{r.status==='confirmed'?c().confirmed:c().cancelled}}</h2><h3>{{title(r.session)}}</h3><p class="ws-date">{{date(r.session)}}</p><p>{{r.session.venue}} · {{r.session.address}}</p><p>{{c().reference}}: <strong>{{r.reference}}</strong></p><p>{{c().manual}}</p><p>{{c().save}}</p><label for="reservation-link">{{c().link}}</label><input id="reservation-link" class="ws-link" readonly [value]="privateLink" (focus)="$any($event.target).select()" /><p class="ws-token">{{privateLink}}</p><div class="ws-row ws-no-print"><a class="ws-button" [href]="privateLink">{{c().manage}}</a><button type="button" class="ws-button secondary" (click)="print()"><app-icon name="clipboard-check"/>{{c().print}}</button></div><p>{{c().account}}</p><div class="ws-row ws-no-print"><a routerLink="/portal/sign-up">{{c().signup}}</a><a [routerLink]="path('preparacion')">{{c().preparation}}</a><a [routerLink]="path()">{{c().browse}}</a></div></article>
+  }@else if(selected();as s){
+    <a [routerLink]="path()">{{c().back}}</a>
+    <article class="ws-card"><h2>{{title(s)}}</h2><p class="ws-date">{{date(s)}}</p><p><app-icon name="map-pin"/> {{s.venue}} · {{s.address}}</p><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><h3>{{c().accessibility}}</h3><p>{{en()?s.accessibilityEn:s.accessibilityEs}}</p><h3>{{c().bring}}</h3><p>{{en()?s.bringEn:s.bringEs}}</p><p>{{s.available>0?s.available+' '+c().places:c().full}}</p>
+    @if(s.available>0){<form class="ws-form" (ngSubmit)="reserve()">
+      <label for="booking-name">{{c().name}}<input id="booking-name" name="name" [(ngModel)]="name" required maxlength="100" autocomplete="given-name" [disabled]="submitting()"/></label>
+      <label for="booking-method">{{c().contactType}}<select id="booking-method" name="contactType" [(ngModel)]="contactType" [disabled]="submitting()"><option value="email">{{c().email}}</option><option value="phone">{{c().phone}}</option></select></label>
+      <label for="booking-contact">{{contactType==='email'?c().email:c().phone}}<input id="booking-contact" name="contact" [(ngModel)]="contact" [type]="contactType==='email'?'email':'tel'" [autocomplete]="contactType==='email'?'email':'tel'" required maxlength="200" [disabled]="submitting()"/></label>
+      <label class="ws-honeypot" aria-hidden="true">Website<input name="website" [(ngModel)]="website" tabindex="-1" autocomplete="off"/></label>
+      <label class="ws-check"><input type="checkbox" name="adult" [(ngModel)]="adult" required [disabled]="submitting()"/>{{c().adult}}</label>
+      <label class="ws-check"><input type="checkbox" name="privacy" [(ngModel)]="privacy" required [disabled]="submitting()"/>{{c().privacy}}</label>
+      <p class="ws-note">{{c().privacyNote}} <a [routerLink]="language.path('privacidad')">{{en()?'Privacy notice':'Aviso de privacidad'}}</a></p><p class="ws-note">{{c().manual}}</p>
+      <button class="ws-button" type="submit" [disabled]="submitting()||!adult||!privacy||!name.trim()||!contact.trim()">{{submitting()?c().saving:c().reserve}}</button>
+      @if(error()){<p role="alert">{{error()}}</p><button type="button" class="ws-button secondary" (click)="resetAttempt()">{{c().newAttempt}}</button>}
+    </form>}
+    </article>
+  }@else if(!loading()&&!loadFailed()){
+    @if(requestedSession()){<p role="alert" class="ws-error">{{en()?'This session is no longer available. Choose another workshop.':'Esta sesión ya no está disponible. Elige otro taller.'}}</p>}
+    @if(!sessions().length){<p class="ws-card">{{c().empty}}</p>}
+    @else{
+      <div class="ws-row" role="group" [attr.aria-label]="c().schedule"><button class="ws-button secondary" type="button" [attr.aria-pressed]="view()==='list'" (click)="view.set('list')">{{c().list}}</button><button class="ws-button secondary" type="button" [attr.aria-pressed]="view()==='calendar'" (click)="view.set('calendar')"><app-icon name="calendar-event"/>{{c().calendar}}</button></div>
+      @if(view()==='calendar'){
+        <div class="ws-row"><button type="button" class="ws-button secondary" [attr.aria-label]="c().previous" (click)="moveMonth(-1)"><app-icon name="chevron-left"/></button><span aria-live="polite">{{monthLabel()}}</span><button type="button" class="ws-button secondary" [attr.aria-label]="c().next" (click)="moveMonth(1)"><app-icon name="chevron-right"/></button></div>
+        <p class="ws-note">{{en()?'Dates and times follow each venue’s timezone.':'Las fechas y horas corresponden a la zona horaria de cada sede.'}}</p>
+        <table class="ws-calendar"><caption>{{monthLabel()}}</caption><thead><tr>@for(day of weekdays();track $index){<th scope="col">{{day}}</th>}</tr></thead><tbody>@for(week of days();track $index){<tr>@for(cell of week;track $index){<td>@if(cell){<time [attr.datetime]="cell.key">{{cell.day}}</time>@for(s of cell.sessions;track s.id){<a [routerLink]="path()" [queryParams]="{session:s.id}" [attr.aria-label]="title(s)+' '+date(s)">{{title(s)}}</a>}}</td>}</tr>}</tbody></table>
+      }@else{
+        <div class="ws-grid">@for(s of sessions();track s.id){<article class="ws-card"><p class="ws-date">{{date(s)}}</p><h3>{{title(s)}}</h3><p>{{s.venue}} · {{s.address}}</p><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><p>{{s.available>0?s.available+' '+c().places:c().full}}</p><a class="ws-button secondary" [routerLink]="path()" [queryParams]="{session:s.id}">{{c().details}}<app-icon name="arrow-right"/></a></article>}</div>
+      }
+    }
+    <p class="ws-row"><a [routerLink]="path('preparacion')">{{c().preparation}}</a></p>
+  }
+</section>
+
+</ng-template>
+@if(embedded()){<ng-container [ngTemplateOutlet]="scheduleBody"/>}@else{<main id="main-content" tabindex="-1"><ng-container [ngTemplateOutlet]="scheduleBody"/></main>}

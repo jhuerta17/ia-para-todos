@@ -83,7 +83,7 @@ export class RouteMetadata {
       this.meta.updateTag({ name: 'robots', content: 'noindex, follow' });
       this.removeCanonical();
       this.removeAlternates();
-    } else if (admin || portal) {
+    } else if (admin || portal || data['private'] === true) {
       const url = this.router.url.split(/[?#]/)[0] || '/';
       this.meta.updateTag({ property: 'og:url', content: `${SITE_URL}${url}` });
       this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });
