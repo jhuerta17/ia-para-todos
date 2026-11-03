@@ -1,0 +1,45 @@
+<main id="main-content" tabindex="-1">
+  <app-page-cover [image]="c().coverImage" [icon]="c().coverIcon" [alt]="c().coverAlt" [title]="c().title" [summary]="c().summary" />
+  <section class="panel" aria-labelledby="panel-title">
+    <header appRevealOnEnter>
+      <h2 id="panel-title">{{ c().panelHeading }}</h2>
+      <p>{{ c().panelLead }}</p>
+      <ul class="promises">
+        @for (promise of c().promises; track promise) {
+          <li><app-icon name="circle-check" /><span>{{ promise }}</span></li>
+        }
+      </ul>
+      <div class="explore">
+        @for (link of c().explore; track link.to) {
+          <app-action-link [to]="link.to" [label]="link.label" />
+        }
+      </div>
+    </header>
+    <div class="cards" appRevealOnEnter>
+      <div class="card highlight">
+        <app-icon name="pencil" />
+        <div>
+          <h3>{{ c().formTitle }}</h3>
+          <p>{{ c().formDescription }}</p>
+          <a class="form-link" href="#participar">{{ c().formLink }}</a>
+        </div>
+      </div>
+      @for (card of c().cards; track card.title) {
+        <div class="card">
+          <app-icon [name]="card.icon" />
+          <div>
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+  @if (community()) {
+    <app-values-section />
+  } @else {
+    <app-workshop-section />
+  }
+  <app-participation-section [page]="true" [context]="context()" />
+  <app-faq-section [heading]="c().faqHeading" [lead]="c().faqLead" [items]="c().faq" />
+</main>
