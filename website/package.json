@@ -21,7 +21,8 @@
     "verify:portal:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-portal.headless.mjs",
     "watch": "ng build --watch --configuration development",
     "verify:ai:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/ai-assist.mts netlify/functions/ai-status.mts netlify/functions/ai-control.mts netlify/lib/ai-security.mts",
-    "verify:portal:db": "node scripts/verify-portal-db.mjs"
+    "verify:portal:db": "node scripts/verify-portal-db.mjs",
+    "verify:portal:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/portal.mts netlify/lib/portal-repository.mts netlify/lib/portal-db.mts"
   },
   "private": true,
   "packageManager": "npm@11.13.0",
