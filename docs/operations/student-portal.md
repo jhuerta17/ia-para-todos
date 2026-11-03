@@ -83,9 +83,15 @@ connections require certificate-verified TLS; no credentials reach the browser.
 Netlify-managed Database packages are removed, so deployment does not require
 access to that product.
 
-- `PORTAL_DATABASE_URL`: Neon **pooled** URL, secret, Functions scope.
-- `PORTAL_MIGRATION_DATABASE_URL`: Neon **direct** URL, secret, Builds scope
-  for the production migration build.
+- `PORTAL_DATABASE_URL`: Neon **pooled** URL, production-only secret.
+  Prefer Functions-only scope when the subscription supports it.
+- `PORTAL_MIGRATION_DATABASE_URL`: Neon **direct** URL, production-only secret
+  for the migration build. Prefer Builds-only scope when available.
+- The current subscription locks per-variable scope controls. With the owner's
+  explicit approval, the three portal secrets use Netlify's available secret
+  scopes (Builds, Functions, Runtime; never post processing). Their values are
+  populated only for production; preview, branch, dev, and dev-server values
+  are empty. No subscription upgrade was made.
 - Keep production values in the production context. Give preview/branch
   deploys their own staging URL; never give previews production credentials.
 - Migrations live in `website/db/migrations`. Run `npm run db:check` and then
@@ -103,7 +109,11 @@ access to that product.
   configure their own staging credentials explicitly. Use additive migrations.
 
 Dedicated Neon project: `ia-para-todos` (`winter-brook-27058187`), AWS Ohio,
-PostgreSQL 18. Production branch: `br-spring-forest-bekgoxfa`; staging:
+PostgreSQL 18. Schema was applied and pooled connections verified on both
+branches; production contained zero student profiles at setup. Synthetic staging
+progress and cross-user ownership checks passed, and their temporary records
+were removed. These are database tests, not a real-email Identity validation.
+Production branch: `br-spring-forest-bekgoxfa`; staging:
 `br-withered-feather-bej641jg`. Staging was created schema-only, not copied from
 participant data. The selected Free plan currently shows six-hour history
 retention in the console; review backup/recovery needs before enrolling users.
