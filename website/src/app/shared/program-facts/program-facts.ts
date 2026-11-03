@@ -48,7 +48,7 @@ export class ProgramFacts {
   protected readonly count = signal(4);
 
   protected readonly photos = [
-    'community-group', 'peer-support', 'everyday-phone', 'family-learning', 'collaboration',
+    'learning-together', 'peer-support', 'everyday-phone', 'family-learning', 'collaboration',
     'family-phone', 'community-learning', 'accessible-technology', 'work-business',
   ].map((key, i, all) => ({
     image: `/images/${key}-480.webp`,

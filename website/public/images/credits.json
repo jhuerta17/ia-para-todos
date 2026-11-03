@@ -42,20 +42,6 @@
     "illustrative": true
   },
   {
-    "key": "community-group",
-    "id": "7983576",
-    "source": "https://www.pexels.com/photo/group-of-elderly-people-standing-behind-a-laptop-and-smiling-7983576/",
-    "photographer": "Kampus Production",
-    "license": "Pexels License",
-    "licenseUrl": "https://www.pexels.com/license/",
-    "alt": "Un grupo de personas adultas reunidas alrededor de una computadora.",
-    "focalPoint": {
-      "x": 50,
-      "y": 50
-    },
-    "illustrative": true
-  },
-  {
     "key": "community-learning",
     "id": "7983574",
     "source": "https://www.pexels.com/photo/elderly-people-learning-about-computers-7983574/",
@@ -136,6 +122,62 @@
     "focalPoint": {
       "x": 50,
       "y": 50
+    },
+    "illustrative": true
+  },
+  {
+    "key": "shared-learning",
+    "id": "6457547",
+    "source": "https://www.pexels.com/photo/diverse-women-talking-while-using-laptop-6457547/",
+    "photographer": "Alexander Suhorucov",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Tres personas aprendiendo juntas con una computadora portátil.",
+    "focalPoint": {
+      "x": 50,
+      "y": 40
+    },
+    "illustrative": true
+  },
+  {
+    "key": "workshop-guidance",
+    "id": "5940827",
+    "source": "https://www.pexels.com/photo/multiethnic-students-doing-research-together-in-library-5940827/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Un grupo aprendiendo con una facilitadora y una computadora en una biblioteca.",
+    "focalPoint": {
+      "x": 50,
+      "y": 40
+    },
+    "illustrative": true
+  },
+  {
+    "key": "neighbor-support",
+    "id": "5486091",
+    "source": "https://www.pexels.com/photo/a-red-haired-woman-wearing-a-cream-sweater-standing-beside-an-old-woman-sitting-with-a-laptop-5486091/",
+    "photographer": "cottonbro studio",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Dos mujeres de distintas generaciones revisando una computadora juntas.",
+    "focalPoint": {
+      "x": 50,
+      "y": 40
+    },
+    "illustrative": true
+  },
+  {
+    "key": "learning-together",
+    "id": "7983549",
+    "source": "https://www.pexels.com/photo/a-man-teaching-elderlies-to-use-a-laptop-7983549/",
+    "photographer": "Kampus Production",
+    "license": "Pexels License",
+    "licenseUrl": "https://www.pexels.com/license/",
+    "alt": "Un facilitador acompañando a dos personas adultas con sus computadoras.",
+    "focalPoint": {
+      "x": 50,
+      "y": 40
     },
     "illustrative": true
   }

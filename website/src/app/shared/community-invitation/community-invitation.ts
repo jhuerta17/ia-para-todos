@@ -63,7 +63,7 @@ export class CommunityInvitation {
   }
 
   protected readonly photographs = [
-    'peer-support', 'community-group', 'everyday-phone', 'community-learning',
+    'peer-support', 'shared-learning', 'everyday-phone', 'community-learning',
     'collaboration', 'family-learning', 'family-phone', 'accessible-technology',
   ];
 }
