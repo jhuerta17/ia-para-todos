@@ -13,13 +13,13 @@ const roles: Record<Lang, { title: string; description: string; image: string }[
     { title: 'Facilitar talleres', description: 'Explicar con palabras sencillas y guiar ejercicios paso a paso.', image: 'guided-practice' },
     { title: 'Acompañar prácticas', description: 'Escuchar preguntas y apoyar a cada persona a su ritmo.', image: 'peer-support' },
     { title: 'Traducir contenidos', description: 'Ayudar a que las instrucciones sean claras y accesibles.', image: 'accessible-technology' },
-    { title: 'Compartir la iniciativa', description: 'Acercar la iniciativa a vecinos, familias y espacios comunitarios.', image: 'collaboration' },
+    { title: 'Compartir la misión', description: 'Acercar nuestra misión a vecinos, familias y espacios comunitarios.', image: 'collaboration' },
   ],
   en: [
     { title: 'Facilitate workshops', description: 'Explain in simple words and guide step-by-step exercises.', image: 'guided-practice' },
     { title: 'Guide practice', description: 'Listen to questions and support each person at their pace.', image: 'peer-support' },
     { title: 'Translate content', description: 'Help keep instructions clear and accessible.', image: 'accessible-technology' },
-    { title: 'Share the initiative', description: 'Bring the initiative to neighbors, families, and community spaces.', image: 'collaboration' },
+    { title: 'Share the mission', description: 'Bring our mission to neighbors, families, and community spaces.', image: 'collaboration' },
   ],
 };
 

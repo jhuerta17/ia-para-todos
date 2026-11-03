@@ -75,13 +75,13 @@ const steps: Record<Lang, Record<ParticipationContext, { title: string; text: st
 const choices: Record<Lang, Record<ParticipationContext, string[]>> = {
   es: {
     workshops: ['Introducción a la IA', 'Vida diaria', 'Trabajo y negocios', 'Padres y familias'],
-    community: ['Facilitar talleres', 'Acompañar prácticas', 'Traducir contenidos', 'Compartir la iniciativa'],
+    community: ['Facilitar talleres', 'Acompañar prácticas', 'Traducir contenidos', 'Compartir la misión'],
     donate: ['Donación individual', 'Patrocinio empresarial', 'Apoyo en especie', 'Otra forma de apoyo'],
     contact: ['Pregunta general', 'Talleres y cursos', 'Colaborar', 'Donaciones', 'Prensa y alianzas'],
   },
   en: {
     workshops: ['Intro to AI', 'Everyday life', 'Work and business', 'Parents and families'],
-    community: ['Facilitate workshops', 'Guide practice', 'Translate content', 'Share the initiative'],
+    community: ['Facilitate workshops', 'Guide practice', 'Translate content', 'Share the mission'],
     donate: ['Individual donation', 'Company sponsorship', 'In-kind support', 'Another way to support'],
     contact: ['General question', 'Workshops and courses', 'Collaborate', 'Donations', 'Press and partnerships'],
   },

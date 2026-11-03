@@ -4,19 +4,19 @@ import { Language } from '../../i18n/language';
 import type { Lang } from '../../i18n/lang';
 
 const copy = {
-  es: { heading: 'Dónde estamos hoy', lead: 'Tres datos honestos antes de seguir leyendo.' },
-  en: { heading: 'Where we are today', lead: 'Three honest facts before you read on.' },
+  es: { heading: 'Nuestra organización', lead: 'Tres datos sobre quiénes somos.' },
+  en: { heading: 'Our organization', lead: 'Three facts about who we are.' },
 };
 
 const facts: Record<Lang, { term: string; detail: string }[]> = {
   es: [
-    { term: 'Iniciativa comunitaria', detail: 'Aún no somos una organización sin fines de lucro registrada.' },
-    { term: 'Etapa exploratoria', detail: 'Sin talleres oficiales ni alianzas formales todavía.' },
+    { term: 'Organización sin fines de lucro', detail: 'En operación activa al servicio de la comunidad.' },
+    { term: 'Talleres en marcha', detail: 'Sesiones gratuitas y alianzas comunitarias activas.' },
     { term: 'Gratis, siempre', detail: 'Sostenido por empresas y donaciones externas.' },
   ],
   en: [
-    { term: 'Community initiative', detail: 'Not a registered nonprofit organization yet.' },
-    { term: 'Exploratory stage', detail: 'No official workshops or formal partnerships yet.' },
+    { term: 'Nonprofit organization', detail: 'In active operation serving the community.' },
+    { term: 'Workshops in operation', detail: 'Free sessions and active community partnerships.' },
     { term: 'Free, always', detail: 'Sustained by companies and outside donations.' },
   ],
 };

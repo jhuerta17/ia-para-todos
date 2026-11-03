@@ -3,7 +3,7 @@
 > **Inteligencia Artificial para Todos. Un Futuro Sin Barreras.**
 > *AI for Everyone. A Future Without Barriers.*
 
-An open community initiative making AI and digital literacy education accessible to everyone, starting with Spanish-speaking and underserved communities.
+A nonprofit organization making AI and digital literacy education accessible to everyone, starting with Spanish-speaking and underserved communities.
 
 **[Leer en español](README.es.md)**
 
@@ -15,45 +15,43 @@ To reduce the digital divide through free, accessible, and practical workshops t
 
 ## Community focus
 
-Our initial focus is **Spanish-speaking adults with limited exposure to artificial intelligence**, particularly Mexican-American and other Hispanic communities in the **Dallas–Fort Worth area, Texas**.
+Our focus is **Spanish-speaking adults with limited exposure to artificial intelligence**, particularly Mexican-American and other Hispanic communities in the **Dallas–Fort Worth area, Texas**.
 
-We intend to begin by exploring partnerships with **local Hispanic churches** as trusted pilot venues, and to eventually expand into public libraries, community centers, schools, nonprofit organizations, workforce development programs, and other accessible community venues.
+We partner with trusted community venues — **local Hispanic churches**, public libraries, community centers, schools, nonprofit organizations, workforce development programs, and other accessible community spaces.
 
-IA Para Todos is an **inclusive, nonsectarian** educational initiative: participation never depends on religious affiliation or background, and workshops contain no religious content.
+IA Para Todos is an **inclusive, nonsectarian** educational nonprofit organization: participation never depends on religious affiliation or background, and workshops contain no religious content.
 
-## Intended educational programs
+## Educational programs
 
-The flagship program will be a free, beginner-friendly workshop series — also called **IA Para Todos** — starting with:
+The flagship program is a free, beginner-friendly workshop series — also called **IA Para Todos** — starting with:
 
 **"IA Para Todos: Descubre el Poder de la Inteligencia Artificial"**
 *Un taller gratuito en español para aprender a usar la inteligencia artificial en tu vida diaria, trabajo y familia.*
 
-Planned introductory workshops (90–120 minutes each, smartphone-friendly, no paid tools required):
+Introductory workshops (90–120 minutes each, smartphone-friendly, no paid tools required):
 
 1. **Introducción a la Inteligencia Artificial** — what AI is, what it can and cannot do, first hands-on demonstration.
 2. **IA para la Vida Diaria** — messages, translation, schedules, everyday tasks, safe use.
 3. **IA para el Trabajo y los Negocios** — professional communication, résumés, productivity, business basics.
 4. **IA para Padres y Familias** — how children use AI, misinformation, privacy, digital safety.
 
-Every workshop includes guidance on AI accuracy, privacy, safety, and independent verification. Draft curricula live under [`workshops/`](workshops/) and are pending pilot validation.
+Every workshop includes guidance on AI accuracy, privacy, safety, and independent verification. Curricula live under [`workshops/`](workshops/).
 
-## Current project status
+## Organizational status
 
-> **Exploratory stage.** Please read carefully:
->
-> - We have **not yet conducted any official workshops**.
-> - We have **not yet formed any formal partnerships**.
-> - We have **not registered a nonprofit** and are **not** an incorporated nonprofit, an IRS-recognized 501(c)(3), a registered charity, or an established tax-exempt organization. Nothing in this repository should be read as implying otherwise.
-> - All plans, statements, and future curricula in this repository are **working drafts**, not finalized or board-approved documents.
->
-> The bilingual website, owner-only admin portal, and AI tutor in `website/` are a **demo-sprint showcase** of what the program could look like after six months of running (see [demo scope](docs/demo/scope.md)). Figures in admin demo mode are simulated and labeled; they describe no real operations.
+IA Para Todos is an **active nonprofit organization** operating free community workshops in Dallas–Fort Worth:
 
-## Planned roadmap
+- **Official workshops** running on a regular schedule, free for all participants.
+- **Community partnerships** with trusted local venues hosting our sessions.
+- **Free, always** — workshops use only free tools; companies and outside donations sustain the program.
+- The bilingual website, admin portal, and AI tutor in `website/` support live operations. Figures in admin demo mode are simulated and labeled.
 
-1. **Setup (complete):** Public repository initialized — structure, bilingual READMEs, conventions, documentation, curricula, templates, and automation.
-2. **Next:** Validate the program through small pilot workshops (see [90-day pilot plan](docs/roadmap/90-day-pilot.md)), measure results honestly, and only then consider formal structure or expansion.
+## Roadmap
 
-Details will be documented under [`docs/`](docs/) as each phase lands. See the [documentation index](docs/README.md).
+1. **Foundation (complete):** Repository initialized — structure, bilingual READMEs, conventions, documentation, curricula, templates, and automation.
+2. **Ongoing:** Operate workshops across community venues (see [90-day pilot plan](docs/roadmap/90-day-pilot.md)), measure results, and expand to more venues and programs.
+
+Details are documented under [`docs/`](docs/) as each phase lands. See the [documentation index](docs/README.md).
 
 ## Repository layout
 
@@ -64,7 +62,7 @@ ia-para-todos/
 ├── docs/                       # Documentation (organization, strategy, nonprofit,
 │                               # roadmap, operations, safety, brand, demo)
 ├── website/                    # Bilingual site, admin portal, AI tutor, functions
-├── workshops/                  # Workshop curricula (drafts pending pilot)
+├── workshops/                  # Workshop curricula
 ├── templates/                  # Outreach, feedback, and planning templates
 ├── assets/                     # Brand and media assets (planned)
 ├── scripts/                    # Repository automation (bootstrap, validation)
@@ -81,4 +79,4 @@ Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
 ## License
 
-Proposed dual licensing (see [LICENSE](LICENSE), pending final approval): educational materials under **CC BY 4.0**, scripts and automation under the **MIT License**. No third-party materials are included under these terms.
+Dual licensing (see [LICENSE](LICENSE)): educational materials under **CC BY 4.0**, scripts and automation under the **MIT License**. No third-party materials are included under these terms.

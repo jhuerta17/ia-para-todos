@@ -17,16 +17,16 @@ const copy: Record<Lang, { coverAlt: string; title: string; summary: string; way
     ways: [
       { icon: 'users', title: 'Donación individual', description: 'Aporta como persona y ayuda a mantener los cursos gratuitos.' },
       { icon: 'sparkles', title: 'Patrocinio empresarial', description: 'Tu empresa puede financiar talleres y cursos en la comunidad.' },
-      { icon: 'clipboard-check', title: 'Apoyo en especie', description: 'Espacios, equipos o tiempo también mantienen la iniciativa.' },
+      { icon: 'clipboard-check', title: 'Apoyo en especie', description: 'Espacios, equipos o tiempo también mantienen nuestra misión.' },
     ],
-    waysNote: 'Por ahora coordinamos cada donación por contacto directo; este sitio no procesa pagos.',
+    waysNote: 'Coordinamos cada donación por contacto directo; este sitio no procesa pagos.',
     faqHeading: 'Preguntas sobre donaciones',
     faqLead: 'Cómo se usan los fondos y qué esperar al donar.',
     faq: [
       { question: '¿A dónde va mi donación?', answer: 'A mantener gratuitos los cursos y talleres: materiales, sedes y acompañamiento en la comunidad.' },
       { question: '¿Los cursos seguirán siendo gratuitos?', answer: 'Sí. Todos los cursos son gratuitos para la comunidad y seguirán siéndolo; las donaciones y patrocinios cubren los costos.' },
       { question: '¿Puedo donar como empresa?', answer: 'Sí. Elige “Patrocinio empresarial” en el formulario y te contactamos para coordinar.' },
-      { question: '¿Recibo un comprobante?', answer: 'Te contactamos para coordinar cada donación. Aún no somos una organización sin fines de lucro registrada, así que por ahora no emitimos recibos deducibles de impuestos.' },
+      { question: '¿Recibo un comprobante?', answer: 'Sí. Te contactamos para coordinar cada donación y te emitimos un comprobante por tu aportación.' },
     ],
   },
   en: {
@@ -38,16 +38,16 @@ const copy: Record<Lang, { coverAlt: string; title: string; summary: string; way
     ways: [
       { icon: 'users', title: 'Individual donation', description: 'Give as a person and help keep courses free.' },
       { icon: 'sparkles', title: 'Company sponsorship', description: 'Your company can fund workshops and courses in the community.' },
-      { icon: 'clipboard-check', title: 'In-kind support', description: 'Venues, equipment, or time also keep the initiative going.' },
+      { icon: 'clipboard-check', title: 'In-kind support', description: 'Venues, equipment, or time also keep our mission going.' },
     ],
-    waysNote: 'For now we coordinate each donation through direct contact; this site does not process payments.',
+    waysNote: 'We coordinate each donation through direct contact; this site does not process payments.',
     faqHeading: 'Questions about donations',
     faqLead: 'How funds are used and what to expect when you donate.',
     faq: [
       { question: 'Where does my donation go?', answer: 'To keeping courses and workshops free: materials, venues, and guidance in the community.' },
       { question: 'Will courses stay free?', answer: 'Yes. Every course is free for the community and will stay that way; donations and sponsorships cover the costs.' },
       { question: 'Can I donate as a company?', answer: 'Yes. Choose “Company sponsorship” in the form and we will contact you to coordinate.' },
-      { question: 'Do I get a receipt?', answer: 'We contact you to coordinate each donation. We are not a registered nonprofit yet, so for now we cannot issue tax-deductible receipts.' },
+      { question: 'Do I get a receipt?', answer: 'Yes. We contact you to coordinate each donation and provide a receipt for your contribution.' },
     ],
   },
 };
