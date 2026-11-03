@@ -2,43 +2,11 @@ import { ActionButton } from '../action-button';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
-import type { Lang } from '../../i18n/lang';
+import { tutorCopy as copy } from './tutor-copy';
+import { TUTOR_INPUT_LIMIT, TUTOR_CONTEXT_LIMIT } from './tutor-core';
 
 interface ChatMessage { from: 'user' | 'ai'; text: string; demo: boolean }
-const copy = {
-  es: {
-    heading: 'Practica con IA', lead: 'Hazle preguntas al tutor y ensaya tu primer prompt aquí mismo.',
-    placeholder: 'Escribe tu pregunta o tu prompt…', send: 'Enviar', thinking: 'Escribiendo…', sample: 'Respuesta de ejemplo',
-    privacy: 'Usa ejemplos inventados. No compartas datos personales.',
-    greeting: '¡Hola! Soy tu tutor de práctica. Escríbeme un prompt y te ayudo a mejorarlo, paso a paso.',
-    disclosure: 'La práctica en vivo usa Meta en modo Contributor: Meta puede usar tus preguntas y sus respuestas para entrenar sus modelos. Usa solo ejemplos inventados. Eliminar correos y teléfonos no elimina todos los datos personales.',
-    acknowledge: 'Entiendo y acepto este uso para practicar con datos inventados.', verify: 'Usar práctica en vivo',
-    verification: 'Acepta el aviso para practicar en vivo, o continúa con ejemplos.',
-    cooldown: 'Espera un momento para volver a usar la IA en vivo. Mientras tanto, practica con ejemplos.',
-    allowance: 'Llegaste al límite de práctica en vivo de hoy. Puedes continuar con ejemplos.',
-    unavailable: 'La práctica en vivo no está disponible. Puedes continuar con respuestas de ejemplo.',
-    connectionError: 'No pudimos conectar con el tutor en vivo. La respuesta de abajo es solo un ejemplo; inténtalo de nuevo más tarde.',
-    paused: 'La práctica en vivo está apagada. Puedes continuar con respuestas de ejemplo.',
-    ready: 'Práctica en vivo activada.',
-    localSample: 'Para mejorar tu prompt, incluye tarea + tema + formato. Por ejemplo: “Dame 3 ideas para una cena saludable, en lista numerada y con palabras fáciles”. Practica con datos inventados. Esta es una respuesta de ejemplo.',
-  },
-  en: {
-    heading: 'Practice with AI', lead: 'Ask the tutor questions and rehearse your first prompt right here.',
-    placeholder: 'Type your question or prompt…', send: 'Send', thinking: 'Typing…', sample: 'Sample reply',
-    privacy: 'Use made-up examples. Do not share personal data.',
-    greeting: 'Hi! I am your practice tutor. Write me a prompt and I will help you improve it, step by step.',
-    disclosure: 'Live practice uses Meta Contributor mode: Meta may use your questions and its replies to train its models. Use fictional examples only. Removing emails and phone numbers does not remove all personal data.',
-    acknowledge: 'I understand and accept this use for practice with fictional data.', verify: 'Use live practice',
-    verification: 'Accept the notice to practice with live AI, or continue with samples.',
-    cooldown: 'Please wait before using live AI again. You can practice with samples meanwhile.',
-    allowance: 'You reached today’s live practice allowance. You can continue with samples.',
-    unavailable: 'Live practice is unavailable. You can continue with sample replies.',
-    connectionError: 'We could not connect to the live tutor. The reply below is only a sample; please try again later.',
-    paused: 'Live practice is turned off. You can continue with sample replies.',
-    ready: 'Live practice enabled.',
-    localSample: 'To improve your prompt, include task + topic + format. For example: “Give me 3 healthy dinner ideas, as a numbered list in simple words.” Practice with made-up data. This is a sample reply.',
-  },
-} satisfies Record<Lang, Record<string, string>>;
+
 
 @Component({ selector: 'app-ai-tutor', imports: [ActionButton, RevealOnEnter], templateUrl: './ai-tutor.html', styleUrl: './ai-tutor.css', changeDetection: ChangeDetectionStrategy.OnPush })
 export class AiTutor {
@@ -75,7 +43,7 @@ export class AiTutor {
   }
   protected enable(): void { if (this.acknowledged()) this.reason.set('ok'); }
   protected async send(value: string): Promise<void> {
-    const input = value.trim().slice(0, 2000);
+    const input = value.trim().slice(0, TUTOR_INPUT_LIMIT);
     if (!input || this.sending()) return;
     this.sending.set(true);
     const prior = this.messages();
@@ -85,7 +53,7 @@ export class AiTutor {
     try {
       if (Date.now() >= this.retryAt) await this.loadStatus();
       if (this.available() && this.acknowledged() && Date.now() >= this.retryAt) {
-        const history = prior.filter(turn => !turn.demo).slice(-6).map(turn => ({ role: turn.from === 'user' ? 'user' : 'assistant', content: turn.text }));
+        const history = prior.filter(turn => !turn.demo).slice(-TUTOR_CONTEXT_LIMIT).map(turn => ({ role: turn.from === 'user' ? 'user' : 'assistant', content: turn.text }));
         const response = await fetch('/api/ai-assist', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ task: 'tutor', lang: this.language.lang(), history, input, acknowledged: true }), signal: AbortSignal.timeout(30000),

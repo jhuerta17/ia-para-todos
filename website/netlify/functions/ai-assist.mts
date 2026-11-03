@@ -1,3 +1,5 @@
+import { scrubPII } from '../../src/app/shared/ai-tutor/tutor-core.ts';
+export { scrubPII } from '../../src/app/shared/ai-tutor/tutor-core.ts';
 import type { Config, Context } from '@netlify/functions';
 import * as security from '../lib/ai-security.mts';
 
@@ -31,13 +33,6 @@ const SYSTEMS: Record<Task, Record<Lang, string>> = {
   },
 };
 
-/** Best-effort PII scrub before anything leaves for the model. Pure. */
-export function scrubPII(value: string): string {
-  return value
-    .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[correo]')
-    .replace(/(\+?\d[\d .-]{7,}\d)/g, '[teléfono]')
-    .slice(0, MAX_INPUT);
-}
 
 const cleanTurn = (turn: unknown): Turn | null => {
   if (typeof turn !== 'object' || turn === null) return null;
