@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="field" role="group" [attr.aria-invalid]="isInvalid('email') ? 'true' : null">
+    <label for="portal-email">{{ c().email }}</label>
+    <input
+      id="portal-email"
+      formControlName="email"
+      type="email"
+      [placeholder]="c().emailPlaceholder"
+      autocomplete="email"
+      [attr.aria-invalid]="isInvalid('email') ? 'true' : null"
+    />
+    @if (isInvalid('email')) {
+      <p class="error" role="alert">{{ errorFor('email') }}</p>
+    }
+  </div>
+  <div class="field" role="group" [attr.aria-invalid]="isInvalid('password') ? 'true' : null">
+    <label for="portal-password">{{ c().password }}</label>
+    <input
+      id="portal-password"
+      formControlName="password"
+      type="password"
+      [placeholder]="c().passwordPlaceholder"
+      autocomplete="current-password"
+      [attr.aria-invalid]="isInvalid('password') ? 'true' : null"
+    />
+    @if (isInvalid('password')) {
+      <p class="error" role="alert">{{ errorFor('password') }}</p>
+    }
+  </div>
+  @if (failed(); as message) {
+    <div role="alert" class="failed">{{ message }}</div>
+  }
+  <div class="submit-row">
+    <button appActionButton type="submit" [disabled]="submitting()">
+      {{ submitting() ? c().submitting : c().submit }}
+    </button>
+  </div>
+</form>

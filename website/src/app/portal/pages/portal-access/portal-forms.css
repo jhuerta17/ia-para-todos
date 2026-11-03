@@ -1,0 +1,5 @@
+.field { margin: 0 0 4px; }
+.failed { margin: 16px 0 0; border: 1px solid #e0b7a8; border-radius: 12px; background: #fdf0ec; color: #952711; padding: 10px 12px; font-size: 0.94rem; }
+.failed:empty { display: none; }
+.submit-row { margin-top: 24px; }
+.submit-row .site-action { width: 100%; justify-content: center; }

@@ -1,0 +1,6 @@
+.form { margin-top: 8px; }
+.failed { margin: 16px 0 0; border: 1px solid #e0b7a8; border-radius: 12px; background: #fdf0ec; color: #952711; padding: 10px 12px; font-size: 0.94rem; }
+.submit-row { margin-top: 24px; }
+.submit-row .site-action { width: 100%; justify-content: center; }
+.linklike { border: 0; background: none; padding: 0; font: inherit; color: var(--color-accent); font-weight: 600; cursor: pointer; text-align: start; }
+.linklike:hover { text-decoration: underline; }

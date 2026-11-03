@@ -1,0 +1,23 @@
+<div class="card">
+  @if (session.user(); as user) {
+    <p class="greeting">{{ c().greeting }}, {{ user.name }}</p>
+  }
+  <h1>{{ c().title }}</h1>
+  <p class="lead">{{ c().lead }}</p>
+  <h2>{{ c().coming }}</h2>
+  <ul>
+    <li>{{ c().courses }}</li>
+    <li>{{ c().tutor }}</li>
+    <li>{{ c().history }}</li>
+  </ul>
+  @if (!session.user()) {
+    <div class="actions">
+      <a appActionButton routerLink="/portal/sign-in">{{ c().signIn }}</a>
+      <a class="ghost" routerLink="/portal/sign-up">{{ c().signUp }}</a>
+    </div>
+  }
+  <p class="foot">
+    <a [routerLink]="homePath()">{{ c().home }}</a>
+    <span aria-hidden="true"> · </span>{{ c().note }}
+  </p>
+</div>

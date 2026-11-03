@@ -45,8 +45,8 @@ for (const lang of LANGS) {
 }
 const canonical = (route) => (route === '' ? `${SITE_URL}/` : `${SITE_URL}/${route}`);
 
-// 1. robots.txt: allow-by-default launch, admin excluded, absolute sitemap URL.
-writeFileSync(join(publish, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+// 1. robots.txt: allow-by-default launch, app shells excluded, absolute sitemap URL.
+writeFileSync(join(publish, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /portal/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
 
 // 2. sitemap.xml: canonical indexable URLs only, with reciprocal hreflang.
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${routes
@@ -58,6 +58,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://w
   .join('\n')}\n</urlset>\n`;
 writeFileSync(join(publish, 'sitemap.xml'), sitemap);
 if (sitemap.includes('/admin')) fail('sitemap leaks admin routes');
+if (sitemap.includes('/portal')) fail('sitemap leaks portal routes');
 
 // 3. 404.html from the client shell so Netlify can serve the branded
 // recovery page with a real 404 status for unknown paths.
@@ -171,6 +172,33 @@ for (const path of ADMIN_PATHS) {
   if (html.includes('rel="canonical"')) fail(`${label} must not set a canonical`);
   if (html.includes('hreflang=')) fail(`${label} must not set hreflang alternates`);
   if (html.includes('name="newsletter"') || html.includes('<app-site-header')) fail(`${label} renders public chrome`);
+}
+
+// 9b. Portal routes prerender as Spanish shells: present but uncrawlable,
+// styled by the site stylesheet (never the admin theme), with no public
+// chrome, canonicals, or hreflang peers.
+const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up'];
+for (const path of PORTAL_PATHS) {
+  const file = join(publish, path, 'index.html');
+  const label = `/${path} [portal]`;
+  if (!existsSync(file)) {
+    fail(`missing prerendered output for ${label}: ${file}`);
+    continue;
+  }
+  const html = readFileSync(file, 'utf8');
+  if (!/<h1[\s>]/.test(html)) fail(`${label} has no rendered <h1>`);
+  if (!html.includes('<html lang="es">')) fail(`${label} lacks <html lang="es">`);
+  if (!html.includes('name="robots"') || !html.includes('content="noindex, nofollow"')) fail(`${label} lacks noindex, nofollow`);
+  if (html.includes('rel="canonical"')) fail(`${label} must not set a canonical`);
+  if (html.includes('hreflang=')) fail(`${label} must not set hreflang alternates`);
+  if (html.includes('name="newsletter"') || html.includes('<app-site-header')) fail(`${label} renders public chrome`);
+  if (html.includes('id="admin-theme"')) fail(`${label} links the admin theme (portal uses the site stylesheet)`);
+}
+// Portal auth forms are app forms, never Netlify forms.
+for (const path of ['portal/sign-in', 'portal/sign-up']) {
+  const file = join(publish, path, 'index.html');
+  if (!existsSync(file)) continue; // missing output is covered above
+  if (/data-netlify="true"/.test(readFileSync(file, 'utf8'))) fail(`/${path} mislabels an auth form for Netlify detection`);
 }
 
 // 10. Demo generator is deterministic: fixed input, exact output.
@@ -336,4 +364,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
-console.log(`postbuild: ok (${routes.length} public + ${ADMIN_PATHS.length} admin routes, sitemap + robots + 404.html)`);
+console.log(`postbuild: ok (${routes.length} public + ${ADMIN_PATHS.length} admin + ${PORTAL_PATHS.length} portal routes, sitemap + robots + 404.html)`);

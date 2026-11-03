@@ -52,9 +52,12 @@ export class RouteMetadata {
     const descriptions = DESCRIPTIONS[lang];
     const key = typeof data['key'] === 'string' ? data['key'] : '';
     const admin = data['admin'] === true;
+    const portal = data['portal'] === true;
     const description: string = admin
       ? 'AI for everyone admin panel. Restricted access.'
-      : data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
+      : portal
+        ? 'Portal del estudiante de IA para todos. Accede a tus cursos y a tu práctica guardada.'
+        : data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
     const title = typeof route.title === 'string' ? route.title : BRAND_NAME[lang];
     const image = DEFAULT_SOCIAL_IMAGE[lang];
     this.document.documentElement.lang = lang;
@@ -80,7 +83,7 @@ export class RouteMetadata {
       this.meta.updateTag({ name: 'robots', content: 'noindex, follow' });
       this.removeCanonical();
       this.removeAlternates();
-    } else if (admin) {
+    } else if (admin || portal) {
       const url = this.router.url.split(/[?#]/)[0] || '/';
       this.meta.updateTag({ property: 'og:url', content: `${SITE_URL}${url}` });
       this.meta.updateTag({ name: 'robots', content: 'noindex, nofollow' });

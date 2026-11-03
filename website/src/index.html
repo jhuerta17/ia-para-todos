@@ -60,10 +60,10 @@
   <script>
   // Admin theme before first paint: /admin/* markup depends on the
   // side-built Tailwind sheet, so request it while the head still parses
-  // (render-blocking, no flash of unstyled content). Public routes return
-  // early and download nothing extra. This runs before the parser reaches
-  // any SSR-serialized copy, so the admin shell dedupes by id and exactly
-  // one link survives.
+  // (render-blocking, no flash of unstyled content). Public and portal
+  // routes use the site stylesheet and return early, downloading nothing
+  // extra. This runs before the parser reaches any SSR-serialized copy,
+  // so the admin shell dedupes by id and exactly one link survives.
   (function () {
     try {
       var path = location.pathname;

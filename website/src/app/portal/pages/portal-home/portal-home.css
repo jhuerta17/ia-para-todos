@@ -1,0 +1,6 @@
+.card { max-width: 640px; }
+.greeting { margin: 0 0 4px; font-size: 1rem; color: #6b5d4d; }
+.card h2 { margin: 24px 0 0; font-size: 1.13rem; }
+.card ul { margin: 8px 0 0; padding-inline-start: 24px; display: grid; gap: 6px; }
+.actions { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.ghost { font-weight: 600; color: var(--color-accent); }

@@ -16,6 +16,9 @@
     "verify:ai": "node scripts/verify-ai-assist.mjs",
     "verify:admin": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-admin.headless.mjs",
     "verify:admin:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-admin.headless.mjs",
+    "verify:portal": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers node scripts/verify-portal.headless.mjs",
+    "review:portal": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers REVIEW_PORTAL=1 node scripts/verify-portal.headless.mjs",
+    "verify:portal:headed": "PLAYWRIGHT_BROWSERS_PATH=../.playwright-browsers HEADED=1 node scripts/verify-portal.headless.mjs",
     "watch": "ng build --watch --configuration development",
     "verify:ai:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/ai-assist.mts netlify/functions/ai-status.mts netlify/functions/ai-control.mts netlify/lib/ai-security.mts"
   },

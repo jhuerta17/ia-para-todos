@@ -1,0 +1,40 @@
+<div class="portal">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a routerLink="/portal" class="brand">
+        <app-brand-mark style="--logo-size: 2rem" />
+        <span class="brand-name">{{ language.brand() }}</span>
+      </a>
+      <div class="topbar-actions">
+        <div class="lang" role="group" [attr.aria-label]="c().language">
+          <button
+            type="button"
+            (click)="setLang('es')"
+            [attr.aria-pressed]="language.lang() === 'es'"
+            [class.active]="language.lang() === 'es'"
+          >
+            ES
+          </button>
+          <span aria-hidden="true">·</span>
+          <button
+            type="button"
+            (click)="setLang('en')"
+            [attr.aria-pressed]="language.lang() === 'en'"
+            [class.active]="language.lang() === 'en'"
+          >
+            EN
+          </button>
+        </div>
+        @if (session.user(); as user) {
+          <span class="who">{{ user.name }}</span>
+          <button type="button" class="signout" (click)="signOut()">{{ c().signOut }}</button>
+        } @else {
+          <a routerLink="/portal/sign-in" class="signin">{{ c().signIn }}</a>
+        }
+      </div>
+    </div>
+  </header>
+  <main class="panel" tabindex="-1">
+    <router-outlet />
+  </main>
+</div>

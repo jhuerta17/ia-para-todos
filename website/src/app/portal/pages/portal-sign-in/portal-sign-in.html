@@ -1,0 +1,65 @@
+@if (mode() === 'login') {
+  <div class="card">
+    <h1>{{ c().loginTitle }}</h1>
+    <p class="lead">{{ c().loginLead }}</p>
+    <div class="form">
+      <app-portal-login-form (submitted)="authenticate($event)" />
+    </div>
+    <p class="foot">
+      <button type="button" class="linklike" (click)="mode.set('request')">{{ c().forgot }}</button>
+      <a routerLink="/portal/sign-up">{{ c().noAccount }}</a>
+    </p>
+  </div>
+} @else if (mode() === 'request' || mode() === 'request-sent') {
+  <div class="card">
+    <h1>{{ mode() === 'request' ? c().requestTitle : c().sentTitle }}</h1>
+    <p class="lead">{{ mode() === 'request' ? c().requestLead : c().sentLead }}</p>
+    @if (mode() === 'request') {
+      <form [formGroup]="requestForm" (ngSubmit)="requestLink()" novalidate>
+        <label for="portal-recovery-email">{{ c().email }}</label>
+        <input
+          id="portal-recovery-email"
+          formControlName="email"
+          type="email"
+          autocomplete="email"
+          [attr.aria-invalid]="requestInvalid() ? 'true' : null"
+        />
+        @if (requestInvalid()) {
+          <p class="error" role="alert">{{ c().emailRequired }}</p>
+        }
+        @if (requestError(); as message) {
+          <div role="alert" class="failed">{{ message }}</div>
+        }
+        <div class="submit-row">
+          <button appActionButton type="submit" [disabled]="requesting()">
+            {{ requesting() ? c().sending : c().send }}
+          </button>
+        </div>
+      </form>
+    }
+    <p class="foot">
+      <button type="button" class="linklike" (click)="mode.set('login')">{{ c().backToLogin }}</button>
+    </p>
+  </div>
+} @else if (mode() === 'recovery') {
+  <div class="card">
+    <h1>{{ c().recoveryTitle }}</h1>
+    <p class="lead">{{ c().recoveryLead }}</p>
+    <div class="form">
+      <app-portal-password-form (submitted)="submitPassword($event)" />
+    </div>
+  </div>
+} @else {
+  <div class="card">
+    @if (failed()) {
+      <h1>{{ c().failedTitle }}</h1>
+      <p class="lead">{{ c().failedLead }}</p>
+      <p class="foot">
+        <button type="button" class="linklike" (click)="mode.set('request'); failed.set(false)">{{ c().forgot }}</button>
+      </p>
+    } @else {
+      <h1>{{ c().confirmingTitle }}</h1>
+      <p class="lead">{{ c().confirmingLead }}</p>
+    }
+  </div>
+}

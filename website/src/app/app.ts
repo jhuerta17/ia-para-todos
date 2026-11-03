@@ -25,20 +25,24 @@ export class App {
   private readonly language = inject(Language);
   protected readonly skipLabel = computed(() => this.language.lang() === 'es' ? 'Saltar al contenido' : 'Skip to content');
   protected readonly isAdmin = signal(false);
+  protected readonly isPortal = signal(false);
 
   constructor() {
     // The first client render lands before the initial navigation
     // completes, when the router snapshot is still empty: seed from the
-    // URL so admin loads never flash the public header/footer (and the
-    // client render matches the prerendered shell for hydration).
+    // URL so admin/portal loads never flash the public header/footer (and
+    // the client render matches the prerendered shell for hydration).
     this.isAdmin.set(this.detectAdminRoute());
+    this.isPortal.set(this.detectPortalRoute());
     // Root outlives the app; no teardown needed.
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isAdmin.set(this.detectAdminRoute());
+        this.isPortal.set(this.detectPortalRoute());
         this.transition.reveal();
       } else if (event instanceof NavigationCancel || event instanceof NavigationError) {
         this.isAdmin.set(this.detectAdminRoute());
+        this.isPortal.set(this.detectPortalRoute());
         this.transition.reset();
       }
     });
@@ -52,17 +56,43 @@ export class App {
     return path === '/admin' || path.startsWith('/admin/');
   }
 
+  private detectPortalRoute(): boolean {
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    if (route.data['portal'] === true) return true;
+    const path = this.document.defaultView?.location.pathname ?? this.router.url.split(/[?#]/)[0];
+    return path === '/portal' || path.startsWith('/portal/');
+  }
+
   private isAdminLoginRoute(): boolean {
     let route = this.router.routerState.snapshot.root;
     while (route.firstChild) route = route.firstChild;
     return route.data['adminLogin'] === true;
   }
 
+  private isPortalAuthRoute(): boolean {
+    let route = this.router.routerState.snapshot.root;
+    while (route.firstChild) route = route.firstChild;
+    return route.data['portalAuth'] === true;
+  }
+
   private routeLanguage(): Lang {
     let route = this.router.routerState.snapshot.root;
     while (route.firstChild) route = route.firstChild;
     const lang = route.data['lang'] as Lang | undefined;
-    if (lang === 'es' || lang === 'en') return lang;
+    if (lang === 'es' || lang === 'en') {
+      // Portal routes honor the visitor's persisted ES/EN choice so the
+      // shell toggle survives navigation; everywhere else the route wins.
+      if (route.data['portal'] === true) {
+        try {
+          const saved = this.document.defaultView?.localStorage.getItem('portal-lang');
+          if (saved === 'es' || saved === 'en') return saved;
+        } catch {
+          // Private mode: fall through to the route default.
+        }
+      }
+      return lang;
+    }
     return this.router.url.split(/[?#]/)[0].startsWith('/en') ? 'en' : 'es';
   }
 
@@ -74,12 +104,15 @@ export class App {
   }
 
   protected onPageActivated(): void {
-    // Identity emails land on the site root with a token fragment; route
-    // them to the access page, which consumes invite, recovery, and
-    // confirmation tokens. Server prerendering never sees a fragment.
+    // Identity emails land on the site root with a token fragment. Only
+    // admins receive invites, so invite tokens go to /admin/sign-in;
+    // recovery and confirmation tokens go to /portal/sign-in, which
+    // consumes them and lands admins on /admin, students on /portal.
+    // Server prerendering never sees a fragment.
     const hash = this.document.defaultView?.location.hash ?? '';
-    if (hash.includes('_token=') && !this.isAdminLoginRoute()) {
-      this.router.navigate(['/admin/sign-in'], { fragment: hash.replace(/^#/, '') });
+    if (hash.includes('_token=') && !this.isAdminLoginRoute() && !this.isPortalAuthRoute()) {
+      const target = hash.includes('invite_token=') ? '/admin/sign-in' : '/portal/sign-in';
+      this.router.navigate([target], { fragment: hash.replace(/^#/, '') });
       return;
     }
     this.language.set(this.routeLanguage());

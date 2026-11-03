@@ -43,9 +43,14 @@ Netlify dashboard:
    all contexts (or at least production). Then **trigger a redeploy**
    (Deploys → Trigger deploy): functions pick up env vars on deploy.
 
-No email-template changes are needed: invite, recovery, and
-confirmation links are detected site-wide and rerouted to
-`/admin/sign-in`, which consumes the token.
+No email-template changes are needed: invite links are detected
+site-wide and rerouted to `/admin/sign-in`, which consumes the token.
+Recovery and confirmation links reroute to `/portal/sign-in` instead;
+after consuming one, admins land on `/admin` and students on `/portal`.
+
+Admin and portal use a shared Identity session: signing out of either
+clears access to both. See [student portal local review](student-portal.md)
+for the isolated, fake-authentication verification workflow.
 
 ## Daily use
 

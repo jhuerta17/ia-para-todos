@@ -1,0 +1,20 @@
+<div class="card">
+  @if (!sent()) {
+    <h1>{{ c().title }}</h1>
+    <p class="lead">{{ c().lead }}</p>
+    <div class="form">
+      <app-portal-signup-form (submitted)="register($event)" />
+    </div>
+    <p class="foot">
+      <a routerLink="/portal/sign-in">{{ c().haveAccount }}</a>
+      <span>{{ c().free }}</span>
+    </p>
+  } @else {
+    <h1>{{ c().sentTitle }}</h1>
+    <p class="lead">{{ c().sentLead }}</p>
+    <p class="sent">{{ sentEmail() }}</p>
+    <p class="foot">
+      <a routerLink="/portal/sign-in">{{ c().backToLogin }}</a>
+    </p>
+  }
+</div>
