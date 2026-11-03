@@ -1,5 +1,7 @@
 import { afterNextRender, Component, computed, inject, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { Icon } from '../shared/icon';
+import { ActionButton } from '../shared/action-button';
 import { RouterLink } from '@angular/router';
 import { Language } from '../i18n/language';
 import { DemoState } from '../admin/data/demo-state';
@@ -8,21 +10,25 @@ import { readDemoBooking, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
 import { workshopDate } from './workshop-format';
 import type { Reservation } from './workshop-types';
-@Component({selector:'app-workshop-manage',imports:[RouterLink],styleUrl:'./workshop.css',template:`
-<main id="main-content" tabindex="-1" class="workshop-shell">
+@Component({selector:'app-workshop-manage',imports:[RouterLink,Icon,ActionButton],styleUrl:'./workshop.css',template:`
+<main id="main-content" tabindex="-1" class="workshop-shell booking-flow">
 <header class="ws-heading"><h1>{{c().manage}}</h1></header>
-@if(loading()){<p role="status">{{c().loading}}</p>}
-@if(error()){<p role="alert" class="ws-error">{{error()}}</p><button type="button" class="ws-button secondary" (click)="act('read')">{{c().retry}}</button><p><a [routerLink]="language.path('contacto')">{{en()?'Contact the team':'Contacta al equipo'}}</a></p>}
-@if(reservation();as r){<article class="ws-card ws-private"><h2>{{r.status==='cancelled'?c().cancelled:r.session.status==='cancelled'?c().sessionCancelled:c().confirmed}}</h2><h3>{{en()?r.session.titleEn:r.session.titleEs}}</h3><p class="ws-date">{{date(r)}}</p><p>{{r.session.venue}} · {{r.session.address}}</p><h3>{{c().accessibility}}</h3><p>{{en()?r.session.accessibilityEn:r.session.accessibilityEs}}</p><h3>{{c().bring}}</h3><p>{{en()?r.session.bringEn:r.session.bringEs}}</p><p>{{c().reference}}: {{r.reference}}</p><p>{{c().manual}}</p><p>{{c().save}}</p><p class="ws-token">{{privateLink}}</p>
-<div class="ws-row ws-no-print"><button type="button" class="ws-button secondary" (click)="print()">{{c().print}}</button>
+@if(loading()){<p class="booking-state" role="status">{{c().loading}}</p>}
+@if(error()){<p role="alert" class="ws-error booking-state">{{error()}}</p><button type="button" class="booking-utility" (click)="act('read')">{{c().retry}}</button><p><a [routerLink]="language.path('contacto')">{{en()?'Contact the team':'Contacta al equipo'}}</a></p>}
+@if(reservation();as r){<article class="booking-result" aria-live="polite">
+<h2 class="booking-status">{{r.status==='cancelled'?c().cancelled:r.session.status==='cancelled'?c().sessionCancelled:c().confirmed}}</h2>
+<div class="booking-layout"><section class="booking-summary"><h2>{{en()?r.session.titleEn:r.session.titleEs}}</h2><p class="booking-fact"><app-icon name="calendar-event"/>{{date(r)}}</p><p class="booking-fact"><app-icon name="map-pin"/><span>{{r.session.venue}}<br/>{{r.session.address}}</span></p><dl class="booking-reference"><dt>{{c().reference}}</dt><dd>{{r.reference}}</dd></dl></section>
+<div class="booking-details"><section><h2>{{c().bring}}</h2><p>{{en()?r.session.bringEn:r.session.bringEs}}</p></section><section class="booking-divider"><h2>{{c().accessibility}}</h2><p>{{en()?r.session.accessibilityEn:r.session.accessibilityEs}}</p></section><section class="booking-divider"><h2>{{c().link}}</h2><p>{{c().save}}</p><label class="booking-link-label" for="manage-link">{{c().link}}</label><input id="manage-link" class="ws-link" readonly [value]="privateLink" (focus)="$any($event.target).select()"/><p class="ws-token booking-print-link">{{privateLink}}</p><p class="ws-note">{{c().manual}}</p>
+<div class="ws-row ws-no-print"><button type="button" class="booking-utility" (click)="print()">{{c().print}}</button>
 @if(r.status==='confirmed'&&r.session.status!=='cancelled'){
-@if(confirmCancel()){<p>{{c().cancelQuestion}}</p><button type="button" class="ws-button" [disabled]="loading()" (click)="act('cancel')">{{c().yes}}</button><button type="button" class="ws-button secondary" (click)="confirmCancel.set(false)">{{c().back}}</button>}
-@else{<button type="button" class="ws-button secondary" (click)="confirmCancel.set(true)">{{c().cancel}}</button>}}
+@if(confirmCancel()){<p>{{c().cancelQuestion}}</p><button type="button" appActionButton [disabled]="loading()" (click)="act('cancel')">{{c().yes}}</button><button type="button" class="booking-utility" (click)="confirmCancel.set(false)">{{c().back}}</button>}
+@else{<button type="button" class="booking-utility" (click)="confirmCancel.set(true)">{{c().cancel}}</button>}}
 </div>
+</section></div></div><aside class="booking-next ws-no-print"><h2>{{c().preparation}}</h2><p>{{c().prepLead}}</p><a appActionButton class="action-warm" [routerLink]="en()?'/en/preparation':'/preparacion'">{{c().preparation}}</a><div class="booking-account">
 @if(r.status==='confirmed'){
-@if(client.session.user()){@if(!r.linked){<button type="button" class="ws-button" [disabled]="loading()" (click)="act('attach')">{{c().attach}}</button>}@else{<p>{{c().linked}}</p><a routerLink="/portal">{{c().myReservations}}</a>}}
+@if(client.session.user()){@if(!r.linked){<button type="button" appActionButton [disabled]="loading()" (click)="act('attach')">{{c().attach}}</button>}@else{<p>{{c().linked}}</p><a routerLink="/portal">{{c().myReservations}}</a>}}
 @else{<p>{{c().account}}</p><p>{{en()?'After signing in, reopen your saved private link to attach this reservation.':'Después de iniciar sesión, vuelve a abrir tu enlace privado guardado para vincular esta reserva.'}}</p><div class="ws-row"><a routerLink="/portal/sign-up" >{{c().signup}}</a><a routerLink="/portal/sign-in" [fragment]="loginFragment">{{c().signin}}</a></div>}}
-<p><a [routerLink]="en()?'/en/preparation':'/preparacion'">{{c().preparation}}</a></p></article>}
+</div></aside></article>}
 </main>`})
 export class WorkshopManage {
   protected readonly language=inject(Language);

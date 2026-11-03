@@ -1,14 +1,21 @@
 <ng-template #scheduleBody>
-<section class="workshop-shell" [class.ws-embedded]="embedded()" [attr.aria-label]="c().schedule">
-  <header class="ws-heading">@if(embedded()){<h2>{{c().schedule}}</h2>}@else{<h1>{{c().schedule}}</h1>}<p>{{c().intro}}</p></header>
+<section class="workshop-shell" [class.ws-embedded]="embedded()" [class.booking-flow]="!!selected() || !!result()" [attr.aria-label]="c().schedule">
+  @if(!selected() && !result()){<header class="ws-heading">@if(embedded()){<h2>{{c().schedule}}</h2>}@else{<h1>{{c().schedule}}</h1>}<p>{{c().intro}}</p></header>}
   @if(loading()){<p role="status">{{c().loading}}</p>}
-  @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" class="ws-button secondary" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
+  @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" [class]="selected() || result() ? 'booking-utility' : 'ws-button secondary'" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
   @if(result();as r){
-    <article class="ws-card ws-private" aria-live="polite"><h2>{{r.status==='confirmed'?c().confirmed:c().cancelled}}</h2><h3>{{title(r.session)}}</h3><p class="ws-date">{{date(r.session)}}</p><p>{{r.session.venue}} · {{r.session.address}}</p><p>{{c().reference}}: <strong>{{r.reference}}</strong></p><p>{{c().manual}}</p><p>{{c().save}}</p><label for="reservation-link">{{c().link}}</label><input id="reservation-link" class="ws-link" readonly [value]="privateLink" (focus)="$any($event.target).select()" /><p class="ws-token">{{privateLink}}</p><div class="ws-row ws-no-print"><a class="ws-button" [href]="privateLink">{{c().manage}}</a><button type="button" class="ws-button secondary" (click)="print()"><app-icon name="clipboard-check"/>{{c().print}}</button></div><p>{{c().account}}</p><div class="ws-row ws-no-print"><a routerLink="/portal/sign-up">{{c().signup}}</a><a [routerLink]="path('preparacion')">{{c().preparation}}</a><a [routerLink]="path()">{{c().browse}}</a></div></article>
+    <article class="booking-result" aria-live="polite">
+      <header class="booking-heading"><app-icon name="clipboard-check"/><h1>{{r.status==='confirmed'?c().confirmed:c().cancelled}}</h1></header>
+      <div class="booking-layout">
+        <section class="booking-summary"><h2>{{title(r.session)}}</h2><p class="booking-fact"><app-icon name="calendar-event"/>{{date(r.session)}}</p><p class="booking-fact"><app-icon name="map-pin"/><span>{{r.session.venue}}<br/>{{r.session.address}}</span></p><dl class="booking-reference"><dt>{{c().reference}}</dt><dd>{{r.reference}}</dd></dl></section>
+        <section class="booking-details"><h2>{{c().link}}</h2><p>{{c().save}}</p><label class="booking-link-label" for="reservation-link">{{c().link}}</label><input id="reservation-link" class="ws-link" readonly [value]="privateLink" (focus)="$any($event.target).select()"/><p class="ws-token booking-print-link">{{privateLink}}</p><div class="ws-row ws-no-print"><a appActionButton [href]="privateLink">{{c().manage}}</a><button type="button" class="booking-utility" (click)="print()"><app-icon name="clipboard-check"/>{{c().print}}</button></div><p class="ws-note">{{c().manual}}</p></section>
+      </div>
+      <aside class="booking-next ws-no-print"><h2>{{c().preparation}}</h2><p>{{c().prepLead}}</p><a appActionButton class="action-warm" [routerLink]="path('preparacion')">{{c().preparation}}</a><div class="booking-account"><p>{{c().account}}</p><div class="ws-row"><a routerLink="/portal/sign-up">{{c().signup}}</a><a [routerLink]="path()">{{c().browse}}</a></div></div></aside>
+    </article>
   }@else if(selected();as s){
     <a [routerLink]="path()">{{c().back}}</a>
-    <article class="ws-card"><h2>{{title(s)}}</h2><p class="ws-date">{{date(s)}}</p><p><app-icon name="map-pin"/> {{s.venue}} · {{s.address}}</p><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><h3>{{c().accessibility}}</h3><p>{{en()?s.accessibilityEn:s.accessibilityEs}}</p><h3>{{c().bring}}</h3><p>{{en()?s.bringEn:s.bringEs}}</p><p>{{s.available>0?s.available+' '+c().places:c().full}}</p>
-    @if(s.available>0){<form class="ws-form" (ngSubmit)="reserve()">
+    <div class="booking-layout booking-registration"><section class="booking-summary"><h1>{{title(s)}}</h1><p class="booking-fact"><app-icon name="calendar-event"/>{{date(s)}}</p><p class="booking-fact"><app-icon name="map-pin"/><span>{{s.venue}}<br/>{{s.address}}</span></p><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><h3>{{c().accessibility}}</h3><p>{{en()?s.accessibilityEn:s.accessibilityEs}}</p><h3>{{c().bring}}</h3><p>{{en()?s.bringEn:s.bringEs}}</p><p>{{s.available>0?s.available+' '+c().places:c().full}}</p>
+    </section><section class="booking-details"><h2>{{c().reserve}}</h2><p>{{c().intro}}</p>@if(s.available>0){<form class="ws-form" (ngSubmit)="reserve()">
       <label for="booking-name">{{c().name}}<input id="booking-name" name="name" [(ngModel)]="name" required maxlength="100" autocomplete="given-name" [disabled]="submitting()"/></label>
       <label for="booking-method">{{c().contactType}}<select id="booking-method" name="contactType" [(ngModel)]="contactType" [disabled]="submitting()"><option value="email">{{c().email}}</option><option value="phone">{{c().phone}}</option></select></label>
       <label for="booking-contact">{{contactType==='email'?c().email:c().phone}}<input id="booking-contact" name="contact" [(ngModel)]="contact" [type]="contactType==='email'?'email':'tel'" [autocomplete]="contactType==='email'?'email':'tel'" required maxlength="200" [disabled]="submitting()"/></label>
@@ -16,10 +23,10 @@
       <label class="ws-check"><input type="checkbox" name="adult" [(ngModel)]="adult" required [disabled]="submitting()"/>{{c().adult}}</label>
       <label class="ws-check"><input type="checkbox" name="privacy" [(ngModel)]="privacy" required [disabled]="submitting()"/>{{c().privacy}}</label>
       <p class="ws-note">{{c().privacyNote}} <a [routerLink]="language.path('privacidad')">{{en()?'Privacy notice':'Aviso de privacidad'}}</a></p><p class="ws-note">{{c().manual}}</p>
-      <button class="ws-button" type="submit" [disabled]="submitting()||!adult||!privacy||!name.trim()||!contact.trim()">{{submitting()?c().saving:c().reserve}}</button>
-      @if(error()){<p role="alert">{{error()}}</p><button type="button" class="ws-button secondary" (click)="resetAttempt()">{{c().newAttempt}}</button>}
+      <button appActionButton type="submit" [disabled]="submitting()||!adult||!privacy||!name.trim()||!contact.trim()">{{submitting()?c().saving:c().reserve}}</button>
+      @if(error()){<p role="alert">{{error()}}</p><button type="button" class="booking-utility" (click)="resetAttempt()">{{c().newAttempt}}</button>}
     </form>}
-    </article>
+    </section></div>
   }@else if(!loading()&&!loadFailed()){
     @if(requestedSession()){<p role="alert" class="ws-error">{{en()?'This session is no longer available. Choose another workshop.':'Esta sesión ya no está disponible. Elige otro taller.'}}</p>}
     @if(!sessions().length){<p class="ws-card">{{c().empty}}</p>}

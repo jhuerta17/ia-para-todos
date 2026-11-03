@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { Language } from '../i18n/language';
+import { ActionButton } from '../shared/action-button';
 import { Icon } from '../shared/icon';
 import { DemoState } from '../admin/data/demo-state';
 import { WorkshopClient, bookingToken } from './workshop-client';
@@ -11,7 +12,7 @@ import { demoSessions, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
 import { venueDay, workshopDate } from './workshop-format';
 import type { BookingInput, Reservation, WorkshopSession } from './workshop-types';
-@Component({selector:'app-workshop-schedule',imports:[FormsModule,RouterLink,Icon,NgTemplateOutlet],templateUrl:'./workshop-schedule.html',styleUrl:'./workshop.css'})
+@Component({selector:'app-workshop-schedule',imports:[FormsModule,RouterLink,Icon,ActionButton,NgTemplateOutlet],templateUrl:'./workshop-schedule.html',styleUrl:'./workshop.css'})
 export class WorkshopSchedule {
   readonly embedded=input(false);
   protected readonly language=inject(Language);
