@@ -1,8 +1,8 @@
 <ng-template #scheduleBody>
-<section class="workshop-shell" [class.ws-embedded]="embedded()" [class.booking-flow]="!!selected() || !!result()" [attr.aria-label]="c().schedule">
+<section class="workshop-shell schedule-page" [class.ws-embedded]="embedded()" [class.booking-flow]="!!selected() || !!result()" [attr.aria-label]="c().schedule">
   @if(!selected() && !result()){<header class="ws-heading">@if(embedded()){<h2>{{c().schedule}}</h2>}@else{<h1>{{c().schedule}}</h1>}<p>{{c().intro}}</p></header>}
   @if(loading()){<p role="status">{{c().loading}}</p>}
-  @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" [class]="selected() || result() ? 'booking-utility' : 'ws-button secondary'" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
+  @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" class="booking-utility" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
   @if(result();as r){
     <article class="booking-result" aria-live="polite">
       <header class="booking-heading"><app-icon name="clipboard-check"/><h1>{{r.status==='confirmed'?c().confirmed:c().cancelled}}</h1></header>
@@ -29,18 +29,44 @@
     </section></div>
   }@else if(!loading()&&!loadFailed()){
     @if(requestedSession()){<p role="alert" class="ws-error">{{en()?'This session is no longer available. Choose another workshop.':'Esta sesión ya no está disponible. Elige otro taller.'}}</p>}
-    @if(!sessions().length){<p class="ws-card">{{c().empty}}</p>}
+    @if(!sessions().length){<p class="schedule-state">{{c().empty}}</p>}
     @else{
-      <div class="ws-row" role="group" [attr.aria-label]="c().schedule"><button class="ws-button secondary" type="button" [attr.aria-pressed]="view()==='list'" (click)="view.set('list')">{{c().list}}</button><button class="ws-button secondary" type="button" [attr.aria-pressed]="view()==='calendar'" (click)="view.set('calendar')"><app-icon name="calendar-event"/>{{c().calendar}}</button></div>
+      <div class="schedule-toolbar">
+        <div class="schedule-views" role="group" [attr.aria-label]="c().schedule">
+          <button class="schedule-toggle" type="button" [attr.aria-pressed]="view()==='list'" (click)="view.set('list')"><app-icon name="menu-2"/>{{c().list}}</button>
+          <button class="schedule-toggle" type="button" [attr.aria-pressed]="view()==='calendar'" (click)="view.set('calendar')"><app-icon name="calendar-event"/>{{c().calendar}}</button>
+        </div>
+        <p class="schedule-timezone">{{en()?'Dates and times follow each venue’s timezone.':'Las fechas y horas corresponden a la zona horaria de cada sede.'}}</p>
+      </div>
       @if(view()==='calendar'){
-        <div class="ws-row"><button type="button" class="ws-button secondary" [attr.aria-label]="c().previous" (click)="moveMonth(-1)"><app-icon name="chevron-left"/></button><span aria-live="polite">{{monthLabel()}}</span><button type="button" class="ws-button secondary" [attr.aria-label]="c().next" (click)="moveMonth(1)"><app-icon name="chevron-right"/></button></div>
-        <p class="ws-note">{{en()?'Dates and times follow each venue’s timezone.':'Las fechas y horas corresponden a la zona horaria de cada sede.'}}</p>
-        <table class="ws-calendar"><caption>{{monthLabel()}}</caption><thead><tr>@for(day of weekdays();track $index){<th scope="col">{{day}}</th>}</tr></thead><tbody>@for(week of days();track $index){<tr>@for(cell of week;track $index){<td>@if(cell){<time [attr.datetime]="cell.key">{{cell.day}}</time>@for(s of cell.sessions;track s.id){<a [routerLink]="path()" [queryParams]="{session:s.id}" [attr.aria-label]="title(s)+' '+date(s)">{{title(s)}}</a>}}</td>}</tr>}</tbody></table>
+        <section class="schedule-month" [attr.aria-label]="monthLabel()">
+          <div class="schedule-month-heading">
+            <h2 aria-live="polite">{{monthLabel()}}</h2>
+            <div class="schedule-month-controls"><button type="button" class="schedule-month-button" [attr.aria-label]="c().previous" (click)="moveMonth(-1)"><app-icon name="chevron-left"/></button><button type="button" class="schedule-month-button" [attr.aria-label]="c().next" (click)="moveMonth(1)"><app-icon name="chevron-right"/></button></div>
+          </div>
+          <table class="schedule-calendar"><caption class="schedule-sr-only">{{monthLabel()}}</caption><thead><tr>@for(day of weekdays();track $index){<th scope="col">{{day}}</th>}</tr></thead><tbody>@for(week of days();track $index){<tr>@for(cell of week;track $index){<td [class.has-workshops]="cell && cell.sessions.length">@if(cell){<time [attr.datetime]="cell.key">{{cell.day}}</time>@for(s of cell.sessions;track s.id){<a [routerLink]="path()" [queryParams]="{session:s.id}" [attr.aria-label]="title(s)+' '+date(s)">{{title(s)}}<app-icon name="arrow-up-right"/></a>}}</td>}</tr>}</tbody></table>
+          <div class="schedule-month-agenda">
+            @for(s of monthSessions();track s.id){
+              <article class="schedule-mobile-entry"><time class="schedule-date" [attr.datetime]="s.startsAt"><span>{{shortMonth(s)}}</span><strong>{{day(s)}}</strong></time><div><h3><a [routerLink]="path()" [queryParams]="{session:s.id}">{{title(s)}}<app-icon name="arrow-up-right"/></a></h3><p>{{date(s)}}</p><p>{{s.venue}}</p><p class="schedule-availability">{{s.available>0?s.available+' '+c().places:c().full}}</p></div></article>
+            }
+          </div>
+          @if(!monthSessions().length){<p class="schedule-state">{{c().noMonth}}</p>}
+        </section>
       }@else{
-        <div class="ws-grid">@for(s of sessions();track s.id){<article class="ws-card"><p class="ws-date">{{date(s)}}</p><h3>{{title(s)}}</h3><p>{{s.venue}} · {{s.address}}</p><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><p>{{s.available>0?s.available+' '+c().places:c().full}}</p><a class="ws-button secondary" [routerLink]="path()" [queryParams]="{session:s.id}">{{c().details}}<app-icon name="arrow-right"/></a></article>}</div>
+        <div class="schedule-agenda">@for(s of sessions();track s.id){
+          <article class="schedule-entry">
+            <time class="schedule-date" [attr.datetime]="s.startsAt"><span>{{shortMonth(s)}}</span><strong>{{day(s)}}</strong></time>
+            <div class="schedule-entry-details">
+              @if(embedded()){<h3>{{title(s)}}</h3>}@else{<h2>{{title(s)}}</h2>}
+              <p class="schedule-fact"><app-icon name="calendar-event"/>{{date(s)}}</p><p class="schedule-fact"><app-icon name="map-pin"/><span>{{s.venue}}<br/>{{s.address}}</span></p>
+              <div class="schedule-meta"><p>{{c().language}}: {{s.language==='es'?'Español':'English'}}</p><p class="schedule-availability">{{s.available>0?s.available+' '+c().places:c().full}}</p></div>
+            </div>
+            <a appActionButton class="action-warm" [routerLink]="path()" [queryParams]="{session:s.id}">{{c().details}}</a>
+          </article>
+        }</div>
       }
     }
-    <p class="ws-row"><a [routerLink]="path('preparacion')">{{c().preparation}}</a></p>
+    <aside class="schedule-preparation"><div><h2>{{c().preparation}}</h2><p>{{c().prepLead}}</p></div><a appActionButton [routerLink]="path('preparacion')">{{c().preparation}}</a></aside>
   }
 </section>
 

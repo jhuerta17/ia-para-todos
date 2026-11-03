@@ -12,7 +12,7 @@ import { demoSessions, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
 import { venueDay, workshopDate } from './workshop-format';
 import type { BookingInput, Reservation, WorkshopSession } from './workshop-types';
-@Component({selector:'app-workshop-schedule',imports:[FormsModule,RouterLink,Icon,ActionButton,NgTemplateOutlet],templateUrl:'./workshop-schedule.html',styleUrl:'./workshop.css'})
+@Component({selector:'app-workshop-schedule',imports:[FormsModule,RouterLink,Icon,ActionButton,NgTemplateOutlet],templateUrl:'./workshop-schedule.html',styleUrls:['./workshop.css','./workshop-public.css','./workshop-agenda.css']})
 export class WorkshopSchedule {
   readonly embedded=input(false);
   protected readonly language=inject(Language);
@@ -41,6 +41,9 @@ export class WorkshopSchedule {
     const cells=Array.from({length:Math.ceil((offset+count)/7)*7},(_,i)=>{const day=i-offset+1;const key=`${this.month()}-${String(day).padStart(2,'0')}`;return day<1||day>count ? null : {day,key,sessions:this.sessions().filter(s=>venueDay(s)===key)};});
     return Array.from({length:cells.length/7},(_,i)=>cells.slice(i*7,i*7+7));
   });
+  protected readonly monthSessions=computed(()=>this.sessions().filter(s=>venueDay(s).startsWith(this.month())));
+  protected day(s:WorkshopSession):string{return String(Number(venueDay(s).slice(-2)));}
+  protected shortMonth(s:WorkshopSession):string{return new Intl.DateTimeFormat(this.language.lang(),{month:'short',timeZone:s.timeZone}).format(new Date(s.startsAt));}
   protected readonly weekdays=computed(()=>Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(this.language.lang(),{weekday:'short',timeZone:'UTC'}).format(new Date(Date.UTC(2026,10,1+i)))));
   protected readonly monthLabel=computed(()=>new Intl.DateTimeFormat(this.language.lang(),{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(`${this.month()}-01T12:00:00Z`)));
   constructor(){

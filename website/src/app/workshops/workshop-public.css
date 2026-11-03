@@ -1,0 +1,29 @@
+/* Shared public workshop surfaces. Operational workshop views keep their own styles. */
+.schedule-page:not(.booking-flow), .preparation-page {
+  max-width: 1120px;
+  padding: 140px 40px 70px;
+  color: var(--color-text);
+}
+.schedule-page:not(.booking-flow) .ws-heading, .preparation-page .ws-heading { margin-bottom: 48px; }
+.schedule-page:not(.booking-flow) .ws-heading h1, .preparation-page .ws-heading h1 {
+  font: 400 var(--text-section)/var(--leading-heading) var(--font-heading);
+  margin: 0 0 20px;
+}
+.schedule-page:not(.booking-flow) .ws-heading p, .preparation-page .ws-heading p {
+  max-width: 65ch;
+  font-size: 1.2rem;
+  line-height: var(--leading-body);
+  margin: 0;
+}
+.schedule-page a.site-action, .preparation-page a.site-action { color: var(--action-contrast); }
+.schedule-page :is(a, button):focus-visible, .preparation-page :is(a, button):focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 809px) {
+  .schedule-page:not(.booking-flow), .preparation-page { padding: 112px 20px 48px; }
+  .schedule-page:not(.booking-flow) .ws-heading h1, .preparation-page .ws-heading h1 { font-size: 2rem; }
+  .schedule-page:not(.booking-flow) .ws-heading p, .preparation-page .ws-heading p { font-size: 1.1rem; }
+}
+@media print { .schedule-page:not(.booking-flow), .preparation-page { padding: 0; } }
