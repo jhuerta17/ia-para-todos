@@ -166,14 +166,29 @@ export class UserSession {
 
   private async doRestore(): Promise<boolean> {
     try {
+      // Reject incomplete browser state before gotrue attempts to parse it.
+      const saved = this.document.defaultView?.localStorage.getItem('gotrue.user');
+      if (saved) {
+        const value = JSON.parse(saved);
+        if (!value || typeof value.id !== 'string' || typeof value.email !== 'string' ||
+            !value.email || typeof value.token?.access_token !== 'string' ||
+            value.token.access_token.split('.').length !== 3 ||
+            typeof value.token.refresh_token !== 'string' ||
+            (value.app_metadata?.roles !== undefined &&
+             (!Array.isArray(value.app_metadata.roles) || !value.app_metadata.roles.every((role: unknown) => typeof role === 'string')))) {
+          throw new Error('INVALID_SAVED_SESSION');
+        }
+      }
       this.current = (await this.client()).currentUser();
       // Refresh expired credentials before a guard admits the saved session.
-      if (this.current) await this.current.jwt();
+      if (this.current && !await this.current.jwt()) throw new Error('INVALID_SAVED_SESSION');
+      this.user.set(this.current ? this.toPortalUser(this.current) : null);
     } catch {
       this.current?.clearSession();
       this.current = null;
+      this.user.set(null);
+      try { this.document.defaultView?.localStorage.removeItem('gotrue.user'); } catch { /* Storage may be unavailable. */ }
     }
-    this.user.set(this.current ? this.toPortalUser(this.current) : null);
     this.ready.set(true);
     return this.current !== null;
   }

@@ -439,6 +439,15 @@ async function main() {
       await page.close();
     }
 
+    for (const saved of ['{invalid', JSON.stringify({ url: '/.netlify/identity', token: {} }), JSON.stringify({ ...seedUser([]), email: null })]) {
+      const page = await browser.newPage();
+      await page.addInitScript((value) => localStorage.setItem('gotrue.user', value), saved);
+      await page.goto(`${base}/portal`, { waitUntil: 'networkidle' });
+      await page.waitForURL(atPath('/portal/sign-in'));
+      check('malformed saved login recovers to usable sign-in', await page.locator('#portal-email').isVisible());
+      await page.close();
+    }
+
     check('no application console errors', consoleErrors.length === 0, consoleErrors.join(' | ').slice(0, 300));
     check('no page errors', pageErrors.length === 0, pageErrors.join(' | ').slice(0, 300));
   } finally {
