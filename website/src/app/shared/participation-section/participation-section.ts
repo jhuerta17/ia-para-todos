@@ -1,3 +1,4 @@
+import { ActionButton } from '../action-button';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Icon, IconName } from '../icon';
@@ -68,7 +69,7 @@ const choices: Record<Lang, Record<ParticipationContext, string[]>> = {
   },
 };
 
-@Component({selector: 'app-participation-section', imports: [ReactiveFormsModule, Icon, RevealOnEnter], templateUrl: './participation-section.html', styleUrls: ['./participation-section.css', '../form-controls.css'], host: { '[class.page]': 'page()' }, changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-participation-section', imports: [ActionButton, ReactiveFormsModule, Icon, RevealOnEnter], templateUrl: './participation-section.html', styleUrls: ['./participation-section.css', '../form-controls.css'], host: { '[class.page]': 'page()' }, changeDetection: ChangeDetectionStrategy.OnPush})
 export class ParticipationSection {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   protected readonly language = inject(Language);

@@ -1,3 +1,4 @@
+import { ActionButton } from '../action-button';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
@@ -39,7 +40,7 @@ const copy = {
   },
 } satisfies Record<Lang, Record<string, string>>;
 
-@Component({ selector: 'app-ai-tutor', imports: [RevealOnEnter], templateUrl: './ai-tutor.html', styleUrl: './ai-tutor.css', changeDetection: ChangeDetectionStrategy.OnPush })
+@Component({ selector: 'app-ai-tutor', imports: [ActionButton, RevealOnEnter], templateUrl: './ai-tutor.html', styleUrl: './ai-tutor.css', changeDetection: ChangeDetectionStrategy.OnPush })
 export class AiTutor {
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

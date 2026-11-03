@@ -1,3 +1,4 @@
+import { ActionButton } from '../../shared/action-button';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,7 +16,7 @@ const copy = {
 
 @Component({
   selector: 'app-workshop-list',
-  imports: [WorkshopCard, FaqSection, Icon, RevealOnEnter],
+  imports: [ActionButton, WorkshopCard, FaqSection, Icon, RevealOnEnter],
   templateUrl: './workshop-list.html',
   styleUrls: ['./workshop-list.css', './workshop-list-interactions.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

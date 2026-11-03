@@ -5,7 +5,7 @@
   <nav class="desktop-nav" [attr.aria-label]="c().nav">
     @for (group of groups(); track group.id) {
       <div class="disclosure" (focusout)="leaveDisclosure($event)">
-        <button #groupToggle type="button" [class.active]="group.active" [attr.aria-controls]="group.id + '-links'" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, groupToggle)">
+        <button class="public-control" #groupToggle type="button" [class.active]="group.active" [attr.aria-controls]="group.id + '-links'" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, groupToggle)">
           {{ group.label }} <app-icon name="chevron-down" />
         </button>
         <div [id]="group.id + '-links'" class="dropdown" [class.open]="disclosure() === group.id" [attr.inert]="disclosure() !== group.id ? '' : null">
@@ -20,14 +20,14 @@
     }
     @if (!participationPage()) { <app-action-link to="/participar" [label]="c().participate" /> }
   </nav>
-  <button #mobileToggle class="mobile-toggle" type="button" [attr.aria-label]="expanded() ? c().closeMenu : c().openMenu" aria-controls="mobile-links" [attr.aria-expanded]="expanded()" (click)="toggleMobile()">
+  <button #mobileToggle class="public-control mobile-toggle" type="button" [attr.aria-label]="expanded() ? c().closeMenu : c().openMenu" aria-controls="mobile-links" [attr.aria-expanded]="expanded()" (click)="toggleMobile()">
     <app-icon [name]="expanded() ? 'x' : 'menu-2'" />
   </button>
   <div id="mobile-links" class="mobile-panel" [class.open]="expanded()" [attr.inert]="!expanded() ? '' : null">
     <nav [attr.aria-label]="c().mobileNav">
       @for (group of groups(); track group.id) {
         <div class="mobile-group">
-          <button #accordionToggle type="button" [class.active]="group.active" [attr.aria-controls]="'mobile-' + group.id" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, accordionToggle)">
+          <button class="public-control" #accordionToggle type="button" [class.active]="group.active" [attr.aria-controls]="'mobile-' + group.id" [attr.aria-expanded]="disclosure() === group.id" (click)="toggleDisclosure(group.id, accordionToggle)">
             {{ group.label }} <app-icon name="chevron-down" />
           </button>
           <div class="accordion-links" [id]="'mobile-' + group.id" [hidden]="disclosure() !== group.id" [attr.inert]="disclosure() !== group.id ? '' : null">

@@ -1,3 +1,4 @@
+import { ActionButton } from '../action-button';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RevealOnEnter } from '../motion/reveal-on-enter';
@@ -25,7 +26,7 @@ const copy: Record<Lang, { heading: string; lead: string; label: string; ph: str
 
 // Course waitlist: posts to the newsletter Netlify form tagged with the
 // course interest, so signups land in the admin inbox like any other row.
-@Component({selector: 'app-course-waitlist', imports: [ReactiveFormsModule, RevealOnEnter], templateUrl: './course-waitlist.html', styleUrl: './course-waitlist.css', changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-course-waitlist', imports: [ActionButton, ReactiveFormsModule, RevealOnEnter], templateUrl: './course-waitlist.html', styleUrl: './course-waitlist.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class CourseWaitlist {
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

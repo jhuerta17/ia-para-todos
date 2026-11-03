@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Icon } from './icon';
+import { ActionButton } from './action-button';
 import { Language } from '../i18n/language';
 
 @Component({
   selector: 'app-action-link',
-  imports: [RouterLink, Icon],
+  imports: [RouterLink, ActionButton],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<a class="action" [class.warm]="tone() === 'warm'" [routerLink]="href()" [attr.aria-label]="accessibleLabel()"><span>{{ label() }}</span><span class="arrow"><app-icon name="arrow-up-right" /></span></a>`,
+  template: `<a appActionButton [class.action-warm]="tone() === 'warm'" [routerLink]="href()" [attr.aria-label]="accessibleLabel()">{{ label() }}</a>`,
   styleUrl: './action-link.css',
 })
 export class ActionLink {

@@ -15,7 +15,7 @@
       <label for="contact-workshop">{{ interestLabel() }} *</label><select id="contact-workshop" name="interest" required formControlName="workshop" [attr.aria-invalid]="invalid('workshop')" aria-describedby="workshop-error"><option value="">{{ c().choose }}</option>@for (choice of choices(); track choice) {<option>{{ choice }}</option>}</select><p id="workshop-error" class="error">@if (invalid('workshop')) { {{ c().interestError }} }</p>
       <label for="contact-message">{{ c().message }}</label><textarea id="contact-message" name="message" formControlName="message" rows="3" maxlength="1000" [placeholder]="c().messagePh"></textarea>
       <label class="consent"><input type="checkbox" name="consent" required formControlName="consent" [attr.aria-invalid]="invalid('consent')" aria-describedby="consent-error" /><span>{{ c().consent }}</span></label><p id="consent-error" class="error">@if (invalid('consent')) { {{ c().consentError }} }</p>
-      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().submit }}</span><app-icon name="arrow-right" /></button>
+      <button appActionButton class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().submit }}</span></button>
       <p class="result" role="status">@if (complete()) { {{ c().result }} }</p>
       <p class="error" role="alert">@if (failed()) { {{ c().failed }} }</p>
     </form>

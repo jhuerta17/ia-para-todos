@@ -2,7 +2,7 @@
   <div class="top-row">
     <div #orbit class="orbit tile">
       @if (motionReady()) {
-        <button class="motion-control" type="button" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? c().resume : c().pause" (click)="toggleMotion()"><app-icon [name]="paused() ? 'player-play' : 'player-pause'" /></button>
+        <button class="public-control motion-control" type="button" [attr.aria-pressed]="paused()" [attr.aria-label]="paused() ? c().resume : c().pause" (click)="toggleMotion()"><app-icon [name]="paused() ? 'player-play' : 'player-pause'" /></button>
       }
       <div class="orbit-track" aria-hidden="true" [class.idle]="!orbitVisible()">
         @for (photo of photos; track photo.image) {

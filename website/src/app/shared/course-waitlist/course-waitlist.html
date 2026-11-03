@@ -11,7 +11,7 @@
       <input id="waitlist-email" name="email" type="email" required [formControl]="email" [placeholder]="c().ph" maxlength="200"
         [attr.aria-invalid]="email.touched && email.invalid" aria-describedby="waitlist-error" />
       <p id="waitlist-error" class="error">@if (email.touched && email.invalid) { {{ c().error }} }</p>
-      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().button }}</span></button>
+      <button appActionButton class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().sending : c().button }}</span></button>
     </div>
     <p class="result" role="status">@if (complete()) { {{ c().result }} }</p>
     <p class="error" role="alert">@if (failed()) { {{ c().failed }} }</p>

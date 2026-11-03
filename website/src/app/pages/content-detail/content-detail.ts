@@ -1,3 +1,4 @@
+import { ActionButton } from '../../shared/action-button';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -14,7 +15,7 @@ const copy = {
   en: { agenda: 'Agenda', agendaCaption: 'Workshop blocks · 100 minutes plus time for questions', time: 'Time', practice: 'Practice', tryIt: 'Try it with a made-up example', verifyElsewhere: 'Verify it elsewhere', verifyLead: 'Compare the answer with another source or a trusted person. If something matters, do not take it as true just because AI says so.', closing: 'Learn calmly and carefully', closingLead: 'Practice with made-up data and avoid sharing personal information.', seriesNav: 'Other workshops in the series', prev: 'Previous', next: 'Next', join: 'I want to join' },
 };
 
-@Component({selector: 'app-content-detail', imports: [RouterLink, PageCover, AiTutor, ActionLink, Icon, RevealOnEnter], templateUrl: './content-detail.html', styleUrl: './content-detail.css', changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-content-detail', imports: [ActionButton, RouterLink, PageCover, AiTutor, ActionLink, Icon, RevealOnEnter], templateUrl: './content-detail.html', styleUrl: './content-detail.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class ContentDetail {
   private readonly route = inject(ActivatedRoute);
   private readonly data = toSignal(this.route.data, { initialValue: this.route.snapshot.data });

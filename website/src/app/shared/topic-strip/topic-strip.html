@@ -1,7 +1,7 @@
 <section aria-labelledby="topics-title">
   <div class="section-heading">
     <h2 id="topics-title">{{ c().heading }}</h2>
-    <button type="button" class="motion-control" [attr.aria-label]="paused() ? c().resume : c().pause" [attr.aria-pressed]="paused()" (click)="toggleMotion()">
+    <button type="button" class="public-control motion-control" [attr.aria-label]="paused() ? c().resume : c().pause" [attr.aria-pressed]="paused()" (click)="toggleMotion()">
       <app-icon [name]="paused() ? 'player-play' : 'player-pause'" />
     </button>
   </div>

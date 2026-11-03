@@ -23,7 +23,7 @@
         <label for="newsletter-email">{{ c().newsLabel }}</label>
         <input id="newsletter-email" name="email" type="email" required [formControl]="email" [placeholder]="c().newsPh" maxlength="200" autocomplete="email" [attr.aria-invalid]="email.touched && email.invalid" [attr.aria-describedby]="email.touched && email.invalid ? 'newsletter-error' : null" />
       </div>
-      <button class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().newsSending : c().newsButton }}</span><app-icon name="arrow-right" /></button>
+      <button appActionButton class="submit" type="submit" [disabled]="sending()"><span>{{ sending() ? c().newsSending : c().newsButton }}</span></button>
       @if (email.touched && email.invalid) { <p id="newsletter-error" class="error">{{ c().newsError }}</p> }
       <div class="feedback" role="status">@if (complete()) { <p class="result">{{ c().newsResult }}</p> }</div>
       <div class="feedback" role="alert">@if (failed()) { <p class="error">{{ c().newsFailed }}</p> }</div>

@@ -1,3 +1,4 @@
+import { ActionButton } from '../../shared/action-button';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,7 +18,7 @@ const copy = {
   en: { searchActivities: 'Search activities', searchResources: 'Search resources', placeholder: 'Name or topic', clear: 'Clear search', topics: 'Topics', all: 'All', one: 'result', many: 'results', kind: 'Resource', read: 'Read resource', emptyTitle: 'We found no results', emptyLead: 'Try another name or topic, or see the whole catalog again.', reset: 'Reset search' },
 };
 
-@Component({selector: 'app-catalog-page', imports: [ActivityCard, PageCover, Icon, FaqSection, RouterLink, RevealOnEnter], templateUrl: './catalog-page.html', styleUrls: ['../workshop-list/workshop-list.css', '../workshop-list/workshop-list-interactions.css', './catalog-page.css'], changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-catalog-page', imports: [ActionButton, ActivityCard, PageCover, Icon, FaqSection, RouterLink, RevealOnEnter], templateUrl: './catalog-page.html', styleUrls: ['../workshop-list/workshop-list.css', '../workshop-list/workshop-list-interactions.css', './catalog-page.css'], changeDetection: ChangeDetectionStrategy.OnPush})
 export class CatalogPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);

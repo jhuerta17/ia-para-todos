@@ -1,9 +1,9 @@
+import { ActionButton } from '../action-button';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BrandMark } from '../brand-mark';
-import { Icon } from '../icon';
 import { Language } from '../../i18n/language';
 import { Lang, StaticKey } from '../../i18n/lang';
 
@@ -21,7 +21,7 @@ const LEARN: StaticKey[] = ['talleres', 'cursos', 'recursos', 'actividades'];
 const COMMUNITY: StaticKey[] = ['nosotros', 'comunidad', 'historias', 'contacto', 'participar', 'donar'];
 const INFO: StaticKey[] = ['privacidad', 'terminos', 'seguridad'];
 
-@Component({selector: 'app-site-footer', imports: [RouterLink, BrandMark, Icon, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-site-footer', imports: [ActionButton, RouterLink, BrandMark, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})
 export class SiteFooter {
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

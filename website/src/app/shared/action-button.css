@@ -1,0 +1,64 @@
+/* Rounded action family. Animation adapted from Uiverse.io by adamgiebl. */
+.site-action {
+  --action-fill: var(--color-accent);
+  --action-contrast: var(--color-warm);
+  --action-inset: .25rem;
+  --action-icon-size: 2.25rem;
+  --action-motion: 300ms;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: var(--control-height);
+  min-width: 0;
+  max-width: 100%;
+  padding: .625rem calc(var(--action-icon-size) + 1rem) .625rem 1.25rem;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--action-fill);
+  color: var(--action-contrast);
+  font: 400 1rem/1.5 var(--font-heading);
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow: inset 0 0 1rem -.6rem rgb(0 0 0 / 18%);
+  -webkit-tap-highlight-color: transparent;
+}
+.site-action.action-warm {
+  --action-fill: var(--color-warm);
+  --action-contrast: var(--color-accent);
+}
+.site-action .action-label { min-width: 0; overflow-wrap: anywhere; }
+.site-action .action-icon {
+  position: absolute;
+  z-index: 1;
+  inset: var(--action-inset) var(--action-inset) var(--action-inset) auto;
+  display: grid;
+  place-items: center;
+  width: var(--action-icon-size);
+  border-radius: calc(var(--radius-control) - var(--action-inset));
+  background: var(--action-contrast);
+  color: var(--action-fill);
+  box-shadow: 0 1px 5px rgb(0 0 0 / 10%);
+  pointer-events: none;
+  transition: width var(--action-motion) var(--ease-out), transform var(--action-motion) var(--ease-out);
+}
+.site-action .action-icon app-icon { --icon-size: 18px; transition: transform var(--action-motion) var(--ease-out); }
+@media (hover: hover) {
+  .site-action:not(:disabled):hover .action-icon { width: calc(100% - 2 * var(--action-inset)); }
+  .site-action:not(:disabled):hover .action-icon app-icon { transform: translateX(.1rem); }
+}
+.site-action:not(:disabled):focus-visible .action-icon { width: calc(100% - 2 * var(--action-inset)); }
+.site-action:focus-visible { outline: 2px solid var(--action-fill); outline-offset: 4px; }
+.site-action:not(:disabled):active .action-icon { transform: scale(.95); }
+.site-action:disabled { opacity: .55; cursor: not-allowed; }
+.site-action:disabled .action-icon { transition: none; }
+.site-action.action-back .action-icon app-icon { rotate: 180deg; }
+@media (prefers-reduced-motion: reduce) {
+  .site-action { --action-motion: 0ms; }
+}
+/* Utility controls use the same focus and disabled treatment, retaining their functional shapes. */
+.public-control:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+.public-control:disabled { opacity: .55; cursor: not-allowed; }

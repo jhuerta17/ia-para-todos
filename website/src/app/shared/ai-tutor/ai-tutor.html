@@ -6,7 +6,7 @@
     <div class="verification">
       <p>{{ c().disclosure }}</p>
       <label><input #consent type="checkbox" [checked]="acknowledged()" (change)="acknowledged.set(consent.checked)" /> {{ c().acknowledge }}</label>
-      <button type="button" (click)="enable()" [disabled]="!acknowledged()">{{ c().verify }}</button>
+      <button appActionButton type="button" (click)="enable()" [disabled]="!acknowledged()">{{ c().verify }}</button>
     </div>
   }
   <div class="chat" role="log" aria-live="polite" aria-label="{{ c().heading }}">
@@ -26,7 +26,7 @@
   <div class="composer">
     <input #box type="text" [attr.aria-label]="c().placeholder" [placeholder]="c().placeholder" maxlength="2000" autocomplete="off"
       (keydown.enter)="send(box.value); box.value = ''" [disabled]="sending()" />
-    <button type="button" (click)="send(box.value); box.value = ''" [disabled]="sending()">{{ c().send }}</button>
+    <button appActionButton type="button" (click)="send(box.value); box.value = ''" [disabled]="sending()">{{ c().send }}</button>
   </div>
   <p class="privacy">{{ c().privacy }}</p>
 </section>
