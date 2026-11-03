@@ -1,5 +1,6 @@
 import { afterNextRender, Component, computed, inject, effect, signal } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { BrandMark } from '../../../shared/brand-mark';
 import { Language } from '../../../i18n/language';
 import type { Lang } from '../../../i18n/lang';
@@ -35,6 +36,7 @@ export class PortalLayout {
   private readonly metadata = inject(RouteMetadata);
   protected readonly profileError = signal(false);
   protected readonly accepting = signal(false);
+  protected readonly accountPage = signal(false);
   protected readonly adult = signal(false);
   protected readonly acceptError = signal(false);
   protected async loadProfile(): Promise<void> {
@@ -49,6 +51,10 @@ export class PortalLayout {
   }
 
   constructor() {
+    this.accountPage.set(this.router.url.split(/[?#]/)[0] === '/portal/account');
+    this.router.events.pipe(takeUntilDestroyed()).subscribe(event => {
+      if (event instanceof NavigationEnd) this.accountPage.set(event.urlAfterRedirects.split(/[?#]/)[0] === '/portal/account');
+    });
     let profileUserId: string | undefined;
     effect(() => {
       const userId = this.session.user()?.id;

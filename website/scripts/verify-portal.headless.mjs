@@ -623,6 +623,23 @@ async function main() {
       await page.close();
     }
 
+    {
+      const page=await browser.newPage();
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      let deletionRequested=false;
+      await page.route('**/api/portal/profile',route=>route.fulfill({status:200,contentType:'application/json',body:'{"consented":false,"privacyVersion":"2026-11-03"}'}));
+      await page.route('**/api/portal/account',route=>{deletionRequested=true;return route.fulfill({status:202,contentType:'application/json',body:'{"deleting":true}'});});
+      await page.route('**/.netlify/identity/logout',route=>route.fulfill({status:200,contentType:'application/json',body:'{}'}));
+      await page.goto(`${base}/portal/account`,{waitUntil:'networkidle'});
+      await page.getByRole('button',{name:'Eliminar mi cuenta',exact:true}).click();
+      await page.getByRole('button',{name:'Eliminar mi cuenta definitivamente',exact:true}).waitFor();
+      check('account deletion remains available without accepting adult consent and asks twice',!deletionRequested);
+      await page.getByRole('button',{name:'Eliminar mi cuenta definitivamente',exact:true}).click();
+      await page.waitForURL(atPath('/portal/sign-in'));
+      check('account deletion request clears the browser session',deletionRequested);
+      await page.close();
+    }
+
     for (const saved of ['{invalid', JSON.stringify({ url: '/.netlify/identity', token: {} }), JSON.stringify({ ...seedUser([]), email: null })]) {
       const page = await browser.newPage();
       await page.addInitScript((value) => localStorage.setItem('gotrue.user', value), saved);

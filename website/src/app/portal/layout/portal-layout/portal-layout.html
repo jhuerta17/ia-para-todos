@@ -38,7 +38,7 @@
     </div>
   </header>
   <main class="panel" tabindex="-1">
-    @if (session.user() && client.consented() !== true) {
+    @if (session.user() && client.consented() !== true && !accountPage()) {
       <section class="consent">
         <h1>{{ language.lang() === 'es' ? 'Antes de comenzar' : 'Before you begin' }}</h1>
         @if (profileError()) {
