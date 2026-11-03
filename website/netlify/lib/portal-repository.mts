@@ -90,6 +90,7 @@ export class PortalRepository {
     });
   }
   async requestDeletion(user: Student) {
+    if (user.roles?.includes('admin')) throw new HttpError(403, 'admin_account_requires_dashboard');
     return transaction(this.pool, async db => {
       await db.query("INSERT INTO portal_profiles(user_id,state) VALUES($1,'deleting') ON CONFLICT(user_id) DO UPDATE SET state='deleting'", [user.id]);
       await db.query('INSERT INTO portal_deletion_jobs(user_id) VALUES($1) ON CONFLICT DO NOTHING', [user.id]);
@@ -100,7 +101,11 @@ export class PortalRepository {
     });
   }
   async purge() {
-    await this.pool.query('DELETE FROM portal_chats WHERE expires_at <= now()');
+    await transaction(this.pool, async db => {
+      const stale = (await db.query("UPDATE portal_requests SET state='done',demo=true,reason='request_interrupted' WHERE state='pending' AND created_at < now()-interval '2 minutes' RETURNING user_id,chat_id,id")).rows;
+      for (const row of stale) await db.query("INSERT INTO portal_messages(user_id,chat_id,request_id,role,content,demo) VALUES($1,$2,$3,'assistant',$4,true) ON CONFLICT DO NOTHING",[row.user_id,row.chat_id,row.id,'Sample reply / Respuesta de ejemplo: include task, context, and format. Incluye tarea, contexto y formato.']);
+      await db.query('DELETE FROM portal_chats WHERE expires_at <= now()');
+    });
     await this.pool.query("DELETE FROM portal_daily_usage WHERE day < (now() AT TIME ZONE 'UTC')::date - 32");
     await this.pool.query('DELETE FROM portal_admissions WHERE NOT confirmed AND expires_at<=now()');
   }

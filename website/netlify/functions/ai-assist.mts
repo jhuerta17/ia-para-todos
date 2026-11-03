@@ -104,6 +104,12 @@ function responseText(payload: Record<string, unknown>): string | null {
 export function createHandler(deps: Dependencies = defaults) {
   return async (req: Request, context: Context): Promise<Response> => {
     try {
+      if (new URL(req.url).pathname.startsWith('/api/portal/')) {
+        const { createPortalAIHandler } = await import('../lib/portal-ai.mts');
+        const { defaultPortalDependencies } = await import('./portal.mts');
+        return createPortalAIHandler({ ...defaultPortalDependencies, control: deps.control, fetch: deps.fetch, now: deps.now,
+          sample: (lang,input) => buildSampleReply('tutor',lang,input), instructions: lang => SYSTEMS.tutor[lang] })(req,context);
+      }
       if (req.method !== 'POST') return security.json({ reason: 'method_not_allowed' }, 405, { Allow: 'POST' });
       if (!security.allowedOrigin(req)) throw new security.HttpError(403, 'origin_not_allowed');
       const awaitedBody = await security.readJSON(req);
@@ -182,6 +188,6 @@ export function createHandler(deps: Dependencies = defaults) {
 export default createHandler();
 // Keep a plain object initializer: Netlify's static parser ignores named exports wrapped in `satisfies`.
 export const config: Config = {
-  path: '/api/ai-assist',
+  path: ['/api/ai-assist', '/api/portal/chats/:id/messages'],
   rateLimit: { action: 'rate_limit', windowLimit: 60, windowSize: 60, aggregateBy: ['ip', 'domain'] },
 };

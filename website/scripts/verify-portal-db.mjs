@@ -1,5 +1,10 @@
 import assert from 'node:assert/strict';
 import { PortalRepository, PRIVACY_VERSION } from '../netlify/lib/portal-repository.mts';
+import { randomUUID } from 'node:crypto';
+import { createPortalAIHandler } from '../netlify/lib/portal-ai.mts';
+import { buildSampleReply, buildMessages } from '../netlify/functions/ai-assist.mts';
+import { reserveAdmission } from '../netlify/lib/portal-repository.mts';
+import { transaction } from '../netlify/lib/portal-db.mts';
 import { createPortalHandler } from '../netlify/functions/portal.mts';
 import { NetlifyDB } from '@netlify/database-dev';
 import { getDatabase } from '@netlify/database';
@@ -44,6 +49,50 @@ try {
   assert.equal((await request(`chats/${chat.id}`,'DELETE')).status, 404);
   assert.deepEqual((await (await request('chats')).json()).chats, []);
   console.log('  ok authenticated APIs, confirmation, consent, progress idempotency, and two-user ownership');
+  user = B;
+  process.env.PORTAL_AI_ENABLED='true';
+  process.env.PORTAL_AI_PRICE_MODEL='muse-spark-1.3-contributor';
+  process.env.PORTAL_AI_INPUT_USD_PER_MILLION='1';
+  process.env.PORTAL_AI_OUTPUT_USD_PER_MILLION='2';
+  process.env.META_MUSE_API_KEY='local-test-key';
+  let calls=0;
+  const ai = createPortalAIHandler({repository:()=>repo,user:async()=>user,control:{read:async()=>true,write:async()=>{}},
+    sample:(lang,input)=>buildSampleReply('tutor',lang,input),instructions:lang=>buildMessages('tutor',lang,[],'')[0].content,
+    fetch:async(_url,init)=>{ calls++; const payload=JSON.parse(init.body); assert.equal(payload.store,false); assert.equal(payload.max_output_tokens,1600); assert.ok(!JSON.stringify(payload).includes('private@example.com')); return Response.json({output:[{type:'message',role:'assistant',content:[{type:'output_text',text:'A fictional practice reply'}]}],usage:{input_tokens:100,output_tokens:100}}); },
+  });
+  const chatB=await repo.createChat(B);
+  const send=(id,options={})=>ai(new Request(`https://test.example/api/portal/chats/${chatB.id}/messages`,{method:'POST',headers:{Origin:'https://test.example','Content-Type':'application/json'},body:JSON.stringify({requestId:id,input:'Practice private@example.com',lang:'en',live:true,acknowledged:true,...options})}),{deploy:{context:'production'}});
+  const first=randomUUID();
+  assert.equal((await send(first)).status,200);
+  assert.equal((await (await send(first)).json()).demo,false);
+  assert.equal(calls,1);
+  assert.equal((await send(first,{input:'changed'})).status,409);
+  assert.equal((await send(randomUUID(),{acknowledged:false})).status,200);
+  assert.equal(calls,1);
+  const history=await repo.chat(B,chatB.id);
+  assert.ok(history.messages.every(message=>!message.content.includes('private@example.com')));
+  assert.equal((await send(randomUUID(),{userId:A.id})).status,400);
+  for(let i=0;i<19;i++) assert.equal((await send(randomUUID())).status,200);
+  assert.equal(calls,20);
+  assert.equal((await (await send(randomUUID())).json()).reason,'allowance_exhausted');
+  assert.equal(calls,20);
+  await repo.chat(B,chatB.id,true);
+  assert.equal((await pool.query('SELECT requests FROM portal_daily_usage WHERE user_id=$1',[B.id])).rows[0].requests,20);
+  console.log('  ok live acknowledgement, scrubbed storage, bounded provider payload, idempotency, daily quotas, and deletion-resistant usage');
+  // A second user can spend only the remaining shared monthly allowance.
+  const C={...B,id:'student-C',email:'c@example.com'};
+  await repo.consent(C); user=C;
+  const budgetChat=await repo.createChat(C);
+  await pool.query('UPDATE portal_monthly_usage SET amount_micro=25000000');
+  const budget=await ai(new Request(`https://test.example/api/portal/chats/${budgetChat.id}/messages`,{method:'POST',headers:{Origin:'https://test.example','Content-Type':'application/json'},body:JSON.stringify({requestId:randomUUID(),input:'fictional',lang:'en',live:true,acknowledged:true})}),{deploy:{context:'production'}});
+  assert.equal((await budget.json()).reason,'monthly_budget_exhausted');
+  assert.equal(calls,20);
+  const admissions=await pool.query('SELECT count(*)::int AS n FROM portal_admissions');
+  for(let i=admissions.rows[0].n;i<25;i++) await transaction(pool,db=>reserveAdmission(db,`test-hash-${i}`));
+  const admissionsRace=await Promise.allSettled([transaction(pool,db=>reserveAdmission(db,'over-cap-A')),transaction(pool,db=>reserveAdmission(db,'over-cap-B'))]);
+  assert.ok(admissionsRace.every(result=>result.status==='rejected'));
+  assert.equal((await pool.query('SELECT count(*)::int AS n FROM portal_admissions')).rows[0].n,25);
+  console.log('  ok shared monthly budget and atomic 25-student admission cap');
   await pool.query('UPDATE portal_chats SET expires_at=now()-interval \'1 day\' WHERE id=$1',[chat.id]);
   user = A;
   assert.equal((await request(`chats/${chat.id}`)).status, 404);
