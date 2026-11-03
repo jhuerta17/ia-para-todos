@@ -404,8 +404,11 @@ async function main() {
       await page.locator('aside').first().getByRole('link', { name: 'Impact' }).click();
       await page.waitForURL('**/admin/impact', { timeout: 10000 });
       const impactRows = await page.locator('tbody tr').count();
-      const reached = await page.getByText('170', { exact: true }).count();
-      check('demo impact renders six months + reach', impactRows === 6 && reached === 1, `${impactRows} rows, reach x${reached}`);
+      // Demo months roll with the date: compare the summary with the visible rows.
+      const attendees = await page.locator('tbody tr td:nth-child(2) span').allTextContents();
+      const total = attendees.reduce((sum, value) => sum + Number(value.trim()), 0);
+      const summary = await page.getByText('People reached', { exact: true }).locator('..').locator('p').nth(1).textContent();
+      check('demo impact renders six months + reach', impactRows === 6 && total > 0 && Number(summary) === total, `${impactRows} rows, reach ${summary}, row total ${total}`);
       await page.screenshot({ path: join(evidence, 'demo-impact.png'), fullPage: true });
       await page.locator('aside').first().getByRole('link', { name: 'Supporters' }).click();
       await page.waitForURL('**/admin/supporters', { timeout: 10000 });
