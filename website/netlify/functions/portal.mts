@@ -2,6 +2,7 @@ import type { Config } from '@netlify/functions';
 import { HttpError, json, readJSON } from '../lib/ai-security.mts';
 import { PortalRepository, PRIVACY_VERSION, type Student } from '../lib/portal-repository.mts';
 import { portalPool } from '../lib/portal-db.mts';
+import { portalUser } from '../lib/portal-user.mts';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const validUUID = (id: string) => UUID.test(id);
@@ -11,7 +12,7 @@ export interface PortalDependencies {
 }
 export const defaultPortalDependencies: PortalDependencies = {
   repository: () => new PortalRepository(portalPool()),
-  user: async () => (await import('@netlify/identity')).getUser(),
+  user: portalUser,
 };
 export function createPortalHandler(deps = defaultPortalDependencies) {
   return async (req: Request): Promise<Response> => {

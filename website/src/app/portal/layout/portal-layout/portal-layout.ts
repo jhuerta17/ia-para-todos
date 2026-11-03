@@ -5,7 +5,7 @@ import { BrandMark } from '../../../shared/brand-mark';
 import { Language } from '../../../i18n/language';
 import type { Lang } from '../../../i18n/lang';
 import { RouteMetadata } from '../../../shared/metadata/route-metadata';
-import { PortalClient } from '../../store/portal-client';
+import { PortalClient, PortalError } from '../../store/portal-client';
 import { UserSession } from '../../session/user-session';
 
 const copy = {
@@ -35,13 +35,18 @@ export class PortalLayout {
   protected readonly client = inject(PortalClient);
   private readonly metadata = inject(RouteMetadata);
   protected readonly profileError = signal(false);
+  protected readonly confirmationRequired = signal(false);
   protected readonly accepting = signal(false);
   protected readonly accountPage = signal(false);
   protected readonly adult = signal(false);
   protected readonly acceptError = signal(false);
   protected async loadProfile(): Promise<void> {
     this.profileError.set(false);
-    try { await this.client.profile(); } catch { this.profileError.set(true); }
+    this.confirmationRequired.set(false);
+    try { await this.client.profile(); } catch (error) {
+      this.confirmationRequired.set(error instanceof PortalError && error.message === 'email_confirmation_required');
+      this.profileError.set(true);
+    }
   }
   protected async accept(): Promise<void> {
     if (!this.adult() || this.accepting()) return;

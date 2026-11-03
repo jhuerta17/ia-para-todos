@@ -608,6 +608,22 @@ async function main() {
     {
       const page=await browser.newPage();
       await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      let blocked=true;
+      await page.route('**/api/portal/profile',route=>route.fulfill({status:blocked?403:200,contentType:'application/json',body:JSON.stringify(blocked?{reason:'email_confirmation_required'}:{consented:false,privacyVersion:'2026-11-03'})}));
+      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      await page.getByRole('alert').filter({hasText:'Confirma tu correo'}).waitFor();
+      await page.getByRole('button',{name:'EN',exact:true}).click();
+      await page.getByRole('alert').filter({hasText:'Confirm your email'}).waitFor();
+      check('email confirmation errors give bilingual recovery guidance',true);
+      blocked=false;
+      await page.getByRole('button',{name:'Try again',exact:true}).click();
+      await page.getByRole('checkbox').waitFor();
+      check('retry recovers from confirmation failure to adult consent',true);
+      await page.close();
+    }
+    {
+      const page=await browser.newPage();
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
       let consented=false;
       await page.route('**/api/portal/profile',route=>{
         if(route.request().method()==='POST')consented=route.request().postDataJSON().adult===true;

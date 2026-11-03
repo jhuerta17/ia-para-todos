@@ -42,7 +42,11 @@
       <section class="consent">
         <h1>{{ language.lang() === 'es' ? 'Antes de comenzar' : 'Before you begin' }}</h1>
         @if (profileError()) {
+          @if (confirmationRequired()) {
+          <p role="alert">{{ language.lang() === 'es' ? 'Confirma tu correo con el enlace que te enviamos. Después, vuelve a iniciar sesión e inténtalo de nuevo.' : 'Confirm your email using the link we sent you. Then sign in again and try again.' }}</p>
+          } @else {
           <p role="alert">{{ language.lang() === 'es' ? 'No pudimos abrir tu cuenta. Inténtalo de nuevo.' : 'We could not open your account. Please try again.' }}</p>
+          }
           <button type="button" (click)="loadProfile()">{{ language.lang() === 'es' ? 'Reintentar' : 'Try again' }}</button>
         } @else if (client.consented() === null) {
           <p role="status">{{ language.lang() === 'es' ? 'Cargando tu cuenta…' : 'Loading your account…' }}</p>
