@@ -396,6 +396,20 @@ for (const [page, marker] of [['index.html', 'inventados'], ['en/index.html', 'M
   }
 }
 
+// 19. Site chrome links the booking and account flows: both home pages
+// expose the schedule CTA, the workshop flow pages, and the portal
+// entries from the header and footer navigation.
+for (const [page, hrefs, cta] of [
+  ['index.html', ['href="/talleres"', 'href="/agenda"', 'href="/preparacion"', 'href="/reservas"', 'href="/portal/sign-in"', 'href="/portal/sign-up"', 'href="/portal/courses"', 'href="/portal/chats"', 'href="/participar"'], 'Reservar lugar'],
+  ['en/index.html', ['href="/en/workshops"', 'href="/en/schedule"', 'href="/en/preparation"', 'href="/en/reservations"', 'href="/portal/sign-in"', 'href="/portal/sign-up"', 'href="/portal/courses"', 'href="/portal/chats"', 'href="/en/participate"'], 'Reserve a place'],
+]) {
+  const html = readFileSync(join(publish, page), 'utf8');
+  for (const href of hrefs) {
+    if (!html.includes(href)) fail(`${page} lacks site-chrome link ${href}`);
+  }
+  if (!html.includes(cta)) fail(`${page} lacks the header schedule CTA (${cta})`);
+}
+
 if (failures.length > 0) {
   console.error(`postbuild: ${failures.length} launch check(s) failed:`);
   for (const failure of failures) console.error(`- ${failure}`);

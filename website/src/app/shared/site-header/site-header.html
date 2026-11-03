@@ -18,7 +18,7 @@
     @for (link of primary(); track link.path) {
       <a [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page">{{ link.label }}</a>
     }
-    @if (!participationPage()) { <app-action-link to="/participar" [label]="c().participate" /> }
+    @if (!schedulePage()) { <app-action-link to="/agenda" [label]="c().reserve" /> }
   </nav>
   <button #mobileToggle class="public-control mobile-toggle" type="button" [attr.aria-label]="expanded() ? c().closeMenu : c().openMenu" aria-controls="mobile-links" [attr.aria-expanded]="expanded()" (click)="toggleMobile()">
     <app-icon [name]="expanded() ? 'x' : 'menu-2'" />
@@ -41,7 +41,7 @@
         <a [routerLink]="link.path" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="dismiss()">{{ link.label }}</a>
       }
       <div class="mobile-language"><span>{{ c().language }}</span><a [routerLink]="alternate().url" [attr.aria-label]="alternate().aria" (click)="dismiss()">{{ alternate().label }}</a></div>
-      @if (!participationPage()) { <app-action-link to="/participar" [label]="c().participate" tone="warm" (click)="dismiss()" /> }
+      @if (!schedulePage()) { <app-action-link to="/agenda" [label]="c().reserve" tone="warm" (click)="dismiss()" /> }
     </nav>
   </div>
 </header>

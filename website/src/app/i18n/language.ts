@@ -1,6 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { BRAND_NAME, DetailKind, Lang, PATHS, StaticKey, detailUrl, sectionUrl, staticPeer } from './lang';
+import { BRAND_NAME, DetailKind, Lang, PATHS, StaticKey, WORKSHOP_PATHS, WorkshopKey, detailUrl, sectionUrl, staticPeer, workshopUrl } from './lang';
 
 /**
  * Current content language, set by the root component on every page
@@ -28,6 +28,11 @@ export class Language {
     return detailUrl(kind, slug, this.lang());
   }
 
+  /** Localized absolute URL for a workshop flow page (agenda, preparation, reservations). */
+  workshop(key: WorkshopKey): string {
+    return workshopUrl(key, this.lang());
+  }
+
   /**
    * Localize a Spanish-section absolute path (`/`, `/talleres`, or
    * `/talleres/<slug>` with an already-localized slug) to the current
@@ -38,6 +43,8 @@ export class Language {
     if (esPath === '/') return '/en';
     const section = (Object.keys(PATHS) as StaticKey[]).find(key => esPath === `/${PATHS[key].es}`);
     if (section) return sectionUrl(section, 'en');
+    const flow = (Object.keys(WORKSHOP_PATHS) as WorkshopKey[]).find(key => esPath === `/${WORKSHOP_PATHS[key].es}`);
+    if (flow) return workshopUrl(flow, 'en');
     for (const key of ['talleres', 'actividades', 'recursos'] as const) {
       const prefix = `/${PATHS[key].es}`;
       if (esPath === prefix || esPath.startsWith(`${prefix}/`)) {

@@ -3,7 +3,7 @@ footer { max-width: 1040px; margin: auto; }
 a { text-decoration: none; }
 a:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
 a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
-.main-band { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 64px; }
+.main-band { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; }
 .main-band > *, .newsletter > *, .signup > * { min-width: 0; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font: 400 26px/1.4 var(--font-heading); }
 .brand app-brand-mark { --logo-size: 32px; }

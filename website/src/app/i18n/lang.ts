@@ -38,6 +38,21 @@ export const PATHS: Record<StaticKey, Record<Lang, string>> = {
   seguridad: { es: 'seguridad', en: 'en/safety' },
 };
 
+/** Workshop flow keys (booking calendar, preparation, reservation lookup). */
+export type WorkshopKey = 'agenda' | 'preparacion' | 'reservas';
+
+/** Full route path per workshop flow page and language (no leading slash). */
+export const WORKSHOP_PATHS: Record<WorkshopKey, Record<Lang, string>> = {
+  agenda: { es: 'agenda', en: 'en/schedule' },
+  preparacion: { es: 'preparacion', en: 'en/preparation' },
+  reservas: { es: 'reservas', en: 'en/reservations' },
+};
+
+/** Absolute URL for a workshop flow page in a language. */
+export function workshopUrl(key: WorkshopKey, lang: Lang): string {
+  return `/${WORKSHOP_PATHS[key][lang]}`;
+}
+
 /** Detail sections share the listing keys. */
 export type DetailKind = 'talleres' | 'actividades' | 'recursos';
 
