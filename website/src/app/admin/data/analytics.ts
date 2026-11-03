@@ -7,6 +7,7 @@ export interface MonthBucket {
   collaborate: number;
   newsletter: number;
   donate: number;
+  contact: number;
   total: number;
 }
 
@@ -15,7 +16,7 @@ export interface FormDelta {
   previous: number;
 }
 
-export const ANALYTICS_FORMS: SubmissionForm[] = ['participate', 'collaborate', 'newsletter', 'donate'];
+export const ANALYTICS_FORMS: SubmissionForm[] = ['participate', 'collaborate', 'newsletter', 'donate', 'contact'];
 
 function monthKey(year: number, month: number): string {
   return `${year}-${String(month + 1).padStart(2, '0')}`;
@@ -32,7 +33,7 @@ export function bucketByMonth(rows: Submission[], monthCount = 6, now = Date.now
     const sameYear = date.getFullYear() === cursor.getFullYear();
     const label =
       date.toLocaleDateString('en', { month: 'short' }) + (sameYear ? '' : ` ’${String(date.getFullYear()).slice(2)}`);
-    buckets.set(key, { key, label, participate: 0, collaborate: 0, newsletter: 0, donate: 0, total: 0 });
+    buckets.set(key, { key, label, participate: 0, collaborate: 0, newsletter: 0, donate: 0, contact: 0, total: 0 });
     order.push(key);
   }
   for (const row of rows) {

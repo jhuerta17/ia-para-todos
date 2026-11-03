@@ -16,6 +16,7 @@ const STROKE: Record<SubmissionForm, string> = {
   collaborate: 'stroke-sky-500',
   newsletter: 'stroke-green-500',
   donate: 'stroke-amber-500',
+  contact: 'stroke-rose-500',
 };
 
 const DOT: Record<SubmissionForm, string> = {
@@ -23,6 +24,7 @@ const DOT: Record<SubmissionForm, string> = {
   collaborate: 'bg-sky-500',
   newsletter: 'bg-green-500',
   donate: 'bg-amber-500',
+  contact: 'bg-rose-500',
 };
 
 const RADIUS = 60;

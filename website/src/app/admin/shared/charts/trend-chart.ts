@@ -22,6 +22,7 @@ const FILL: Record<SubmissionForm, string> = {
   collaborate: 'fill-sky-500',
   newsletter: 'fill-green-500',
   donate: 'fill-amber-500',
+  contact: 'fill-rose-500',
 };
 
 const DOT: Record<SubmissionForm, string> = {
@@ -29,6 +30,7 @@ const DOT: Record<SubmissionForm, string> = {
   collaborate: 'bg-sky-500',
   newsletter: 'bg-green-500',
   donate: 'bg-amber-500',
+  contact: 'bg-rose-500',
 };
 
 const PLOT = { left: 44, right: 16, top: 16, bottom: 224, height: 260, width: 640 };
@@ -80,7 +82,7 @@ export class TrendChart {
   });
 
   protected readonly totals = computed(() => {
-    const sums: Record<SubmissionForm, number> = { participate: 0, collaborate: 0, newsletter: 0, donate: 0 };
+    const sums: Record<SubmissionForm, number> = { participate: 0, collaborate: 0, newsletter: 0, donate: 0, contact: 0 };
     for (const bucket of this.buckets()) for (const form of ANALYTICS_FORMS) sums[form] += bucket[form];
     return ANALYTICS_FORMS.map((form) => ({ form, label: FORM_LABELS[form], total: sums[form] }));
   });

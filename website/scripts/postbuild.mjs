@@ -127,10 +127,12 @@ const formPages = [
   ['comunidad/index.html', 'collaborate'],
   ['participar/index.html', 'participate'],
   ['donar/index.html', 'donate'],
+  ['contacto/index.html', 'contact'],
   ['en/index.html', 'participate'],
   ['en/community/index.html', 'collaborate'],
   ['en/participate/index.html', 'participate'],
   ['en/donate/index.html', 'donate'],
+  ['en/contact/index.html', 'contact'],
 ];
 for (const [page, name] of formPages) {
   const html = readFileSync(join(publish, page), 'utf8');

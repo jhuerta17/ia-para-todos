@@ -9,7 +9,7 @@ import type { Context } from '@netlify/functions';
 // volume the response flags `truncated` so the UI can say so.
 const API = 'https://api.netlify.com/api/v1';
 const PER_PAGE = 100;
-const KNOWN_FORMS = ['participate', 'collaborate', 'newsletter', 'donate'] as const;
+const KNOWN_FORMS = ['participate', 'collaborate', 'newsletter', 'donate', 'contact'] as const;
 type KnownForm = (typeof KNOWN_FORMS)[number];
 
 interface ApiForm {

@@ -1,5 +1,5 @@
 /** Netlify Forms submissions, normalized for the admin dashboard. */
-export type SubmissionForm = 'participate' | 'collaborate' | 'newsletter' | 'donate';
+export type SubmissionForm = 'participate' | 'collaborate' | 'newsletter' | 'donate' | 'contact';
 
 export interface Submission {
   id: string;
@@ -18,6 +18,7 @@ export const FORM_LABELS: Record<SubmissionForm, string> = {
   collaborate: 'Collaborate',
   newsletter: 'Newsletter',
   donate: 'Donations',
+  contact: 'Contact',
 };
 
 export const FORM_BADGE_COLORS: Record<SubmissionForm, 'primary' | 'info' | 'success'> = {
@@ -25,4 +26,5 @@ export const FORM_BADGE_COLORS: Record<SubmissionForm, 'primary' | 'info' | 'suc
   collaborate: 'info',
   newsletter: 'success',
   donate: 'success',
+  contact: 'info',
 };
