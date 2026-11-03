@@ -10,7 +10,7 @@ import { createPortalPool } from '../netlify/lib/portal-db.mts';
 import { migratePortal } from './lib/portal-migrations.mjs';
 import { fileURLToPath } from 'node:url';
 import EmbeddedPostgres from 'embedded-postgres';
-import { mkdtemp, readdir, readFile } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, copyFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createServer } from 'node:net';
@@ -25,9 +25,25 @@ let pool;
 try {
   await local.initialise();await local.start();
   const connectionString=`postgres://portal_test:${password}@127.0.0.1:${port}/postgres`;
-  await migratePortal({connectionString,directory:migrations});
+  const initial=await Promise.all([migratePortal({connectionString,directory:migrations}),migratePortal({connectionString,directory:migrations})]);
+  assert.equal(initial.reduce((sum,result)=>sum+result.length,0),1);
   assert.equal((await migratePortal({connectionString,directory:migrations})).length,0);
   pool=createPortalPool(connectionString,10);
+  const migrationFixtures=await mkdtemp(join(tmpdir(),'portal-migration-check-'));
+  try {
+    const files=(await readdir(migrations)).filter(name=>name.endsWith('.sql')).sort();
+    for(const file of files)await copyFile(join(migrations,file),join(migrationFixtures,file));
+    await writeFile(join(migrationFixtures,files[0]),'-- changed applied migration');
+    await assert.rejects(migratePortal({connectionString,directory:migrationFixtures}),/changed/);
+    await copyFile(join(migrations,files[0]),join(migrationFixtures,files[0]));
+    await writeFile(join(migrationFixtures,'20200101000000_out_of_order.sql'),'SELECT 1;');
+    await assert.rejects(migratePortal({connectionString,directory:migrationFixtures}),/Out-of-order/);
+    await rm(join(migrationFixtures,'20200101000000_out_of_order.sql'));
+    await writeFile(join(migrationFixtures,'20990101000000_invalid.sql'),'CREATE TABLE must_rollback(id integer); SELECT * FROM missing_migration_relation;');
+    await assert.rejects(migratePortal({connectionString,directory:migrationFixtures}));
+    assert.equal((await pool.query("SELECT to_regclass('public.must_rollback') AS relation")).rows[0].relation,null);
+    console.log('  ok migration concurrency, checksum integrity, ordering, and failed-DDL rollback');
+  } finally {await rm(migrationFixtures,{recursive:true,force:true});}
   await pool.query("INSERT INTO portal_profiles(user_id) VALUES ('fixture-A'),('fixture-B')");
   await pool.query("INSERT INTO portal_enrollments(user_id,course_id) VALUES ('fixture-A','first-prompt')");
   await assert.rejects(pool.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES ('fixture-B','first-prompt','clear-request')"));

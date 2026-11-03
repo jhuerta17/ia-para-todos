@@ -8,6 +8,11 @@
   command = "npm run build"
   publish = "dist/website/browser"
 
+# Production applies reviewed SQL before publishing the matching application.
+# Requires the production-only, Builds-scoped direct Neon connection secret.
+[context.production]
+  command = "npm run db:migrate && npm run build"
+
 [build.environment]
   NODE_VERSION = "24.16.0"
   NPM_FLAGS = "--no-audit --no-fund"
