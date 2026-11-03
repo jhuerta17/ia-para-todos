@@ -9,12 +9,27 @@ import { createPortalHandler } from '../netlify/functions/portal.mts';
 import { NetlifyDB } from '@netlify/database-dev';
 import { getDatabase } from '@netlify/database';
 import { fileURLToPath } from 'node:url';
-const local = new NetlifyDB({ logger: () => {} });
+import EmbeddedPostgres from 'embedded-postgres';
+import { mkdtemp, readdir, readFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { createServer } from 'node:net';
+const migrations=fileURLToPath(new URL('../netlify/database/migrations',import.meta.url));
+// Check platform migration compatibility independently; its emulator shares a
+// single PostgreSQL session and must not be used to claim transaction races.
+const emulator=new NetlifyDB({logger:()=>{}});
+try {await emulator.start();await emulator.applyMigrations(migrations);}finally{await emulator.stop();}
+const listener=createServer();
+await new Promise(resolve=>listener.listen(0,'127.0.0.1',resolve));
+const port=listener.address().port;
+await new Promise(resolve=>listener.close(resolve));
+const password=randomUUID();
+const local=new EmbeddedPostgres({databaseDir:await mkdtemp(join(tmpdir(),'portal-postgres-')),user:'portal_test',password,port,persistent:false,createPostgresUser:false,onLog:()=>{},onError:()=>{}});
 let pool;
 try {
-  const url = await local.start();
-  await local.applyMigrations(fileURLToPath(new URL('../netlify/database/migrations', import.meta.url)));
-  pool = getDatabase({ connectionString: url }).pool;
+  await local.initialise();await local.start();
+  pool=getDatabase({connectionString:`postgres://portal_test:${password}@127.0.0.1:${port}/postgres`}).pool;
+  for(const file of (await readdir(migrations)).filter(name=>name.endsWith('.sql')).sort())await pool.query(await readFile(join(migrations,file),'utf8'));
   await pool.query("INSERT INTO portal_profiles(user_id) VALUES ('fixture-A'),('fixture-B')");
   await pool.query("INSERT INTO portal_enrollments(user_id,course_id) VALUES ('fixture-A','first-prompt')");
   await assert.rejects(pool.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES ('fixture-B','first-prompt','clear-request')"));
@@ -110,7 +125,9 @@ try {
   assert.equal((await request(`chats/${chat.id}`)).status, 404);
   await repo.purge();
   assert.equal((await pool.query('SELECT * FROM portal_chats WHERE id=$1',[chat.id])).rowCount,0);
-  await request('account','DELETE');
+  const deletionRace = await Promise.allSettled([repo.progress(A,'enroll'),repo.requestDeletion(A)]);
+  assert.equal(deletionRace[1].status,'fulfilled',JSON.stringify(deletionRace));
+  assert.equal((await pool.query('SELECT count(*)::int AS n FROM portal_enrollments WHERE user_id=$1',[A.id])).rows[0].n,0);
   assert.equal((await request('profile')).status,403);
   await repo.retryDeletions(async()=>{throw new Error('temporary identity failure');});
   assert.equal((await pool.query('SELECT completed_at FROM portal_deletion_jobs WHERE user_id=$1',[A.id])).rows[0].completed_at,null);

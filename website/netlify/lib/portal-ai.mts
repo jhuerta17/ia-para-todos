@@ -107,6 +107,8 @@ export function createPortalAIHandler(options: PortalAIOptions) {
         } catch { reason='upstream_unavailable'; }
       }
       await transaction(repo.pool, async db => {
+        await ensureProfile(db,user);
+        if (!(await db.query('SELECT id FROM portal_chats WHERE id=$1 AND user_id=$2 AND expires_at>now() FOR UPDATE',[chatId,user.id])).rows.length) throw new HttpError(404,'not_found');
         const request = (await db.query("SELECT * FROM portal_requests WHERE user_id=$1 AND id=$2 AND state='pending' FOR UPDATE",[user.id,id])).rows[0];
         if (!request) throw new HttpError(409,'request_interrupted');
         await db.query("INSERT INTO portal_messages(user_id,chat_id,request_id,role,content,demo) VALUES($1,$2,$3,'assistant',$4,$5)",[user.id,chatId,id,scrubPII(reply),demo]);

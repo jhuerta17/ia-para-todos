@@ -25,7 +25,7 @@ export async function reserveAdmission(db: Queryable, hash: string, userId?: str
 export async function ensureProfile(db: Queryable, user: Student, consentRequired = true): Promise<Record<string, any>> {
   if (!user.confirmedAt) throw new HttpError(403, 'email_confirmation_required');
   await db.query('INSERT INTO portal_profiles(user_id) VALUES($1) ON CONFLICT DO NOTHING', [user.id]);
-  const profile = (await db.query('SELECT * FROM portal_profiles WHERE user_id=$1', [user.id])).rows[0];
+  const profile = (await db.query('SELECT * FROM portal_profiles WHERE user_id=$1 FOR UPDATE', [user.id])).rows[0];
   if (profile.state !== 'active') throw new HttpError(403, 'account_deleting');
   if (consentRequired && (!profile.adult_attested_at || profile.privacy_version !== PRIVACY_VERSION)) throw new HttpError(428, 'consent_required');
   return profile;
@@ -86,7 +86,7 @@ export class PortalRepository {
   async chat(user: Student, id: string, remove = false) {
     return transaction(this.pool, async db => {
       await ensureProfile(db, user);
-      const row = (await db.query('SELECT * FROM portal_chats WHERE id=$1 AND user_id=$2 AND expires_at>now()', [id, user.id])).rows[0];
+      const row = (await db.query('SELECT * FROM portal_chats WHERE id=$1 AND user_id=$2 AND expires_at>now() FOR UPDATE', [id, user.id])).rows[0];
       if (!row) throw new HttpError(404, 'not_found');
       if (remove) { await db.query('DELETE FROM portal_chats WHERE id=$1 AND user_id=$2', [id, user.id]); return { deleted: true }; }
       await recoverInterrupted(db,user.id,id);
@@ -106,11 +106,13 @@ export class PortalRepository {
     });
   }
   async purge() {
-    await transaction(this.pool, async db => {
-      const stale = (await db.query("UPDATE portal_requests SET state='done',demo=true,reason='request_interrupted' WHERE state='pending' AND created_at < now()-interval '2 minutes' RETURNING user_id,chat_id,id")).rows;
-      for (const row of stale) await db.query("INSERT INTO portal_messages(user_id,chat_id,request_id,role,content,demo) VALUES($1,$2,$3,'assistant',$4,true) ON CONFLICT DO NOTHING",[row.user_id,row.chat_id,row.id,'Sample reply / Respuesta de ejemplo: include task, context, and format. Incluye tarea, contexto y formato.']);
-      await db.query('DELETE FROM portal_chats WHERE expires_at <= now()');
+    // Use the same chat -> request lock order as reads/generation.
+    const stale = (await this.pool.query("SELECT DISTINCT user_id,chat_id FROM portal_requests WHERE state='pending' AND created_at<now()-interval '2 minutes'")).rows;
+    for (const row of stale) await transaction(this.pool,async db=>{
+      await db.query('SELECT id FROM portal_chats WHERE id=$1 AND user_id=$2 FOR UPDATE',[row.chat_id,row.user_id]);
+      await recoverInterrupted(db,row.user_id,row.chat_id);
     });
+    await this.pool.query('DELETE FROM portal_chats WHERE expires_at<=now()');
     await this.pool.query("DELETE FROM portal_daily_usage WHERE day < (now() AT TIME ZONE 'UTC')::date - 32");
     await this.pool.query('DELETE FROM portal_admissions WHERE NOT confirmed AND expires_at<=now()');
   }
