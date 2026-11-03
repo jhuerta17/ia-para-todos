@@ -27,8 +27,9 @@
         <div class="channel">
           <app-icon [name]="channel.icon" />
           <div>
-            <h3>{{ channel.title }} <span class="status">{{ c().pending }}</span></h3>
+            <h3>{{ channel.title }} @if (channel.live) { <span class="status is-live">{{ c().available }}</span> } @else { <span class="status">{{ c().pending }}</span> } </h3>
             <p>{{ channel.description }}</p>
+            @if (channel.href) { <a class="channel-link" [href]="channel.href">{{ channel.link }}</a> }
           </div>
         </div>
       }
@@ -48,10 +49,12 @@
     </header>
     <ul class="social" appRevealOnEnter>
       @for (item of social; track item.name) {
-        <li [attr.aria-label]="item.name + ': ' + c().soon">
-          <app-icon [name]="item.icon" />
-          <span class="name">{{ item.name }}</span>
-          <span class="status">{{ c().soon }}</span>
+        <li>
+          <a [href]="item.href" target="_blank" rel="me noopener" [attr.aria-label]="item.name + ': ' + item.handle">
+            <app-icon [name]="item.icon" />
+            <span class="name">{{ item.name }}</span>
+            <span class="handle">{{ item.handle }}</span>
+          </a>
         </li>
       }
     </ul>
