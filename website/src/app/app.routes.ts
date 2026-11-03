@@ -1,4 +1,5 @@
 import { adminGuard, adminGuardChild } from './admin/auth/admin-guard';
+import { pageTransitionGuard } from './shared/page-transition/page-transition-guard';
 import { informationPages } from './data/information-pages';
 import { resourceDetails } from './data/resource-details';
 import { activityDetails } from './data/activity-details';
@@ -84,11 +85,18 @@ function detailRoutes(lang: Lang): Routes {
   );
 }
 
+/** Wraps public routes with the page-transition guard: activation waits for
+ * the wipe panel to cover the viewport, so the swap stays hidden. Admin
+ * routes are left untouched and stay instant. */
+function withWipe(routes: Routes): Routes {
+  return routes.map((route) => ({ ...route, canActivate: [...(route.canActivate ?? []), pageTransitionGuard] }));
+}
+
 export const routes: Routes = [
-  ...staticRoutes('es'),
-  ...detailRoutes('es'),
-  ...staticRoutes('en'),
-  ...detailRoutes('en'),
+  ...withWipe(staticRoutes('es')),
+  ...withWipe(detailRoutes('es')),
+  ...withWipe(staticRoutes('en')),
+  ...withWipe(detailRoutes('en')),
   {
     path: 'admin', loadComponent: () => import('./admin/layout/admin-layout/admin-layout').then(module => module.AdminLayout),
     canActivate: [adminGuard],
@@ -103,5 +111,5 @@ export const routes: Routes = [
       { path: 'sign-in', loadComponent: () => import('./admin/pages/admin-access/admin-access').then(module => module.AdminAccess), title: 'Admin sign-in · AI for everyone', data: { lang: 'en', admin: true, adminLogin: true, bare: true } },
     ],
   },
-  { path: '**', loadComponent: () => import('./pages/not-found/not-found').then(module => module.NotFound), title: 'Página no encontrada · IA para todos' },
+  { path: '**', loadComponent: () => import('./pages/not-found/not-found').then(module => module.NotFound), title: 'Página no encontrada · IA para todos', canActivate: [pageTransitionGuard] },
 ];

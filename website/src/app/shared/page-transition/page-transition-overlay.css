@@ -1,0 +1,36 @@
+:host { display: contents; }
+
+/* Resting state: parked below the viewport, hidden, never intercepting. */
+.wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  background: var(--color-transition);
+  transform: translateY(101%);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Cover: rise from below over the old page. */
+.wipe[data-state='covering'] {
+  visibility: visible;
+  transform: translateY(0);
+  transition: transform var(--duration-cover) var(--ease-cover);
+  will-change: transform;
+  pointer-events: auto;
+}
+
+/* Covered: the route swaps underneath; no transition so the hold is still. */
+.wipe[data-state='covered'] {
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Reveal: keep sliding up, away over the new page. */
+.wipe[data-state='revealing'] {
+  visibility: visible;
+  transform: translateY(-101%);
+  transition: transform var(--duration-wipe-reveal) var(--ease-out);
+  will-change: transform;
+}

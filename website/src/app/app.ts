@@ -1,4 +1,6 @@
 import { RouteMetadata } from './shared/metadata/route-metadata';
+import { PageTransition } from './shared/page-transition/page-transition.service';
+import { PageTransitionOverlay } from './shared/page-transition/page-transition-overlay';
 import { SiteFooter } from './shared/site-footer/site-footer';
 import { DOCUMENT } from '@angular/common';
 import { afterNextRender, Component, computed, inject, Injector, signal } from '@angular/core';
@@ -9,7 +11,7 @@ import { Lang } from './i18n/lang';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeader, SiteFooter],
+  imports: [RouterOutlet, SiteHeader, SiteFooter, PageTransitionOverlay],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
@@ -19,6 +21,7 @@ export class App {
   private initialActivation = true;
   private readonly metadata = inject(RouteMetadata);
   private readonly router = inject(Router);
+  private readonly transition = inject(PageTransition);
   private readonly language = inject(Language);
   protected readonly skipLabel = computed(() => this.language.lang() === 'es' ? 'Saltar al contenido' : 'Skip to content');
   protected readonly isAdmin = signal(false);
@@ -31,8 +34,12 @@ export class App {
     this.isAdmin.set(this.detectAdminRoute());
     // Root outlives the app; no teardown needed.
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+      if (event instanceof NavigationEnd) {
         this.isAdmin.set(this.detectAdminRoute());
+        this.transition.reveal();
+      } else if (event instanceof NavigationCancel || event instanceof NavigationError) {
+        this.isAdmin.set(this.detectAdminRoute());
+        this.transition.reset();
       }
     });
   }

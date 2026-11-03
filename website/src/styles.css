@@ -71,6 +71,7 @@
   --color-heading: #000000;
   --color-border: #e7e5e0;
   --color-border-strong: #cbbbad;
+  --color-transition: var(--color-page);
 
   --space-xs: 0.5rem;
   --space-sm: 0.75rem;
@@ -95,7 +96,10 @@
   --duration-fast: 250ms;
   --duration-standard: 300ms;
   --duration-reveal: 600ms;
+  --duration-cover: 450ms;
+  --duration-wipe-reveal: 550ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-cover: cubic-bezier(0.55, 0, 1, 0.45);
 }
 
 *,
@@ -147,6 +151,27 @@ a {
   outline-offset: 4px;
 }
 
+/* Page transition slideshow: the outgoing page slides up and fades as
+ * the wipe panel covers it, on the panel's own timing. */
+body[data-page-transition='covering'] main,
+body[data-page-transition='covered'] main {
+  transition: transform var(--duration-cover) var(--ease-cover), opacity var(--duration-cover) var(--ease-cover);
+  transform: translateY(-48px);
+  opacity: 0;
+}
+
+/* The incoming page rises into place as the panel exits upward. */
+body[data-page-transition='revealing'] main {
+  animation: page-transition-rise var(--duration-wipe-reveal) var(--ease-out);
+}
+
+@keyframes page-transition-rise {
+  from {
+    transform: translateY(32px);
+    opacity: 0;
+  }
+}
+
 @media (max-width: 1199px) {
   :root {
     --text-hero: 2.63rem;
@@ -167,5 +192,12 @@ a {
     --duration-fast: 0ms;
     --duration-standard: 0ms;
     --duration-reveal: 0ms;
+    --duration-cover: 0ms;
+    --duration-wipe-reveal: 0ms;
+  }
+
+  body[data-page-transition] main {
+    animation: none;
+    transition: none;
   }
 }
