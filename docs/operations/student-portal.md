@@ -1,114 +1,186 @@
-# Student portal: checkpoint 2
+# Adult student portal operations
 
-Status: authentication plus the first bilingual course, enrollment, and local
-per-account progress are implemented; owner verification pending. Saved chats,
-managed database, real email-flow verification, open registration, and live
-student AI remain future checkpoints.
-Production settings have not been changed.
+The repository implements the free ES/EN introductory course, account progress,
+saved sample/live practice, adult/privacy consent, capped signup, quotas,
+retention, and deletion. Production deployment, real email callbacks, and
+real two-user staging evidence remain separate release gates.
 
-## Run the checks
+## Data and access
+
+Netlify Identity owns credentials, email, and display name. Netlify DB owns
+profiles (Identity ID and consent), enrollments, lesson completion, chats,
+messages, admissions, deletion jobs, and usage counters. No student records or
+secrets belong in Git. Public workshops remain anonymous; the approved adult
+portal exception is documented in the privacy guidelines and public notices.
+
+Every portal API derives ownership from verified Identity; it rejects
+unconfirmed email and requires adult/privacy consent. User metadata cannot
+assign the admin role. Portal access does not imply admin access. Admin APIs
+and edge role rules retain their existing checks. Portal and admin share a
+session; signing out of either signs out of both.
+
+Course progress now uses authenticated server APIs. The temporary browser
+store is deleted. Earlier local progress is intentionally not migrated.
+Language choice and Identity sessions still use browser storage.
+
+All portal page URLs are prerendered, noindex/nofollow, and excluded from the
+sitemap. Private APIs return no-store responses. Unknown routes retain real
+404 behavior; there is no broad SPA rewrite.
+
+## Verification commands
 
 From `website/`:
 
 ```sh
+npm ci
 npm run build
+npm run verify:ai:types
+npm run verify:portal:types
 npm run verify:ai
+npm run verify:portal:db
 npm run verify:admin
 npm run verify:portal
+npm audit --omit=dev
 ```
 
-The browser checks require the repository's installed Playwright Chromium.
-Portal screenshots and results are written to the operating system temporary
-folder under `ia-para-todos-verify-portal`, not committed source.
+The database suite first verifies migration compatibility with
+`@netlify/database-dev`, then starts a disposable real PostgreSQL cluster via
+`embedded-postgres` for separate-session transaction tests. The emulator shares
+a session and is not used to claim concurrency guarantees. The suite checks
+foreign keys, ownership, idempotency, simultaneous quota admission, the monthly
+budget, admissions, interrupted replies, retention, and deletion versus saves.
+The cluster is stopped and removed afterward; it never targets a managed DB.
+No real model or Identity calls are made.
 
-## Review authentication without a backend
+The browser suite uses test-only Identity/API fixtures and installed Playwright
+Chromium. It covers auth, two users in one browser, course progress, saved
+sample chats, deletion, safe text rendering, consent, errors, and mobile layout.
+Evidence is written under the OS temporary directory `ia-para-todos-verify-portal`.
+The test API adapter is never imported by the app or Netlify functions.
 
-From `website/`, after building:
+`npm run review:portal` opens the local app with the same fake services. Use
+`estudiante@example.com` and any password of at least eight characters. Tick
+the adult checkbox for signup. Close the browser when finished. Plain
+`npm start` does not emulate Identity or the database APIs.
 
-```sh
-npm run review:portal
-```
+## Required environment configuration
 
-This opens a local browser with fake Identity responses. Use
-`estudiante@example.com` with any password of at least eight characters.
-No real account is created, no email is delivered, and there are no AI calls.
-Close the browser when finished.
+Set values through Netlify's environment-variable UI, with secrets marked
+secret and separate staging/production scopes. Do not put values in this file
+or `netlify.toml`.
 
-1. Switch ES/EN and open Create account; the language should persist.
-2. Submit a name, email, and password; expect the confirm-email screen.
-3. Open `/portal/sign-in`, log in, and expect the student greeting.
-4. Sign out; expect the login screen. Opening `/portal` redirects there.
-5. Use Forgot password; expect the check-email screen.
-6. Open `/portal/sign-in#recovery_token=local-demo` on the same local
-   server; set a new password and expect the portal greeting.
-7. Repeat at a narrow/mobile window width; controls should fit without
-   horizontal scrolling.
+| Variable | Meaning |
+| --- | --- |
+| `PORTAL_EMAIL_HASH_SECRET` | Random secret of at least 32 characters for admission-email HMACs. Required for non-admin admission. Keep stable; coordinate admission reconciliation before rotation. |
+| `PORTAL_SIGNUP_ENABLED` | Defaults off. Only `true` permits non-invited signup through the Identity validation hook. |
+| `PORTAL_AI_ENABLED` | Defaults off. Only `true` allows student live generation, alongside the existing global AI switch. |
+| `PORTAL_AI_PRICE_MODEL` | Must exactly match `muse-spark-1.3-contributor`. |
+| `PORTAL_AI_INPUT_USD_PER_MILLION` | Positive verified provider input price in USD per million tokens. No guessed default. |
+| `PORTAL_AI_OUTPUT_USD_PER_MILLION` | Positive verified provider output price, including reasoning, in USD per million tokens. |
+| `META_MUSE_API_KEY` | Existing provider credential; server-only. |
+| `AI_ALLOWED_ORIGINS` | Existing public/admin AI origin allowlist. Portal mutations separately require the request's exact same origin. |
 
-For the normal development server, `npm start` serves localhost:4200,
-but Identity is not emulated there. Use the review command for interactive
-fake authentication, and the automated suite for expired credentials,
-invalid links, return-path rejection, admin authorization, and logout
-across both app surfaces.
+`@netlify/database` resolves the correct managed DB connection. Netlify
+provisions/applies committed migrations on supported deploys. The build base
+is `website`, so migrations live in `website/netlify/database/migrations`.
+Never edit/remove applied migrations or apply hosted schema manually. If the
+account's plan cannot provision Netlify DB, stop and resolve plan support;
+do not silently substitute browser storage or another provider.
 
-## Authentication boundaries
+## Quotas, histories, and spending
 
-Portal and admin share one lazily loaded Identity session. AdminSession
-adds the admin role requirement; server functions and Netlify edge rules
-remain responsible for real authorization. Saved credentials are refreshed
-when expired before guards admit them. Portal return destinations are an exact allowlist of the home, course list,
-course detail, and three lesson routes; auth screens and unknown paths are excluded.
+The pilot admits at most 25 active/reserved non-admin seats. Reservations expire
+24 hours after an unconfirmed signup attempt; confirmation must reacquire a seat
+if its reservation expired. Existing students acquire a seat when accepting
+portal consent. Invited administrators do not consume seats. Open signup needs
+both the environment gate and Identity registration setting; leave email
+confirmation enabled. Server roles change on next login/token refresh.
 
-Email links for recovery, confirmation, and email changes route to portal
-sign-in; admin invitations still route to admin sign-in. Portal tokens are
-removed from the address bar after capture, even if verification fails.
-Real delivery and edge authorization require staging and are not proven
-by the local stubs.
+Live practice is limited to 20 admitted requests per student per UTC day. A
+shared student-AI ledger is capped at 25,000,000 microdollars ($25) per UTC month.
+Day/month reset at 00:00 UTC. Sample replies do not consume live allowance.
+Admission reserves conservative input/output cost before any provider call,
+then reconciles verified token usage. Unknown cost stays reserved; a failed
+request can consume allowance/reservation. Missing price/model/key/configuration
+or an exhausted budget produces a clearly labeled sample, never an unbounded
+live call. The existing global admin switch must also be enabled.
 
-## Review the first course
+Request IDs bind to user, chat, normalized prompt, language, and live/consent
+flags. Replays do not call the provider twice. Only one pending send per chat
+is accepted. A send interrupted for more than two minutes recovers to a sample
+on the next read/send; daily maintenance also repairs abandoned requests. No
+automatic provider retries are made. Max 50 unexpired chats per user, 200 saved
+messages per chat, 2,000 characters per message, and six non-sample messages of
+model context. New chat titles come from the scrubbed first prompt.
 
-1. Sign in at `/portal/sign-in` with an existing account (admins may use the
-   portal too). A preview does not enable open registration or change Identity
-   settings; use the local fake-auth review command if no test account exists.
-2. Choose My courses / Mis cursos, then Your first prompt / Tu primer prompt.
-3. Enroll. Expect zero of three completed lessons.
-4. Complete two lessons and reload. Expect two of three to remain complete.
-5. Switch ES/EN. The same lessons and progress should appear in the chosen language.
-6. Return to the overview and choose Continue learning. Expect the remaining
-   lesson; completing it displays the course-complete message.
-7. Sign out and use a different account in the same browser. Its enrollment
-   and completion must start empty.
+Deleting a chat never refunds durable usage. Monthly totals are aggregate and
+survive account deletion. Daily per-user counters age out after roughly 32 days.
+The application ceiling excludes hosting, DB, email, public tutor usage, and
+provider pricing changes. Review provider billing as well as application totals;
+verify rates before activation and after model/pricing changes.
 
-All lesson URLs are prerendered and support direct navigation and reload.
-Unknown lesson/course URLs retain the site's real 404 behavior. Progress uses
-`portal-progress:v1:<encoded Identity user ID>:first-prompt` in localStorage.
-It is temporary, browser-only scaffolding, not server authorization or a backup.
-Clearing site data loses progress, and it does not transfer between localhost,
-preview URLs, and production. Corrupt, blocked, or full storage displays an
-error without claiming that progress was saved. Lessons remain readable.
-The three lesson IDs are shared by both translations. They can be completed
-in any order, and duplicate completion never increases the total.
+## Retention and deletion
 
-## Remaining checkpoints
+Chat expiry is 30 days after creation, independent of later messages. Expired
+histories are denied immediately; `portal-maintenance` purges them daily at
+04:00 UTC. The public privacy notice explains provider backup limitations and
+Meta Contributor processing. Local deletion cannot reverse provider training.
+Common email/phone patterns are scrubbed before storage and transmission, but
+this is not full anonymization. Never log message bodies, replies, email, JWTs,
+or provider keys.
 
-Checkpoint 2 is prepared on `main` for the existing Git-connected deployment
-flow. Do not create a manual Netlify deploy. The owner will verify the deployed
-main branch; wait for that review before starting the following checkpoints:
+Students can delete individual chats or request account deletion in My account.
+The request immediately removes chats/progress, removes daily counters, records
+a deletion job, and denies further portal access. Maintenance retries Identity
+deletion daily and releases the admission seat on success. Dashboard Identity
+deletion events also clear portal data. Minimal user-ID tombstones and deletion
+records remain to deny stale tokens; they contain no conversation content.
+Admin accounts must be managed in the dashboard to avoid accidental owner loss.
+Provider backups must have their retention/access settings reviewed before launch.
 
-3. Saved sample chats sharing tutor logic, acknowledgements, safe text,
-   2,000-character inputs, and six-message model context.
-4. Separate staging Identity and Netlify DB, owned-resource APIs,
-   committed migrations, server storage, two-user isolation tests.
-5. Confirmed adult signup capped at 25 students; all receive live AI
-   subject to 20 requests per UTC day and a $25 UTC-month application
-   ceiling. Reserve costs atomically; use idempotent request IDs. Update
-   privacy first, expire chats 30 days after creation, purge daily, and
-   support chat/account deletion. No prompt/reply logging.
-6. Operations, cost monitoring, production checklist, explicit release
-   approval, and shutdown/rollback controls. Hosting and public tutor
-   costs are separate from the student AI ceiling.
+Monitor pending deletion jobs, attempts, oldest request date, and the scheduled
+function's last successful run. A job older than 24 hours needs operator review;
+service outages can extend deletion time. Do not report completion solely from
+the initial 202 response. Test deletion with disposable staging users only.
 
-Commit coherent, validated increments with descriptive subjects and bodies
-covering reasons, checks, and limitations. Stage only relevant files;
-exclude secrets and generated output. Never push or rewrite history without
-separate authorization. Manual verification may remain pending in a commit,
-but must be recorded before presenting the checkpoint.
+## Abuse response and incident handling
+
+1. Disable `PORTAL_SIGNUP_ENABLED` and/or `PORTAL_AI_ENABLED` as needed and
+   redeploy through the normal main-branch workflow. The global admin AI pause
+   is the immediate cross-instance live-generation switch.
+2. Inspect safe error counts, quota totals, oldest pending deletion job, and
+   scheduled-function status. Do not enable prompt/reply logging for diagnosis.
+3. Review monthly reserved cost against provider billing. Unexpected usage or
+   stalled maintenance requires stopping pilot expansion.
+4. Rotate a compromised provider key in Netlify and at the provider, then
+   redeploy. Rotate Identity sessions through its supported dashboard controls.
+   Do not read CLI token files or invent undocumented Identity endpoints.
+5. Record incidents privately. Commit only anonymized process improvements.
+
+## Release gates
+
+1. Finish all local commands above and review desktop/mobile evidence.
+2. Configure a separate staging Netlify project with separate Identity users
+   and DB. Leave production invite-only and live student AI off. Identity
+   settings are dashboard-only: enable confirmation, then open registration
+   on staging and set its signup gate. Set a separate admission HMAC secret.
+3. Verify fresh-email signup → confirm → adult notice → enroll → lesson
+   completion → sample chat → logout → another browser restores history.
+4. Use two real confirmed users. Swap chat IDs for GET, DELETE, and message
+   requests; expect 404 without leaked content. Verify students are denied
+   `/admin` at the edge and in the app, including after admin logout.
+5. Configure verified pricing and a staging-approved provider test; student
+   live calls remain production-context gated by default. Prove actual live
+   behavior in the final controlled production pilot after approval, never
+   assume sample-mode staging proves provider billing.
+6. Exercise email recovery/confirmation, chat expiry, interrupted sends,
+   account deletion, Identity retry, and a successful scheduled run. Confirm
+   Netlify's backup retention, plan support, and estimated platform costs.
+7. Obtain production approval, set the reviewed configuration, and deploy the
+   reviewed `main` commit through Git. Enable signup/live only after the
+   migration and access checks pass. Do not create an ad-hoc manual production
+   deploy. No production deploy has been performed by this implementation work.
+
+On a bad release, disable signup/live first and fix forward with a corrective
+commit. Do not remove migrations or restore data snapshots as a routine app
+rollback. Re-run the relevant checks before the next main-branch deploy.
