@@ -6,19 +6,15 @@ import { buildSampleReply, buildMessages } from '../netlify/functions/ai-assist.
 import { reserveAdmission } from '../netlify/lib/portal-repository.mts';
 import { transaction } from '../netlify/lib/portal-db.mts';
 import { createPortalHandler } from '../netlify/functions/portal.mts';
-import { NetlifyDB } from '@netlify/database-dev';
-import { getDatabase } from '@netlify/database';
+import { createPortalPool } from '../netlify/lib/portal-db.mts';
+import { migratePortal } from './lib/portal-migrations.mjs';
 import { fileURLToPath } from 'node:url';
 import EmbeddedPostgres from 'embedded-postgres';
 import { mkdtemp, readdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createServer } from 'node:net';
-const migrations=fileURLToPath(new URL('../netlify/database/migrations',import.meta.url));
-// Check platform migration compatibility independently; its emulator shares a
-// single PostgreSQL session and must not be used to claim transaction races.
-const emulator=new NetlifyDB({logger:()=>{}});
-try {await emulator.start();await emulator.applyMigrations(migrations);}finally{await emulator.stop();}
+const migrations=fileURLToPath(new URL('../db/migrations',import.meta.url));
 const listener=createServer();
 await new Promise(resolve=>listener.listen(0,'127.0.0.1',resolve));
 const port=listener.address().port;
@@ -28,8 +24,10 @@ const local=new EmbeddedPostgres({databaseDir:await mkdtemp(join(tmpdir(),'porta
 let pool;
 try {
   await local.initialise();await local.start();
-  pool=getDatabase({connectionString:`postgres://portal_test:${password}@127.0.0.1:${port}/postgres`}).pool;
-  for(const file of (await readdir(migrations)).filter(name=>name.endsWith('.sql')).sort())await pool.query(await readFile(join(migrations,file),'utf8'));
+  const connectionString=`postgres://portal_test:${password}@127.0.0.1:${port}/postgres`;
+  await migratePortal({connectionString,directory:migrations});
+  assert.equal((await migratePortal({connectionString,directory:migrations})).length,0);
+  pool=createPortalPool(connectionString,10);
   await pool.query("INSERT INTO portal_profiles(user_id) VALUES ('fixture-A'),('fixture-B')");
   await pool.query("INSERT INTO portal_enrollments(user_id,course_id) VALUES ('fixture-A','first-prompt')");
   await assert.rejects(pool.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES ('fixture-B','first-prompt','clear-request')"));
