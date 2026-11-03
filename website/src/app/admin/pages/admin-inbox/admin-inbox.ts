@@ -22,6 +22,7 @@ const FILTERS: { id: Filter; label: string }[] = [
   { id: 'collaborate', label: FORM_LABELS.collaborate },
   { id: 'newsletter', label: FORM_LABELS.newsletter },
   { id: 'donate', label: FORM_LABELS.donate },
+  { id: 'contact', label: FORM_LABELS.contact },
 ];
 
 // Full submissions inbox: per-form filters plus the message table.

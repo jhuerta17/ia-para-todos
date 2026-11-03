@@ -79,6 +79,7 @@ export function generateDemoSubmissions(now: number, months = 6): Submission[] {
       collaborate: (growth % 3 === 0 ? 1 : 0) + (random() < 0.25 ? 1 : 0),
       newsletter: 2 + Math.floor(growth / 6) + (random() < 0.5 ? 1 : 0),
       donate: 0,
+      contact: 0,
     };
     for (const form of ['participate', 'collaborate', 'newsletter'] as const) {
       for (let i = 0; i < counts[form]; i++) {
