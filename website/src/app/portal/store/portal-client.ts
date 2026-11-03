@@ -11,7 +11,7 @@ export class PortalError extends Error {
 export class PortalClient {
   private readonly session = inject(UserSession);
   readonly consented = signal<boolean | null>(null);
-  readonly privacyVersion = signal('2026-11-03');
+  readonly privacyVersion = signal('2026-11-03-meta-contributor-v1');
   async request<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
     const token = await this.session.jwt();
     const response = await fetch(`/api/portal/${path}`, {

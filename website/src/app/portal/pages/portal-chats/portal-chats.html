@@ -14,8 +14,7 @@
         @for(message of chat.messages;track $index){<article [class.user]="message.role==='user'"><p class="speaker">{{message.role==='user'?(language.lang()==='es'?'Tú':'You'):(message.demo?tutor().sample:'IA / AI')}}</p><p class="message-text">{{message.content}}</p></article>}
       </div>
       <p class="note">{{tutor().privacy}}</p>
-      <label class="check"><input type="checkbox" [checked]="live" (change)="live=$any($event.target).checked" [disabled]="sending()||retryAvailable()||busy()" /> {{c().mode}}</label>
-      @if(live){<p class="disclosure">{{tutor().disclosure}}</p><label class="check"><input type="checkbox" [checked]="acknowledged" (change)="acknowledged=$any($event.target).checked" [disabled]="sending()||retryAvailable()||busy()" /> {{tutor().acknowledge}}</label>@if(!acknowledged){<p>{{tutor().verification}}</p>}}
+      <p class="disclosure">{{tutor().disclosure}}</p>
       @if(reason()==='allowance_exhausted'||reason()==='monthly_budget_exhausted'){<p role="status">{{c().budget}}</p>}
       @if(reason()==='sample_mode'||reason()==='upstream_unavailable'||reason()==='paused'){<p class="note">{{c().sampleMode}}</p>}
       <form (submit)="$event.preventDefault(); send()"><label for="portal-prompt">{{tutor().placeholder}}</label><textarea id="portal-prompt" name="prompt" [value]="input" (input)="input=$any($event.target).value" maxlength="2000" rows="4" [disabled]="sending()||retryAvailable()||busy()"></textarea><p class="note">{{input.length}} / 2000</p>

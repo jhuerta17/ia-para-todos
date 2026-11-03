@@ -573,12 +573,16 @@ async function main() {
       await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
       await page.goto(`${base}/portal/chats`,{waitUntil:'networkidle'});
       await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
+      check('no sample notice before first response',await page.getByText('Modo de ejemplo: las respuestas de ejemplo no son respuestas de una IA en vivo.',{exact:true}).count()===0);
+      const liveRequest=page.waitForRequest(request=>request.url().includes('/messages') && request.method()==='POST');
       const prompts=['First fictional prompt','Second fictional prompt','Third fictional prompt'];
       for(const text of prompts){
         await page.locator('#portal-prompt').fill(text);
         await page.getByRole('button',{name:'Enviar',exact:true}).click();
         await page.getByRole('log').getByText(text,{exact:true}).waitFor();
       }
+      const sentBody=(await liveRequest).postDataJSON();
+      check('practice requests live AI with account consent by default',sentBody.live===true && sentBody.acknowledged===true);
       check('saved chat renders three prompts and labeled sample replies',await page.getByRole('log').locator('article').count()===6);
       await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
       await page.getByRole('heading',{name:'Nueva conversación',exact:true}).waitFor();
@@ -595,9 +599,8 @@ async function main() {
       await page.getByRole('button',{name:'First fictional prompt',exact:true}).waitFor();
       check('chat deletion survives reload while the other history remains',await page.getByRole('button',{name:'A second conversation',exact:true}).count()===0);
       await page.getByRole('button',{name:'First fictional prompt',exact:true}).click();
-      await page.getByRole('checkbox',{name:'Solicitar una respuesta en vivo',exact:true}).check();
-      check('live practice displays contributor disclosure and acknowledgement gate',await page.getByText('Acepta el aviso para practicar en vivo, o continúa con ejemplos.',{exact:true}).waitFor().then(()=>true).catch(()=>false));
-      await page.getByRole('checkbox',{name:'Solicitar una respuesta en vivo',exact:true}).uncheck();
+      await page.locator('.conversation .disclosure').waitFor();
+      check('practice shows contributor disclosure without repeated consent controls',(await page.locator('.conversation .disclosure').innerText()).includes('Meta') && await page.locator('.conversation').getByRole('checkbox').count()===0);
       await page.locator('#portal-prompt').fill('<img src=x onerror=alert(1)>');
       await page.getByRole('button',{name:'Enviar',exact:true}).click();
       await page.getByRole('log').getByText('<img src=x onerror=alert(1)>',{exact:true}).waitFor();

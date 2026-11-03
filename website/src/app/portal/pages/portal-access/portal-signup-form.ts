@@ -16,14 +16,14 @@ const copy = {
     email: 'Correo electrónico', emailPlaceholder: 'nombre@example.com', emailRequired: 'El correo es obligatorio.',
     emailInvalid: 'Escribe un correo válido.', password: 'Contraseña', passwordPlaceholder: 'Mínimo 8 caracteres',
     passwordRequired: 'La contraseña es obligatoria.', passwordShort: 'Usa al menos 8 caracteres.',
-    adult: 'Tengo 18 años o más y entiendo que se guarda mi progreso y mis conversaciones vencen a los 30 días.', adultRequired: 'Confirma que tienes 18 años o más y que leíste el aviso.', submit: 'Crear cuenta', submitting: 'Creando cuenta…',
+    adult: 'Tengo 18 años o más y entiendo que se guarda mi progreso y mis conversaciones vencen a los 30 días. Acepto que la práctica use Meta Contributor y que Meta pueda usar mis preguntas y sus respuestas para entrenar sus modelos. Usaré solo datos inventados.', adultRequired: 'Confirma que tienes 18 años o más y que leíste el aviso.', submit: 'Crear cuenta', submitting: 'Creando cuenta…',
   },
   en: {
     name: 'Name', namePlaceholder: 'What is your name?', nameRequired: 'Your name is required.',
     email: 'Email', emailPlaceholder: 'name@example.com', emailRequired: 'Email is required.',
     emailInvalid: 'Enter a valid email.', password: 'Password', passwordPlaceholder: 'At least 8 characters',
     passwordRequired: 'Password is required.', passwordShort: 'Use at least 8 characters.',
-    adult: 'I am 18 or older and understand that progress is saved and chats are kept for 30 days.', adultRequired: 'Confirm you are 18 or older and have read the notice.', submit: 'Create account', submitting: 'Creating account…',
+    adult: 'I am 18 or older and understand that progress is saved and chats are kept for 30 days. I agree to practice with Meta Contributor and understand that Meta may use my questions and its replies to train its models. I will use fictional data only.', adultRequired: 'Confirm you are 18 or older and have read the notice.', submit: 'Create account', submitting: 'Creating account…',
   },
 } satisfies Record<Lang, Record<string, string>>;
 

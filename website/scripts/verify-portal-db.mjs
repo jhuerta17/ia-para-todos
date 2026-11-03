@@ -79,6 +79,11 @@ try {
   assert.equal((await profileResponse.json()).consented, false);
   assert.equal((await request('progress')).status, 428);
   assert.equal((await request('profile','POST',{ adult: true, privacyVersion: PRIVACY_VERSION })).status, 200);
+  await repo.pool.query('UPDATE portal_profiles SET privacy_version=$2 WHERE user_id=$1', [A.id, '2026-11-03']);
+  assert.equal((await (await request('profile')).json()).consented, false, 'old consent does not cover Meta Contributor');
+  assert.equal((await request('chats')).status, 428);
+  assert.equal((await request('profile','POST',{ adult: true, privacyVersion: '2026-11-03' })).status, 400);
+  assert.equal((await request('profile','POST',{ adult: true, privacyVersion: PRIVACY_VERSION })).status, 200);
   assert.equal((await request('progress','POST',{ action: 'complete', lessonId: 'clear-request' })).status, 409);
   await request('progress','POST',{ action:'enroll' });
   await request('progress','POST',{ action:'complete',lessonId:'clear-request' });

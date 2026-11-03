@@ -146,6 +146,8 @@ confirmation enabled. Server roles change on next login/token refresh.
 
 Live practice is limited to 20 admitted requests per student per UTC day. A
 shared student-AI ledger is capped at 25,000,000 microdollars ($25) per UTC month.
+Student practice requests live AI by default after verified account setup. Registration and the versioned portal consent notice disclose Meta Contributor training use in both languages. Existing accounts must accept `2026-11-03-meta-contributor-v1` once before using portal data; practice does not ask for consent again per conversation. The provider configuration, global AI switch, and usage limits still apply, and fallback replies remain labeled as samples.
+
 Day/month reset at 00:00 UTC. Sample replies do not consume live allowance.
 Admission reserves conservative input/output cost before any provider call,
 then reconciles verified token usage. Unknown cost stays reserved; a failed

@@ -2,7 +2,7 @@ import { createHmac, randomUUID } from 'node:crypto';
 import { HttpError, env } from './ai-security.mts';
 import { transaction, type PortalPool, type Queryable } from './portal-db.mts';
 
-export const PRIVACY_VERSION = '2026-11-03';
+export const PRIVACY_VERSION = '2026-11-03-meta-contributor-v1';
 export interface Student { id: string; email?: string; confirmedAt?: string; roles?: string[] }
 export function emailHash(email: string): string {
   const secret = env('PORTAL_EMAIL_HASH_SECRET');
