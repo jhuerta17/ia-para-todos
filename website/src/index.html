@@ -58,16 +58,16 @@
   <link rel="preload" href="fonts/libre-baskerville/libre-baskerville-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/instrument-sans/instrument-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <script>
-  // Admin theme before first paint: /admin/* markup depends on the
+  // Dashboard theme before first paint: /admin/* and /portal/* depend on the
   // side-built Tailwind sheet, so request it while the head still parses
-  // (render-blocking, no flash of unstyled content). Public and portal
+  // (render-blocking, no flash of unstyled content). Public
   // routes use the site stylesheet and return early, downloading nothing
   // extra. This runs before the parser reaches any SSR-serialized copy,
   // so the admin shell dedupes by id and exactly one link survives.
   (function () {
     try {
       var path = location.pathname;
-      if (path !== '/admin' && path.indexOf('/admin/') !== 0) return;
+      if (!/^\/(admin|portal)(\/|$)/.test(path)) return;
       if (document.getElementById('admin-theme')) return;
       var link = document.createElement('link');
       link.id = 'admin-theme';

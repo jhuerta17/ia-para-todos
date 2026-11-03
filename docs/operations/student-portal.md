@@ -27,6 +27,22 @@ All portal page URLs are prerendered, noindex/nofollow, and excluded from the
 sitemap. Private APIs return no-store responses. Unknown routes retain real
 404 behavior; there is no broad SPA rewrite.
 
+## Student interface
+
+Student authentication uses the same TailAdmin split-screen presentation as admin,
+with student-specific signup, confirmation, recovery, and ES/EN controls. Signed-in
+pages use a separate student sidebar, header, and account menu. Course, practice,
+account, and consent views share the dashboard theme; the public website keeps its
+existing appearance. The theme is loaded on direct app visits and client navigation.
+Shared presentation code lives in `website/src/app/shared/dashboard`; the TailAdmin
+license remains in `website/src/app/admin/THIRD_PARTY_NOTICES.md`.
+
+The overview reads course progress and recent conversations from the existing APIs.
+It resumes the first incomplete lesson, offers course review after completion, and
+opens a recent chat through `/portal/chats?chat=<id>`. Course and chat sections have
+independent loading/error/retry states. No database migration or new API is needed.
+Visual reuse does not change role checks, consent, session sharing, or data ownership.
+
 ## Verification commands
 
 From `website/`:

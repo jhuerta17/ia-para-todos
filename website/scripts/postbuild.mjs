@@ -176,7 +176,7 @@ for (const path of ADMIN_PATHS) {
 }
 
 // 9b. Portal routes prerender as Spanish shells: present but uncrawlable,
-// styled by the site stylesheet (never the admin theme), with no public
+// styled by the shared dashboard stylesheet, with no public
 // chrome, canonicals, or hreflang peers.
 const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up', 'portal/chats', 'portal/account', ...COURSE_PATHS.map(path => path.slice(1))];
 for (const path of PORTAL_PATHS) {
@@ -193,7 +193,7 @@ for (const path of PORTAL_PATHS) {
   if (html.includes('rel="canonical"')) fail(`${label} must not set a canonical`);
   if (html.includes('hreflang=')) fail(`${label} must not set hreflang alternates`);
   if (html.includes('name="newsletter"') || html.includes('<app-site-header')) fail(`${label} renders public chrome`);
-  if (html.includes('id="admin-theme"')) fail(`${label} links the admin theme (portal uses the site stylesheet)`);
+  if (!html.includes('id="admin-theme"')) fail(`${label} lacks the shared dashboard theme`);
 }
 // Portal auth forms are app forms, never Netlify forms.
 for (const path of ['portal/sign-in', 'portal/sign-up']) {

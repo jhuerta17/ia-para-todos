@@ -1,4 +1,7 @@
-import { afterNextRender, Component, computed, inject, effect, signal } from '@angular/core';
+import { AuthBrand } from '../../../shared/dashboard/auth-brand';
+import { NgTemplateOutlet } from '@angular/common';
+import { ensureDashboardTheme } from '../../../shared/dashboard/dashboard-theme';
+import { afterNextRender, Component, computed, inject, effect, signal, HostListener, ElementRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { BrandMark } from '../../../shared/brand-mark';
@@ -13,17 +16,12 @@ const copy = {
   en: { signIn: 'Sign in', signOut: 'Sign out', language: 'Language' },
 } satisfies Record<Lang, Record<string, string>>;
 
-// Student portal shell: the public site's own visual language (warm
-// panel, brand accent, site fonts) with app behavior (no public
-// header/footer, noindex). No admin-theme dependency: portal pages
-// must feel like part of the site, not a separate webapp. The ES/EN
-// choice persists per browser (route activation honors it for portal
-// routes; see App.routeLanguage).
+// Student app shell; authentication and authorization remain portal-specific.
 export const PORTAL_LANG_KEY = 'portal-lang';
 
 @Component({
   selector: 'app-portal-layout',
-  imports: [BrandMark, RouterModule],
+  imports: [BrandMark, RouterModule, NgTemplateOutlet, AuthBrand],
   templateUrl: './portal-layout.html',
   styleUrl: './portal-layout.css',
 })
@@ -55,10 +53,46 @@ export class PortalLayout {
     finally { this.accepting.set(false); }
   }
 
+  protected readonly smallScreen = signal(false);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  protected readonly mobileOpen = signal(false);
+  protected toggleMobile(): void {
+    this.mobileOpen.set(!this.mobileOpen());
+    if (this.mobileOpen()) requestAnimationFrame(() => this.host.nativeElement.querySelector<HTMLElement>('.sidebar nav a')?.focus());
+  }
+  @HostListener('window:resize')
+  protected resize(): void {
+    this.smallScreen.set(window.innerWidth < 1280);
+    if (!this.smallScreen()) this.mobileOpen.set(false);
+  }
+  @HostListener('keydown.escape')
+  protected escape(): void {
+    if (this.mobileOpen()) {
+      this.mobileOpen.set(false);
+      this.host.nativeElement.querySelector<HTMLElement>('.mobile-toggle')?.focus();
+    }
+    this.host.nativeElement.querySelector('details')?.removeAttribute('open');
+  }
+  protected readonly collapsed = signal(false);
+  protected readonly authPage = signal(false);
+  protected readonly currentPath = signal('/portal');
+  protected readonly nav = computed(() => this.language.lang() === 'es'
+    ? [{path:'/portal',label:'Resumen',icon:'◫'}, {path:'/portal/courses',label:'Mis cursos',icon:'▤'}, {path:'/portal/chats',label:'Práctica',icon:'◇'}, {path:'/portal/account',label:'Mi cuenta',icon:'○'}]
+    : [{path:'/portal',label:'Overview',icon:'◫'}, {path:'/portal/courses',label:'My courses',icon:'▤'}, {path:'/portal/chats',label:'Practice',icon:'◇'}, {path:'/portal/account',label:'My account',icon:'○'}]);
+  protected readonly pageLabel = computed(() => [...this.nav()].reverse().find(item => this.currentPath() === item.path || this.currentPath().startsWith(item.path + '/'))?.label);
+  private updateRoute(url: string): void {
+    const path = url.split(/[?#]/)[0]!;
+    this.currentPath.set(path);
+    this.authPage.set(path === '/portal/sign-in' || path === '/portal/sign-up');
+    this.accountPage.set(path === '/portal/account');
+    this.mobileOpen.set(false);
+  }
   constructor() {
+    ensureDashboardTheme();
+    this.updateRoute(this.router.url);
     this.accountPage.set(this.router.url.split(/[?#]/)[0] === '/portal/account');
     this.router.events.pipe(takeUntilDestroyed()).subscribe(event => {
-      if (event instanceof NavigationEnd) this.accountPage.set(event.urlAfterRedirects.split(/[?#]/)[0] === '/portal/account');
+      if (event instanceof NavigationEnd) this.updateRoute(event.urlAfterRedirects);
     });
     let profileUserId: string | undefined;
     effect(() => {
@@ -69,6 +103,7 @@ export class PortalLayout {
       if (userId) void this.loadProfile();
     });
     afterNextRender(() => {
+      this.resize();
       try {
         const saved = localStorage.getItem(PORTAL_LANG_KEY);
         if (saved === 'es' || saved === 'en') this.language.set(saved);

@@ -147,7 +147,7 @@ async function main() {
       check('sign-in renders login form', (heading ?? '').includes('Iniciar sesión') && fields === 2, heading ?? '(no h1)');
       const themeLinks = await page.locator('head link#admin-theme').count();
       const chrome = await page.locator('app-site-header, app-site-footer').count();
-      check('portal uses site styles, no admin theme or public chrome', themeLinks === 0 && chrome === 0, `${themeLinks} theme link(s), ${chrome} chrome node(s)`);
+      check('portal uses shared TailAdmin styles without public chrome', themeLinks === 1 && chrome === 0, `${themeLinks} theme link(s), ${chrome} chrome node(s)`);
       await page.screenshot({ path: join(evidence, 'sign-in-desktop.png') });
       await page.goto(`${base}/portal/sign-up`, { waitUntil: 'networkidle' });
       const upHeading = await page.locator('h1').first().textContent();
@@ -221,6 +221,7 @@ async function main() {
       const bouncedUp = await page.waitForURL(atPath('/portal'), { timeout: 15000 }).then(() => true).catch(() => false);
       check('seeded student bounces from sign-up to portal', bouncedUp, page.url());
       await page.goto(`${base}/portal`, { waitUntil: 'networkidle' });
+      await page.locator('.account-menu summary').click();
       await page.locator('button.signout').click();
       const signedOut = await page.waitForURL(atPath('/portal/sign-in'), { timeout: 15000 }).then(() => true).catch(() => false);
       const loginBack = signedOut ? await page.locator('#portal-email').waitFor({ timeout: 10000 }).then(() => true).catch(() => false) : false;
@@ -355,7 +356,7 @@ async function main() {
       const form = await page.locator('form').count();
       check('no-js sign-in renders static form', form >= 1, `${form} form(s)`);
       const themeLink = await page.locator('head link#admin-theme').count();
-      check('no-js portal ships no admin CSS', themeLink === 0, `${themeLink} link(s)`);
+      check('no-js portal ships dashboard CSS', themeLink === 1, `${themeLink} link(s)`);
       await page.goto(`${base}/`, { waitUntil: 'domcontentloaded' });
       const home = await page.locator('h1').first().textContent();
       check('public home unaffected', (home ?? '').length > 0, (home ?? '(none)').slice(0, 40));
@@ -451,8 +452,9 @@ async function main() {
       // Use the public Angular link from admin's brand menu when possible; a
       // history event triggers the router without reloading the document.
       await page.evaluate(() => { history.pushState({}, '', '/portal'); dispatchEvent(new PopStateEvent('popstate')); });
-      await page.locator('button.signout').waitFor();
+      await page.locator('.account-menu summary').waitFor();
       check('admin can navigate to portal in same app', await page.getByText('Admin User').first().isVisible());
+      await page.locator('.account-menu summary').click();
       await page.locator('button.signout').click();
       await page.waitForURL(atPath('/portal/sign-in'));
       await page.evaluate(() => { history.pushState({}, '', '/admin'); dispatchEvent(new PopStateEvent('popstate')); });
@@ -520,6 +522,7 @@ async function main() {
       check('course fits mobile viewport', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       await page.screenshot({ path: join(evidence, 'course-mobile.png'), fullPage: true });
       await page.route('**/.netlify/identity/logout', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+      await page.locator('.account-menu summary').click();
       await page.locator('button.signout').click();
       await page.waitForURL(atPath('/portal/sign-in'));
       await page.route('**/.netlify/identity/token', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: tokenResponse() }));
@@ -662,6 +665,70 @@ async function main() {
       await page.goto(`${base}/portal`, { waitUntil: 'networkidle' });
       await page.waitForURL(atPath('/portal/sign-in'));
       check('malformed saved login recovers to usable sign-in', await page.locator('#portal-email').isVisible());
+      await page.close();
+    }
+
+    // TailAdmin overview uses real API states and independent recovery.
+    {
+      const page = await browser.newPage({viewport:{width:1440,height:1000}});
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      let progress={enrolled:false,completed:[]};
+      let broken=false;
+      await page.route('**/api/portal/progress',route=>route.fulfill({status:broken?503:200,contentType:'application/json',body:JSON.stringify(broken?{reason:'unavailable'}:progress)}));
+      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      check('sidebar excludes hidden mobile links from keyboard navigation',await page.locator('.sidebar').getAttribute('inert')===null);
+      check('overview new student explores course',await page.getByRole('link',{name:'Explorar el curso',exact:true}).getAttribute('href')==='/portal/courses/first-prompt');
+      progress={enrolled:true,completed:['clear-request']};
+      await page.reload({waitUntil:'networkidle'});
+      check('overview resumes first incomplete lesson',await page.getByRole('link',{name:'Continuar aprendiendo',exact:true}).getAttribute('href')==='/portal/courses/first-prompt/lessons/refine-response');
+      await page.screenshot({path:join(evidence,'overview-desktop.png'),fullPage:true});
+      progress.completed=['clear-request','refine-response','verify-and-protect'];
+      await page.reload({waitUntil:'networkidle'});
+      check('overview completed course offers review',await page.getByRole('link',{name:'Repasar el curso',exact:true}).isVisible());
+      broken=true;
+      await page.reload({waitUntil:'networkidle'});
+      check('overview progress failure keeps practice available',await page.getByRole('alert').isVisible() && await page.getByText('Todavía no tienes conversaciones.',{exact:false}).isVisible());
+      broken=false;
+      await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+      await page.getByRole('link',{name:'Repasar el curso',exact:true}).waitFor();
+      check('overview retry restores progress',await page.getByRole('alert').count()===0);
+      await page.locator('.sidebar').getByRole('link',{name:'Práctica',exact:true}).click();
+      await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
+      await page.locator('#portal-prompt').waitFor();
+      await page.locator('.sidebar').getByRole('link',{name:'Resumen',exact:true}).click();
+      await page.locator('.overview-list a').waitFor();
+      await page.locator('.overview-list a').click();
+      await page.locator('#portal-prompt').waitFor();
+      check('recent practice opens the saved conversation',new URL(page.url()).searchParams.has('chat'));
+      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      const failChats=route=>route.fulfill({status:503,contentType:'application/json',body:'{"reason":"unavailable"}'});
+      await page.route('**/api/portal/chats',failChats);
+      await page.reload({waitUntil:'networkidle'});
+      check('chat failure keeps learning overview available',await page.getByRole('alert').isVisible() && await page.getByRole('link',{name:'Repasar el curso',exact:true}).isVisible());
+      await page.unroute('**/api/portal/chats',failChats);
+      await page.getByRole('button',{name:'Reintentar',exact:true}).click();
+      await page.locator('.overview-list a').waitFor();
+      check('practice retry restores saved conversation',await page.getByRole('alert').count()===0);
+      await page.setViewportSize({width:390,height:844});
+      await page.getByRole('button',{name:'Menú de navegación',exact:true}).click();
+      await page.waitForFunction(()=>document.querySelector('.sidebar').getBoundingClientRect().left===0);
+      check('mobile navigation opens',await page.locator('.sidebar').evaluate(el=>el.getBoundingClientRect().left===0));
+      await page.locator('.sidebar').getByRole('link',{name:'Mis cursos',exact:true}).click();
+      await page.waitForURL(atPath('/portal/courses'));
+      check('mobile navigation closes after selection',await page.locator('.mobile-toggle').getAttribute('aria-expanded')==='false');
+      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      check('mobile overview fits',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      await page.screenshot({path:join(evidence,'overview-mobile.png'),fullPage:true});
+      await page.locator('.portal-header .lang').getByRole('button',{name:'EN',exact:true}).click();
+      await page.getByRole('heading',{name:'Your learning',exact:true}).waitFor();
+      check('overview English translation',await page.getByRole('heading',{name:'Your learning',exact:true}).isVisible());
+      await page.getByRole('button',{name:'Navigation menu',exact:true}).click();
+      await page.keyboard.press('Escape');
+      check('Escape returns focus to mobile menu',await page.locator('.mobile-toggle').evaluate(el=>el===document.activeElement));
+      await page.getByRole('button',{name:'Navigation menu',exact:true}).click();
+      await page.locator('.back-site').click();
+      await page.waitForURL(atPath('/en'));
+      check('return to public site retains public layout',await page.locator('app-site-header').isVisible() && await page.locator('.portal-root').count()===0);
       await page.close();
     }
 

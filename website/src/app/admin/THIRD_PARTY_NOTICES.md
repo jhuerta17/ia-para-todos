@@ -1,6 +1,7 @@
-# Third-party notices (admin dashboard)
+# Third-party notices (admin and student dashboards)
 
-The admin shell under `src/app/admin/` vendors and adapts components,
+The admin shell under `src/app/admin/`, shared dashboard presentation under
+`src/app/shared/dashboard/`, and student portal under `src/app/portal/` vendor and adapt components,
 styles, and design tokens from the free TailAdmin Angular template:
 
 - Project: TailAdmin — Free Angular Tailwind Admin Dashboard Template

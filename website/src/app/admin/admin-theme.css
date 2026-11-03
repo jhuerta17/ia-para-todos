@@ -1,9 +1,9 @@
 /* Admin design tokens, vendored from TailAdmin's Tailwind v4 theme
  * (MIT, see THIRD_PARTY_NOTICES.md) with the site brand applied.
  * Compiled WITHOUT Preflight by `npm run build:admin-css` (runs as
- * prebuild) into public/admin-theme.css, which only admin routes reference
+ * prebuild) into public/admin-theme.css, which admin and student routes reference
  * (early-loader in index.html plus the admin shell ensure one
- * render-blocking <link>) so public and portal visitors never download
+ * render-blocking <link>) so public visitors never download
  * it. Brand scale derives from the site accent #4a1c00.
  *
  * Cascade design (light-only admin beside hand-written public CSS):
@@ -13,6 +13,7 @@
  * utilities intentionally inherit the site serif from the public rules. */
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css';
+@import '../shared/dashboard/portal-components.css';
 
 @custom-variant dark (&:is(.dark *));
 

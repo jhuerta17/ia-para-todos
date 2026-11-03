@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Language } from '../../../i18n/language';
 import { ActionButton } from '../../../shared/action-button';
@@ -12,6 +13,7 @@ const copy = {
 @Component({selector:'app-portal-chats',imports:[ActionButton],templateUrl:'./portal-chats.html',styleUrl:'./portal-chats.css',changeDetection:ChangeDetectionStrategy.OnPush})
 export class PortalChats {
   private readonly client=inject(PortalClient);
+  private initialChat = inject(ActivatedRoute).snapshot.queryParamMap.get('chat');
   protected readonly language=inject(Language);
   protected readonly c=computed(()=>copy[this.language.lang()]);
   protected readonly tutor=computed(()=>tutorCopy[this.language.lang()]);
@@ -33,6 +35,9 @@ export class PortalChats {
     this.busy.set(true);this.failed.set(false);
     try {
       this.chats.set((await this.client.request<{chats:PortalChat[]}>('chats')).chats);
+      const initial = this.initialChat;
+      this.initialChat = null;
+      if(initial && this.chats().some(chat=>chat.id===initial)) this.selected.set(await this.client.request(`chats/${initial}`));
       const selected=this.selected();
       if(selected && this.chats().some(chat=>chat.id===selected.id)) this.selected.set(await this.client.request(`chats/${selected.id}`));
       else if(selected) this.selected.set(null);
