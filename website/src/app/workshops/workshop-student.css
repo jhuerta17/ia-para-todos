@@ -1,0 +1,49 @@
+:host { display: block; margin-bottom: 28px; }
+.student-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; margin-bottom: 16px; }
+.student-workshops .student-section-title { font: 600 18px/1.4 var(--font-body); margin: 0; }
+.student-browse, .student-practice { display: inline-flex; align-items: center; gap: 8px; color: var(--color-accent); font-size: 14px; line-height: 1.5; text-decoration: none; min-height: 44px; }
+.student-browse:hover, .student-practice:hover { text-decoration: underline; text-underline-offset: 4px; }
+.student-browse app-icon, .student-practice app-icon { --icon-size: 18px; }
+.student-reservation { border: 1px solid var(--color-border); background: white; border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.student-reservation-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(220px, 1fr); gap: 28px; align-items: center; padding: 24px; }
+.student-summary { min-width: 0; background: #f8f4ec; padding: 24px; border-radius: 16px; }
+.student-workshops .student-workshop-title { font: 600 21px/1.4 var(--font-body); margin: 0 0 20px; overflow-wrap: anywhere; }
+.student-fact { display: flex; align-items: start; gap: 12px; font-size: 15px; margin: 12px 0 0; }
+.student-fact app-icon { --icon-size: 20px; color: #6f4a22; margin-top: 3px; }
+.student-fact span { min-width: 0; overflow-wrap: anywhere; }
+.student-status { display: flex; align-items: start; gap: 8px; font-size: 14px; font-weight: 600; color: #6f4a22; margin: 0 0 16px; }
+.student-status app-icon { --icon-size: 18px; margin-top: 2px; }
+.student-learning-actions { display: grid; align-content: center; gap: 16px; min-width: 0; }
+.student-prepared { display: flex; align-items: center; gap: 8px; color: #6f4a22; font-size: 13px; margin: 0; }
+.student-prepared app-icon { --icon-size: 18px; }
+.student-learning-actions .site-action { width: 100%; }
+.student-learning-actions .site-action app-icon { --icon-size: 20px; margin-right: 8px; vertical-align: middle; }
+.student-review { display: flex; align-items: center; gap: 10px; min-height: 44px; color: var(--color-accent); font-size: 14px; font-weight: 500; text-decoration: none; padding: 8px 0; }
+.student-review:hover { text-decoration: underline; text-underline-offset: 4px; }
+.student-review app-icon { --icon-size: 20px; }
+.student-review app-icon:last-child { --icon-size: 18px; margin-left: auto; }
+.student-reservation-footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; border-top: 1px solid var(--color-border); padding: 12px 24px; }
+.student-text-button { border: 0; background: transparent; padding: 10px 0; min-height: 44px; color: var(--color-accent); font: 400 14px/1.5 var(--font-body); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; text-align: left; }
+.student-cancel { color: #667085; }
+.student-cancellation { background: #fdf0ec; border-top: 1px solid #e0b7a8; padding: 20px 24px; }
+.student-cancellation p { font-size: 15px; margin: 0 0 12px; }
+.student-confirm-actions { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.student-confirm { border: 1px solid #952711; background: white; color: #952711; border-radius: 8px; min-height: 44px; padding: 10px 16px; font: 500 14px/1.5 var(--font-body); cursor: pointer; }
+.student-state { border: 1px solid var(--color-border); background: white; border-radius: 16px; padding: 24px; font-size: 15px; line-height: 1.7; }
+.student-error { background: #fdf0ec; border-color: #e0b7a8; }
+.student-error p { margin: 0; }
+button:disabled { opacity: .55; cursor: default; }
+:is(a,button):focus-visible { outline: 3px solid #8a5f30; outline-offset: 3px; }
+@media(max-width:1000px) {
+  .student-reservation-body { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .student-learning-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; }
+  .student-prepared { grid-column: 1 / -1; }
+}
+@media(max-width:600px) {
+  .student-section-heading { gap: 4px 16px; margin-bottom: 12px; }
+  .student-reservation-body { padding: 16px; }
+  .student-summary { padding: 20px; }
+  .student-workshops .student-workshop-title { font-size: 19px; }
+  .student-learning-actions { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .student-reservation-footer, .student-cancellation { padding-inline: 20px; }
+}

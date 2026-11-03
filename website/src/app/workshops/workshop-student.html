@@ -1,0 +1,42 @@
+<section class="student-workshops" [attr.aria-label]="c().nextWorkshop">
+  <header class="student-section-heading">
+    <h2 class="student-section-title">{{c().nextWorkshop}}</h2>
+    <a class="student-browse" [routerLink]="en()?'/en/schedule':'/agenda'">{{c().browse}}<app-icon name="arrow-up-right"/></a>
+  </header>
+  @if(loading()){<p class="student-state" role="status">{{c().loading}}</p>}
+  @if(error()){<div role="alert" class="student-state student-error"><p>{{c().error}}</p><button class="student-text-button" type="button" (click)="load()">{{c().retry}}</button></div>}
+  @if(!loading()&&!error()&&!next()){
+    <p class="student-state">{{c().noReservation}}</p>
+    <app-workshop-schedule [embedded]="true"/>
+  }
+  @for(r of ordered();track r.id){
+    <article class="student-reservation">
+      <div class="student-reservation-body">
+        <div class="student-summary">
+          @if(r.status==='cancelled'){<p class="student-status"><app-icon name="alert-circle"/>{{c().cancelled}}</p>}
+          @else if(r.session.status==='cancelled'){<p class="student-status"><app-icon name="alert-circle"/>{{c().sessionCancelled}}</p>}
+          <h3 class="student-workshop-title">{{en()?r.session.titleEn:r.session.titleEs}}</h3>
+          <p class="student-fact"><app-icon name="calendar-event"/><span>{{date(r)}}</span></p>
+          <p class="student-fact"><app-icon name="map-pin"/><span>{{r.session.venue}}<br/>{{r.session.address}}</span></p>
+        </div>
+        <nav class="student-learning-actions" [attr.aria-label]="en()?'Workshop preparation and review':'Preparación y repaso del taller'">
+          @if(prepared()){<p class="student-prepared"><app-icon name="circle-check"/>{{c().prepDone}}</p>}
+          <a appActionButton [routerLink]="en()?'/en/preparation':'/preparacion'"><app-icon name="clipboard-check"/>{{c().preparation}}</a>
+          <a class="student-review" [routerLink]="topicPath(r)"><app-icon name="book"/>{{c().review}}<app-icon name="arrow-up-right"/></a>
+        </nav>
+      </div>
+      <footer class="student-reservation-footer">
+        <a class="student-practice" routerLink="/portal/chats">{{c().practice}}<app-icon name="arrow-up-right"/></a>
+        @if(r.status==='confirmed'&&r.session.status!=='cancelled'&&future(r)){
+          <button type="button" class="student-text-button student-cancel" [id]="'cancel-trigger-'+r.id" [attr.aria-expanded]="confirmId()===r.id" [attr.aria-controls]="confirmId()===r.id?'cancel-reservation-'+r.id:null" [disabled]="busy()" (click)="confirmId.set(confirmId()===r.id?'':r.id)">{{c().cancel}}</button>
+        }
+      </footer>
+      @if(confirmId()===r.id){
+        <div class="student-cancellation" [id]="'cancel-reservation-'+r.id" role="group" [attr.aria-label]="c().cancelQuestion" aria-live="polite">
+          <p>{{c().cancelQuestion}}</p>
+          <div class="student-confirm-actions"><button type="button" class="student-confirm" [disabled]="busy()" (click)="cancel(r)">{{c().yes}}</button><button type="button" class="student-text-button" [disabled]="busy()" (click)="dismissCancellation(r.id)">{{c().back}}</button></div>
+        </div>
+      }
+    </article>
+  }
+</section>
