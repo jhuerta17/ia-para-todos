@@ -28,7 +28,9 @@ Ideas failing any criterion stay ideas. The backlog growing is fine; the program
 
 - Certification or accreditation programs; job placement services; paid courses.
 - Policy lobbying; vendor partnerships with content influence; franchising the brand.
-- Anything requiring participant data collection beyond anonymous aggregates.
+- Additional participant tracking beyond anonymous aggregates. The approved free,
+  adults-only student portal is a narrow exception for account access, saved
+  progress, and 30-day practice histories under the [privacy guidelines](../safety/privacy-guidelines.md).
 
 ## Related documents
 

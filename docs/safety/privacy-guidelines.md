@@ -31,6 +31,29 @@
 - **Partners:** keep correspondence and contact details in private files; the repo holds only templates and anonymized lessons.
 - **30-day follow-up:** anonymous group signals via host channels (e.g., show of hands at a next event), never tracked individuals.
 
+## Adult student portal exception
+
+The free, adults-only student portal is an explicitly approved exception to the
+workshop rule of anonymous aggregates. Netlify Identity holds login credentials,
+email, and the chosen display name. Private Netlify Postgres holds the Identity
+user ID, adult/privacy attestation, enrollments, lesson completion, and saved
+practice chats. Nothing from those records belongs in this public repository.
+
+Chats and their messages expire 30 days after creation, are excluded from reads
+at expiry, and are physically purged daily. Students may delete them sooner.
+Course progress remains until account deletion. Requests for account deletion
+immediately remove saved chats/progress and disable portal access; scheduled
+retries remove the Identity account. Minimal user-ID deletion markers remain to
+reject stale credentials; aggregate monthly spending and recent daily counters
+are operational controls, not conversation logs. Provider backups have their own
+retention; verify their settings before opening the pilot.
+
+Use fictional examples. Scrub common email/phone patterns before both storage
+and model transmission, without claiming that this removes all personal data.
+Live Meta Contributor practice requires a separate acknowledgement: Meta may use
+prompts and replies to train its models. Local deletion cannot undo provider use.
+Do not log prompts, replies, email addresses, or authentication tokens.
+
 ## Where private operational data lives
 
 > **DECISION NEEDED:** The private storage solution (encrypted drive, access list, retention schedule) has not been selected. Until it is: paper in a locked location, digital in a password-protected folder with minimal sharing, and nothing in this repository or in personal chat histories beyond coordination.
