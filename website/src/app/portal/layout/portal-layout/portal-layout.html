@@ -26,6 +26,7 @@
           </button>
         </div>
         @if (session.user(); as user) {
+          <a routerLink="/portal/courses" class="signin">{{ language.lang() === 'es' ? 'Mis cursos' : 'My courses' }}</a>
           <span class="who">{{ user.name }}</span>
           <button type="button" class="signout" (click)="signOut()">{{ c().signOut }}</button>
         } @else {

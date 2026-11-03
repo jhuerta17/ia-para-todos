@@ -439,6 +439,111 @@ async function main() {
       await page.close();
     }
 
+    // Courses: real rendered interactions, reload, translations, and user isolation.
+    {
+      const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      await context.addInitScript((seed) => {
+        if (!sessionStorage.getItem('seeded')) {
+          localStorage.setItem('gotrue.user', JSON.stringify(seed));
+          sessionStorage.setItem('seeded', '1');
+        }
+      }, seedUser([]));
+      const page = await context.newPage();
+      const course = '/portal/courses/first-prompt';
+      const lesson = (id) => `${course}/lessons/${id}`;
+      await page.goto(`${base}/portal/courses`, { waitUntil: 'networkidle' });
+      await page.getByRole('link', { name: 'Ver el curso', exact: true }).click();
+      await page.getByRole('button', { name: 'Inscribirme gratis', exact: true }).click();
+      await page.getByTestId('course-progress').getByText('0 de 3 lecciones completadas').waitFor();
+      check('course enrollment starts with zero completed lessons', await page.getByRole('link', { name: 'Continuar aprendiendo', exact: true }).isVisible());
+      await page.getByRole('link', { name: 'Continuar aprendiendo', exact: true }).click();
+      await page.getByRole('heading', { name: 'Escribe una instrucción clara', exact: true }).waitFor();
+      await page.getByRole('button', { name: 'Marcar como completada', exact: true }).click();
+      await page.getByTestId('course-progress').getByText('1 de 3 lecciones completadas').waitFor();
+      await page.getByRole('button', { name: 'Completada', exact: true }).waitFor();
+      check('completion is explicit and cannot be submitted twice', !await page.getByRole('button', { name: 'Completada', exact: true }).isEnabled());
+      await page.getByRole('link', { name: 'Siguiente lección', exact: false }).click();
+      await page.getByRole('heading', { name: 'Mejora la respuesta', exact: true }).waitFor();
+      await page.getByRole('button', { name: 'Marcar como completada', exact: true }).click();
+      await page.getByTestId('course-progress').getByText('2 de 3 lecciones completadas').waitFor();
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.getByTestId('course-progress').getByText('2 de 3 lecciones completadas').waitFor();
+      check('two lesson completions survive reload', true);
+      await page.getByRole('button', { name: 'EN', exact: true }).click();
+      await page.getByRole('heading', { name: 'Improve the response', exact: true }).waitFor();
+      check('English uses the same progress and lesson IDs', (await page.getByTestId('course-progress').innerText()).includes('2 of 3'));
+      await page.goto(`${base}${course}`, { waitUntil: 'networkidle' });
+      await page.getByRole('link', { name: 'Continue learning', exact: true }).click();
+      await page.waitForURL(atPath(lesson('verify-and-protect')));
+      check('continue resumes the unfinished lesson', true);
+      await page.getByRole('button', { name: 'Mark as completed', exact: true }).click();
+      await page.getByText('Course complete. Keep practicing!', { exact: true }).waitFor();
+      check('all three lessons finish the course', (await page.getByTestId('course-progress').innerText()).includes('3 of 3'));
+      await page.goto(`${base}${course}`, { waitUntil: 'networkidle' });
+      check('course action label keeps its contrasting button color', await page.getByRole('link', { name: 'Review the course', exact: true }).evaluate(element => getComputedStyle(element).color !== getComputedStyle(element).backgroundColor));
+      await page.screenshot({ path: join(evidence, 'course-desktop.png'), fullPage: true });
+      await page.setViewportSize({ width: 390, height: 844 });
+      check('course fits mobile viewport', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await page.screenshot({ path: join(evidence, 'course-mobile.png'), fullPage: true });
+      await page.route('**/.netlify/identity/logout', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+      await page.locator('button.signout').click();
+      await page.waitForURL(atPath('/portal/sign-in'));
+      await page.route('**/.netlify/identity/token', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: tokenResponse() }));
+      await page.route('**/.netlify/identity/user', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...JSON.parse(userResponse([], 'Second Student', 'second@example.com')), id: 'user-2' }) }));
+      await page.locator('#portal-email').fill('second@example.com');
+      await page.locator('#portal-password').fill('correct-password');
+      await page.locator('button[type="submit"]').click();
+      await page.waitForURL(atPath('/portal'));
+      await page.goto(`${base}${lesson('verify-and-protect')}`, { waitUntil: 'networkidle' });
+      await page.getByRole('button', { name: 'Enroll for free', exact: true }).waitFor();
+      check('another account has no enrollment or inherited completion', await page.getByTestId('course-progress').count() === 0);
+      await page.getByRole('button', { name: 'Enroll for free', exact: true }).click();
+      await page.getByRole('button', { name: 'Mark as completed', exact: true }).click();
+      await page.getByTestId('course-progress').getByText('1 of 3 lessons completed').waitFor();
+      check('lessons can be completed out of order', true);
+      await context.close();
+    }
+    for (const failureMode of ['write', 'read', 'corrupt']) {
+      const page = await browser.newPage();
+      await page.addInitScript(({ seed, mode }) => {
+        localStorage.setItem('gotrue.user', JSON.stringify(seed));
+        const key = 'portal-progress:v1:user-1:first-prompt';
+        if (mode === 'corrupt') localStorage.setItem(key, '{broken');
+        const originalGet = Storage.prototype.getItem;
+        const originalSet = Storage.prototype.setItem;
+        Storage.prototype.getItem = function(key) {
+          if (mode === 'read' && key.startsWith('portal-progress:')) throw new Error('Storage blocked');
+          return originalGet.call(this, key);
+        };
+        Storage.prototype.setItem = function(key, value) {
+          if (mode === 'write' && key.startsWith('portal-progress:')) throw new Error('Storage full');
+          return originalSet.call(this, key, value);
+        };
+      }, { seed: seedUser([]), mode: failureMode });
+      await page.goto(`${base}/portal/courses/first-prompt`, { waitUntil: 'networkidle' });
+      if (failureMode === 'write') await page.getByRole('button', { name: 'Inscribirme gratis', exact: true }).click();
+      await page.getByRole('alert').waitFor();
+      check(`progress ${failureMode} failure is honest and does not claim enrollment`, await page.getByTestId('course-progress').count() === 0);
+      await page.getByRole('link', { name: 'Escribe una instrucción clara', exact: false }).click();
+      await page.getByRole('heading', { name: 'Escribe una instrucción clara', exact: true }).waitFor();
+      check(`lessons remain readable after ${failureMode} failure`, true);
+      await page.close();
+    }
+    {
+      const page = await browser.newPage();
+      const destination = '/portal/courses/first-prompt/lessons/clear-request';
+      await page.goto(`${base}${destination}`, { waitUntil: 'networkidle' });
+      await page.waitForURL(url => url.pathname === '/portal/sign-in' && url.searchParams.get('return') === destination);
+      await page.route('**/.netlify/identity/token', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: tokenResponse() }));
+      await page.route('**/.netlify/identity/user', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: userResponse() }));
+      await page.locator('#portal-email').fill('estudiante@example.com');
+      await page.locator('#portal-password').fill('correct-password');
+      await page.locator('button[type="submit"]').click();
+      await page.waitForURL(atPath(destination));
+      check('direct lesson link returns to lesson after login', true);
+      await page.close();
+    }
+
     for (const saved of ['{invalid', JSON.stringify({ url: '/.netlify/identity', token: {} }), JSON.stringify({ ...seedUser([]), email: null })]) {
       const page = await browser.newPage();
       await page.addInitScript((value) => localStorage.setItem('gotrue.user', value), saved);

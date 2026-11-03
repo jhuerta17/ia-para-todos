@@ -1,8 +1,9 @@
-# Student portal: checkpoint 1
+# Student portal: checkpoint 2
 
-Status: authentication implemented and locally tested against fake Identity;
-owner verification pending. Courses, progress, saved chats, managed database,
-real email flows, open registration, and live student AI are not implemented.
+Status: authentication plus the first bilingual course, enrollment, and local
+per-account progress are implemented; owner verification pending. Saved chats,
+managed database, real email-flow verification, open registration, and live
+student AI remain future checkpoints.
 Production settings have not been changed.
 
 ## Run the checks
@@ -54,8 +55,8 @@ across both app surfaces.
 Portal and admin share one lazily loaded Identity session. AdminSession
 adds the admin role requirement; server functions and Netlify edge rules
 remain responsible for real authorization. Saved credentials are refreshed
-when expired before guards admit them. The portal accepts only `/portal`
-as a return destination until additional protected pages exist.
+when expired before guards admit them. Portal return destinations are an exact allowlist of the home, course list,
+course detail, and three lesson routes; auth screens and unknown paths are excluded.
 
 Email links for recovery, confirmation, and email changes route to portal
 sign-in; admin invitations still route to admin sign-in. Portal tokens are
@@ -63,12 +64,36 @@ removed from the address bar after capture, even if verification fails.
 Real delivery and edge authorization require staging and are not proven
 by the local stubs.
 
+## Review the first course
+
+1. Sign in at `/portal/sign-in` with an existing account (admins may use the
+   portal too). A preview does not enable open registration or change Identity
+   settings; use the local fake-auth review command if no test account exists.
+2. Choose My courses / Mis cursos, then Your first prompt / Tu primer prompt.
+3. Enroll. Expect zero of three completed lessons.
+4. Complete two lessons and reload. Expect two of three to remain complete.
+5. Switch ES/EN. The same lessons and progress should appear in the chosen language.
+6. Return to the overview and choose Continue learning. Expect the remaining
+   lesson; completing it displays the course-complete message.
+7. Sign out and use a different account in the same browser. Its enrollment
+   and completion must start empty.
+
+All lesson URLs are prerendered and support direct navigation and reload.
+Unknown lesson/course URLs retain the site's real 404 behavior. Progress uses
+`portal-progress:v1:<encoded Identity user ID>:first-prompt` in localStorage.
+It is temporary, browser-only scaffolding, not server authorization or a backup.
+Clearing site data loses progress, and it does not transfer between localhost,
+preview URLs, and production. Corrupt, blocked, or full storage displays an
+error without claiming that progress was saved. Lessons remain readable.
+The three lesson IDs are shared by both translations. They can be completed
+in any order, and duplicate completion never increases the total.
+
 ## Remaining checkpoints
 
-Proceed only after the owner says **verified** at each checkpoint:
+Checkpoint 2 is prepared on `main` for the existing Git-connected deployment
+flow. Do not create a manual Netlify deploy. The owner will verify the deployed
+main branch; wait for that review before starting the following checkpoints:
 
-2. One free adult ES/EN first-prompt course, three lessons, enrollment and
-   progress through an asynchronous per-user temporary PortalStore.
 3. Saved sample chats sharing tutor logic, acknowledgements, safe text,
    2,000-character inputs, and six-message model context.
 4. Separate staging Identity and Netlify DB, owned-resource APIs,

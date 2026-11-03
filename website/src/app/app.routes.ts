@@ -1,3 +1,4 @@
+import { COURSE_ID, LESSON_IDS } from './portal/courses/course-paths';
 import { adminGuard, adminGuardChild } from './admin/auth/admin-guard';
 import { portalGuard, portalGuardChild } from './portal/auth/portal-guard';
 import { pageTransitionGuard } from './shared/page-transition/page-transition-guard';
@@ -113,13 +114,16 @@ export const routes: Routes = [
     ],
   },
   {
-    // Student portal (step 2: Identity auth, any signed-in role).
+    // Student portal: any signed-in Identity role.
     // Stays instant like admin: no page-transition guard on app surfaces.
     path: 'portal', loadComponent: () => import('./portal/layout/portal-layout/portal-layout').then(module => module.PortalLayout),
     canActivate: [portalGuard],
     canActivateChild: [portalGuardChild],
     children: [
       { path: '', loadComponent: () => import('./portal/pages/portal-home/portal-home').then(module => module.PortalHome), title: 'Portal del estudiante · IA para todos', data: { lang: 'es', portal: true } },
+      { path: 'courses', loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Mis cursos · IA para todos', data: { lang: 'es', portal: true, courseView: 'list' } },
+      { path: `courses/${COURSE_ID}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'course' } },
+      ...LESSON_IDS.map(lessonId => ({ path: `courses/${COURSE_ID}/lessons/${lessonId}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'lesson', lessonId } })),
       { path: 'sign-in', loadComponent: () => import('./portal/pages/portal-sign-in/portal-sign-in').then(module => module.PortalSignIn), title: 'Iniciar sesión · IA para todos', data: { lang: 'es', portal: true, portalAuth: true } },
       { path: 'sign-up', loadComponent: () => import('./portal/pages/portal-sign-up/portal-sign-up').then(module => module.PortalSignUp), title: 'Crear cuenta · IA para todos', data: { lang: 'es', portal: true, portalAuth: true } },
     ],

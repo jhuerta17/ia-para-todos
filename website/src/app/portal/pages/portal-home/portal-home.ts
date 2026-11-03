@@ -9,32 +9,32 @@ const copy = {
   es: {
     greeting: 'Hola',
     title: 'Portal del estudiante',
-    lead: 'Tu espacio personal de aprendizaje está en construcción. Ya puedes entrar y salir de tu cuenta; los cursos y la práctica guardada llegan en los próximos pasos.',
-    coming: 'Lo que llegará:',
-    courses: 'Cursos prediseñados para seguir a tu ritmo',
+    lead: 'Comienza con Tu primer prompt: tres lecciones cortas para aprender a pedir, mejorar y verificar respuestas.',
+    coming: 'Más adelante',
+    courses: 'Explorar mis cursos',
     tutor: 'Práctica con el tutor de IA dentro de tu portal',
     history: 'Tus conversaciones guardadas para retomarlas cuando quieras',
     signIn: 'Iniciar sesión',
     signUp: 'Crear cuenta',
     home: 'Volver al sitio',
-    note: 'Paso 2 de 7: cuentas y acceso. Los cursos llegan en el paso 3.',
+    note: 'Gratis y a tu ritmo.',
   },
   en: {
     greeting: 'Hi',
     title: 'Student portal',
-    lead: 'Your personal learning space is under construction. You can already sign in and out; courses and saved practice arrive in the next steps.',
-    coming: 'What is coming:',
-    courses: 'Ready-made courses to follow at your own pace',
+    lead: 'Start with Your first prompt: three short lessons to learn to ask, improve, and verify responses.',
+    coming: 'Coming later',
+    courses: 'Explore my courses',
     tutor: 'Practice with the AI tutor inside your portal',
     history: 'Your saved conversations, ready to resume anytime',
     signIn: 'Sign in',
     signUp: 'Create account',
     home: 'Back to the site',
-    note: 'Step 2 of 7: accounts and access. Courses arrive in step 3.',
+    note: 'Free and at your own pace.',
   },
 } satisfies Record<Lang, Record<string, string>>;
 
-// Step-2 home: session-aware greeting, course content still ahead.
+// Session-aware landing page for the learning portal.
 @Component({
   selector: 'app-portal-home',
   imports: [ActionButton, RouterModule],

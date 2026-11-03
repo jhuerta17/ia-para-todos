@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { generateDemoSubmissions } from '../src/app/admin/data/demo-generator.ts';
 import { bucketByMonth, monthDeltas } from '../src/app/admin/data/analytics.ts';
 import { demoImpactMonths, demoSupporters, demoSupporterTotal, demoWorkshops } from '../src/app/admin/data/demo-content.ts';
+import { COURSE_PATHS } from '../src/app/portal/courses/course-paths.ts';
 import { SITE_URL } from '../src/app/shared/metadata/site.ts';
 import { LANGS, PATHS } from '../src/app/i18n/lang.ts';
 import { workshops } from '../src/app/data/workshops.ts';
@@ -177,7 +178,7 @@ for (const path of ADMIN_PATHS) {
 // 9b. Portal routes prerender as Spanish shells: present but uncrawlable,
 // styled by the site stylesheet (never the admin theme), with no public
 // chrome, canonicals, or hreflang peers.
-const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up'];
+const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up', ...COURSE_PATHS.map(path => path.slice(1))];
 for (const path of PORTAL_PATHS) {
   const file = join(publish, path, 'index.html');
   const label = `/${path} [portal]`;
