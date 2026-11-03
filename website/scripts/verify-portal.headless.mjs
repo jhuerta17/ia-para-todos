@@ -3,6 +3,7 @@
 // localStorage, and stubs /.netlify/identity/* — no Netlify backend needed.
 //
 // Usage: npm run verify:portal (add HEADED=1 to watch the browser).
+import { createPortalFixture } from './portal-fixture.mjs';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { readFile } from 'node:fs/promises';
@@ -74,6 +75,12 @@ async function main() {
   const browser = await chromium.launch({ headless: !reviewing && process.env['HEADED'] !== '1' });
   if (reviewing) {
     const page = await browser.newPage();
+    const fixture=createPortalFixture();
+    await page.route('**/api/portal/**',async route=>{
+      const userId=await page.evaluate(()=>JSON.parse(localStorage.getItem('gotrue.user')||'null')?.id);
+      const result=fixture(new URL(route.request().url()).pathname.slice('/api/portal/'.length),route.request().method(),route.request().postDataJSON(),userId);
+      await route.fulfill({status:result.status,contentType:'application/json',body:JSON.stringify(result.body)});
+    });
     await page.route('**/.netlify/identity/**', (route) => {
       const path = new URL(route.request().url()).pathname;
       if (path.endsWith('/token') || path.endsWith('/verify')) {
@@ -93,14 +100,39 @@ async function main() {
     server.close();
     return;
   }
+  const contextFixtures = new WeakMap();
+  async function stubPortal(page) {
+    if (!contextFixtures.has(page.context())) contextFixtures.set(page.context(), createPortalFixture());
+    const fixture = contextFixtures.get(page.context());
+    await page.route('**/api/portal/**', async route => {
+      try {
+        const userId = await page.evaluate(() => { try { return JSON.parse(localStorage.getItem('gotrue.user'))?.id; } catch { return null; } });
+        const path = new URL(route.request().url()).pathname.slice('/api/portal/'.length);
+        const result = fixture(path, route.request().method(), route.request().postDataJSON(), userId);
+        await route.fulfill({ status: result.status, contentType:'application/json', body:JSON.stringify(result.body) });
+      } catch(error) {
+        if(!page.isClosed()&&!error.message.includes('Execution context was destroyed')) pageErrors.push(`API fixture: ${error.message}`);
+        await route.abort().catch(()=>{});
+      }
+    });
+  }
   const pageErrors = [];
   const consoleErrors = [];
-  browser.on('page', (page) => {
-    page.on('pageerror', (error) => pageErrors.push(error.message));
-    page.on('console', (message) => {
-      if (message.type() === 'error' && !message.text().includes('Failed to load resource')) consoleErrors.push(message.text());
-    });
-  });
+  async function preparePage(page) {
+    await stubPortal(page);
+    page.on('pageerror', error=>pageErrors.push(error.message));
+    page.on('console',message=>{if(message.type()==='error'&&!message.text().includes('Failed to load resource'))consoleErrors.push(message.text());});
+    return page;
+  }
+  const originalPage=browser.newPage.bind(browser);
+  browser.newPage=async options=>preparePage(await originalPage(options));
+  const originalContext=browser.newContext.bind(browser);
+  browser.newContext=async options=>{
+    const context=await originalContext(options);
+    const original=context.newPage.bind(context);
+    context.newPage=async()=>preparePage(await original());
+    return context;
+  };
 
   try {
     // ---- 1. Logged-out guard + static shells ----
@@ -217,6 +249,7 @@ async function main() {
       await page.locator('#portal-signup-name').fill('Estudiante Nuevo');
       await page.locator('#portal-signup-email').fill('nuevo@example.com');
       await page.locator('#portal-signup-password').fill('new-password-1');
+      await page.locator('#portal-signup-adult').check();
       await page.locator('button[type="submit"]').click();
       const sent = await page.getByRole('heading', { name: 'Confirma tu correo' }).waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
       const echoed = await page.getByText('nuevo@example.com').isVisible().catch(() => false);
@@ -229,6 +262,7 @@ async function main() {
       await dupe.locator('#portal-signup-name').fill('Alguien');
       await dupe.locator('#portal-signup-email').fill('alguien@example.com');
       await dupe.locator('#portal-signup-password').fill('new-password-1');
+      await dupe.locator('#portal-signup-adult').check();
       await dupe.locator('button[type="submit"]').click();
       const exists = await dupe.getByText('Esa cuenta ya existe.').waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
       check('duplicate signup shows exists message', exists);
@@ -503,30 +537,17 @@ async function main() {
       check('lessons can be completed out of order', true);
       await context.close();
     }
-    for (const failureMode of ['write', 'read', 'corrupt']) {
+    for (const failureMode of ['write', 'read']) {
       const page = await browser.newPage();
-      await page.addInitScript(({ seed, mode }) => {
-        localStorage.setItem('gotrue.user', JSON.stringify(seed));
-        const key = 'portal-progress:v1:user-1:first-prompt';
-        if (mode === 'corrupt') localStorage.setItem(key, '{broken');
-        const originalGet = Storage.prototype.getItem;
-        const originalSet = Storage.prototype.setItem;
-        Storage.prototype.getItem = function(key) {
-          if (mode === 'read' && key.startsWith('portal-progress:')) throw new Error('Storage blocked');
-          return originalGet.call(this, key);
-        };
-        Storage.prototype.setItem = function(key, value) {
-          if (mode === 'write' && key.startsWith('portal-progress:')) throw new Error('Storage full');
-          return originalSet.call(this, key, value);
-        };
-      }, { seed: seedUser([]), mode: failureMode });
-      await page.goto(`${base}/portal/courses/first-prompt`, { waitUntil: 'networkidle' });
-      if (failureMode === 'write') await page.getByRole('button', { name: 'Inscribirme gratis', exact: true }).click();
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      await page.route('**/api/portal/progress',async route=>{
+        if(failureMode==='read'||route.request().method()==='POST')return route.fulfill({status:503,contentType:'application/json',body:'{"reason":"portal_unavailable"}'});
+        return route.fulfill({status:200,contentType:'application/json',body:'{"enrolled":false,"completed":[]}'});
+      });
+      await page.goto(`${base}/portal/courses/first-prompt`,{waitUntil:'networkidle'});
+      if(failureMode==='write')await page.getByRole('button',{name:'Inscribirme gratis',exact:true}).click();
       await page.getByRole('alert').waitFor();
-      check(`progress ${failureMode} failure is honest and does not claim enrollment`, await page.getByTestId('course-progress').count() === 0);
-      await page.getByRole('link', { name: 'Escribe una instrucción clara', exact: false }).click();
-      await page.getByRole('heading', { name: 'Escribe una instrucción clara', exact: true }).waitFor();
-      check(`lessons remain readable after ${failureMode} failure`, true);
+      check(`server progress ${failureMode} failure never claims a save`,await page.getByTestId('course-progress').count()===0);
       await page.close();
     }
     {
@@ -541,6 +562,64 @@ async function main() {
       await page.locator('button[type="submit"]').click();
       await page.waitForURL(atPath(destination));
       check('direct lesson link returns to lesson after login', true);
+      await page.close();
+    }
+
+    {
+      const page=await browser.newPage({viewport:{width:1280,height:900}});
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      await page.goto(`${base}/portal/chats`,{waitUntil:'networkidle'});
+      await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
+      const prompts=['First fictional prompt','Second fictional prompt','Third fictional prompt'];
+      for(const text of prompts){
+        await page.locator('#portal-prompt').fill(text);
+        await page.getByRole('button',{name:'Enviar',exact:true}).click();
+        await page.getByRole('log').getByText(text,{exact:true}).waitFor();
+      }
+      check('saved chat renders three prompts and labeled sample replies',await page.getByRole('log').locator('article').count()===6);
+      await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
+      await page.getByRole('heading',{name:'Nueva conversación',exact:true}).waitFor();
+      await page.locator('#portal-prompt').fill('A second conversation');
+      await page.getByRole('button',{name:'Enviar',exact:true}).click();
+      await page.getByRole('log').getByText('A second conversation',{exact:true}).waitFor();
+      await page.getByRole('button',{name:'First fictional prompt',exact:true}).click();
+      await page.getByRole('log').getByText('Third fictional prompt',{exact:true}).waitFor();
+      check('chat selection restores the complete history',await page.getByRole('log').locator('article').count()===6);
+      await page.getByRole('button',{name:'A second conversation',exact:true}).click();
+      await page.getByRole('button',{name:'Eliminar conversación',exact:true}).click();
+      await page.getByRole('button',{name:'Sí, eliminar',exact:true}).click();
+      await page.reload({waitUntil:'networkidle'});
+      await page.getByRole('button',{name:'First fictional prompt',exact:true}).waitFor();
+      check('chat deletion survives reload while the other history remains',await page.getByRole('button',{name:'A second conversation',exact:true}).count()===0);
+      await page.getByRole('button',{name:'First fictional prompt',exact:true}).click();
+      await page.getByRole('checkbox',{name:'Solicitar una respuesta en vivo',exact:true}).check();
+      check('live practice displays contributor disclosure and acknowledgement gate',await page.getByText('Acepta el aviso para practicar en vivo, o continúa con ejemplos.',{exact:true}).waitFor().then(()=>true).catch(()=>false));
+      await page.getByRole('checkbox',{name:'Solicitar una respuesta en vivo',exact:true}).uncheck();
+      await page.locator('#portal-prompt').fill('<img src=x onerror=alert(1)>');
+      await page.getByRole('button',{name:'Enviar',exact:true}).click();
+      await page.getByRole('log').getByText('<img src=x onerror=alert(1)>',{exact:true}).waitFor();
+      check('chat content is rendered as text without executing markup',await page.getByRole('log').locator('img').count()===0);
+      await page.screenshot({path:join(evidence,'saved-chats-desktop.png'),fullPage:true});
+      await page.setViewportSize({width:390,height:844});
+      check('saved chat layout fits mobile',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      await page.screenshot({path:join(evidence,'saved-chats-mobile.png'),fullPage:true});
+      await page.close();
+    }
+    {
+      const page=await browser.newPage();
+      await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      let consented=false;
+      await page.route('**/api/portal/profile',route=>{
+        if(route.request().method()==='POST')consented=route.request().postDataJSON().adult===true;
+        return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({consented,privacyVersion:'2026-11-03'})});
+      });
+      await page.goto(`${base}/portal`,{waitUntil:'networkidle'});
+      await page.getByRole('heading',{name:'Antes de comenzar',exact:true}).waitFor();
+      check('adult/privacy consent blocks portal data until accepted',!await page.getByRole('button',{name:'Continuar',exact:true}).isEnabled());
+      await page.getByRole('checkbox').check();
+      await page.getByRole('button',{name:'Continuar',exact:true}).click();
+      await page.getByRole('heading',{name:'Portal del estudiante',exact:true}).waitFor();
+      check('acceptance unlocks the portal',consented);
       await page.close();
     }
 

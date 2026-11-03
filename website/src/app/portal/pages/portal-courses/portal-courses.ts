@@ -17,9 +17,9 @@ const copy = {
     complete: 'Marcar como completada', completed: 'Curso completado. ¡Sigue practicando!',
     practice: 'Practica con un ejemplo inventado', reflect: 'Antes de terminar',
     enrollFirst: 'Puedes leer las lecciones en cualquier orden. Inscríbete para guardar tu progreso.',
-    local: 'Por ahora, tu progreso se guarda solo en este navegador y para esta cuenta. No se sincroniza con otros dispositivos y se pierde si borras los datos del sitio.',
-    error: 'No pudimos leer o guardar tu progreso. Comprueba que el navegador permita guardar datos para este sitio e inténtalo de nuevo. Puedes seguir leyendo las lecciones.',
-    retry: 'Volver a cargar el progreso', loading: 'Cargando tu progreso…', saving: 'Guardando…', next: 'Siguiente lección', saved: 'Progreso guardado en este navegador.',
+    local: 'Tu progreso se guarda en tu cuenta para continuar desde otro dispositivo.',
+    error: 'No pudimos leer o guardar tu progreso. Comprueba tu conexión e inténtalo de nuevo. Puedes seguir leyendo las lecciones.',
+    retry: 'Volver a cargar el progreso', loading: 'Cargando tu progreso…', saving: 'Guardando…', next: 'Siguiente lección', saved: 'Progreso guardado en tu cuenta.',
   },
   en: {
     courses: 'My courses', free: 'Free · Beginner · 3 lessons',
@@ -29,9 +29,9 @@ const copy = {
     complete: 'Mark as completed', completed: 'Course complete. Keep practicing!',
     practice: 'Practice with a made-up example', reflect: 'Before you finish',
     enrollFirst: 'Read the lessons in any order. Enroll to save your progress.',
-    local: 'For now, your progress is saved only in this browser and for this account. It does not sync across devices and is lost if you clear site data.',
-    error: 'We could not read or save your progress. Check that your browser allows saving data for this site, then try again. You can keep reading the lessons.',
-    retry: 'Reload progress', loading: 'Loading your progress…', saving: 'Saving…', next: 'Next lesson', saved: 'Progress saved in this browser.',
+    local: 'Your progress is saved in your account so you can continue from another device.',
+    error: 'We could not read or save your progress. Check your connection, then try again. You can keep reading the lessons.',
+    retry: 'Reload progress', loading: 'Loading your progress…', saving: 'Saving…', next: 'Next lesson', saved: 'Progress saved in your account.',
   },
 };
 

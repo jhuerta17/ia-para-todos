@@ -16,3 +16,6 @@ main:focus { outline: none; }
 @media (max-width: 809px) { .panel { margin: 16px 10px 48px; padding: 28px 16px; border-radius: 24px; } .who { display: none; } }
 
 @media (max-width: 600px) { .topbar-inner { flex-wrap: wrap; gap: 10px; } .topbar-actions { flex-wrap: wrap; gap: 10px; } }
+
+.consent { max-width: 640px; margin: auto; padding: 24px; background: white; border-radius: 20px; line-height: 1.7; }
+.consent input { width: auto; display: inline-block; margin-right: 8px; }

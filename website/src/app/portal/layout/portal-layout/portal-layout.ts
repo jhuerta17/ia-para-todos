@@ -1,8 +1,10 @@
-import { afterNextRender, Component, computed, inject } from '@angular/core';
+import { afterNextRender, Component, computed, inject, effect, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { BrandMark } from '../../../shared/brand-mark';
 import { Language } from '../../../i18n/language';
 import type { Lang } from '../../../i18n/lang';
+import { RouteMetadata } from '../../../shared/metadata/route-metadata';
+import { PortalClient } from '../../store/portal-client';
 import { UserSession } from '../../session/user-session';
 
 const copy = {
@@ -29,8 +31,32 @@ export class PortalLayout {
   protected readonly session = inject(UserSession);
   protected readonly c = computed(() => copy[this.language.lang()]);
   private readonly router = inject(Router);
+  protected readonly client = inject(PortalClient);
+  private readonly metadata = inject(RouteMetadata);
+  protected readonly profileError = signal(false);
+  protected readonly accepting = signal(false);
+  protected readonly adult = signal(false);
+  protected readonly acceptError = signal(false);
+  protected async loadProfile(): Promise<void> {
+    this.profileError.set(false);
+    try { await this.client.profile(); } catch { this.profileError.set(true); }
+  }
+  protected async accept(): Promise<void> {
+    if (!this.adult() || this.accepting()) return;
+    this.accepting.set(true); this.acceptError.set(false);
+    try { await this.client.consent(); } catch { this.acceptError.set(true); }
+    finally { this.accepting.set(false); }
+  }
 
   constructor() {
+    let profileUserId: string | undefined;
+    effect(() => {
+      const userId = this.session.user()?.id;
+      if (userId === profileUserId) return;
+      profileUserId = userId;
+      this.client.consented.set(null);
+      if (userId) void this.loadProfile();
+    });
     afterNextRender(() => {
       try {
         const saved = localStorage.getItem(PORTAL_LANG_KEY);
@@ -43,6 +69,7 @@ export class PortalLayout {
 
   protected setLang(lang: Lang): void {
     this.language.set(lang);
+    this.metadata.update();
     try {
       localStorage.setItem(PORTAL_LANG_KEY, lang);
     } catch {

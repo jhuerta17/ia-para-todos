@@ -3,3 +3,5 @@
 .failed:empty { display: none; }
 .submit-row { margin-top: 24px; }
 .submit-row .site-action { width: 100%; justify-content: center; }
+
+.adult-attestation { display:flex; gap:8px; align-items:flex-start; font-size:.9rem; line-height:1.6; } .adult-attestation input { width:auto; margin-top:5px; flex-shrink:0; }

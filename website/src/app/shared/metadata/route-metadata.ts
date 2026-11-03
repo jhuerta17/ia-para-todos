@@ -56,7 +56,7 @@ export class RouteMetadata {
     const description: string = admin
       ? 'AI for everyone admin panel. Restricted access.'
       : portal
-        ? 'Portal del estudiante de IA para todos. Accede a tus cursos y a tu práctica guardada.'
+        ? (lang === 'es' ? 'Portal del estudiante de IA para todos. Accede a tus cursos y a tu práctica guardada.' : 'AI for everyone student portal. Access your courses and saved practice.')
         : data['detail']?.summary ?? data['catalog']?.summary ?? data['information']?.intro ?? descriptions[key] ?? descriptions['home'];
     const title = typeof route.title === 'string' ? route.title : BRAND_NAME[lang];
     const image = DEFAULT_SOCIAL_IMAGE[lang];

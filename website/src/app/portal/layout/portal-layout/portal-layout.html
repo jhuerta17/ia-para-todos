@@ -27,6 +27,8 @@
         </div>
         @if (session.user(); as user) {
           <a routerLink="/portal/courses" class="signin">{{ language.lang() === 'es' ? 'Mis cursos' : 'My courses' }}</a>
+          <a routerLink="/portal/chats" class="signin">{{ language.lang() === 'es' ? 'Práctica' : 'Practice' }}</a>
+          <a routerLink="/portal/account" class="signin">{{ language.lang() === 'es' ? 'Mi cuenta' : 'My account' }}</a>
           <span class="who">{{ user.name }}</span>
           <button type="button" class="signout" (click)="signOut()">{{ c().signOut }}</button>
         } @else {
@@ -36,6 +38,22 @@
     </div>
   </header>
   <main class="panel" tabindex="-1">
-    <router-outlet />
+    @if (session.user() && client.consented() !== true) {
+      <section class="consent">
+        <h1>{{ language.lang() === 'es' ? 'Antes de comenzar' : 'Before you begin' }}</h1>
+        @if (profileError()) {
+          <p role="alert">{{ language.lang() === 'es' ? 'No pudimos abrir tu cuenta. Inténtalo de nuevo.' : 'We could not open your account. Please try again.' }}</p>
+          <button type="button" (click)="loadProfile()">{{ language.lang() === 'es' ? 'Reintentar' : 'Try again' }}</button>
+        } @else if (client.consented() === null) {
+          <p role="status">{{ language.lang() === 'es' ? 'Cargando tu cuenta…' : 'Loading your account…' }}</p>
+        } @else {
+          <p>{{ language.lang() === 'es' ? 'Este portal gratuito es para personas de 18 años o más. Guardamos tu progreso y tus conversaciones en tu cuenta. Las conversaciones se eliminan después de 30 días; puedes borrarlas antes.' : 'This free portal is for adults aged 18 or older. We save progress and conversations in your account. Conversations expire after 30 days; you can delete them sooner.' }}</p>
+          <p><a [routerLink]="language.path('privacidad')">{{ language.lang() === 'es' ? 'Leer el aviso de privacidad' : 'Read the privacy notice' }}</a></p>
+          <label><input type="checkbox" [checked]="adult()" (change)="adult.set($any($event.target).checked)" /> {{ language.lang() === 'es' ? 'Tengo 18 años o más y entiendo cómo se guardan mis datos.' : 'I am 18 or older and understand how my data is saved.' }}</label>
+          @if (acceptError()) { <p role="alert">{{ language.lang() === 'es' ? 'No pudimos activar tu acceso. El piloto puede estar completo; inténtalo más tarde.' : 'We could not activate access. The pilot may be full; try again later.' }}</p> }
+          <p><button type="button" [disabled]="!adult() || accepting()" (click)="accept()">{{ language.lang() === 'es' ? 'Continuar' : 'Continue' }}</button></p>
+        }
+      </section>
+    } @else { <router-outlet /> }
   </main>
 </div>

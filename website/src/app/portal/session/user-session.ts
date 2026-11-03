@@ -69,7 +69,7 @@ export class UserSession {
   async signup(name: string, email: string, password: string, lang: Lang): Promise<void> {
     const auth = await this.client();
     try {
-      await auth.signup(email, password, { full_name: name });
+      await auth.signup(email, password, { full_name: name, adult: true, privacy_version: '2026-11-03' });
     } catch (error) {
       throw new Error(this.signupMessage(error, lang));
     }

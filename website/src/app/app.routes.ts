@@ -121,6 +121,8 @@ export const routes: Routes = [
     canActivateChild: [portalGuardChild],
     children: [
       { path: '', loadComponent: () => import('./portal/pages/portal-home/portal-home').then(module => module.PortalHome), title: 'Portal del estudiante · IA para todos', data: { lang: 'es', portal: true } },
+      { path: 'chats', loadComponent: () => import('./portal/pages/portal-chats/portal-chats').then(module => module.PortalChats), title: 'Práctica guardada · IA para todos', data: { lang: 'es', portal: true } },
+      { path: 'account', loadComponent: () => import('./portal/pages/portal-account/portal-account').then(module => module.PortalAccount), title: 'Mi cuenta · IA para todos', data: { lang: 'es', portal: true } },
       { path: 'courses', loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Mis cursos · IA para todos', data: { lang: 'es', portal: true, courseView: 'list' } },
       { path: `courses/${COURSE_ID}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'course' } },
       ...LESSON_IDS.map(lessonId => ({ path: `courses/${COURSE_ID}/lessons/${lessonId}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'lesson', lessonId } })),

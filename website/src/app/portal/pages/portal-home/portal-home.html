@@ -7,7 +7,7 @@
   <div class="actions"><a appActionButton routerLink="/portal/courses">{{ c().courses }}</a></div>
   <h2>{{ c().coming }}</h2>
   <ul>
-    <li>{{ c().tutor }}</li>
+    <li><a routerLink="/portal/chats">{{ c().tutor }}</a></li>
     <li>{{ c().history }}</li>
   </ul>
   @if (!session.user()) {

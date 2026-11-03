@@ -41,6 +41,8 @@
       <p class="error" role="alert">{{ errorFor('password') }}</p>
     }
   </div>
+  <label class="adult-attestation"><input id="portal-signup-adult" type="checkbox" formControlName="adult" /> {{ c().adult }}</label>
+  @if (form.controls.adult.touched && form.controls.adult.invalid) { <p class="error" role="alert">{{ c().adultRequired }}</p> }
   @if (failed(); as message) {
     <div role="alert" class="failed">{{ message }}</div>
   }

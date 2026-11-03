@@ -39,6 +39,7 @@ export class PortalSignUp {
   @ViewChild(PortalSignupForm) private readonly signupForm?: PortalSignupForm;
 
   private readonly language = inject(Language);
+  protected readonly privacyPath = computed(() => this.language.path('privacidad'));
   protected readonly c = computed(() => copy[this.language.lang()]);
   protected readonly sent = signal(false);
   protected readonly sentEmail = signal('');

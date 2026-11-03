@@ -1,0 +1,28 @@
+<header><h1>{{c().title}}</h1><p>{{c().lead}}</p><p class="note">{{c().saved}}</p></header>
+@if(failed()){<div role="alert" class="error"><p>{{c().error}}</p>@if(retryAvailable()){<p>{{c().pending}}</p><button type="button" (click)="send(true)" [disabled]="sending()">{{c().retry}}</button>}</div>}
+<div class="chat-workspace">
+  <aside class="chat-list"><button appActionButton type="button" (click)="create()" [disabled]="busy()||sending()">{{c().new}}</button>
+    <button class="refresh" type="button" (click)="refresh()" [disabled]="busy()||sending()">{{c().reload}}</button>
+    @if(busy()){<p role="status">{{c().loading}}</p>}
+    @if(!chats().length&&!busy()){<p>{{c().empty}}</p>}
+    <ul>@for(chat of chats();track chat.id){<li><button type="button" (click)="open(chat)" [disabled]="busy()||sending()" [attr.aria-current]="selected()?.id===chat.id?'true':null">{{chat.title||c().untitled}}</button></li>}</ul>
+  </aside>
+  @if(selected();as chat){
+    <section class="conversation" [attr.aria-label]="c().selected">
+      <h2>{{chat.title||c().untitled}}</h2><p class="note">{{c().expires}} {{expires(chat.expiresAt)}}</p>
+      <div class="messages" role="log" aria-live="polite">
+        @for(message of chat.messages;track $index){<article [class.user]="message.role==='user'"><p class="speaker">{{message.role==='user'?(language.lang()==='es'?'Tú':'You'):(message.demo?tutor().sample:'IA / AI')}}</p><p class="message-text">{{message.content}}</p></article>}
+      </div>
+      <p class="note">{{tutor().privacy}}</p>
+      <label class="check"><input type="checkbox" [checked]="live" (change)="live=$any($event.target).checked" [disabled]="sending()||retryAvailable()||busy()" /> {{c().mode}}</label>
+      @if(live){<p class="disclosure">{{tutor().disclosure}}</p><label class="check"><input type="checkbox" [checked]="acknowledged" (change)="acknowledged=$any($event.target).checked" [disabled]="sending()||retryAvailable()||busy()" /> {{tutor().acknowledge}}</label>@if(!acknowledged){<p>{{tutor().verification}}</p>}}
+      @if(reason()==='allowance_exhausted'||reason()==='monthly_budget_exhausted'){<p role="status">{{c().budget}}</p>}
+      @if(reason()==='sample_mode'||reason()==='upstream_unavailable'||reason()==='paused'){<p class="note">{{c().sampleMode}}</p>}
+      <form (submit)="$event.preventDefault(); send()"><label for="portal-prompt">{{tutor().placeholder}}</label><textarea id="portal-prompt" name="prompt" [value]="input" (input)="input=$any($event.target).value" maxlength="2000" rows="4" [disabled]="sending()||retryAvailable()||busy()"></textarea><p class="note">{{input.length}} / 2000</p>
+        <button appActionButton type="submit" [disabled]="!input.trim()||sending()||busy()||retryAvailable()">{{sending()?c().sending:tutor().send}}</button>
+      </form>
+      @if(deleting()){<div class="delete-confirm"><p>{{c().confirm}}</p><button type="button" (click)="remove()" [disabled]="busy()||sending()">{{c().yes}}</button><button type="button" (click)="deleting.set(false)">{{c().cancel}}</button></div>}
+      @else{<button class="delete" type="button" (click)="deleting.set(true)" [disabled]="busy()||sending()">{{c().delete}}</button>}
+    </section>
+  }
+</div>

@@ -178,7 +178,7 @@ for (const path of ADMIN_PATHS) {
 // 9b. Portal routes prerender as Spanish shells: present but uncrawlable,
 // styled by the site stylesheet (never the admin theme), with no public
 // chrome, canonicals, or hreflang peers.
-const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up', ...COURSE_PATHS.map(path => path.slice(1))];
+const PORTAL_PATHS = ['portal', 'portal/sign-in', 'portal/sign-up', 'portal/chats', 'portal/account', ...COURSE_PATHS.map(path => path.slice(1))];
 for (const path of PORTAL_PATHS) {
   const file = join(publish, path, 'index.html');
   const label = `/${path} [portal]`;
