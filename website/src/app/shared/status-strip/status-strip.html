@@ -1,0 +1,14 @@
+<section aria-labelledby="status-title">
+  <header appRevealOnEnter>
+    <h2 id="status-title">{{ c().heading }}</h2>
+    <p>{{ c().lead }}</p>
+  </header>
+  <dl appRevealOnEnter>
+    @for (fact of facts(); track fact.term) {
+      <div>
+        <dt>{{ fact.term }}</dt>
+        <dd>{{ fact.detail }}</dd>
+      </div>
+    }
+  </dl>
+</section>

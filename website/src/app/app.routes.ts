@@ -14,7 +14,7 @@ const TITLES: Record<Lang, Record<StaticKey, string>> = {
   es: {
     home: 'IA para todos', talleres: 'Talleres · IA para todos', actividades: 'Actividades · IA para todos',
     recursos: 'Recursos para aprender · IA para todos', nosotros: 'Nosotros · IA para todos', comunidad: 'Comunidad · IA para todos',
-    participar: 'Participa · IA para todos', historias: 'Historias · IA para todos', contacto: 'Contacto · IA para todos',
+    participar: 'Participa · IA para todos', contacto: 'Contacto · IA para todos',
     cursos: 'Cursos en línea · IA para todos',
     donar: 'Donar · IA para todos',
     privacidad: '', terminos: '', seguridad: '',
@@ -22,7 +22,7 @@ const TITLES: Record<Lang, Record<StaticKey, string>> = {
   en: {
     home: 'AI for everyone', talleres: 'Workshops · AI for everyone', actividades: 'Activities · AI for everyone',
     recursos: 'Resources for learning · AI for everyone', nosotros: 'About us · AI for everyone', comunidad: 'Community · AI for everyone',
-    participar: 'Participate · AI for everyone', historias: 'Stories · AI for everyone', contacto: 'Contact · AI for everyone',
+    participar: 'Participate · AI for everyone', contacto: 'Contact · AI for everyone',
     cursos: 'Online courses · AI for everyone',
     donar: 'Donate · AI for everyone',
     privacidad: '', terminos: '', seguridad: '',
@@ -54,7 +54,6 @@ function staticRoutes(lang: Lang): Routes {
     { path: PATHS.nosotros[lang], loadComponent: () => import('./pages/about/about').then(module => module.About), title: TITLES[lang].nosotros, data: { lang, key: 'nosotros', pair: pair('nosotros') } },
     { path: PATHS.comunidad[lang], loadComponent: () => import('./pages/participation-page/participation-page').then(module => module.ParticipationPage), title: TITLES[lang].comunidad, data: { lang, key: 'comunidad', pair: pair('comunidad'), community: true } },
     { path: PATHS.participar[lang], loadComponent: () => import('./pages/participation-page/participation-page').then(module => module.ParticipationPage), title: TITLES[lang].participar, data: { lang, key: 'participar', pair: pair('participar') } },
-    { path: PATHS.historias[lang], loadComponent: () => import('./pages/stories/stories').then(module => module.Stories), title: TITLES[lang].historias, data: { lang, key: 'historias', pair: pair('historias') } },
     { path: PATHS.contacto[lang], loadComponent: () => import('./pages/contact/contact').then(module => module.Contact), title: TITLES[lang].contacto, data: { lang, key: 'contacto', pair: pair('contacto') } },
     { path: PATHS.cursos[lang], loadComponent: () => import('./pages/courses/courses').then(module => module.Courses), title: TITLES[lang].cursos, data: { lang, key: 'cursos', pair: pair('cursos') } },
     { path: PATHS.donar[lang], loadComponent: () => import('./pages/donate/donate').then(module => module.Donate), title: TITLES[lang].donar, data: { lang, key: 'donar', pair: pair('donar') } },

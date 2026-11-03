@@ -15,13 +15,13 @@ const copy = {
 };
 
 const labels: Record<Lang, Record<StaticKey, string>> = {
-  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', recursos: 'Recursos', comunidad: 'Comunidad', actividades: 'Actividades', historias: 'Historias', privacidad: 'Privacidad', terminos: 'Acerca de', seguridad: 'Seguridad', contacto: 'Contacto', participar: 'Participar', cursos: 'Cursos', donar: 'Donar' },
-  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', actividades: 'Activities', historias: 'Stories', privacidad: 'Privacy', terminos: 'About', seguridad: 'Safety', contacto: 'Contact', participar: 'Participate', cursos: 'Courses', donar: 'Donate' },
+  es: { home: 'Inicio', nosotros: 'Nosotros', talleres: 'Talleres', recursos: 'Recursos', comunidad: 'Comunidad', actividades: 'Actividades', privacidad: 'Privacidad', terminos: 'Acerca de', seguridad: 'Seguridad', contacto: 'Contacto', participar: 'Participar', cursos: 'Cursos', donar: 'Donar' },
+  en: { home: 'Home', nosotros: 'About', talleres: 'Workshops', recursos: 'Resources', comunidad: 'Community', actividades: 'Activities', privacidad: 'Privacy', terminos: 'About', seguridad: 'Safety', contacto: 'Contact', participar: 'Participate', cursos: 'Courses', donar: 'Donate' },
 };
 
 const PRIMARY: StaticKey[] = ['nosotros', 'contacto'];
 const LEARN: StaticKey[] = ['talleres', 'cursos', 'recursos', 'actividades'];
-const COMMUNITY: StaticKey[] = ['comunidad', 'historias', 'donar'];
+const COMMUNITY: StaticKey[] = ['comunidad', 'donar'];
 
 @Component({
   selector: 'app-site-header',

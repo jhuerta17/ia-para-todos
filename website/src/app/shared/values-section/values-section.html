@@ -1,0 +1,15 @@
+<section aria-labelledby="values-title">
+  <header appRevealOnEnter>
+    <h2 id="values-title">{{ c().heading }}</h2>
+    <p>{{ c().lead }}</p>
+  </header>
+  <ul appRevealOnEnter>
+    @for (value of values(); track value.title) {
+      <li>
+        <app-icon [name]="value.icon" />
+        <h3>{{ value.title }}</h3>
+        <p>{{ value.body }}</p>
+      </li>
+    }
+  </ul>
+</section>

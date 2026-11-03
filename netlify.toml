@@ -157,6 +157,18 @@
   force = true
   conditions = { Role = ["admin"] }
 
+# Retired stories pages (founder story now lives on About): keep old
+# links and bookmarks working with permanent redirects.
+[[redirects]]
+  from = "/historias"
+  to = "/nosotros"
+  status = 301
+
+[[redirects]]
+  from = "/en/stories"
+  to = "/en/about"
+  status = 301
+
 # Custom 404: Netlify serves existing prerendered files first (no force),
 # so this only catches unknown paths. 404.html is the client shell, which
 # boots the branded Angular recovery page for visitors with JavaScript.

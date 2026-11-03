@@ -17,8 +17,8 @@
 1. Home `/`: free Spanish workshops, phone-first, community framing.
 2. `/talleres`: four connected workshops — open one, show the agenda,
    series position ("Taller 2 de 4"), and prev/next navigation.
-3. `/historias`: invented examples (labeled) plus the real founder
-   story with photo.
+3. `/nosotros`: mission, program facts, values, and the real
+   founder story with photo.
 4. `/cursos`: the course ladder — free mini-course live, paid tiers
    honestly marked in preparation.
 

@@ -4,9 +4,10 @@ import { RevealOnEnter } from '../motion/reveal-on-enter';
 import { Language } from '../../i18n/language';
 import type { Lang } from '../../i18n/lang';
 
-const copy: Record<Lang, { heading: string; name: string; role: string; paragraphs: string[]; quote: string; quoteBy: string; attend: string; help: string }> = {
+const copy: Record<Lang, { heading: string; anchor: string; name: string; role: string; paragraphs: string[]; quote: string; quoteBy: string; attend: string; help: string }> = {
   es: {
     heading: 'El fundador',
+    anchor: 'fundador',
     name: 'Jaime Huerta Cruz',
     role: 'Fundador de IA Para Todos',
     paragraphs: [
@@ -22,6 +23,7 @@ const copy: Record<Lang, { heading: string; name: string; role: string; paragrap
   },
   en: {
     heading: 'Our founder',
+    anchor: 'founder',
     name: 'Jaime Huerta Cruz',
     role: 'Founder of IA Para Todos',
     paragraphs: [

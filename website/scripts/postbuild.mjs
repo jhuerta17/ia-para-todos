@@ -32,7 +32,7 @@ for (const [name, es, en] of pairs) {
   if (es.length !== en.length) fail(`${name}: es has ${es.length} entries, en has ${en.length}; index pairing broken`);
 }
 
-const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'historias', 'contacto', 'cursos', 'donar'];
+const STATIC_KEYS = ['home', 'talleres', 'actividades', 'recursos', 'nosotros', 'comunidad', 'participar', 'contacto', 'cursos', 'donar'];
 // Route records with their language peer for hreflang.
 const routes = [];
 for (const lang of LANGS) {
@@ -316,7 +316,7 @@ for (const path of ADMIN_PATHS) {
 }
 
 // 17. Honesty guard: no public page claims real operations, and the
-// stories pages keep their invented-examples disclaimer.
+// home pages keep the invented-examples disclaimer on the carousel.
 const BANNED_CLAIMS = ['501(c)(3)', '501c3', 'testimonios de', 'testimonials from', 'talleres realizados', 'workshops delivered', 'han asistido', 'have attended', 'nuestros donantes', 'our donors'];
 for (const { path } of routes) {
   const file = path === '' ? join(publish, 'index.html') : join(publish, path, 'index.html');
@@ -326,7 +326,7 @@ for (const { path } of routes) {
     if (html.includes(phrase)) fail(`/${path || ''} claims real operations: ${phrase}`);
   }
 }
-for (const [page, marker] of [['historias/index.html', 'inventados'], ['en/stories/index.html', 'Made-up examples']]) {
+for (const [page, marker] of [['index.html', 'inventados'], ['en/index.html', 'Made-up examples']]) {
   const html = readFileSync(join(publish, page), 'utf8');
   if (!html.includes(marker)) fail(`${page} lost the invented-examples disclaimer`);
 }

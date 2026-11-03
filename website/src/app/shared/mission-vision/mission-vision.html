@@ -1,0 +1,15 @@
+<section aria-labelledby="mission-vision-title">
+  <header appRevealOnEnter>
+    <h2 id="mission-vision-title">{{ c().heading }}</h2>
+    <p>{{ c().lead }}</p>
+  </header>
+  <div class="statements">
+    @for (statement of statements(); track statement.label) {
+      <div class="statement" appRevealOnEnter>
+        <app-icon name="quote" />
+        <h3>{{ statement.label }}</h3>
+        <p class="quote">“{{ statement.text }}”</p>
+      </div>
+    }
+  </div>
+</section>

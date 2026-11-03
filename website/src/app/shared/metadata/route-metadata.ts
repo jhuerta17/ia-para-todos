@@ -10,10 +10,9 @@ const DESCRIPTIONS: Record<Lang, Record<string, string>> = {
   es: {
     home: 'Iniciativa comunitaria: talleres gratuitos en español para aprender inteligencia artificial desde cero, con tu teléfono.',
     talleres: 'Cuatro talleres de IA en español: primeros pasos, vida diaria, trabajo y negocios, y padres y familias.',
-    nosotros: 'Conoce la misión y el enfoque comunitario de IA Para Todos, una iniciativa educativa en español.',
+    nosotros: 'Conoce la misión, los valores y la historia del fundador de IA Para Todos, una iniciativa educativa en español.',
     comunidad: 'Formas de colaborar con IA Para Todos: facilitación, acompañamiento, traducción y difusión.',
     participar: 'Cuéntanos en qué taller te gustaría participar. Usamos tus datos solo para contactarte.',
-    historias: 'Cinco escenarios de aprendizaje inventados para imaginar cómo practicar con IA. Ejemplos ilustrativos, no testimonios.',
     contacto: 'Contacto de IA Para Todos, iniciativa educativa en español en Dallas–Fort Worth.',
     cursos: 'Cursos en línea en español, siempre gratuitos: mini-curso con tutor de IA y más rutas gratuitas en preparación.',
     donar: 'Dona a IA Para Todos: los cursos y talleres son gratuitos para la comunidad gracias a empresas y donaciones.',
@@ -22,10 +21,9 @@ const DESCRIPTIONS: Record<Lang, Record<string, string>> = {
   en: {
     home: 'Community initiative: free workshops in Spanish to learn artificial intelligence from scratch, with your phone.',
     talleres: 'Four AI workshops in Spanish: first steps, everyday life, work and business, and parents and families.',
-    nosotros: 'Learn about the mission and community focus of AI for everyone, an educational initiative in Spanish.',
+    nosotros: 'Learn about the mission, values, and founder story of AI for everyone, an educational initiative in Spanish.',
     comunidad: 'Ways to collaborate with AI for everyone: facilitation, guidance, translation, and outreach.',
     participar: 'Tell us which workshop you would like to join. We use your data only to contact you.',
-    historias: 'Five fictional learning scenarios to imagine practicing with AI. Illustrative examples, not testimonials.',
     contacto: 'Contact AI for everyone, a Spanish-language educational initiative in Dallas–Fort Worth.',
     cursos: 'Online courses in Spanish, always free: mini-course with an AI tutor, plus more free tracks in preparation.',
     donar: 'Donate to AI for everyone: courses and workshops stay free for the community thanks to companies and donations.',
