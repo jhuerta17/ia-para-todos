@@ -61,7 +61,7 @@ try {
     fetch:async(_url,init)=>{ calls++; const payload=JSON.parse(init.body); assert.equal(payload.store,false); assert.equal(payload.max_output_tokens,1600); assert.ok(!JSON.stringify(payload).includes('private@example.com')); return Response.json({output:[{type:'message',role:'assistant',content:[{type:'output_text',text:'A fictional practice reply'}]}],usage:{input_tokens:100,output_tokens:100}}); },
   });
   const chatB=await repo.createChat(B);
-  const send=(id,options={})=>ai(new Request(`https://test.example/api/portal/chats/${chatB.id}/messages`,{method:'POST',headers:{Origin:'https://test.example','Content-Type':'application/json'},body:JSON.stringify({requestId:id,input:'Practice private@example.com',lang:'en',live:true,acknowledged:true,...options})}),{deploy:{context:'production'}});
+  const send=(id,options={},target=chatB.id)=>ai(new Request(`https://test.example/api/portal/chats/${target}/messages`,{method:'POST',headers:{Origin:'https://test.example','Content-Type':'application/json'},body:JSON.stringify({requestId:id,input:'Practice private@example.com',lang:'en',live:true,acknowledged:true,...options})}),{deploy:{context:'production'}});
   const first=randomUUID();
   assert.equal((await send(first)).status,200);
   assert.equal((await (await send(first)).json()).demo,false);
@@ -72,7 +72,12 @@ try {
   const history=await repo.chat(B,chatB.id);
   assert.ok(history.messages.every(message=>!message.content.includes('private@example.com')));
   assert.equal((await send(randomUUID(),{userId:A.id})).status,400);
-  for(let i=0;i<19;i++) assert.equal((await send(randomUUID())).status,200);
+  for(let i=0;i<18;i++) assert.equal((await send(randomUUID())).status,200);
+  const concurrentChat=await repo.createChat(B);
+  const concurrent=await Promise.all([send(randomUUID()),send(randomUUID(),{},concurrentChat.id)]);
+  const concurrentBodies=await Promise.all(concurrent.map(response=>response.json()));
+  assert.equal(concurrentBodies.filter(body=>body.demo===false).length,1);
+  assert.equal(concurrentBodies.filter(body=>body.reason==='allowance_exhausted').length,1);
   assert.equal(calls,20);
   assert.equal((await (await send(randomUUID())).json()).reason,'allowance_exhausted');
   assert.equal(calls,20);
@@ -87,6 +92,13 @@ try {
   const budget=await ai(new Request(`https://test.example/api/portal/chats/${budgetChat.id}/messages`,{method:'POST',headers:{Origin:'https://test.example','Content-Type':'application/json'},body:JSON.stringify({requestId:randomUUID(),input:'fictional',lang:'en',live:true,acknowledged:true})}),{deploy:{context:'production'}});
   assert.equal((await budget.json()).reason,'monthly_budget_exhausted');
   assert.equal(calls,20);
+  const interrupted=(await pool.query('SELECT id FROM portal_requests WHERE user_id=$1 AND chat_id=$2 LIMIT 1',[C.id,budgetChat.id])).rows[0].id;
+  await pool.query("UPDATE portal_requests SET state='pending',created_at=now()-interval '3 minutes' WHERE user_id=$1 AND id=$2",[C.id,interrupted]);
+  await pool.query("DELETE FROM portal_messages WHERE user_id=$1 AND request_id=$2 AND role='assistant'",[C.id,interrupted]);
+  const recovered=await repo.chat(C,budgetChat.id);
+  assert.equal(recovered.messages.filter(message=>message.role==='assistant').length,1);
+  assert.equal((await pool.query('SELECT state FROM portal_requests WHERE user_id=$1 AND id=$2',[C.id,interrupted])).rows[0].state,'done');
+  console.log('  ok interrupted sends recover on read without another provider call');
   const admissions=await pool.query('SELECT count(*)::int AS n FROM portal_admissions');
   for(let i=admissions.rows[0].n;i<25;i++) await transaction(pool,db=>reserveAdmission(db,`test-hash-${i}`));
   const admissionsRace=await Promise.allSettled([transaction(pool,db=>reserveAdmission(db,'over-cap-A')),transaction(pool,db=>reserveAdmission(db,'over-cap-B'))]);

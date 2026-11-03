@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import type { Context } from '@netlify/functions';
 import { HttpError, json, readJSON, env, MODELS, OUTPUT_TOKEN_CAP, REASONING_EFFORT, liveConfigured, type LiveControl } from './ai-security.mts';
 import { transaction } from './portal-db.mts';
-import { ensureProfile, messageView, type PortalRepository, type Student } from './portal-repository.mts';
+import { ensureProfile, recoverInterrupted, messageView, type PortalRepository, type Student } from './portal-repository.mts';
 import { scrubPII, TUTOR_CONTEXT_LIMIT } from '../../src/app/shared/ai-tutor/tutor-core.ts';
 
 export interface PortalAIOptions {
@@ -53,6 +53,7 @@ export function createPortalAIHandler(options: PortalAIOptions) {
         await ensureProfile(db, user);
         const chat = (await db.query('SELECT id FROM portal_chats WHERE id=$1 AND user_id=$2 AND expires_at>now() FOR UPDATE', [chatId,user.id])).rows[0];
         if (!chat) throw new HttpError(404, 'not_found');
+        await recoverInterrupted(db,user.id,chatId);
         const previous = (await db.query('SELECT * FROM portal_requests WHERE user_id=$1 AND id=$2', [user.id,id])).rows[0];
         if (previous) {
           if (previous.chat_id !== chatId || previous.input_hash !== digest) throw new HttpError(409, 'request_conflict');

@@ -32,6 +32,10 @@ export async function ensureProfile(db: Queryable, user: Student, consentRequire
 }
 export const chatView = (row: Record<string, any>) => ({ id: row.id, title: row.title, createdAt: new Date(row.created_at).toISOString(), expiresAt: new Date(row.expires_at).toISOString() });
 export const messageView = (row: Record<string, any>) => ({ role: row.role, content: row.content, demo: row.demo });
+export async function recoverInterrupted(db: Queryable, userId: string, chatId: string): Promise<void> {
+  const stale = (await db.query("UPDATE portal_requests SET state='done',demo=true,reason='request_interrupted' WHERE user_id=$1 AND chat_id=$2 AND state='pending' AND created_at<now()-interval '2 minutes' RETURNING id",[userId,chatId])).rows;
+  for (const row of stale) await db.query("INSERT INTO portal_messages(user_id,chat_id,request_id,role,content,demo) VALUES($1,$2,$3,'assistant',$4,true) ON CONFLICT DO NOTHING",[userId,chatId,row.id,'Sample reply / Respuesta de ejemplo: include task, context, and format. Incluye tarea, contexto y formato.']);
+}
 export class PortalRepository {
   readonly pool: PortalPool;
   constructor(pool: PortalPool) { this.pool = pool; }
@@ -85,6 +89,7 @@ export class PortalRepository {
       const row = (await db.query('SELECT * FROM portal_chats WHERE id=$1 AND user_id=$2 AND expires_at>now()', [id, user.id])).rows[0];
       if (!row) throw new HttpError(404, 'not_found');
       if (remove) { await db.query('DELETE FROM portal_chats WHERE id=$1 AND user_id=$2', [id, user.id]); return { deleted: true }; }
+      await recoverInterrupted(db,user.id,id);
       const messages = (await db.query('SELECT * FROM portal_messages WHERE chat_id=$1 AND user_id=$2 ORDER BY sequence LIMIT 200', [id, user.id])).rows.map(messageView);
       return { ...chatView(row), messages };
     });
