@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { generateDemoSubmissions } from '../src/app/admin/data/demo-generator.ts';
 import { bucketByMonth, monthDeltas } from '../src/app/admin/data/analytics.ts';
 import { demoImpactMonths, demoSupporters, demoSupporterTotal, demoWorkshops } from '../src/app/admin/data/demo-content.ts';
+import { DEMO_SESSION_DEFS, demoHistory, demoPortalReservations, demoSessions, demoStudents } from '../src/app/workshops/workshop-demo.ts';
 import { COURSE_PATHS } from '../src/app/portal/courses/course-paths.ts';
 import { SITE_URL } from '../src/app/shared/metadata/site.ts';
 import { LANGS, PATHS } from '../src/app/i18n/lang.ts';
@@ -359,6 +360,40 @@ for (const { path } of routes) {
 for (const [page, marker] of [['index.html', 'inventados'], ['en/index.html', 'Made-up examples']]) {
   const html = readFileSync(join(publish, page), 'utf8');
   if (!html.includes(marker)) fail(`${page} lost the invented-examples disclaimer`);
+}
+
+// 18. Workshop demo data is deterministic, evergreen, and clearly
+// fictional: upcoming sessions stay upcoming, ids can never collide
+// with real rows, and no string claims real operations.
+{
+  const NOW = Date.UTC(2026, 9, 30);
+  const first = demoSessions(NOW);
+  const second = demoSessions(NOW);
+  if (JSON.stringify(first) !== JSON.stringify(second)) fail('workshop demo drift: not deterministic');
+  if (first.length !== 5) fail(`workshop demo drift: expected 5 upcoming, got ${first.length}`);
+  const history = demoHistory(NOW);
+  if (history.length !== 6) fail(`workshop demo drift: expected 6 past, got ${history.length}`);
+  if (history.reduce((sum, session) => sum + session.attended, 0) !== 170) fail('workshop demo drift: expected 170 past attendees');
+  if (DEMO_SESSION_DEFS.length !== 11) fail(`workshop demo drift: expected 11 session defs, got ${DEMO_SESSION_DEFS.length}`);
+  for (const session of first) {
+    if (session.status !== 'published') fail(`workshop demo drift: ${session.id} is not published`);
+    if (Date.parse(session.startsAt) <= NOW || Date.parse(session.endsAt) <= Date.parse(session.startsAt)) fail(`workshop demo drift: ${session.id} dates are not upcoming`);
+    if (!session.id.startsWith('demo-')) fail(`workshop demo drift: ${session.id} could collide with real rows`);
+    if (session.available < 0 || session.available > session.capacity) fail(`workshop demo drift: ${session.id} availability out of range`);
+    if (!session.titleEs || !session.titleEn || !session.venue || !session.address) fail(`workshop demo drift: ${session.id} lacks bilingual details`);
+  }
+  const starts = first.map((session) => Date.parse(session.startsAt));
+  if (JSON.stringify(starts) !== JSON.stringify([...starts].sort((a, b) => a - b))) fail('workshop demo drift: upcoming sessions are not date-ordered');
+  const students = demoStudents();
+  if (students.length < 60) fail(`workshop demo drift: expected at least 60 students, got ${students.length}`);
+  if (!students.every((student) => student.contact.endsWith('@example.com') || /^\(555\) \d{3}-\d{4}$/.test(student.contact))) fail('workshop demo drift: seed contacts must stay fictional');
+  const portal = demoPortalReservations(NOW);
+  if (portal.length !== 1 || portal[0].status !== 'confirmed' || !portal[0].linked) fail('workshop demo drift: expected one linked upcoming portal reservation');
+  if (Date.parse(portal[0].session.startsAt) <= NOW) fail('workshop demo drift: portal reservation is not upcoming');
+  const blob = JSON.stringify([...first, ...history, ...students, ...portal]).toLowerCase();
+  for (const phrase of BANNED_CLAIMS) {
+    if (blob.includes(phrase)) fail(`workshop demo claims real operations: ${phrase}`);
+  }
 }
 
 if (failures.length > 0) {

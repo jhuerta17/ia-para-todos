@@ -6,6 +6,7 @@ import { DOCUMENT } from '@angular/common';
 import { afterNextRender, Component, computed, inject, Injector, signal } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, Router, RouterOutlet } from '@angular/router';
 import { SiteHeader } from './shared/site-header/site-header';
+import { DemoState } from './admin/data/demo-state';
 import { Language } from './i18n/language';
 import { Lang } from './i18n/lang';
 
@@ -20,6 +21,8 @@ export class App {
   private readonly injector = inject(Injector);
   private initialActivation = true;
   private readonly metadata = inject(RouteMetadata);
+  // Constructed on every load so ?demo=1 is captured before guards redirect.
+  protected readonly demoState = inject(DemoState);
   private readonly router = inject(Router);
   private readonly transition = inject(PageTransition);
   private readonly language = inject(Language);

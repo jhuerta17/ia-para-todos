@@ -88,3 +88,22 @@ Use fictional sessions and guests to exercise publication, guest email/phone
 booking, management-link cancellation, linking, assisted booking, manual follow-up,
 retention, and account deletion. Then deploy the reviewed change through the normal
 Git production workflow. Implementation does not publish real sessions or deploy.
+
+## Fictional data for review
+
+Two options tell the same six-month story (six past sessions with 170
+attendees, upcoming sessions with partial bookings). Everyone is fictional.
+
+- Browser demo: open any schedule, reservation, preparation, or portal
+  page with `?demo=1` (for example `/agenda?demo=1`). Sessions,
+  availability, and the signed-in student's reservation are fictional and
+  clearly labeled; bookings are simulated in the browser and reach no
+  server. The flag persists per browser; `?demo=0` or the exit button
+  returns to real data. Off by default, so tests and production are
+  unaffected.
+- Staging seed: `WORKSHOP_SEED_DATABASE_URL=<staging-direct-url>
+  npm run db:seed:workshops -- --confirm` inserts eleven fictional
+  sessions and fictional reservations (`@example.com` and 555 contacts
+  only, enforced by the script). Idempotent and insert-only; sessions
+  past the 30-day retention window keep anonymous totals without rows.
+  Never run against production.

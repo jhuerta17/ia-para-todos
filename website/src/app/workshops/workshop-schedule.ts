@@ -5,7 +5,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { Language } from '../i18n/language';
 import { Icon } from '../shared/icon';
+import { DemoState } from '../admin/data/demo-state';
 import { WorkshopClient, bookingToken } from './workshop-client';
+import { demoSessions, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
 import { venueDay, workshopDate } from './workshop-format';
 import type { BookingInput, Reservation, WorkshopSession } from './workshop-types';
@@ -16,6 +18,8 @@ export class WorkshopSchedule {
   protected readonly en=computed(()=>this.language.lang()==='en');
   protected readonly c=computed(()=>workshopCopy[this.language.lang()]);
   private readonly client=inject(WorkshopClient);
+  protected readonly demoState=inject(DemoState);
+  protected readonly demo=this.demoState.enabled;
   private readonly document=inject(DOCUMENT);
   private readonly params=toSignal(inject(ActivatedRoute).queryParamMap);
   protected readonly sessions=signal<WorkshopSession[]>([]);
@@ -50,9 +54,11 @@ export class WorkshopSchedule {
   protected moveMonth(delta:number):void{const [y,m]=this.month().split('-').map(Number);this.month.set(new Date(Date.UTC(y,m-1+delta,1)).toISOString().slice(0,7));}
   protected async load():Promise<void>{
     this.loading.set(true);this.loadFailed.set(false);this.error.set('');
+    if(this.demo()){const sessions=demoSessions();this.sessions.set(sessions);if(sessions.length)this.month.set(venueDay(sessions[0]).slice(0,7));this.loading.set(false);return;}
     try{const data=await this.client.request<{sessions:WorkshopSession[]}>('sessions');this.sessions.set(data.sessions);if(data.sessions.length)this.month.set(venueDay(data.sessions[0]).slice(0,7));}
     catch{this.loadFailed.set(true);this.error.set(this.c().error);}finally{this.loading.set(false);}
   }
+  protected exitDemo():void{this.demoState.disable();this.result.set(null);this.attempt=null;void this.load();}
   protected async reserve():Promise<void>{
     const s=this.selected();if(!s||this.submitting()||!this.adult||!this.privacy)return;
     this.submitting.set(true);this.error.set('');
@@ -60,9 +66,19 @@ export class WorkshopSchedule {
     if(this.attempt&&JSON.stringify(this.attempt)!==JSON.stringify(b)){this.error.set(this.c().changed);this.submitting.set(false);return;}
     this.attempt=b;
     try{
-      const result=await this.client.request<Reservation>('book','POST',b);
-      this.privateLink=`${this.document.location.origin}${this.path('reservas')}#${b.token}`;
-      this.result.set(result);
+      if(this.demo()){
+        // Simulated booking: the fictional reservation lives in the browser only.
+        const session:WorkshopSession={...s,available:Math.max(0,s.available-1)};
+        const reservation:Reservation={id:`demo-booking-${b.token.slice(0,8)}`,reference:`DEMO-${b.token.slice(0,8).toUpperCase()}`,status:'confirmed',session,linked:false};
+        saveDemoBooking({token:b.token,reservation});
+        this.sessions.set(this.sessions().map(x=>x.id===s.id?session:x));
+        this.privateLink=`${this.document.location.origin}${this.path('reservas')}#demo-${b.token}`;
+        this.result.set(reservation);
+      }else{
+        const result=await this.client.request<Reservation>('book','POST',b);
+        this.privateLink=`${this.document.location.origin}${this.path('reservas')}#${b.token}`;
+        this.result.set(result);
+      }
     }catch(e){const reason=(e as Error).message;this.error.set(reason==='session_full'?this.c().fullError:reason==='already_reserved'?this.c().duplicate:this.c().error);}
     finally{this.submitting.set(false);}
   }

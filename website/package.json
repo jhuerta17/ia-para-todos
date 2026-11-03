@@ -25,6 +25,7 @@
     "verify:portal:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/portal.mts netlify/lib/portal-repository.mts netlify/lib/portal-db.mts netlify/functions/identity.mts netlify/functions/portal-maintenance.mts netlify/lib/portal-ai.mts",
     "db:migrate": "node scripts/migrate-portal.mjs",
     "db:check": "node scripts/migrate-portal.mjs --check",
+    "db:seed:workshops": "node scripts/seed-workshops.mjs",
     "verify:workshops": "node scripts/verify-workshops.mjs",
     "verify:workshops:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/workshops.mts netlify/functions/portal-maintenance.mts"
   },

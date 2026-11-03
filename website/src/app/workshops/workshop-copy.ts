@@ -19,6 +19,7 @@ export const workshopCopy = {
     materials:'Materiales y práctica',review:'Repasar el tema del taller',practice:'Practicar con ejemplos inventados',past:'Talleres anteriores',
     preparing:'Preparación opcional',browse:'Ver próximos talleres',status:'Estado',noMonth:'No hay talleres este mes.',
     fullError:'Este taller ya no tiene lugares. Elige otra fecha.',duplicate:'Ya tienes una reserva para este taller.',changed:'Para cambiar estos datos, inicia una nueva reserva con el botón de abajo.',newAttempt:'Iniciar otra reserva',
+    demoNote:'Vista de demostración: los talleres, lugares y reservas mostrados son ficticios.',demoExit:'Ver talleres reales',demoSaved:'Reserva ficticia de demostración: no se guardó nada real.',
   },
   en: {
     schedule:'Upcoming workshops',intro:'Learn in person, in community, and for free. Reserve a place; no account required.',
@@ -40,5 +41,6 @@ export const workshopCopy = {
     materials:'Materials and practice',review:'Review the workshop topic',practice:'Practice with made-up examples',past:'Previous workshops',
     preparing:'Optional preparation',browse:'Find upcoming workshops',status:'Status',noMonth:'No workshops this month.',
     fullError:'This workshop is now full. Choose another date.',duplicate:'You already have a reservation for this workshop.',changed:'To change these details, start a new reservation using the button below.',newAttempt:'Start another reservation',
+    demoNote:'Demo view: the workshops, places, and reservations shown are fictional.',demoExit:'View real schedule',demoSaved:'Fictional demo reservation: nothing real was saved.',
   },
 };
