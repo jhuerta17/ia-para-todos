@@ -18,8 +18,7 @@ export class WorkshopSchedule {
   protected readonly en=computed(()=>this.language.lang()==='en');
   protected readonly c=computed(()=>workshopCopy[this.language.lang()]);
   private readonly client=inject(WorkshopClient);
-  protected readonly demoState=inject(DemoState);
-  protected readonly demo=this.demoState.enabled;
+  protected readonly demo=inject(DemoState).enabled;
   private readonly document=inject(DOCUMENT);
   private readonly params=toSignal(inject(ActivatedRoute).queryParamMap);
   protected readonly sessions=signal<WorkshopSession[]>([]);
@@ -58,7 +57,6 @@ export class WorkshopSchedule {
     try{const data=await this.client.request<{sessions:WorkshopSession[]}>('sessions');this.sessions.set(data.sessions);if(data.sessions.length)this.month.set(venueDay(data.sessions[0]).slice(0,7));}
     catch{this.loadFailed.set(true);this.error.set(this.c().error);}finally{this.loading.set(false);}
   }
-  protected exitDemo():void{this.demoState.disable();this.result.set(null);this.attempt=null;void this.load();}
   protected async reserve():Promise<void>{
     const s=this.selected();if(!s||this.submitting()||!this.adult||!this.privacy)return;
     this.submitting.set(true);this.error.set('');
@@ -69,10 +67,10 @@ export class WorkshopSchedule {
       if(this.demo()){
         // Simulated booking: the fictional reservation lives in the browser only.
         const session:WorkshopSession={...s,available:Math.max(0,s.available-1)};
-        const reservation:Reservation={id:`demo-booking-${b.token.slice(0,8)}`,reference:`DEMO-${b.token.slice(0,8).toUpperCase()}`,status:'confirmed',session,linked:false};
+        const reservation:Reservation={id:crypto.randomUUID(),reference:crypto.randomUUID(),status:'confirmed',session,linked:false};
         saveDemoBooking({token:b.token,reservation});
         this.sessions.set(this.sessions().map(x=>x.id===s.id?session:x));
-        this.privateLink=`${this.document.location.origin}${this.path('reservas')}#demo-${b.token}`;
+        this.privateLink=`${this.document.location.origin}${this.path('reservas')}#${b.token}`;
         this.result.set(reservation);
       }else{
         const result=await this.client.request<Reservation>('book','POST',b);

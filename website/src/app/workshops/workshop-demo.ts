@@ -177,7 +177,7 @@ export function demoStudents(count = 60): DemoStudent[] {
 /** The demo student's own upcoming reservation, shown after sign-in. */
 export function demoPortalReservations(now = Date.now()): Reservation[] {
   const session = demoSessions(now).find((candidate) => candidate.id === 'demo-08') ?? demoSessions(now)[0];
-  return [{ id: 'demo-reservation-1', reference: 'DEMO-A1B2C3', status: 'confirmed', session, linked: true }];
+  return [{ id: 'b7e4f2a1-3c8d-4e5f-9a6b-1d2e3f4a5b6c', reference: 'b7e4f2a1-3c8d-4e5f-9a6b-1d2e3f4a5b6c', status: 'confirmed', session, linked: true }];
 }
 
 export interface DemoBooking {
@@ -216,5 +216,5 @@ export function saveDemoBooking(booking: DemoBooking): void {
 
 export function readDemoBooking(token: string): DemoBooking | null {
   restoreDemoBookings();
-  return demoMemory.get(token.replace(/^demo-/, '')) ?? null;
+  return demoMemory.get(token) ?? null;
 }

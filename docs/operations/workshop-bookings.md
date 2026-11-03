@@ -96,11 +96,11 @@ attendees, upcoming sessions with partial bookings). Everyone is fictional.
 
 - Browser demo: open any schedule, reservation, preparation, or portal
   page with `?demo=1` (for example `/agenda?demo=1`). Sessions,
-  availability, and the signed-in student's reservation are fictional and
-  clearly labeled; bookings are simulated in the browser and reach no
-  server. The flag persists per browser; `?demo=0` or the exit button
-  returns to real data. Off by default, so tests and production are
-  unaffected.
+  availability, and the signed-in student's reservation are fictional;
+  bookings are simulated in the browser and reach no server. The flag
+  persists per browser; `?demo=0` returns to real data. Off by default,
+  so tests and production are unaffected. Demo and live views look
+  identical, so check the URL before sharing a screenshot.
 - Staging seed: `WORKSHOP_SEED_DATABASE_URL=<staging-direct-url>
   npm run db:seed:workshops -- --confirm` inserts eleven fictional
   sessions and fictional reservations (`@example.com` and 555 contacts

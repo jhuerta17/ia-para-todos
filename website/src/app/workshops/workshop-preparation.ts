@@ -7,7 +7,6 @@ import { workshopCopy } from './workshop-copy';
 const DEMO_PREP_KEY = 'workshop-demo-prep';
 @Component({selector:'app-workshop-preparation',imports:[RouterLink],styleUrl:'./workshop.css',template:`
 <main id="main-content" tabindex="-1" class="workshop-shell ws-reading"><header class="ws-heading"><h1>{{c().preparation}}</h1><p>{{c().prepLead}}</p></header>
-@if(demo()){<p class="ws-demo" role="note">{{c().demoNote}}</p>}
 @if(en()){
 <section><h2>1. What is AI?</h2><p>Artificial intelligence finds patterns to generate text, images, or suggestions. It can help you start a task, but it can invent details and make mistakes. You decide what to trust and use.</p></section>
 <section><h2>2. Try one made-up example</h2><p>“Suggest three dinners with rice and vegetables for a fictional family of three. Use a short list.”</p><p>A useful request includes a task, some context, and the format you want. Think about how you would ask for a shorter list. You can do this on paper; no AI tool is required.</p></section>

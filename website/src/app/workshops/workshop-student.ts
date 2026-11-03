@@ -11,7 +11,6 @@ import { workshopCopy } from './workshop-copy';
 import { workshopDate } from './workshop-format';
 @Component({selector:'app-workshop-student',imports:[RouterLink,WorkshopSchedule],styleUrl:'./workshop.css',template:`
 <section [attr.aria-label]="c().nextWorkshop"><header class="ws-heading"><h2>{{c().nextWorkshop}}</h2></header>
-@if(demo()){<p class="ws-demo" role="note">{{c().demoNote}}</p>}
 @if(loading()){<p role="status">{{c().loading}}</p>}
 @if(error()){<div role="alert" class="ws-error">{{c().error}} <button class="ws-button secondary" type="button" (click)="load()">{{c().retry}}</button></div>}
 @if(!loading()&&!error()&&!next()){<p>{{c().noReservation}}</p><app-workshop-schedule [embedded]="true"/>}
