@@ -35,7 +35,7 @@
 
 The free, adults-only student portal is an explicitly approved exception to the
 workshop rule of anonymous aggregates. Netlify Identity holds login credentials,
-email, and the chosen display name. Private Netlify Postgres holds the Identity
+email, and the chosen display name. Private Neon Postgres holds the Identity
 user ID, adult/privacy attestation, enrollments, lesson completion, and saved
 practice chats. Nothing from those records belongs in this public repository.
 

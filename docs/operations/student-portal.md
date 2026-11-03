@@ -7,7 +7,7 @@ real two-user staging evidence remain separate release gates.
 
 ## Data and access
 
-Netlify Identity owns credentials, email, and display name. Netlify DB owns
+Netlify Identity owns credentials, email, and display name. Neon PostgreSQL owns
 profiles (Identity ID and consent), enrollments, lesson completion, chats,
 messages, admissions, deletion jobs, and usage counters. No student records or
 secrets belong in Git. Public workshops remain anonymous; the approved adult
@@ -43,10 +43,8 @@ npm run verify:portal
 npm audit --omit=dev
 ```
 
-The database suite first verifies migration compatibility with
-`@netlify/database-dev`, then starts a disposable real PostgreSQL cluster via
-`embedded-postgres` for separate-session transaction tests. The emulator shares
-a session and is not used to claim concurrency guarantees. The suite checks
+The database suite starts a disposable real PostgreSQL cluster via
+`embedded-postgres` for separate-session transaction tests. The suite checks
 foreign keys, ownership, idempotency, simultaneous quota admission, the monthly
 budget, admissions, interrupted replies, retention, and deletion versus saves.
 The cluster is stopped and removed afterward; it never targets a managed DB.
@@ -80,12 +78,36 @@ or `netlify.toml`.
 | `META_MUSE_API_KEY` | Existing provider credential; server-only. |
 | `AI_ALLOWED_ORIGINS` | Existing public/admin AI origin allowlist. Portal mutations separately require the request's exact same origin. |
 
-`@netlify/database` resolves the correct managed DB connection. Netlify
-provisions/applies committed migrations on supported deploys. The build base
-is `website`, so migrations live in `website/netlify/database/migrations`.
-Never edit/remove applied migrations or apply hosted schema manually. If the
-account's plan cannot provision Netlify DB, stop and resolve plan support;
-do not silently substitute browser storage or another provider.
+The portal uses the standard `pg` driver and a small reusable pool. Remote
+connections require certificate-verified TLS; no credentials reach the browser.
+Netlify-managed Database packages are removed, so deployment does not require
+access to that product.
+
+- `PORTAL_DATABASE_URL`: Neon **pooled** URL, secret, Functions scope.
+- `PORTAL_MIGRATION_DATABASE_URL`: Neon **direct** URL, secret, Builds scope
+  for the production migration build.
+- Keep production values in the production context. Give preview/branch
+  deploys their own staging URL; never give previews production credentials.
+- Migrations live in `website/db/migrations`. Run `npm run db:check` and then
+  `npm run db:migrate` with the direct URL supplied securely through the
+  environment. Neither command prints the connection string. `db:check`
+  initializes the migration tracking table when absent, but applies no portal
+  schema migration.
+- The runner takes a session advisory lock, checks applied-file SHA-256 hashes,
+  rejects removed/changed/out-of-order migrations, and applies each pending
+  file transactionally. Never edit a file after it has been applied.
+- Local `npm run build` does not require a database. The Netlify production
+  context runs `npm run db:migrate && npm run build`; a missing direct URL or
+  failed migration stops publication. Apply and test schema on staging first.
+  Other preview contexts do not run migrations or inherit production secrets;
+  configure their own staging credentials explicitly. Use additive migrations.
+
+Dedicated Neon project: `ia-para-todos` (`winter-brook-27058187`), AWS Ohio,
+PostgreSQL 18. Production branch: `br-spring-forest-bekgoxfa`; staging:
+`br-withered-feather-bej641jg`. Staging was created schema-only, not copied from
+participant data. The selected Free plan currently shows six-hour history
+retention in the console; review backup/recovery needs before enrolling users.
+
 
 ## Quotas, histories, and spending
 
@@ -161,7 +183,7 @@ the initial 202 response. Test deletion with disposable staging users only.
 
 1. Finish all local commands above and review desktop/mobile evidence.
 2. Configure a separate staging Netlify project with separate Identity users
-   and DB. Leave production invite-only and live student AI off. Identity
+   and its own Neon staging database connection. Leave production invite-only and live student AI off. Identity
    settings are dashboard-only: enable confirmation, then open registration
    on staging and set its signup gate. Set a separate admission HMAC secret.
 3. Verify fresh-email signup → confirm → adult notice → enroll → lesson
@@ -175,7 +197,7 @@ the initial 202 response. Test deletion with disposable staging users only.
    assume sample-mode staging proves provider billing.
 6. Exercise email recovery/confirmation, chat expiry, interrupted sends,
    account deletion, Identity retry, and a successful scheduled run. Confirm
-   Netlify's backup retention, plan support, and estimated platform costs.
+   Neon's backup retention, plan support, and estimated platform costs.
 7. Obtain production approval, set the reviewed configuration, and deploy the
    reviewed `main` commit through Git. Enable signup/live only after the
    migration and access checks pass. Do not create an ad-hoc manual production
