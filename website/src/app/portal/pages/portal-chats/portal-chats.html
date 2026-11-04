@@ -1,27 +1,30 @@
-<header><h1>{{c().title}}</h1><p>{{c().lead}}</p><p class="note">{{c().saved}}</p></header>
-@if(failed()){<div role="alert" class="error"><p>{{c().error}}</p>@if(retryAvailable()){<p>{{c().pending}}</p><button type="button" (click)="send(true)" [disabled]="sending()">{{c().retry}}</button>}</div>}
-<div class="chat-workspace">
-  <aside class="chat-list"><button appActionButton type="button" (click)="create()" [disabled]="busy()||sending()">{{c().new}}</button>
-    <button class="refresh" type="button" (click)="refresh()" [disabled]="busy()||sending()">{{c().reload}}</button>
-    @if(busy()){<p role="status">{{c().loading}}</p>}
-    @if(!chats().length&&!busy()){<p>{{c().empty}}</p>}
-    <ul>@for(chat of chats();track chat.id){<li><button type="button" (click)="open(chat)" [disabled]="busy()||sending()" [attr.aria-current]="selected()?.id===chat.id?'true':null">{{chat.title||c().untitled}}</button></li>}</ul>
-  </aside>
-  @if(selected();as chat){
-    <section class="conversation" [attr.aria-label]="c().selected">
-      <h2>{{chat.title||c().untitled}}</h2><p class="note">{{c().expires}} {{expires(chat.expiresAt)}}</p>
-      <div class="messages" role="log" aria-live="polite">
-        @for(message of chat.messages;track $index){<article [class.user]="message.role==='user'"><p class="speaker">{{message.role==='user'?(language.lang()==='es'?'Tú':'You'):(message.demo?tutor().sample:'IA / AI')}}</p><p class="message-text">{{message.content}}</p></article>}
-      </div>
-      <p class="note">{{tutor().privacy}}</p>
-      <p class="disclosure">{{tutor().disclosure}}</p>
-      @if(reason()==='allowance_exhausted'||reason()==='monthly_budget_exhausted'){<p role="status">{{c().budget}}</p>}
-      @if(reason()==='sample_mode'||reason()==='upstream_unavailable'||reason()==='paused'){<p class="note">{{c().sampleMode}}</p>}
-      <form (submit)="$event.preventDefault(); send()"><label for="portal-prompt">{{tutor().placeholder}}</label><textarea id="portal-prompt" name="prompt" [value]="input" (input)="input=$any($event.target).value" maxlength="2000" rows="4" [disabled]="sending()||retryAvailable()||busy()"></textarea><p class="note">{{input.length}} / 2000</p>
-        <button appActionButton type="submit" [disabled]="!input.trim()||sending()||busy()||retryAvailable()">{{sending()?c().sending:tutor().send}}</button>
-      </form>
-      @if(deleting()){<div class="delete-confirm"><p>{{c().confirm}}</p><button type="button" (click)="remove()" [disabled]="busy()||sending()">{{c().yes}}</button><button type="button" (click)="deleting.set(false)">{{c().cancel}}</button></div>}
-      @else{<button class="delete" type="button" (click)="deleting.set(true)" [disabled]="busy()||sending()">{{c().delete}}</button>}
-    </section>
-  }
+<div class="practice-page">
+  <header class="practice-header"><h1 class="practice-title">{{c().title}}</h1><p>{{c().lead}}</p><p class="practice-note"><app-icon name="shield-check"/>{{c().saved}}</p></header>
+  @if(failed()){<div role="alert" class="practice-error"><p>{{c().error}}</p>@if(retryAvailable()){<p>{{c().pending}}</p><button class="practice-text-button" type="button" (click)="send(true)" [disabled]="sending()">{{c().retry}}</button>}</div>}
+  <div class="practice-workspace">
+    <aside class="practice-history" [attr.aria-label]="c().historyTitle">
+      <h2 class="practice-section-title">{{c().historyTitle}}</h2>
+      <button appActionButton type="button" (click)="create()" [disabled]="busy()||sending()"><app-icon name="plus"/>{{c().new}}</button>
+      <button class="practice-text-button practice-refresh" type="button" (click)="refresh()" [disabled]="busy()||sending()">{{c().reload}}</button>
+      @if(busy()){<p class="practice-note" role="status">{{c().loading}}</p>}
+      @if(!chats().length&&!busy()){<p class="practice-note">{{c().empty}}</p>}
+      <ul>@for(chat of chats();track chat.id){<li><button type="button" (click)="open(chat)" [disabled]="busy()||sending()" [attr.aria-current]="selected()?.id===chat.id?'true':null"><app-icon name="pencil"/><span>{{chat.title||c().untitled}}</span></button></li>}</ul>
+    </aside>
+    @if(selected();as chat){
+      <section class="conversation practice-conversation" [attr.aria-label]="c().selected">
+        <header class="practice-conversation-heading"><h2 class="practice-section-title">{{chat.title||c().untitled}}</h2><p class="practice-note">{{c().expires}} {{expires(chat.expiresAt)}}</p></header>
+        @if(!chat.messages?.length){<div class="practice-quick-start"><p>{{c().startTitle}}</p><div>@for(example of c().examples;track example.title){<button type="button" (click)="startExample(example.prompt)" [disabled]="busy()||sending()||retryAvailable()">{{example.title}}</button>}</div></div>}
+        <div class="messages" role="log" aria-live="polite">@for(message of chat.messages;track $index){<article [class.user]="message.role==='user'"><p class="speaker">{{message.role==='user'?(language.lang()==='es'?'Tú':'You'):(message.demo?tutor().sample:'IA / AI')}}</p><p class="message-text">{{message.content}}</p></article>}</div>
+        <p class="practice-note practice-privacy"><app-icon name="shield-check"/>{{tutor().privacy}}</p><p class="disclosure">{{tutor().disclosure}}</p>
+        @if(reason()==='allowance_exhausted'||reason()==='monthly_budget_exhausted'){<p role="status">{{c().budget}}</p>}
+        @if(reason()==='sample_mode'||reason()==='upstream_unavailable'||reason()==='paused'){<p class="practice-note">{{c().sampleMode}}</p>}
+        <form class="practice-composer" (submit)="$event.preventDefault(); send()"><label for="portal-prompt">{{tutor().placeholder}}</label><textarea id="portal-prompt" name="prompt" [value]="input" (input)="input=$any($event.target).value" maxlength="2000" rows="4" [disabled]="sending()||retryAvailable()||busy()"></textarea><div class="practice-compose-actions"><p class="practice-note">{{input.length}} / 2000</p><button appActionButton type="submit" [disabled]="!input.trim()||sending()||busy()||retryAvailable()">{{sending()?c().sending:tutor().send}}</button></div></form>
+        <footer class="practice-delete"><button id="delete-conversation" class="practice-text-button" type="button" (click)="deleting.set(!deleting())" [attr.aria-expanded]="deleting()" [disabled]="busy()||sending()">{{c().delete}}</button>
+          @if(deleting()){<div class="practice-delete-confirm" role="group" [attr.aria-label]="c().confirm"><p>{{c().confirm}}</p><div><button class="practice-danger-button" type="button" (click)="remove()" [disabled]="busy()||sending()">{{c().yes}}</button><button class="practice-text-button" type="button" (click)="dismissDeletion()" [disabled]="busy()||sending()">{{c().cancel}}</button></div></div>}
+        </footer>
+      </section>
+    }@else{
+      <section class="practice-welcome"><div class="practice-welcome-intro"><app-icon name="bulb"/><h2 class="practice-welcome-title">{{chats().length?c().selectTitle:c().startTitle}}</h2><p>{{chats().length?c().selectLead:c().startLead}}</p></div><ul class="practice-example-list">@for(example of c().examples;track example.title){<li><button type="button" (click)="startExample(example.prompt)" [disabled]="busy()||sending()"><span><strong>{{example.title}}</strong><span>{{example.prompt}}</span></span><app-icon name="arrow-right"/></button></li>}</ul></section>
+    }
+  </div>
 </div>

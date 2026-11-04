@@ -576,8 +576,14 @@ async function main() {
     {
       const page=await browser.newPage({viewport:{width:1280,height:900}});
       await page.addInitScript(seed=>localStorage.setItem('gotrue.user',JSON.stringify(seed)),seedUser([]));
+      let exampleSends=0;
+      page.on('request',request=>{if(request.url().includes('/messages')&&request.method()==='POST')exampleSends++;});
       await page.goto(`${base}/portal/chats`,{waitUntil:'networkidle'});
-      await page.getByRole('button',{name:'Nueva conversación',exact:true}).click();
+      await page.getByRole('button',{name:/^Ideas para una cena/}).click();
+      await page.locator('#portal-prompt').waitFor();
+      check('practice example opens an unsent draft',!!await page.locator('#portal-prompt').inputValue() && exampleSends===0 && await page.getByRole('log').locator('article').count()===0);
+      await page.locator('#portal-prompt').fill('Edited fictional starter');
+      check('practice example can be edited before sending',await page.locator('#portal-prompt').inputValue()==='Edited fictional starter' && exampleSends===0);
       check('no sample notice before first response',await page.getByText('Modo de ejemplo: las respuestas de ejemplo no son respuestas de una IA en vivo.',{exact:true}).count()===0);
       const liveRequest=page.waitForRequest(request=>request.url().includes('/messages') && request.method()==='POST');
       const prompts=['First fictional prompt','Second fictional prompt','Third fictional prompt'];
@@ -661,6 +667,9 @@ async function main() {
       await page.getByRole('button',{name:'Eliminar mi cuenta',exact:true}).click();
       await page.getByRole('button',{name:'Eliminar mi cuenta definitivamente',exact:true}).waitFor();
       check('account deletion remains available without accepting adult consent and asks twice',!deletionRequested);
+      await page.getByRole('button',{name:'Cancelar',exact:true}).click();
+      check('cancelling account deletion keeps the account and returns focus',!deletionRequested && await page.evaluate(()=>document.activeElement?.id==='account-delete-trigger'));
+      await page.getByRole('button',{name:'Eliminar mi cuenta',exact:true}).click();
       await page.getByRole('button',{name:'Eliminar mi cuenta definitivamente',exact:true}).click();
       await page.waitForURL(atPath('/portal/sign-in'));
       check('account deletion request clears the browser session',deletionRequested);
