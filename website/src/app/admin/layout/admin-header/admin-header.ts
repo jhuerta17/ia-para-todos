@@ -1,3 +1,4 @@
+import { Icon } from '../../../shared/icon';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -11,7 +12,7 @@ import { BrandMark } from '../../../shared/brand-mark';
 // and notifications removed (light-only admin, no fake controls).
 @Component({
   selector: 'app-admin-header',
-  imports: [BrandMark, CommonModule, RouterModule, AdminUserDropdown],
+  imports: [Icon, BrandMark, CommonModule, RouterModule, AdminUserDropdown],
   templateUrl: './admin-header.html',
 })
 export class AdminHeader {

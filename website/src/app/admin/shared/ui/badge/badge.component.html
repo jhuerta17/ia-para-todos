@@ -1,7 +1,7 @@
 @if (startIcon) {
-  <span class="inline-flex shrink-0" [innerHTML]="startIcon | safeHtml"></span>
+  <app-icon [name]="startIcon" style="--icon-size: 16px" />
 }
 <ng-content></ng-content>
 @if (endIcon) {
-  <span class="inline-flex shrink-0" [innerHTML]="endIcon | safeHtml"></span>
+  <app-icon [name]="endIcon" style="--icon-size: 16px" />
 }

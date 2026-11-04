@@ -1,3 +1,4 @@
+import { Icon } from '../../../shared/icon';
 import { CommonModule } from '@angular/common';
 import { Component, computed, ElementRef, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -11,7 +12,7 @@ import { AdminSession } from '../../session/admin-session';
 // Language/RTL switching, profile, and support links removed.
 @Component({
   selector: 'app-admin-user-dropdown',
-  imports: [CommonModule, RouterModule],
+  imports: [Icon, CommonModule, RouterModule],
   templateUrl: './admin-user-dropdown.html',
 })
 export class AdminUserDropdown implements OnInit, OnDestroy {

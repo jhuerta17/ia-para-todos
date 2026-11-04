@@ -3,8 +3,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AdminBreadcrumb } from '../../layout/admin-breadcrumb/admin-breadcrumb';
-import { AdminSafeHtmlPipe } from '../../shared/safe-html.pipe';
-import { ADMIN_ICONS } from '../../shared/icons';
+import { Icon, IconName } from '../../../shared/icon';
 import { BadgeComponent } from '../../shared/ui/badge/badge.component';
 import type { BadgeColor } from '../../shared/ui/badge/badge.component';
 import { DemoState } from '../../data/demo-state';
@@ -19,7 +18,7 @@ import { TABLE_IMPORTS } from '../../shared/ui/table/table.directive';
 interface StatCard {
   form: SubmissionForm;
   label: string;
-  icon: string;
+  icon: IconName;
   total: number;
   recent: number;
   deltaText: string;
@@ -43,7 +42,7 @@ function deltaBadge(current: number, previous: number): { deltaText: string; del
 }
 @Component({
   selector: 'app-admin-overview',
-  imports: [AiUsage, RouterModule, AdminBreadcrumb, AdminSafeHtmlPipe, BadgeComponent, TrendChart, FormDonut, ...TABLE_IMPORTS],
+  imports: [AiUsage, RouterModule, AdminBreadcrumb, Icon, BadgeComponent, TrendChart, FormDonut, ...TABLE_IMPORTS],
   templateUrl: './admin-overview.html',
 })
 export class AdminOverview {
@@ -70,10 +69,10 @@ export class AdminOverview {
     const rows = this.submissions();
     if (!rows) return null;
     const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-    const cards: { form: SubmissionForm; icon: string }[] = [
-      { form: 'participate', icon: ADMIN_ICONS.group },
-      { form: 'collaborate', icon: ADMIN_ICONS.box },
-      { form: 'newsletter', icon: ADMIN_ICONS.envelope },
+    const cards: { form: SubmissionForm; icon: IconName }[] = [
+      { form: 'participate', icon: 'users' },
+      { form: 'collaborate', icon: 'book' },
+      { form: 'newsletter', icon: 'mail' },
     ];
     const deltas = monthDeltas(rows);
     return cards.map(({ form, icon }) => {

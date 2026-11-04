@@ -1,3 +1,4 @@
+import { Icon } from '../../../shared/icon';
 import { Component, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -12,7 +13,7 @@ type AccessMode = 'login' | 'request' | 'request-sent' | 'invite' | 'recovery' |
 // password recovery, and email confirmation via URL tokens.
 @Component({
   selector: 'app-admin-access',
-  imports: [RouterModule, ReactiveFormsModule, AdminAuthLayout, AdminAccessForm, AdminPasswordForm],
+  imports: [Icon, RouterModule, ReactiveFormsModule, AdminAuthLayout, AdminAccessForm, AdminPasswordForm],
   templateUrl: './admin-access.html',
 })
 export class AdminAccess {

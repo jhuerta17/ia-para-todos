@@ -1,3 +1,4 @@
+import { Icon } from '../../../shared/icon';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -5,7 +6,7 @@ import { RouterModule } from '@angular/router';
 // renders the page h1 and trails back to the admin overview.
 @Component({
   selector: 'app-admin-breadcrumb',
-  imports: [RouterModule],
+  imports: [Icon, RouterModule],
   host: { class: 'block' },
   templateUrl: './admin-breadcrumb.html',
 })
