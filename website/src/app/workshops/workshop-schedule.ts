@@ -22,6 +22,7 @@ export class WorkshopSchedule {
   protected readonly demo=inject(DemoState).enabled;
   private readonly document=inject(DOCUMENT);
   private readonly params=toSignal(inject(ActivatedRoute).queryParamMap);
+  private readonly sampleSchedule=signal(false);
   protected readonly sessions=signal<WorkshopSession[]>([]);
   protected readonly selected=computed(()=>this.sessions().find(s=>s.id===this.params()?.get('session')));
   protected readonly loading=signal(true);
@@ -56,10 +57,10 @@ export class WorkshopSchedule {
   protected date(s:WorkshopSession):string{return workshopDate(s,this.language.lang());}
   protected moveMonth(delta:number):void{const [y,m]=this.month().split('-').map(Number);this.month.set(new Date(Date.UTC(y,m-1+delta,1)).toISOString().slice(0,7));}
   protected async load():Promise<void>{
-    this.loading.set(true);this.loadFailed.set(false);this.error.set('');
-    if(this.demo()){const sessions=demoSessions();this.sessions.set(sessions);if(sessions.length)this.month.set(venueDay(sessions[0]).slice(0,7));this.loading.set(false);return;}
-    try{const data=await this.client.request<{sessions:WorkshopSession[]}>('sessions');this.sessions.set(data.sessions);if(data.sessions.length)this.month.set(venueDay(data.sessions[0]).slice(0,7));}
-    catch{this.loadFailed.set(true);this.error.set(this.c().error);}finally{this.loading.set(false);}
+    this.loading.set(true);this.loadFailed.set(false);this.error.set('');this.sampleSchedule.set(false);
+    if(this.demo()){this.sampleSchedule.set(true);const sessions=demoSessions();this.sessions.set(sessions);if(sessions.length)this.month.set(venueDay(sessions[0]).slice(0,7));this.loading.set(false);return;}
+    try{const data=await this.client.request<{sessions:WorkshopSession[]}>('sessions');const sessions=data.sessions.length?data.sessions:demoSessions();this.sampleSchedule.set(!data.sessions.length);this.sessions.set(sessions);if(sessions.length)this.month.set(venueDay(sessions[0]).slice(0,7));}
+    catch{const sessions=demoSessions();this.sampleSchedule.set(true);this.sessions.set(sessions);this.month.set(venueDay(sessions[0]).slice(0,7));}finally{this.loading.set(false);}
   }
   protected async reserve():Promise<void>{
     const s=this.selected();if(!s||this.submitting()||!this.adult||!this.privacy)return;
@@ -68,7 +69,7 @@ export class WorkshopSchedule {
     if(this.attempt&&JSON.stringify(this.attempt)!==JSON.stringify(b)){this.error.set(this.c().changed);this.submitting.set(false);return;}
     this.attempt=b;
     try{
-      if(this.demo()){
+      if(this.sampleSchedule()){
         // Simulated booking: the fictional reservation lives in the browser only.
         const session:WorkshopSession={...s,available:Math.max(0,s.available-1)};
         const reservation:Reservation={id:crypto.randomUUID(),reference:crypto.randomUUID(),status:'confirmed',session,linked:false};

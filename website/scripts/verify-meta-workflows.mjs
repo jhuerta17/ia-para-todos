@@ -34,6 +34,36 @@ try{
   const repo=new WorkshopRepository(pool);
   const session={topic:'trabajo-negocios',titleEs:'Negocio de ejemplo',titleEn:'Fictional business workshop',language:'es',startsAt:new Date(now+86400000*5).toISOString(),endsAt:new Date(now+86400000*5+7200000).toISOString(),timeZone:'America/Chicago',venue:'Fictional Library',address:'Example public address',accessibilityEs:'Acceso de ejemplo',accessibilityEn:'Example access',bringEs:'Teléfono',bringEn:'Phone',capacity:10,status:'published'};
   const {id}=await repo.save(session);const draft=await repo.save({...session,status:'draft',titleEs:'PRIVATE DRAFT'});
+  // Discovery uses the same published schedule as registration; never demo data.
+  const publicSession = (await repo.schedule())[0];
+  const fixtures = Array.from({length:7},(_,i)=>({...publicSession,id:`fixture-${i}`,titleEs:`Taller ${i}`,titleEn:`Workshop ${i}`,startsAt:new Date(now+(i+1)*86400000).toISOString(),available:i===1?0:5}));
+  const hidden = ['draft','cancelled'].map(status=>({...fixtures[0],id:status,status}));
+  const past = {...fixtures[0],id:'past',startsAt:new Date(now-1000).toISOString()};
+  for (const [command,lang,path,full] of [['Talleres','es','/agenda','Cupo completo.'],['Workshops','en','/en/schedule','Full.']]) {
+    const listing = discoveryReply(command,[...fixtures].reverse().concat(hidden,past),origin,undefined,now);
+    assert.equal(listing.lang,lang);
+    assert.deepEqual(listing.sessionIds,fixtures.slice(0,5).map(s=>s.id));
+    assert(listing.reply.includes('America/Chicago'));
+    assert(listing.reply.includes(full));
+    assert(!listing.reply.includes('fixture-5'));
+    assert(!listing.reply.includes('fixture-6'));
+    assert(!listing.reply.includes('session=fixture-1'),'full workshop has no registration invitation');
+    assert(listing.reply.endsWith(origin+path));
+    assert(listing.reply.includes('\n'));
+    assert(!listing.reply.includes('\\n'),'real line breaks, not escaped characters');
+    for (const i of [0,2,3,4]) {
+      const url = new URL(origin+path+'?session='+fixtures[i].id);
+      assert(listing.reply.includes(url.href));
+      assert.equal(url.searchParams.get('session'),fixtures[i].id);
+    }
+    const detail=discoveryReply('2',fixtures,origin,{language:lang,sessionIds:listing.sessionIds},now).reply;
+    assert(detail.includes(full));
+    assert(!detail.includes('Book on the website') && !detail.includes('Reserva en el sitio'));
+    assert(!detail.includes('\\n'));
+    const empty=discoveryReply(command,[],origin,undefined,now);
+    assert.deepEqual(empty.sessionIds,[]);
+    assert(empty.reply.includes(origin+path));
+  }
   const deps={env:k=>settings[k]??'',pool:()=>pool,sessions:()=>repo.schedule(),fetch:send,user:admin,now:()=>now};
   const h=createWhatsAppHandler(deps);
   assert.equal((await h(new Request(origin+'/api/whatsapp/webhook?hub.mode=subscribe&hub.verify_token=fictional-verify-token&hub.challenge=1234'),context)).status,200);
@@ -42,11 +72,11 @@ try{
   assert.equal(validSignature('{}','sha256='+'0'.repeat(64),settings.WHATSAPP_APP_SECRET),false);
   assert.equal((await h(new Request(origin+'/api/whatsapp/webhook',{method:'POST',body:'{}'}),context)).status,403);
   assert.equal((await h(request('{bad-json'),context)).status,400);
-  const event=envelope('Talleres');assert.equal((await h(request(event),context)).status,200);assert.equal(sent.length,1);assert.match(sent[0].body.text.body,/Negocio de ejemplo/);assert(!sent[0].body.text.body.includes('PRIVATE DRAFT'));
+  const event=envelope('Talleres');assert.equal((await h(request(event),context)).status,200);assert.equal(sent.length,1);assert.match(sent[0].body.text.body,/Negocio de ejemplo/);assert(sent[0].body.text.body.includes('/agenda?session='+id));assert(!sent[0].body.text.body.includes('PRIVATE DRAFT'));
   await createWhatsAppHandler(deps)(request(event),context);assert.equal(sent.length,1,'durable cross-instance deduplication');
   const repeated=envelope('Talleres');await Promise.all([h(request(repeated),context),createWhatsAppHandler(deps)(request(repeated),context)]);assert.equal(sent.length,2,'concurrent duplicates sent once');
   await h(request(envelope('1')),context);assert.match(sent.at(-1).body.text.body,new RegExp('/agenda\\?session='+id));assert.match(sent.at(-1).body.text.body,/America\/Chicago/);
-  await h(request(envelope('Workshops')),context);assert.match(sent.at(-1).body.text.body,/Fictional business workshop/);
+  await h(request(envelope('Workshops')),context);assert.match(sent.at(-1).body.text.body,/Fictional business workshop/);assert(sent.at(-1).body.text.body.includes('/en/schedule?session='+id));
   await h(request(envelope('1')),context);assert(sent.at(-1).body.text.body.includes('/en/schedule?session='+id));
   await h(request(envelope('9')),context);assert.match(sent.at(-1).body.text.body,/Invalid or expired/);
   await h(request(envelope('help')),context);assert.match(sent.at(-1).body.text.body,/\/en\/contact/);
@@ -55,6 +85,11 @@ try{
   assert.equal((await createWhatsAppHandler({...deps,user:async()=>null})(new Request(origin+'/api/whatsapp/status'),context)).status,401);
   assert.equal((await (await h(new Request(origin+'/api/whatsapp/status',{headers:{Authorization:'Bearer fictional'}}),context)).json()).status,'test_ready');
   await createWhatsAppHandler({...deps,sessions:async()=>{throw new Error('offline');}})(request(envelope('Talleres')),context);assert.match(sent.at(-1).body.text.body,/consultar los talleres/);
+  // Explicit language commands take precedence over an earlier saved language even on failure.
+  await createWhatsAppHandler({...deps,sessions:async()=>{throw new Error('offline');}})(request(envelope('Workshops')),context);
+  assert.match(sent.at(-1).body.text.body,/temporarily unavailable/);
+  assert(sent.at(-1).body.text.body.includes('/en/schedule'));
+  assert(!sent.at(-1).body.text.body.includes('No workshops are published'));
   const failed=envelope('Talleres');let attempts=0;const fail=createWhatsAppHandler({...deps,fetch:async()=>{attempts++;throw new Error('network');}});await fail(request(failed),context);await fail(request(failed),context);assert.equal(attempts,1);
   assert.equal((await pool.query('SELECT state FROM whatsapp_events WHERE id_hash=$1',[hash('event:'+failed.entry[0].changes[0].value.messages[0].id)])).rows[0].state,'failed');
   const records=await pool.query('SELECT * FROM whatsapp_events');assert(records.rows.every(r=>/^[a-f0-9]{64}$/.test(r.id_hash)));assert(JSON.stringify(records.rows).includes('15555550100')===false);

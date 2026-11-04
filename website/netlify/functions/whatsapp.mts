@@ -4,7 +4,7 @@ import { env, HttpError, json } from '../lib/ai-security.mts';
 import { portalPool, type PortalPool } from '../lib/portal-db.mts';
 import { portalUser } from '../lib/portal-user.mts';
 import { WorkshopRepository } from '../lib/workshop-repository.mts';
-import { discoveryReply, type WorkflowLang } from '../../src/app/workshops/meta-workflows.ts';
+import { discoveryLanguage, discoveryReply, type WorkflowLang } from '../../src/app/workshops/meta-workflows.ts';
 import type { WorkshopSession } from '../../src/app/workshops/workshop-types.ts';
 
 const SETTINGS = ['WHATSAPP_APP_SECRET','WHATSAPP_VERIFY_TOKEN','WHATSAPP_ACCESS_TOKEN','WHATSAPP_PHONE_NUMBER_ID','WHATSAPP_GRAPH_VERSION','WHATSAPP_PUBLIC_ORIGIN','WHATSAPP_TEST_RECIPIENTS'] as const;
@@ -87,7 +87,7 @@ export function createWhatsAppHandler(deps: WhatsAppDependencies = defaults) {
             const text=message.type==='text' && typeof message.text?.body==='string'?message.text.body.slice(0,1000):'';
             let result:{lang:WorkflowLang;reply:string;sessionIds?:string[]};
             try {result=discoveryReply(text,await deps.sessions(),config.origin,saved?{language:saved.language,sessionIds:saved.session_ids}:undefined,deps.now());}
-            catch {const lang=saved?.language==='en'?'en':'es';result={lang,reply:lang==='es'?`No pudimos consultar los talleres. Intenta más tarde o visita ${config.origin}/agenda.`:`Workshops are temporarily unavailable. Try later or visit ${config.origin}/en/schedule.`};}
+            catch {const lang=discoveryLanguage(text,saved?.language);result={lang,reply:lang==='es'?`No pudimos consultar los talleres. Intenta más tarde o visita ${config.origin}/agenda.`:`Workshops are temporarily unavailable. Try later or visit ${config.origin}/en/schedule.`};}
             if(result.sessionIds)await pool.query(`INSERT INTO whatsapp_selections(sender_hash,language,session_ids,expires_at) VALUES($1,$2,$3,now()+interval '1 hour') ON CONFLICT(sender_hash) DO UPDATE SET language=EXCLUDED.language,session_ids=EXCLUDED.session_ids,expires_at=EXCLUDED.expires_at`,[senderHash,result.lang,JSON.stringify(result.sessionIds)]);
             const response=await deps.fetch(`https://graph.facebook.com/${deps.env('WHATSAPP_GRAPH_VERSION')}/${deps.env('WHATSAPP_PHONE_NUMBER_ID')}/messages`,{
               method:'POST',headers:{Authorization:`Bearer ${deps.env('WHATSAPP_ACCESS_TOKEN')}`,'Content-Type':'application/json'},

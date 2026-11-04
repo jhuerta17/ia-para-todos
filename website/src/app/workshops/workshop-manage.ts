@@ -4,7 +4,6 @@ import { Icon } from '../shared/icon';
 import { ActionButton } from '../shared/action-button';
 import { RouterLink } from '@angular/router';
 import { Language } from '../i18n/language';
-import { DemoState } from '../admin/data/demo-state';
 import { WorkshopClient } from './workshop-client';
 import { readDemoBooking, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
@@ -35,7 +34,6 @@ export class WorkshopManage {
   protected readonly en=computed(()=>this.language.lang()==='en');
   protected readonly c=computed(()=>workshopCopy[this.language.lang()]);
   protected readonly client=inject(WorkshopClient);
-  protected readonly demo=inject(DemoState).enabled;
   private readonly document=inject(DOCUMENT);
   protected readonly reservation=signal<Reservation|null>(null);
   protected readonly error=signal('');protected readonly loading=signal(true);protected readonly confirmCancel=signal(false);
@@ -45,7 +43,7 @@ export class WorkshopManage {
   protected date(r:Reservation){return workshopDate(r.session,this.language.lang());}
   protected async act(action:string){
     this.loading.set(true);this.error.set('');
-    if(this.demo()){
+    {
       const booking=readDemoBooking(this.token);
       if(booking){
         const updated:Reservation=action==='cancel'?{...booking.reservation,status:'cancelled'}:action==='attach'?{...booking.reservation,linked:true}:booking.reservation;

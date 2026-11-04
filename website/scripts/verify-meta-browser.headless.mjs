@@ -6,6 +6,7 @@ import { extname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { createPortalFixture } from './portal-fixture.mjs';
+import { discoveryReply } from '../src/app/workshops/meta-workflows.ts';
 const website=fileURLToPath(new URL('..',import.meta.url));
 process.env.PLAYWRIGHT_BROWSERS_PATH ||= join(website,'../.playwright-browsers');
 const {chromium}=await import('playwright-core');
@@ -29,6 +30,21 @@ await page.route('**/api/whatsapp/status',route=>route.fulfill({status:200,conte
 await page.route('**/api/ai-status',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({live:false,reason:'paused'})}));
 await page.route('**/api/ai-assist',route=>{generated++;return route.fulfill({status:failDraft?503:200,contentType:'application/json',body:JSON.stringify(failDraft?{reason:'unavailable'}:{reply:'Instagram\nExample invitation\nFacebook\nExample announcement\nWhatsApp\nExample invitation',demo:!liveDraft})});});
 try{
+  // Follow the actual links produced by discovery, without submitting bookings.
+  for (const [command,lang] of [['Talleres','es'],['Workshops','en']]) {
+    const reply=discoveryReply(command,[session],base,undefined,now).reply;
+    const link=reply.split('\n').map(line=>line.match(/https?:\/\/\S+\?session=\S+/)?.[0]).find(Boolean);
+    assert(link,'discovery contains a direct registration link');
+    await page.goto(link,{waitUntil:'networkidle'});
+    assert.equal(new URL(page.url()).searchParams.get('session'),session.id);
+    assert(await page.title());
+    await page.getByRole('heading',{name:lang==='es'?session.titleEs:session.titleEn,exact:true}).waitFor();
+    await page.locator('#booking-name').waitFor();
+    await page.locator('#booking-name').fill('Fictional visitor');
+    assert.equal(await page.locator('#booking-name').inputValue(),'Fictional visitor');
+    assert(await page.locator('.booking-registration button[type="submit"]').isDisabled());
+    await page.screenshot({path:join(evidence,`whatsapp-registration-${lang}.png`),fullPage:false});
+  }
   await page.goto(base+'/',{waitUntil:'networkidle'});await page.getByRole('heading',{name:'Por qué elegimos Meta',exact:true}).waitFor();await page.locator('app-meta-learning').screenshot({path:join(evidence,'why-meta-desktop.png')});assert(await page.locator('app-meta-learning img').evaluate(img=>img.complete&&img.naturalWidth>0));
   await page.goto(base+'/en/courses',{waitUntil:'networkidle'});await page.getByRole('heading',{name:'Learn with Meta AI',exact:true}).waitFor();assert.equal(await page.getByRole('link',{name:'Explore the free path',exact:true}).getAttribute('href'),'/portal/courses/learn-meta-ai');
   await page.goto(base+'/portal/courses',{waitUntil:'networkidle'});await page.getByRole('heading',{name:'Aprende con Meta AI',exact:true}).waitFor();

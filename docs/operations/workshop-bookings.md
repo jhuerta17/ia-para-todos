@@ -107,3 +107,29 @@ attendees, upcoming sessions with partial bookings). Everyone is fictional.
   only, enforced by the script). Idempotent and insert-only; sessions
   past the 30-day retention window keep anonymous totals without rows.
   Never run against production.
+
+
+## WhatsApp agenda and registration
+
+The public `/api/workshops/sessions` endpoint and WhatsApp handler both use
+`WorkshopRepository.schedule()` against the portal database. Only published
+sessions whose start time is still in the future are returned. WhatsApp lists
+up to five sessions in chronological order, including venue-local dates, times,
+timezones, and direct registration links for sessions with availability. Full
+sessions are labeled as full. Numbered replies provide details; the full agenda
+link provides access to sessions beyond the first five. Empty schedules and
+service failures have different replies in the requested language.
+
+The live public API returned `{"sessions":[]}` during the November 3, 2026
+investigation. Browser Demo mode can still show fictional sessions; open
+`/agenda?demo=0` to compare the real schedule. Do not seed fictional workshops
+into production to fix an empty reply. Publish confirmed dates, times, venues,
+and capacities through the live admin workshop editor, then verify the public
+API contains the same session IDs. Existing WhatsApp credentials and recipient
+restrictions are unchanged by this update.
+
+After the normal production deploy, send `Talleres` and `Workshops` from an
+allowed recipient. Compare titles and dates with the live agenda, follow each
+language's registration link to its matching form without submitting a booking,
+and reply with a listed number to check details. Live WhatsApp delivery cannot
+be verified by the offline tests; they mock Meta and use disposable databases.
