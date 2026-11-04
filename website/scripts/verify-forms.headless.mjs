@@ -108,6 +108,20 @@ async function main() {
       await page.locator('main h1, main h2').first().waitFor();
       results.timings[flow.key] = Date.now() - started;
       const form = page.locator(`form[name="${flow.form}"]`);
+      const jumpLink = page.locator('a[appInPageLink="participar"]');
+      if (await jumpLink.count()) {
+        check(`${flow.key}: form link stays on the localized page`,
+          await jumpLink.getAttribute('href') === `${flow.url}#participar`);
+        await jumpLink.press('Enter');
+        const destination = await page.evaluate(() => ({
+          path: location.pathname,
+          focus: document.activeElement?.id,
+          top: document.getElementById('participar').getBoundingClientRect().top,
+        }));
+        check(`${flow.key}: keyboard form link scrolls and focuses the form`,
+          destination.path === flow.url && destination.focus === 'contact-name' && destination.top >= 70 && destination.top <= 120,
+          JSON.stringify(destination));
+      }
       await form.scrollIntoViewIfNeeded();
       await page.screenshot({ path: join(evidence, `${flow.key}-initial.png`) });
       if (flow.form !== 'newsletter') {

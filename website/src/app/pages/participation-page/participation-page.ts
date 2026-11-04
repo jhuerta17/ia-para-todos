@@ -1,3 +1,4 @@
+import { InPageLink } from '../../shared/in-page-link';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -156,7 +157,7 @@ const copy: Record<Lang, Record<'community' | 'workshops', ModeCopy>> = {
 
 @Component({
   selector: 'app-participation-page',
-  imports: [ActionLink, Icon, PageCover, WorkshopSection, ValuesSection, ParticipationSection, FaqSection, RevealOnEnter],
+  imports: [InPageLink, ActionLink, Icon, PageCover, WorkshopSection, ValuesSection, ParticipationSection, FaqSection, RevealOnEnter],
   templateUrl: './participation-page.html',
   styleUrl: './participation-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

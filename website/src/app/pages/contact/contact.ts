@@ -1,3 +1,4 @@
+import { InPageLink } from '../../shared/in-page-link';
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Icon, IconName } from '../../shared/icon';
 import { ActionLink } from '../../shared/action-link';
@@ -78,7 +79,7 @@ const channels: Record<Lang, { icon: IconName; title: string; description: strin
   ],
 };
 
-@Component({selector: 'app-contact', imports: [ActionLink, Icon, PageCover, ParticipationSection, FaqSection, RevealOnEnter], templateUrl: './contact.html', styleUrl: './contact.css', changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-contact', imports: [InPageLink, ActionLink, Icon, PageCover, ParticipationSection, FaqSection, RevealOnEnter], templateUrl: './contact.html', styleUrl: './contact.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class Contact {
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

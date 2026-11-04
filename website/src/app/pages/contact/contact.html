@@ -20,7 +20,7 @@
         <div>
           <h3>{{ c().formTitle }} <span class="status is-live">{{ c().available }}</span></h3>
           <p>{{ c().formDescription }}</p>
-          <a class="form-link" href="#participar">{{ c().formLink }}</a>
+          <a class="form-link" appInPageLink="participar">{{ c().formLink }}</a>
         </div>
       </div>
       @for (channel of channels(); track channel.title) {
