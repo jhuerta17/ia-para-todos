@@ -1,7 +1,7 @@
 :host { display: block; }
 .tutor { margin-top: 60px; padding: 40px; border-radius: 30px; background: var(--color-cool); }
 h2 { font-size: 30px; margin-bottom: 12px; }
-.lead { margin: 0 0 24px; }
+:host .tutor .lead { margin: 0 0 24px; color: #475467; }
 .chat { display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding: 4px; }
 .bubble { max-width: 85%; padding: 16px 20px; border-radius: 20px; background: white; }
 .bubble p { margin: 0; line-height: 1.7; white-space: pre-wrap; }

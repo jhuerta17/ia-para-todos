@@ -31,6 +31,9 @@ try{
   await db.initialise();await db.start();
   await migratePortal({connectionString:`postgres://meta_test:fictional-local-password@127.0.0.1:${port}/postgres`,directory:join(website,'db/migrations')});
   pool=createPortalPool(`postgres://meta_test:fictional-local-password@127.0.0.1:${port}/postgres`,8);
+  // Scenario fixtures must not inherit the published events seeded by migrations.
+  // This pool belongs only to the disposable database created above.
+  await pool.query('DELETE FROM workshop_sessions');
   const repo=new WorkshopRepository(pool);
   const session={topic:'trabajo-negocios',titleEs:'Negocio de ejemplo',titleEn:'Fictional business workshop',language:'es',startsAt:new Date(now+86400000*5).toISOString(),endsAt:new Date(now+86400000*5+7200000).toISOString(),timeZone:'America/Chicago',venue:'Fictional Library',address:'Example public address',accessibilityEs:'Acceso de ejemplo',accessibilityEn:'Example access',bringEs:'Teléfono',bringEn:'Phone',capacity:10,status:'published'};
   const {id}=await repo.save(session);const draft=await repo.save({...session,status:'draft',titleEs:'PRIVATE DRAFT'});

@@ -1,4 +1,14 @@
 .schedule-page .ws-error { border: 1px solid var(--color-border-strong); }
+/* Keep the footer outside the initial viewport until schedule data arrives. */
+.schedule-loading { min-height: 100svh; }
+.schedule-skeleton-toolbar { width: min(280px, 100%); height: 54px; margin: 28px 0 32px; border-radius: 28px; background: var(--color-warm); }
+.schedule-skeleton-row { display: flex; gap: 32px; padding: 36px 0; border-top: 1px solid var(--color-border); }
+.schedule-skeleton-date { flex: 0 0 64px; height: 88px; border-radius: 20px; background: var(--color-warm); }
+.schedule-skeleton-copy { flex: 1; min-width: 0; }
+.schedule-skeleton-copy span { display: block; max-width: 440px; height: 20px; margin-bottom: 20px; border-radius: 8px; background: var(--color-warm); }
+.schedule-skeleton-copy span:first-child { width: 75%; height: 32px; }
+.schedule-skeleton-copy span:last-child { width: 60%; }
+@media (max-width: 809px) { .schedule-skeleton-row { gap: 16px; min-height: 280px; } }
 .schedule-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
 .schedule-views { display: inline-flex; flex: none; gap: 4px; padding: 5px; background: var(--color-warm); border-radius: 28px; }
 .schedule-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; border: 0; border-radius: 24px; padding: 10px 20px; background: transparent; color: var(--color-accent); font: inherit; cursor: pointer; }

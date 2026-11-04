@@ -1,7 +1,17 @@
 <ng-template #scheduleBody>
-<section class="workshop-shell schedule-page" [class.ws-embedded]="embedded()" [class.booking-flow]="!!selected() || !!result()" [attr.aria-label]="c().schedule">
+<section class="workshop-shell schedule-page" [class.ws-embedded]="embedded()" [class.booking-flow]="!!selected() || !!result()" [attr.aria-label]="c().schedule" [attr.aria-busy]="loading()">
   @if(!selected() && !result()){<header class="ws-heading">@if(embedded()){<h2>{{c().schedule}}</h2>}@else{<h1>{{c().schedule}}</h1>}<p>{{c().intro}}</p></header>}
-  @if(loading()){<p role="status">{{c().loading}}</p>}
+  @if(loading()){
+    <div class="schedule-loading">
+      <p role="status">{{c().loading}}</p>
+      <div class="schedule-skeleton" aria-hidden="true">
+        <div class="schedule-skeleton-toolbar"></div>
+        @for(row of [1,2,3];track row){
+          <div class="schedule-skeleton-row"><div class="schedule-skeleton-date"></div><div class="schedule-skeleton-copy"><span></span><span></span><span></span></div></div>
+        }
+      </div>
+    </div>
+  }
   @if(error()){<div class="ws-error" role="alert">{{error()}} <button type="button" class="booking-utility" (click)="result()?resetAttempt():load()">{{c().retry}}</button></div>}
   @if(result();as r){
     <article class="booking-result" aria-live="polite">
