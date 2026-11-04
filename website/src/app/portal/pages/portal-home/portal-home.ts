@@ -1,3 +1,4 @@
+import { Icon } from '../../../shared/icon';
 import { WorkshopStudent } from '../../../workshops/workshop-student';
 import { BadgeComponent } from '../../../shared/dashboard/badge';
 import { PORTAL_STORE, CourseProgress } from '../../store/portal-store';
@@ -43,7 +44,7 @@ const copy = {
 // Session-aware landing page for the learning portal.
 @Component({
   selector: 'app-portal-home',
-  imports: [WorkshopStudent, ActionButton, RouterModule, BadgeComponent],
+  imports: [Icon, WorkshopStudent, ActionButton, RouterModule, BadgeComponent],
   templateUrl: './portal-home.html',
   styleUrls: ['./portal-home.css', '../portal-card.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,6 +5,8 @@
         type="button"
         (click)="handleToggle()"
         aria-label="Show or hide the menu"
+        aria-controls="admin-navigation"
+        [attr.aria-expanded]="mobileViewport ? (isMobileOpen$ | async) : (sidebar.isExpanded$ | async)"
         class="inline-flex size-10 items-center justify-center rounded-[10px] border border-gray-300 bg-transparent text-gray-500 shadow-theme-xs transition-all hover:bg-gray-50 hover:text-gray-800 lg:size-11 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-white"
         [ngClass]="{ 'bg-gray-100 dark:bg-white/3': isMobileOpen$ | async }"
       >
@@ -24,6 +26,8 @@
         type="button"
         (click)="toggleApplicationMenu()"
         aria-label="Show or hide the account menu"
+        [attr.aria-expanded]="isApplicationMenuOpen"
+        aria-controls="admin-account-controls"
         class="inline-flex size-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 xl:hidden dark:text-gray-400 dark:hover:bg-gray-800"
       >
         <app-icon name="users" />
@@ -31,6 +35,7 @@
     </div>
 
     <div
+      id="admin-account-controls"
       class="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md xl:flex xl:justify-end xl:px-0 xl:shadow-none"
       [ngClass]="isApplicationMenuOpen ? 'flex' : 'hidden'"
     >

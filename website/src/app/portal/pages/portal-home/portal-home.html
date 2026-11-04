@@ -10,6 +10,6 @@
 @else if(chatsError()){<p role="alert">{{en()?'We could not load your conversations.':'No pudimos cargar tus conversaciones.'}}</p><button class="overview-retry" (click)="loadChats()">{{en()?'Try again':'Reintentar'}}</button>}
 @else if(chats().length){<ul class="overview-list">@for(chat of chats();track chat.id){<li><a routerLink="/portal/chats" [queryParams]="{chat:chat.id}">{{chat.title || (en()?'New conversation':'Nueva conversación')}}</a></li>}</ul>}
 @else{<p>{{en()?'No conversations yet. Practice with a made-up example to begin.':'Todavía no tienes conversaciones. Comienza con un ejemplo inventado.'}}</p>}
-<p class="note">{{c().history}}</p><a routerLink="/portal/chats">{{c().tutor}} →</a></section></div>
+<p class="note">{{c().history}}</p><a routerLink="/portal/chats">{{c().tutor}} <app-icon name="arrow-right" style="--icon-size: 16px; vertical-align: middle" /></a></section></div>
 
 }@else{<section class="card"><h2>{{en()?'Keep learning after your workshop':'Sigue aprendiendo después de tu taller'}}</h2><p>{{en()?'Courses and saved AI practice are optional. Review their consent notice when you are ready.':'Los cursos y la práctica guardada con IA son opcionales. Revisa su aviso de consentimiento cuando quieras comenzar.'}}</p><a routerLink="/portal/courses">{{en()?'Explore learning and practice':'Explorar aprendizaje y práctica'}}</a></section>}

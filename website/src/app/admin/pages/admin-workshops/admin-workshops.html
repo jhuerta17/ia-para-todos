@@ -9,7 +9,7 @@
     </div>
     <div class="h-64 rounded-2xl bg-gray-100 dark:bg-gray-800"></div>
   </div>
-  <p class="sr-only">Loading workshops…</p>
+  <p class="sr-only" role="status">Loading workshops…</p>
 } @else if (!demo()) {
   <app-workshop-admin/>
   <button type="button" (click)="previewDemo()" class="mt-4 text-sm underline">Preview with demo data</button>

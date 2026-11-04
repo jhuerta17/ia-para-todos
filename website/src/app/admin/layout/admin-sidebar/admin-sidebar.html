@@ -1,4 +1,6 @@
 <aside
+  id="admin-navigation"
+  [attr.data-mobile-open]="(isMobileOpen$ | async) ? 'true' : 'false'"
   class="fixed start-0 top-0 z-50 flex h-screen flex-col border-e border-gray-200 bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out xl:translate-x-0 dark:border-gray-800 dark:bg-gray-900"
   [ngClass]="{
     'w-[290px]': (isExpanded$ | async) || (isMobileOpen$ | async) || (isHovered$ | async),
@@ -25,7 +27,7 @@
   </div>
 
   <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-    <nav class="mb-6">
+    <nav class="mb-6" aria-label="Administration">
       <div class="flex flex-col gap-4">
         @for (section of sections; track section.heading) {
           <div>

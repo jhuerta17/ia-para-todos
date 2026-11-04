@@ -58,6 +58,14 @@ export class AdminUserDropdown implements OnInit, OnDestroy {
     this.demo.toggle();
   }
 
+  @HostListener('keydown.escape', ['$event'])
+  protected dismissMenu(event: Event): void {
+    if (!this.isOpen) return;
+    event.stopPropagation();
+    this.closeDropdown();
+    this.element.nativeElement.querySelector('button.dropdown-toggle')?.focus();
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {

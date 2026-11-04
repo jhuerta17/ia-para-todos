@@ -431,7 +431,28 @@ async function main() {
       await ledger.press('ArrowRight');
       const scrolls = await page.waitForFunction(() => document.querySelector('.admin-table-scroll').scrollLeft > 0, null, { timeout: 5000 }).then(() => true).catch(() => false);
       check('mobile ledger supports keyboard horizontal scrolling', scrolls);
+      const mobileMenu = page.getByRole('button', { name: 'Show or hide the menu', exact: true });
+      check('closed mobile sidebar is hidden from keyboard navigation',
+        !(await page.getByRole('navigation', { name: 'Administration' }).isVisible()));
+      await mobileMenu.click();
+      const nav = page.getByRole('navigation', { name: 'Administration' });
+      await nav.waitFor({ state: 'visible' });
+      await page.waitForFunction(() => document.querySelector('button[aria-controls="admin-navigation"]').getAttribute('aria-expanded') === 'true');
+      check('mobile navigation opens with expanded state', await nav.isVisible() && await mobileMenu.getAttribute('aria-expanded') === 'true');
+      await nav.getByRole('link', { name: 'Plans', exact: true }).focus();
+      await page.keyboard.press('Escape');
+      await nav.waitFor({ state: 'hidden' });
+      check('Escape closes mobile navigation and returns focus',
+        !(await nav.isVisible()) && await mobileMenu.evaluate(el => el === document.activeElement));
       await page.screenshot({ path: join(evidence, 'demo-supporters-mobile.png') });
+      await page.emulateMedia({ media: 'print' });
+      check('admin print keeps the ledger and hides app controls',
+        await page.getByRole('heading', { name: 'Supporters', level: 1 }).isVisible() &&
+        !(await page.locator('app-admin-header').isVisible()) &&
+        !(await page.locator('app-admin-sidebar').isVisible()) &&
+        !(await page.getByRole('button', { name: 'Exit demo', exact: true }).isVisible()));
+      check('admin print retains the demo warning', await page.getByText('Demo data.', { exact: true }).isVisible());
+      await page.pdf({ path: join(evidence, 'supporters-print.pdf'), format: 'A4' });
       await page.close();
       await context.close();
 

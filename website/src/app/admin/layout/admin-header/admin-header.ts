@@ -1,6 +1,7 @@
 import { Icon } from '../../../shared/icon';
+import { DOCUMENT } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AdminSidebarService } from '../../core/sidebar.service';
 import { AdminUserDropdown } from '../admin-user-dropdown/admin-user-dropdown';
@@ -16,8 +17,13 @@ import { BrandMark } from '../../../shared/brand-mark';
   templateUrl: './admin-header.html',
 })
 export class AdminHeader {
+  private readonly document = inject(DOCUMENT);
   protected readonly brand = BRAND_NAME.en;
   isApplicationMenuOpen = false;
+  protected mobileViewport = typeof window !== 'undefined' && window.innerWidth < 1280;
+
+  @HostListener('window:resize')
+  protected updateViewport(): void { this.mobileViewport = window.innerWidth < 1280; }
   readonly isMobileOpen$;
 
   constructor(public sidebar: AdminSidebarService) {
@@ -30,6 +36,18 @@ export class AdminHeader {
     } else {
       this.sidebar.toggleMobileOpen();
     }
+  }
+
+  @HostListener('document:keydown.escape')
+  protected closeMobileMenus(): void {
+    if (window.innerWidth >= 1280) return;
+    this.isMobileOpen$.subscribe(open => {
+      if (open) {
+        this.sidebar.setMobileOpen(false);
+        this.document.querySelector<HTMLElement>('button[aria-controls="admin-navigation"]')?.focus();
+      }
+    }).unsubscribe();
+    this.isApplicationMenuOpen = false;
   }
 
   toggleApplicationMenu(): void {
