@@ -1,3 +1,4 @@
+import { WhatsappLink } from './shared/whatsapp-link';
 import { RouteMetadata } from './shared/metadata/route-metadata';
 import { PageTransition } from './shared/page-transition/page-transition.service';
 import { PageTransitionOverlay } from './shared/page-transition/page-transition-overlay';
@@ -12,7 +13,7 @@ import { Lang } from './i18n/lang';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeader, SiteFooter, PageTransitionOverlay],
+  imports: [WhatsappLink, RouterOutlet, SiteHeader, SiteFooter, PageTransitionOverlay],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })

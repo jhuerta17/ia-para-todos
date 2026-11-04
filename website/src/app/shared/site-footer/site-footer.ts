@@ -1,3 +1,4 @@
+import { WhatsappLink } from '../whatsapp-link';
 import { ActionButton } from '../action-button';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -31,7 +32,7 @@ const LEARN: StaticKey[] = ['talleres', 'cursos', 'recursos', 'actividades'];
 const COMMUNITY: StaticKey[] = ['nosotros', 'comunidad', 'contacto', 'participar', 'donar'];
 const INFO: StaticKey[] = ['privacidad', 'terminos', 'seguridad'];
 
-@Component({selector: 'app-site-footer', imports: [ActionButton, RouterLink, BrandMark, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})
+@Component({selector: 'app-site-footer', imports: [WhatsappLink, ActionButton, RouterLink, BrandMark, ReactiveFormsModule], templateUrl: './site-footer.html', styleUrls: ['./site-footer.css', '../form-controls.css'], changeDetection: ChangeDetectionStrategy.OnPush})
 export class SiteFooter {
   protected readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);

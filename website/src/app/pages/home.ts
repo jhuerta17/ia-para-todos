@@ -1,3 +1,4 @@
+import { WhatsappLink } from '../shared/whatsapp-link';
 import { MetaLearning } from '../shared/meta-learning';
 import { FaqSection } from '../shared/faq-section/faq-section';
 import { ResourceSection } from '../shared/resource-section/resource-section';
@@ -23,7 +24,7 @@ const copy = {
 
 @Component({
   selector: 'app-home',
-  imports: [MetaLearning, ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits, CommunityIntroduction, CommunityInvitation, LearningStories, ParticipationSection, ResourceSection, FaqSection],
+  imports: [WhatsappLink, MetaLearning, ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits, CommunityIntroduction, CommunityInvitation, LearningStories, ParticipationSection, ResourceSection, FaqSection],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

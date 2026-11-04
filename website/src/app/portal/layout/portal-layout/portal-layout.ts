@@ -1,3 +1,4 @@
+import { WhatsappLink } from '../../../shared/whatsapp-link';
 import { Icon, type IconName } from '../../../shared/icon';
 import { NgTemplateOutlet } from '@angular/common';
 import { ensureDashboardTheme } from '../../../shared/dashboard/dashboard-theme';
@@ -21,7 +22,7 @@ export const PORTAL_LANG_KEY = 'portal-lang';
 
 @Component({
   selector: 'app-portal-layout',
-  imports: [Icon, BrandMark, RouterModule, NgTemplateOutlet],
+  imports: [WhatsappLink, Icon, BrandMark, RouterModule, NgTemplateOutlet],
   templateUrl: './portal-layout.html',
   styleUrl: './portal-layout.css',
 })

@@ -1,3 +1,4 @@
+import { WhatsappLink } from '../../shared/whatsapp-link';
 import { WorkshopSchedule } from '../../workshops/workshop-schedule';
 import { ActionButton } from '../../shared/action-button';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject } from '@angular/core';
@@ -17,7 +18,7 @@ const copy = {
 
 @Component({
   selector: 'app-workshop-list',
-  imports: [WorkshopSchedule, ActionButton, WorkshopCard, FaqSection, Icon, RevealOnEnter],
+  imports: [WhatsappLink, WorkshopSchedule, ActionButton, WorkshopCard, FaqSection, Icon, RevealOnEnter],
   templateUrl: './workshop-list.html',
   styleUrls: ['./workshop-list.css', './workshop-list-interactions.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
