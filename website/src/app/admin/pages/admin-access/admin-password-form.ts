@@ -1,12 +1,14 @@
+import { ActionButton } from '../../../shared/action-button';
 import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 // Password-set form for invite acceptance and recovery completion.
-// Same TailAdmin field styling as the sign-in form.
+// Uses the shared site access styling.
 @Component({
   selector: 'app-admin-password-form',
-  imports: [ReactiveFormsModule],
+  imports: [ActionButton, ReactiveFormsModule],
   templateUrl: './admin-password-form.html',
+  styleUrls: ['../../../shared/form-controls.css', '../../../portal/pages/portal-access/portal-forms.css'],
   host: { class: 'contents' },
   styles: `
     :host {

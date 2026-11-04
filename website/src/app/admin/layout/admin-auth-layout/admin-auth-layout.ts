@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BRAND_NAME } from '../../../i18n/lang';
-import { AuthBrand } from '../../../shared/dashboard/auth-brand';
+import { BrandMark } from '../../../shared/brand-mark';
+import { Icon } from '../../../shared/icon';
 
-// Adapted from TailAdmin's AuthPageLayout (see THIRD_PARTY_NOTICES.md):
-// split-screen access layout with the site brand; decorative grid
-// and theme toggle removed (light-only admin).
+// Branded access shell shared visually with the student portal.
 @Component({
   selector: 'app-admin-auth-layout',
-  imports: [AuthBrand, RouterModule],
+  imports: [BrandMark, Icon, RouterModule],
   templateUrl: './admin-auth-layout.html',
 })
 export class AdminAuthLayout {

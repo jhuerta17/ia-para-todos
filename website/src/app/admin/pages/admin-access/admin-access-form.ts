@@ -1,3 +1,4 @@
+import { ActionButton } from '../../../shared/action-button';
 import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -6,13 +7,12 @@ export interface AdminCredentials {
   password: string;
 }
 
-// Sign-in form styled after TailAdmin's sign-in fields (see
-// THIRD_PARTY_NOTICES.md), Spanish copy, no demo submit: the parent
-// performs the real Identity login and feeds back errors.
+// Admin credentials form; the parent handles Identity authentication.
 @Component({
   selector: 'app-admin-access-form',
-  imports: [ReactiveFormsModule],
+  imports: [ActionButton, ReactiveFormsModule],
   templateUrl: './admin-access-form.html',
+  styleUrls: ['../../../shared/form-controls.css', '../../../portal/pages/portal-access/portal-forms.css'],
   host: { class: 'contents' },
   styles: `
     :host {

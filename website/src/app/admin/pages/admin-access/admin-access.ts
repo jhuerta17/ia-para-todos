@@ -1,7 +1,7 @@
-import { Icon } from '../../../shared/icon';
+import { ActionButton } from '../../../shared/action-button';
 import { Component, signal, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AdminAuthLayout } from '../../layout/admin-auth-layout/admin-auth-layout';
 import { AdminSession } from '../../session/admin-session';
 import { AdminAccessForm, AdminCredentials } from './admin-access-form';
@@ -13,8 +13,9 @@ type AccessMode = 'login' | 'request' | 'request-sent' | 'invite' | 'recovery' |
 // password recovery, and email confirmation via URL tokens.
 @Component({
   selector: 'app-admin-access',
-  imports: [Icon, RouterModule, ReactiveFormsModule, AdminAuthLayout, AdminAccessForm, AdminPasswordForm],
+  imports: [ActionButton, ReactiveFormsModule, AdminAuthLayout, AdminAccessForm, AdminPasswordForm],
   templateUrl: './admin-access.html',
+  styleUrls: ['../../../shared/form-controls.css', '../../../portal/pages/portal-access/portal-forms.css'],
 })
 export class AdminAccess {
   @ViewChild(AdminAccessForm) private readonly loginForm?: AdminAccessForm;

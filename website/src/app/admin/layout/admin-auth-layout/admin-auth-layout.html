@@ -1,12 +1,13 @@
-<div class="admin-root relative z-1 bg-white p-6 font-sans text-gray-800 sm:p-0 dark:bg-gray-900">
-  <div class="relative flex min-h-screen w-full flex-col justify-center lg:flex-row sm:p-0 dark:bg-gray-900">
-    <ng-content />
-    <div class="relative hidden h-full w-full items-center bg-brand-950 lg:grid lg:w-1/2 dark:bg-white/5">
-      <div class="z-1 flex items-center justify-center">
-        <div class="flex max-w-xs flex-col items-center">
-          <app-auth-brand [brand]="brand" description="Admin panel: review the site requests." backLabel="AI for everyone, back to site" />
-        </div>
-      </div>
+<div class="admin-access-root auth-page">
+  <main class="auth-main" tabindex="-1">
+    <div class="auth-top"><a routerLink="/"><app-icon name="arrow-left" /> Back to site</a></div>
+    <div class="auth-form">
+      <a class="auth-mobile-brand" routerLink="/" [attr.aria-label]="brand"><app-brand-mark style="--logo-size:2.25rem" /><span>{{ brand }}</span></a>
+      <ng-content />
     </div>
-  </div>
+  </main>
+  <aside class="auth-brand">
+    <a class="auth-brand-link" routerLink="/" [attr.aria-label]="brand"><app-brand-mark style="--logo-size:3rem" /><span>{{ brand }}</span></a>
+    <p class="auth-brand-description">Your space to manage, support, and keep things moving forward.</p>
+  </aside>
 </div>

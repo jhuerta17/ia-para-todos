@@ -85,9 +85,33 @@ async function main() {
       // Styled-first-paint guard: exactly one theme link after JS boot
       // (early-loader + SSR copy deduped) with utilities applied.
       const themeLinks = await page.locator('head link#admin-theme').count();
-      const signinBg = await page.locator('.admin-root').first().evaluate((el) => getComputedStyle(el).backgroundColor).catch(() => '(none)');
-      check('sign-in keeps one theme link with utilities applied', themeLinks === 1 && signinBg === 'rgb(255, 255, 255)', `${themeLinks} link(s), bg=${signinBg}`);
+      const signinBg = await page.locator('.admin-access-root').first().evaluate((el) => getComputedStyle(el).backgroundColor).catch(() => '(none)');
+      check('sign-in keeps one theme link with shared access styling', themeLinks === 1 && signinBg === 'rgb(255, 255, 255)', `${themeLinks} link(s), bg=${signinBg}`);
+      check('desktop access has warm brand panel', await page.locator('.auth-brand').evaluate(el => getComputedStyle(el).backgroundColor) === 'rgb(248, 244, 236)');
+      await page.getByRole('button', { name: 'Show password' }).click();
+      await page.waitForFunction(() => document.querySelector('#admin-password')?.type === 'text');
+      check('password visibility toggle works', await page.locator('#admin-password').getAttribute('type') === 'text');
+      await page.getByRole('button', { name: 'Hide password' }).click();
+      await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+      await page.getByText('Email is required.').waitFor();
+      check('empty login shows validation', await page.getByText('Email is required.').isVisible() && await page.getByText('Password is required.').isVisible());
       await page.screenshot({ path: join(evidence, 'signin.png') });
+      await page.setViewportSize({ width: 390, height: 844 });
+      check('mobile shows compact brand and hides side panel', await page.locator('.auth-mobile-brand').isVisible() && !await page.locator('.auth-brand').isVisible());
+      check('mobile has no horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await page.screenshot({ path: join(evidence, 'signin-mobile.png') });
+      await page.getByRole('button', { name: 'Recover it by email' }).click();
+      await page.getByRole('button', { name: 'Send link', exact: true }).click();
+      await page.getByText('Enter a valid email.', { exact: true }).waitFor();
+      check('recovery validates email', await page.getByText('Enter a valid email.', { exact: true }).isVisible());
+      await page.route('**/.netlify/identity/recover', route => route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }));
+      await page.locator('#admin-recovery-email').fill('admin@example.com');
+      await page.getByRole('button', { name: 'Send link', exact: true }).click();
+      await page.getByRole('heading', { name: 'Check your email' }).waitFor();
+      check('recovery request shows sent state', await page.getByRole('heading', { name: 'Check your email' }).isVisible());
+      await page.getByRole('button', { name: 'Back to sign-in' }).click();
+      await page.getByRole('heading', { name: 'Admin sign-in' }).waitFor();
+      check('recovery returns to sign-in', await page.getByRole('heading', { name: 'Admin sign-in' }).isVisible());
       await page.close();
     }
 
@@ -279,7 +303,21 @@ async function main() {
       await fresh.goto(`${base}/admin/sign-in#recovery_token=xyz789`, { waitUntil: 'networkidle' });
       const recoveryHeading = await fresh.getByRole('heading', { name: 'New password' }).isVisible().catch(() => false);
       check('recovery token opens recovery mode', recoveryHeading);
+      await fresh.route('**/.netlify/identity/verify', route => route.fulfill({ status: 200, contentType: 'application/json', body: tokenResponse() }));
+      await fresh.route('**/.netlify/identity/user', route => route.fulfill({ status: 200, contentType: 'application/json', body: userResponse() }));
+      await fresh.locator('#admin-new-password').fill('new-password-1');
+      await fresh.locator('#admin-new-password-confirm').fill('new-password-1');
+      await fresh.getByRole('button', { name: 'Save password' }).click();
+      await fresh.waitForURL('**/admin');
+      check('password recovery lands on dashboard', new URL(fresh.url()).pathname === '/admin');
       await fresh.close();
+      const confirmation = await browser.newPage();
+      await confirmation.route('**/.netlify/identity/verify', route => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ ...JSON.parse(tokenResponse()), user: JSON.parse(userResponse()) }) }));
+      await confirmation.route('**/.netlify/identity/user', route => route.fulfill({ status: 200, contentType: 'application/json', body: userResponse() }));
+      await confirmation.goto(`${base}/admin/sign-in#confirmation_token=confirm123`, { waitUntil: 'networkidle' });
+      await confirmation.getByRole('heading', { name: 'Email confirmed' }).waitFor();
+      check('email confirmation shows branded success state', await confirmation.locator('.admin-access-root .card').isVisible());
+      await confirmation.close();
     }
 
     // ---- 10. Token links landing on public pages reroute ----
