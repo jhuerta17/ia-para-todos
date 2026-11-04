@@ -8,6 +8,7 @@ import { PortalSignup, PortalSignupForm } from '../portal-access/portal-signup-f
 const copy = {
   es: {
     title: 'Crear cuenta',
+    privacy: 'Aviso de privacidad',
     lead: 'Crea tu cuenta gratuita para entrar a tu portal. Te enviamos un correo para confirmarla.',
     sentTitle: 'Confirma tu correo',
     sentLead: 'Te enviamos un enlace de confirmación. Ábrelo y entrarás directo a tu portal.',
@@ -17,6 +18,7 @@ const copy = {
   },
   en: {
     title: 'Create account',
+    privacy: 'Privacy notice',
     lead: 'Create your free account to enter your portal. We will email you a link to confirm it.',
     sentTitle: 'Confirm your email',
     sentLead: 'We sent a confirmation link. Open it and you will land straight in your portal.',

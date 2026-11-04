@@ -1,5 +1,4 @@
 import { Icon, type IconName } from '../../../shared/icon';
-import { AuthBrand } from '../../../shared/dashboard/auth-brand';
 import { NgTemplateOutlet } from '@angular/common';
 import { ensureDashboardTheme } from '../../../shared/dashboard/dashboard-theme';
 import { afterNextRender, Component, computed, inject, effect, signal, HostListener, ElementRef } from '@angular/core';
@@ -22,7 +21,7 @@ export const PORTAL_LANG_KEY = 'portal-lang';
 
 @Component({
   selector: 'app-portal-layout',
-  imports: [Icon, BrandMark, RouterModule, NgTemplateOutlet, AuthBrand],
+  imports: [Icon, BrandMark, RouterModule, NgTemplateOutlet],
   templateUrl: './portal-layout.html',
   styleUrl: './portal-layout.css',
 })

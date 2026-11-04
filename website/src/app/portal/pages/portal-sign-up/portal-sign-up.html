@@ -3,7 +3,7 @@
     <h1>{{ c().title }}</h1>
     <p class="lead">{{ c().lead }}</p>
     <div class="form">
-      <p><a [routerLink]="privacyPath()">Privacidad / Privacy</a></p>
+      <p class="auth-privacy"><a [routerLink]="privacyPath()">{{ c().privacy }}</a></p>
     <app-portal-signup-form (submitted)="register($event)" />
     </div>
     <p class="foot">

@@ -1,65 +1,33 @@
-<div class="learning">
-  <nav class="breadcrumbs" [attr.aria-label]="c().courses">
-    <a routerLink="/portal">{{ c().courses }}</a>
-    @if (!listing()) { <span aria-hidden="true">/</span><a routerLink="/portal/courses">{{ c().back }}</a> }
-  </nav>
-  <header>
-    <p class="eyebrow">{{ c().free }}</p>
-    <h1>{{ listing() ? c().courses : (lesson()?.title ?? course().title) }}</h1>
-    <p class="lead">{{ lesson()?.summary ?? course().summary }}</p>
+<div class="course-learning">
+  @if(!listing()){
+    <nav class="course-back" [attr.aria-label]="c().courses"><a [routerLink]="lesson()?coursePath:'/portal/courses'"><app-icon name="arrow-left"/>{{lesson()?c().overview:c().back}}</a></nav>
+  }
+  <header class="course-header">
+    <h1 class="course-heading">{{listing()?c().courses:(lesson()?.title??course().title)}}</h1>
+    <p class="course-lead">{{listing()?c().catalogLead:(lesson()?.summary??course().summary)}}</p>
+    <p class="course-meta"><app-icon name="book"/>{{c().free}}</p>
   </header>
-  <p class="storage-note">{{ c().local }}</p>
-  @if (loading()) { <p role="status">{{ c().loading }}</p> }
-  @if (failed()) {
-    <div class="error" role="alert"><p>{{ c().error }}</p><button type="button" (click)="load()">{{ c().retry }}</button></div>
+  @if(loading()){<p class="course-state" role="status">{{c().loading}}</p>}
+  @if(failed()){<div class="course-error" role="alert"><p>{{c().error}}</p><button type="button" class="course-retry" (click)="load()">{{c().retry}}</button></div>}
+  @if(!loading()&&!failed()&&progress().enrolled){
+    <section class="course-progress" [attr.aria-label]="c().progress"><div><p>{{c().progress}}</p><strong data-testid="course-progress">{{progress().completed.length}} {{c().of}} 3 {{c().lessons}}</strong></div><progress [value]="progress().completed.length" max="3" [attr.aria-label]="c().progress"></progress>@if(finished()){<p class="course-finished"><app-icon name="circle-check"/>{{c().completed}}</p>}</section>
   }
-  @if (!loading() && !failed() && progress().enrolled) {
-    <section class="progress" [attr.aria-label]="c().progress">
-      <p>{{ c().progress }}: <strong data-testid="course-progress">{{ progress().completed.length }} {{ c().of }} 3 {{ c().lessons }}</strong></p>
-      <progress [value]="progress().completed.length" max="3" [attr.aria-label]="c().progress"></progress>
-      @if (finished()) { <p class="success">{{ c().completed }}</p> }
-    </section>
-  }
-  @if (listing()) {
-    <article class="course-card">
-      <img src="/images/peer-support-960.webp" alt="" width="960" height="640" />
-      <div><h2>{{ course().title }}</h2><p>{{ course().summary }}</p>
-        <a appActionButton [routerLink]="coursePath">{{ c().browse }}</a>
-      </div>
+  @if(listing()){
+    <article class="course-entry"><img src="/images/peer-support-960.webp" alt="" width="960" height="640"/><div><h2 class="course-card-title">{{course().title}}</h2><p>{{course().summary}}</p><a appActionButton [routerLink]="coursePath">{{c().browse}}</a></div></article>
+  }@else if(lesson();as current){
+    <article class="course-reader">
+      @for(section of current.sections;track $index){<section><h2 class="course-section-title">{{section.heading}}</h2>@for(paragraph of section.paragraphs;track $index){<p>{{paragraph}}</p>}@if(section.bullets){<ul>@for(bullet of section.bullets;track $index){<li>{{bullet}}</li>}</ul>}</section>}
+      <aside class="course-practice"><app-icon name="bulb"/><h2 class="course-section-title">{{c().practice}}</h2><p>{{current.practice}}</p><div class="course-reflection"><h3 class="course-reflect-title">{{c().reflect}}</h3><p>{{current.reflection}}</p></div></aside>
     </article>
-  } @else if (lesson(); as current) {
-    <a class="back" [routerLink]="coursePath">← {{ c().overview }}</a>
-    <article class="lesson">
-      @for (section of current.sections; track $index) {
-        <section><h2>{{ section.heading }}</h2>
-          @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
-          @if (section.bullets) { <ul>@for (bullet of section.bullets; track $index) { <li>{{ bullet }}</li> }</ul> }
-        </section>
-      }
-      <aside class="practice"><h2>{{ c().practice }}</h2><p>{{ current.practice }}</p><h3>{{ c().reflect }}</h3><p>{{ current.reflection }}</p></aside>
-    </article>
-    <div class="actions">
-      @if (progress().enrolled) {
-        <button appActionButton type="button" (click)="save()" [disabled]="loading() || saving() || failed() || progress().completed.includes(current.id)">{{ saving() ? c().saving : progress().completed.includes(current.id) ? c().done : c().complete }}</button>
-      } @else {
-        <p>{{ c().enrollFirst }}</p>
-        <button appActionButton type="button" (click)="save()" [disabled]="loading() || saving() || failed()">{{ saving() ? c().saving : c().enroll }}</button>
-      }
-      @if (next(); as following) { <a [routerLink]="lessonPath(following.id)">{{ c().next }} →</a> }
-      @else { <a [routerLink]="coursePath">{{ c().overview }}</a> }
+    <div class="course-actions course-reader-actions">
+      @if(progress().enrolled){<button appActionButton type="button" (click)="save()" [disabled]="loading()||saving()||failed()||progress().completed.includes(current.id)">{{saving()?c().saving:progress().completed.includes(current.id)?c().done:c().complete}}</button>}
+      @else{<p>{{c().enrollFirst}}</p><button appActionButton type="button" (click)="save()" [disabled]="loading()||saving()||failed()">{{saving()?c().saving:c().enroll}}</button>}
+      @if(next();as following){<a class="course-next" [routerLink]="lessonPath(following.id)">{{c().next}}<app-icon name="arrow-right"/></a>}@else{<a class="course-next" [routerLink]="coursePath">{{c().overview}}<app-icon name="arrow-right"/></a>}
     </div>
-  } @else {
-    <div class="actions">
-      @if (progress().enrolled) { <a appActionButton [routerLink]="resume()">{{ finished() ? c().review : c().continue }}</a> }
-      @else { <button appActionButton type="button" (click)="save()" [disabled]="loading() || saving() || failed()">{{ saving() ? c().saving : c().enroll }}</button> }
-    </div>
-    <ol class="lessons">
-      @for (item of course().lessons; track item.id) {
-        <li><a [routerLink]="lessonPath(item.id)"><strong>{{ item.title }}</strong><span>{{ item.summary }}</span></a>
-          @if (progress().completed.includes(item.id)) { <span class="badge">{{ c().done }}</span> }
-        </li>
-      }
-    </ol>
+  }@else{
+    <div class="course-actions">@if(progress().enrolled){<a appActionButton [routerLink]="resume()">{{finished()?c().review:c().continue}}</a>}@else{<button appActionButton type="button" (click)="save()" [disabled]="loading()||saving()||failed()">{{saving()?c().saving:c().enroll}}</button>}</div>
+    <ol class="course-lessons" role="list">@for(item of course().lessons;track item.id;let index=$index){<li><a [routerLink]="lessonPath(item.id)"><span class="course-number" aria-hidden="true">{{index+1}}</span><span class="course-lesson-label"><strong>{{item.title}}</strong><span>{{item.summary}}</span>@if(progress().completed.includes(item.id)){<span class="course-done"><app-icon name="circle-check"/>{{c().done}}</span>}</span><app-icon name="chevron-right"/></a></li>}</ol>
   }
-  <p role="status" class="save-status">{{ saved() ? c().saved : '' }}</p>
+  <p class="course-storage"><app-icon name="clipboard-check"/>{{c().local}}</p>
+  <p role="status" class="course-save-status">{{saved()?c().saved:''}}</p>
 </div>

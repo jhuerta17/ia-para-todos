@@ -2,6 +2,7 @@ import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Language } from '../../../i18n/language';
+import { Icon } from '../../../shared/icon';
 import { ActionButton } from '../../../shared/action-button';
 import { COURSE_PATH, lessonPath } from '../../courses/course-paths';
 import { firstPrompt } from '../../courses/first-prompt';
@@ -10,6 +11,7 @@ import { UserSession } from '../../session/user-session';
 
 const copy = {
   es: {
+    catalogLead: 'Lecciones cortas para aprender a tu ritmo, con ejemplos inventados.',
     courses: 'Mis cursos', free: 'Gratis · Principiante · 3 lecciones',
     browse: 'Ver el curso', back: 'Volver a mis cursos', overview: 'Volver al curso',
     enroll: 'Inscribirme gratis', continue: 'Continuar aprendiendo', review: 'Repasar el curso',
@@ -22,6 +24,7 @@ const copy = {
     retry: 'Volver a cargar el progreso', loading: 'Cargando tu progreso…', saving: 'Guardando…', next: 'Siguiente lección', saved: 'Progreso guardado en tu cuenta.',
   },
   en: {
+    catalogLead: 'Short lessons to learn at your own pace, using made-up examples.',
     courses: 'My courses', free: 'Free · Beginner · 3 lessons',
     browse: 'View course', back: 'Back to my courses', overview: 'Back to course',
     enroll: 'Enroll for free', continue: 'Continue learning', review: 'Review the course',
@@ -36,7 +39,7 @@ const copy = {
 };
 
 @Component({
-  selector: 'app-portal-courses', imports: [RouterLink, ActionButton],
+  selector: 'app-portal-courses', imports: [RouterLink, ActionButton, Icon],
   templateUrl: './portal-courses.html', styleUrl: './portal-courses.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
