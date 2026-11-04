@@ -4,7 +4,7 @@ export const tutorCopy = {
   es: {
     heading: 'Practica con IA', lead: 'Hazle preguntas al tutor y ensaya tu primer prompt aquí mismo.',
     placeholder: 'Escribe tu pregunta o tu prompt…', send: 'Enviar', thinking: 'Escribiendo…', sample: 'Respuesta de ejemplo',
-    privacy: 'Usa ejemplos inventados. No compartas datos personales.',
+    privacy: 'Usa ejemplos inventados. No compartas datos personales. Esta práctica no se guarda en tu cuenta.',
     greeting: '¡Hola! Soy tu tutor de práctica. Escríbeme un prompt y te ayudo a mejorarlo, paso a paso.',
     disclosure: 'La práctica en vivo usa Meta en modo Contributor: Meta puede usar tus preguntas y sus respuestas para entrenar sus modelos. Usa solo ejemplos inventados. Eliminar correos y teléfonos no elimina todos los datos personales.',
     acknowledge: 'Entiendo y acepto este uso para practicar con datos inventados.', verify: 'Usar práctica en vivo',
@@ -20,7 +20,7 @@ export const tutorCopy = {
   en: {
     heading: 'Practice with AI', lead: 'Ask the tutor questions and rehearse your first prompt right here.',
     placeholder: 'Type your question or prompt…', send: 'Send', thinking: 'Typing…', sample: 'Sample reply',
-    privacy: 'Use made-up examples. Do not share personal data.',
+    privacy: 'Use made-up examples. Do not share personal data. This practice is not saved to your account.',
     greeting: 'Hi! I am your practice tutor. Write me a prompt and I will help you improve it, step by step.',
     disclosure: 'Live practice uses Meta Contributor mode: Meta may use your questions and its replies to train its models. Use fictional examples only. Removing emails and phone numbers does not remove all personal data.',
     acknowledge: 'I understand and accept this use for practice with fictional data.', verify: 'Use live practice',

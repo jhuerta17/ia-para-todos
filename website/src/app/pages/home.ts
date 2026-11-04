@@ -1,3 +1,4 @@
+import { MetaLearning } from '../shared/meta-learning';
 import { FaqSection } from '../shared/faq-section/faq-section';
 import { ResourceSection } from '../shared/resource-section/resource-section';
 import { ParticipationSection } from '../shared/participation-section/participation-section';
@@ -22,7 +23,7 @@ const copy = {
 
 @Component({
   selector: 'app-home',
-  imports: [ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits, CommunityIntroduction, CommunityInvitation, LearningStories, ParticipationSection, ResourceSection, FaqSection],
+  imports: [MetaLearning, ActionLink, IntroCards, TopicStrip, MissionReveal, WorkshopSection, ProgramFacts, ActivitySection, LearningBenefits, CommunityIntroduction, CommunityInvitation, LearningStories, ParticipationSection, ResourceSection, FaqSection],
   templateUrl: './home.html',
   styleUrl: './home.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

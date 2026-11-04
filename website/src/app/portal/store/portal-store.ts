@@ -1,12 +1,12 @@
 import { Injectable, InjectionToken, inject } from '@angular/core';
-import type { LessonId } from '../courses/course-paths';
+import type { CourseId, LessonId } from '../courses/course-paths';
 import { UserSession } from '../session/user-session';
 import { PortalClient } from './portal-client';
 export interface CourseProgress { enrolled: boolean; completed: LessonId[] }
 export interface PortalStore {
-  load(userId: string): Promise<CourseProgress>;
-  enroll(userId: string): Promise<CourseProgress>;
-  complete(userId: string, lesson: LessonId): Promise<CourseProgress>;
+  load(userId: string, courseId?: CourseId): Promise<CourseProgress>;
+  enroll(userId: string, courseId?: CourseId): Promise<CourseProgress>;
+  complete(userId: string, lesson: LessonId, courseId?: CourseId): Promise<CourseProgress>;
 }
 @Injectable({ providedIn: 'root' })
 export class ServerPortalStore implements PortalStore {
@@ -15,9 +15,9 @@ export class ServerPortalStore implements PortalStore {
   private check(userId: string): void {
     if (!userId || userId !== this.session.user()?.id) throw new Error('SESSION_CHANGED');
   }
-  load(userId: string): Promise<CourseProgress> { this.check(userId); return this.client.request('progress'); }
-  enroll(userId: string): Promise<CourseProgress> { this.check(userId); return this.client.request('progress','POST',{action:'enroll'}); }
-  complete(userId: string, lessonId: LessonId): Promise<CourseProgress> { this.check(userId); return this.client.request('progress','POST',{action:'complete',lessonId}); }
+  load(userId: string, courseId?: CourseId): Promise<CourseProgress> { this.check(userId); return this.client.request(`progress${courseId && courseId !== 'first-prompt' ? '?courseId='+courseId : ''}`); }
+  enroll(userId: string, courseId?: CourseId): Promise<CourseProgress> { this.check(userId); return this.client.request('progress','POST',{action:'enroll', ...(courseId && courseId !== 'first-prompt' ? {courseId} : {})}); }
+  complete(userId: string, lessonId: LessonId, courseId?: CourseId): Promise<CourseProgress> { this.check(userId); return this.client.request('progress','POST',{action:'complete',lessonId,...(courseId && courseId !== 'first-prompt' ? {courseId} : {})}); }
 }
 export const PORTAL_STORE = new InjectionToken<PortalStore>('PortalStore', {
   providedIn: 'root', factory: () => inject(ServerPortalStore),

@@ -1,4 +1,4 @@
-import { COURSE_ID, LESSON_IDS } from './portal/courses/course-paths';
+import { COURSE_CATALOG } from './portal/courses/course-paths';
 import { adminGuard, adminGuardChild } from './admin/auth/admin-guard';
 import { portalGuard, portalGuardChild } from './portal/auth/portal-guard';
 import { pageTransitionGuard } from './shared/page-transition/page-transition-guard';
@@ -110,6 +110,7 @@ export const routes: Routes = [
       { path: '', loadComponent: () => import('./admin/pages/admin-overview/admin-overview').then(module => module.AdminOverview), title: 'Dashboard · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'requests', loadComponent: () => import('./admin/pages/admin-inbox/admin-inbox').then(module => module.AdminInbox), title: 'Requests · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'workshops', loadComponent: () => import('./admin/pages/admin-workshops/admin-workshops').then(module => module.AdminWorkshops), title: 'Workshops · AI for everyone', data: { lang: 'en', admin: true } },
+      { path: 'outreach', loadComponent: () => import('./admin/pages/admin-outreach/admin-outreach').then(m=>m.AdminOutreach), title: 'Outreach kit · IA para todos', data: {lang:'en',admin:true} },
       { path: 'impact', loadComponent: () => import('./admin/pages/admin-impact/admin-impact').then(module => module.AdminImpact), title: 'Impact · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'supporters', loadComponent: () => import('./admin/pages/admin-supporters/admin-supporters').then(module => module.AdminSupporters), title: 'Supporters · AI for everyone', data: { lang: 'en', admin: true } },
       { path: 'plans', loadComponent: () => import('./admin/pages/admin-plans/admin-plans').then(module => module.AdminPlans), title: 'Plans · AI for everyone', data: { lang: 'en', admin: true } },
@@ -127,8 +128,10 @@ export const routes: Routes = [
       { path: 'chats', loadComponent: () => import('./portal/pages/portal-chats/portal-chats').then(module => module.PortalChats), title: 'Práctica guardada · IA para todos', data: { lang: 'es', portal: true } },
       { path: 'account', loadComponent: () => import('./portal/pages/portal-account/portal-account').then(module => module.PortalAccount), title: 'Mi cuenta · IA para todos', data: { lang: 'es', portal: true } },
       { path: 'courses', loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Mis cursos · IA para todos', data: { lang: 'es', portal: true, courseView: 'list' } },
-      { path: `courses/${COURSE_ID}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'course' } },
-      ...LESSON_IDS.map(lessonId => ({ path: `courses/${COURSE_ID}/lessons/${lessonId}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Tu primer prompt · IA para todos', data: { lang: 'es', portal: true, courseView: 'lesson', lessonId } })),
+      ...Object.entries(COURSE_CATALOG).flatMap(([courseId, lessonIds]) => [
+        { path: `courses/${courseId}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Cursos · IA para todos', data: { lang: 'es', portal: true, courseView: 'course', courseId } },
+        ...lessonIds.map(lessonId => ({ path: `courses/${courseId}/lessons/${lessonId}`, loadComponent: () => import('./portal/pages/portal-courses/portal-courses').then(module => module.PortalCourses), title: 'Lecciones · IA para todos', data: { lang: 'es', portal: true, courseView: 'lesson', courseId, lessonId } })),
+      ]),
       { path: 'sign-in', loadComponent: () => import('./portal/pages/portal-sign-in/portal-sign-in').then(module => module.PortalSignIn), title: 'Iniciar sesión · IA para todos', data: { lang: 'es', portal: true, portalAuth: true } },
       { path: 'sign-up', loadComponent: () => import('./portal/pages/portal-sign-up/portal-sign-up').then(module => module.PortalSignUp), title: 'Crear cuenta · IA para todos', data: { lang: 'es', portal: true, portalAuth: true } },
     ],

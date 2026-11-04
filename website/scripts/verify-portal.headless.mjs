@@ -493,7 +493,8 @@ async function main() {
       const course = '/portal/courses/first-prompt';
       const lesson = (id) => `${course}/lessons/${id}`;
       await page.goto(`${base}/portal/courses`, { waitUntil: 'networkidle' });
-      await page.getByRole('link', { name: 'Ver el curso', exact: true }).click();
+      check('catalog contains both courses',await page.getByRole('heading',{name:'Aprende con Meta AI',exact:true}).isVisible());
+      await page.locator('a[href="/portal/courses/first-prompt"]').click();
       await page.getByRole('button', { name: 'Inscribirme gratis', exact: true }).click();
       await page.getByTestId('course-progress').getByText('0 de 3 lecciones completadas').waitFor();
       check('course enrollment starts with zero completed lessons', await page.getByRole('link', { name: 'Continuar aprendiendo', exact: true }).isVisible());

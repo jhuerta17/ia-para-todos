@@ -27,7 +27,10 @@
     "db:check": "node scripts/migrate-portal.mjs --check",
     "db:seed:workshops": "node scripts/seed-workshops.mjs",
     "verify:workshops": "node scripts/verify-workshops.mjs",
-    "verify:workshops:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/workshops.mts netlify/functions/portal-maintenance.mts"
+    "verify:workshops:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/workshops.mts netlify/functions/portal-maintenance.mts",
+    "verify:meta": "node scripts/verify-meta-workflows.mjs",
+    "verify:meta:types": "tsc --ignoreConfig --strict --noEmit --allowImportingTsExtensions --target ES2022 --module nodenext --types node --skipLibCheck netlify/functions/whatsapp.mts",
+    "verify:meta:browser": "node scripts/verify-meta-browser.headless.mjs"
   },
   "private": true,
   "packageManager": "npm@11.13.0",

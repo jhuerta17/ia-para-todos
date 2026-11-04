@@ -69,6 +69,7 @@ const copy: Record<Lang, { coverAlt: string; title: string; lead: string; ladder
 
 @Component({selector: 'app-courses', imports: [PageCover, AiTutor, CourseWaitlist, ActionLink, RevealOnEnter], templateUrl: './courses.html', styleUrl: './courses.css', changeDetection: ChangeDetectionStrategy.OnPush})
 export class Courses {
+  protected readonly metaEs = computed(() => this.language.lang() === 'es');
   private readonly language = inject(Language);
   protected readonly c = computed(() => copy[this.language.lang()]);
 }

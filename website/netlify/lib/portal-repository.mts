@@ -1,3 +1,4 @@
+import { COURSE_CATALOG, type CourseId } from '../../src/app/portal/courses/course-paths.ts';
 import { ACCOUNT_PRIVACY_VERSION } from '../../src/app/portal/auth/account-policy.ts';
 import { createHmac, randomUUID } from 'node:crypto';
 import { HttpError, env } from './ai-security.mts';
@@ -57,16 +58,17 @@ export class PortalRepository {
       return { consented: version === PRIVACY_VERSION, privacyVersion: version };
     });
   }
-  async progress(user: Student, action: 'read' | 'enroll' | 'complete', lesson?: string) {
+  async progress(user: Student, action: 'read' | 'enroll' | 'complete', lesson?: string, courseId: CourseId = 'first-prompt') {
+    if (typeof courseId !== 'string' || !Object.hasOwn(COURSE_CATALOG, courseId) || (action === 'complete' && !(COURSE_CATALOG[courseId] as readonly string[]).includes(lesson ?? ''))) throw new HttpError(400, 'invalid_progress');
     return transaction(this.pool, async db => {
       await ensureProfile(db, user);
-      if (action === 'enroll') await db.query("INSERT INTO portal_enrollments(user_id,course_id) VALUES($1,'first-prompt') ON CONFLICT DO NOTHING", [user.id]);
-      const enrolled = (await db.query("SELECT 1 FROM portal_enrollments WHERE user_id=$1 AND course_id='first-prompt'", [user.id])).rows.length > 0;
+      if (action === 'enroll') await db.query("INSERT INTO portal_enrollments(user_id,course_id) VALUES($1,$2) ON CONFLICT DO NOTHING", [user.id, courseId]);
+      const enrolled = (await db.query("SELECT 1 FROM portal_enrollments WHERE user_id=$1 AND course_id=$2", [user.id, courseId])).rows.length > 0;
       if (action === 'complete') {
         if (!enrolled) throw new HttpError(409, 'not_enrolled');
-        await db.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES($1,'first-prompt',$2) ON CONFLICT DO NOTHING", [user.id, lesson]);
+        await db.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES($1,$2,$3) ON CONFLICT DO NOTHING", [user.id, courseId, lesson]);
       }
-      const rows = (await db.query("SELECT lesson_id FROM portal_lesson_progress WHERE user_id=$1 AND course_id='first-prompt' ORDER BY lesson_id", [user.id])).rows;
+      const rows = (await db.query("SELECT lesson_id FROM portal_lesson_progress WHERE user_id=$1 AND course_id=$2 ORDER BY lesson_id", [user.id, courseId])).rows;
       return { enrolled, completed: rows.map(row => row.lesson_id) };
     });
   }

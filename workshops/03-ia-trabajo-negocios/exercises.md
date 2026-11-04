@@ -47,3 +47,20 @@ Si tienes negocio propio, descríbelo en general (tipo de negocio, sin datos rea
 3. **Plan semanal del negocio:** *"Ayúdame a organizar mis tareas en un plan semanal: [tareas generales]. En tabla fácil de leer."*
 
 **Recuerda:** la IA ordena y propone; tú decides, verificas y nunca compartes datos sensibles.
+
+
+## Laboratorio Meta AI: Panadería Sol / Meta AI lab: Sol Bakery
+
+**Escenario ficticio:** Panadería Sol abre el sábado de 9 a 12 y ofrece pan de canela. No se han definido precios ni descuentos. Usa nuestro tutor Muse Spark o Meta AI si está disponible para tu cuenta. Acepta el aviso de Contributor antes de usar el tutor en vivo; puedes trabajar en papel o con respuestas de ejemplo.
+
+1. Escribe una instrucción con tarea, público, canal y tono para un texto de Instagram.
+2. Pide un anuncio de Facebook y una respuesta a un cliente por WhatsApp usando los mismos datos.
+3. Solicita una versión más breve y compara. Verifica horario, producto y cualquier promesa; elimina precios o descuentos inventados.
+4. Explica qué revisarías antes de compartir. No publiques ni envíes los textos durante el ejercicio.
+
+**Fictional scenario:** Sol Bakery opens Saturday from 9 to 12 and offers cinnamon bread. No prices or discounts are specified. Use our Muse Spark tutor or Meta AI when available for your account. Acknowledge Contributor mode before live tutor use; paper or sample replies are valid alternatives.
+
+1. Write a prompt specifying task, audience, channel, and tone for an Instagram caption.
+2. Request a Facebook announcement and WhatsApp customer reply using the same facts.
+3. Ask for a shorter revision and compare. Check hours, product, and promises; remove invented prices or discounts.
+4. Explain what you would verify before sharing. Do not publish or send drafts during this exercise.

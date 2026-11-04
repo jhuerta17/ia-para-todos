@@ -5,6 +5,8 @@ import { portalPool } from '../lib/portal-db.mts';
 export default async () => {
   const repo = new PortalRepository(portalPool());
   await repo.purge();
+  await portalPool().query('DELETE FROM whatsapp_events WHERE expires_at<=now()');
+  await portalPool().query('DELETE FROM whatsapp_selections WHERE expires_at<=now()');
   await new WorkshopRepository(portalPool()).purge();
   const { admin } = await import('@netlify/identity');
   await repo.retryDeletions(async id => {

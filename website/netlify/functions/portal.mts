@@ -1,3 +1,4 @@
+import { COURSE_CATALOG, type CourseId } from '../../src/app/portal/courses/course-paths.ts';
 import type { Config } from '@netlify/functions';
 import { HttpError, json, readJSON } from '../lib/ai-security.mts';
 import { PortalRepository, PRIVACY_VERSION, type Student } from '../lib/portal-repository.mts';
@@ -30,12 +31,14 @@ export function createPortalHandler(deps = defaultPortalDependencies) {
         return json(await repo.consent(user));
       }
       if (path === '/api/portal/account' && req.method === 'DELETE') return json(await repo.requestDeletion(user), 202);
-      if (path === '/api/portal/progress' && req.method === 'GET') return json(await repo.progress(user, 'read'));
+      if (path === '/api/portal/progress' && req.method === 'GET') return json(await repo.progress(user, 'read', undefined, (new URL(req.url).searchParams.get('courseId') ?? 'first-prompt') as CourseId));
       if (path === '/api/portal/progress' && req.method === 'POST') {
         const body = await readJSON(req);
-        if (Object.keys(body).some(k => !['action','lessonId'].includes(k))) throw new HttpError(400, 'unsupported_field');
-        if (body['action'] === 'enroll' && body['lessonId'] === undefined) return json(await repo.progress(user, 'enroll'));
-        if (body['action'] === 'complete' && ['clear-request','refine-response','verify-and-protect'].includes(body['lessonId'] as string)) return json(await repo.progress(user, 'complete', body['lessonId'] as string));
+        if (Object.keys(body).some(k => !['action','lessonId','courseId'].includes(k))) throw new HttpError(400, 'unsupported_field');
+        const courseId = (body['courseId'] ?? 'first-prompt') as CourseId;
+        if (typeof courseId !== 'string' || !Object.hasOwn(COURSE_CATALOG, courseId)) throw new HttpError(400, 'invalid_course');
+        if (body['action'] === 'enroll' && body['lessonId'] === undefined) return json(await repo.progress(user, 'enroll', undefined, courseId));
+        if (body['action'] === 'complete' && (COURSE_CATALOG[courseId] as readonly string[]).includes(body['lessonId'] as string)) return json(await repo.progress(user, 'complete', body['lessonId'] as string, courseId));
         throw new HttpError(400, 'invalid_progress');
       }
       if (path === '/api/portal/chats' && req.method === 'GET') return json({ chats: await repo.chats(user) });

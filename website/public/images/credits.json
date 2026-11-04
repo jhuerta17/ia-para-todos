@@ -25,7 +25,9 @@
       "x": 50,
       "y": 50
     },
-    "illustrative": true
+    "illustrative": true,
+    "altEs": "Mujeres adultas usando un teléfono para aprender.",
+    "altEn": "Adult women using a phone to learn."
   },
   {
     "key": "family-learning",
@@ -123,7 +125,9 @@
       "x": 50,
       "y": 50
     },
-    "illustrative": true
+    "illustrative": true,
+    "altEs": "Personas adultas aprendiendo con apoyo cercano.",
+    "altEn": "Adults learning with support nearby."
   },
   {
     "key": "shared-learning",

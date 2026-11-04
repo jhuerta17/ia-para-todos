@@ -1,10 +1,12 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Language } from '../../../i18n/language';
 import { Icon } from '../../../shared/icon';
 import { ActionButton } from '../../../shared/action-button';
-import { COURSE_PATH, lessonPath } from '../../courses/course-paths';
+import { COURSE_ID, META_COURSE_ID, type CourseId, type LessonId, lessonPath } from '../../courses/course-paths';
+import { AiTutor } from '../../../shared/ai-tutor/ai-tutor';
+import { metaAI } from '../../courses/meta-ai';
 import { firstPrompt } from '../../courses/first-prompt';
 import { PORTAL_STORE, type CourseProgress } from '../../store/portal-store';
 import { UserSession } from '../../session/user-session';
@@ -39,7 +41,7 @@ const copy = {
 };
 
 @Component({
-  selector: 'app-portal-courses', imports: [RouterLink, ActionButton, Icon],
+  selector: 'app-portal-courses', imports: [RouterLink, ActionButton, Icon, AiTutor],
   templateUrl: './portal-courses.html', styleUrl: './portal-courses.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,7 +52,9 @@ export class PortalCourses {
   private readonly session = inject(UserSession);
   private readonly store = inject(PORTAL_STORE);
   protected readonly c = computed(() => copy[this.language.lang()]);
-  protected readonly course = computed(() => firstPrompt(this.language.lang()));
+  protected readonly courseId = computed(() => (this.data()['courseId'] ?? COURSE_ID) as CourseId);
+  protected readonly course = computed(() => this.courseId() === META_COURSE_ID ? metaAI(this.language.lang()) : firstPrompt(this.language.lang()));
+  protected readonly catalog = computed(() => [{id:COURSE_ID, ...firstPrompt(this.language.lang())},{id:META_COURSE_ID, ...metaAI(this.language.lang())}]);
   protected readonly lesson = computed(() => this.course().lessons.find(item => item.id === this.data()['lessonId']));
   protected readonly listing = computed(() => this.data()['courseView'] === 'list');
   protected readonly progress = signal<CourseProgress>({ enrolled: false, completed: [] });
@@ -58,16 +62,20 @@ export class PortalCourses {
   protected readonly saving = signal(false);
   protected readonly failed = signal(false);
   protected readonly saved = signal(false);
-  protected readonly coursePath = COURSE_PATH;
-  protected readonly lessonPath = lessonPath;
+  protected readonly coursePath = computed(() => `/portal/courses/${this.courseId()}`);
+  protected readonly lessonPath = (id: LessonId) => lessonPath(id, this.courseId());
   protected readonly finished = computed(() => this.progress().completed.length === this.course().lessons.length);
-  protected readonly resume = computed(() => lessonPath((this.course().lessons.find(item => !this.progress().completed.includes(item.id)) ?? this.course().lessons[0]!).id));
+  protected readonly resume = computed(() => this.lessonPath((this.course().lessons.find(item => !this.progress().completed.includes(item.id)) ?? this.course().lessons[0]!).id));
   protected readonly next = computed(() => {
     const index = this.course().lessons.findIndex(item => item.id === this.lesson()?.id);
     return this.course().lessons[index + 1];
   });
 
-  constructor() { afterNextRender(() => { void this.load(); }); }
+  constructor() {
+    let ready = false;
+    effect(() => { this.courseId(); if (ready) void this.load(); });
+    afterNextRender(() => { ready = true; void this.load(); });
+  }
 
   protected async load(): Promise<void> {
     const userId = this.session.user()?.id;
@@ -76,8 +84,9 @@ export class PortalCourses {
     this.failed.set(false);
     this.saved.set(false);
     try {
-      const value = await this.store.load(userId);
-      if (this.session.user()?.id === userId) this.progress.set(value);
+      const courseId = this.courseId();
+      const value = await this.store.load(userId, courseId);
+      if (this.session.user()?.id === userId && this.courseId() === courseId) this.progress.set(value);
     } catch { this.failed.set(true); }
     finally { this.loading.set(false); }
   }
@@ -90,8 +99,8 @@ export class PortalCourses {
     try {
       const lesson = this.lesson();
       const value = this.progress().enrolled && lesson
-        ? await this.store.complete(userId, lesson.id)
-        : await this.store.enroll(userId);
+        ? await this.store.complete(userId, lesson.id, this.courseId())
+        : await this.store.enroll(userId, this.courseId());
       if (this.session.user()?.id === userId) { this.progress.set(value); this.saved.set(true); }
     } catch { this.failed.set(true); }
     finally { this.saving.set(false); }

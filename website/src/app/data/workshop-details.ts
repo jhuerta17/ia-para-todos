@@ -408,6 +408,7 @@ function build(lang: Lang): ContentDetail[] {
         ...(next ? { next: { url: `/talleres/${next.slug}`, title: next.shortTitle } } : {}),
       },
       ...curriculum[lang][workshop.slug],
+      sections: [...curriculum[lang][workshop.slug].sections, ...(index === 2 ? [{heading: lang === 'es' ? 'Laboratorio Meta AI: un negocio, tres canales' : 'Meta AI lab: one business, three channels', paragraphs: [lang === 'es' ? 'Panadería Sol es ficticia: abre el sábado de 9 a 12 y ofrece pan de canela. Practica en nuestro tutor Muse Spark o en Meta AI si está disponible para tu cuenta. No se han definido precios ni descuentos.' : 'Sol Bakery is fictional: open Saturday 9 to 12, offering cinnamon bread. Practice in our Muse Spark tutor or in Meta AI if available for your account. No prices or discounts are specified.'], bullets: lang === 'es' ? ['Escribe tu propia instrucción para un texto breve de Instagram.', 'Adapta el texto a un anuncio de Facebook y una respuesta a un cliente por WhatsApp.', 'Pide una revisión más clara y compara. Comprueba horarios y elimina datos inventados por la IA antes de compartir.'] : ['Write your own prompt for a short Instagram caption.', 'Adapt it to a Facebook announcement and a WhatsApp customer reply.', 'Request a clearer revision and compare. Verify hours and remove AI-invented facts before sharing.']}] : [])],
     };
   });
 }

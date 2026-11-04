@@ -90,6 +90,15 @@ try {
   await request('progress','POST',{ action:'complete',lessonId:'clear-request' });
   assert.deepEqual(await (await request('progress')).json(), { enrolled:true, completed:['clear-request'] });
   assert.equal((await request('progress','POST',{ action:'enroll',userId:B.id })).status, 400);
+  assert.equal((await request('progress','POST',{action:'enroll',courseId:'learn-meta-ai'})).status,200);
+  assert.equal((await request('progress','POST',{action:'complete',courseId:'learn-meta-ai',lessonId:'everyday-messages'})).status,200);
+  assert.deepEqual(await (await request('progress?courseId=learn-meta-ai')).json(),{enrolled:true,completed:['everyday-messages']});
+  assert.deepEqual(await (await request('progress')).json(),{enrolled:true,completed:['clear-request']});
+  assert.equal((await request('progress','POST',{action:'complete',courseId:'learn-meta-ai',lessonId:'clear-request'})).status,400);
+  assert.equal((await request('progress?courseId=unknown')).status,400);
+  await assert.rejects(pool.query("INSERT INTO portal_lesson_progress(user_id,course_id,lesson_id) VALUES($1,'learn-meta-ai','clear-request')",[A.id]));
+  console.log('  ok two-course progress isolation, legacy default, API and database lesson validation');
+
   const chat = await (await request('chats','POST')).json();
   assert.equal((await request(`chats/${chat.id}`)).status, 200);
   user = B;

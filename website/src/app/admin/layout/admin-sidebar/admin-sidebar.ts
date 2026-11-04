@@ -27,6 +27,7 @@ export class AdminSidebar {
         { name: 'Dashboard', path: '/admin', icon: 'book' },
         { name: 'Requests', path: '/admin/requests', icon: 'mail' },
         { name: 'Workshops', path: '/admin/workshops', icon: 'calendar-event' },
+        { name: 'Outreach kit', path: '/admin/outreach', icon: 'sparkles' },
         { name: 'Impact', path: '/admin/impact', icon: 'arrow-up-right' },
         { name: 'Supporters', path: '/admin/supporters', icon: 'users' },
         { name: 'Plans', path: '/admin/plans', icon: 'clipboard-check' },

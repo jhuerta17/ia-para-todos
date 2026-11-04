@@ -4,7 +4,7 @@ import type { Context } from '@netlify/functions';
 // Meta counts internal reasoning and visible text together. Keep room for both.
 export const OUTPUT_TOKEN_CAP = 1600;
 export const REASONING_EFFORT = 'minimal';
-export const MODELS = { tutor: 'muse-spark-1.3-contributor', triage: 'muse-spark-1.3' } as const;
+export const MODELS = { tutor: 'muse-spark-1.3-contributor', triage: 'muse-spark-1.3', outreach: 'muse-spark-1.3-contributor' } as const;
 export const LIMITS = { perMinute: 20, perDay: 100, concurrent: 3, perIPConcurrent: 1 } as const;
 export const env = (name: string): string => {
   const runtime = globalThis as typeof globalThis & { Netlify?: { env: { get(name: string): string | undefined } } };

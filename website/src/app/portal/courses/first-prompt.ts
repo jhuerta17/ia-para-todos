@@ -11,7 +11,7 @@ interface Lesson {
   practice: string;
   reflection: string;
 }
-interface Course {
+export interface Course {
   title: string;
   summary: string;
   lessons: Lesson[];

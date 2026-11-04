@@ -39,6 +39,7 @@ export class Language {
    * language. Used by ActionLink so callers keep writing Spanish paths.
    */
   localize(esPath: string): string {
+    if (esPath === '/portal' || esPath.startsWith('/portal/')) return esPath;
     if (this.lang() === 'es') return esPath;
     if (esPath === '/') return '/en';
     const section = (Object.keys(PATHS) as StaticKey[]).find(key => esPath === `/${PATHS[key].es}`);
