@@ -1,8 +1,7 @@
 # Workshop-first experience
 
 In-person workshops are the main learning experience. The existing topic catalog
-remains; real dated sessions are managed at `/admin/workshops`. Sessions start
-empty, and drafts are private until an organizer publishes them. The existing
+remains; real dated sessions are managed at `/admin/workshops`. Drafts are private until an organizer publishes them. The existing
 admin demo mode remains synthetic and does not write live sessions.
 
 ## Participant flow
@@ -87,27 +86,32 @@ Apply and verify the migration on staging through the existing migration process
 Use fictional sessions and guests to exercise publication, guest email/phone
 booking, management-link cancellation, linking, assisted booking, manual follow-up,
 retention, and account deletion. Then deploy the reviewed change through the normal
-Git production workflow. Implementation does not publish real sessions or deploy.
+Git production workflow. The confirmed-event migration above is applied by the production build.
 
-## Fictional data for review
+## Confirmed November–December 2026 workshops
 
-Two options tell the same six-month story (six past sessions with 170
-attendees, upcoming sessions with partial bookings). Everyone is fictional.
+The organizer confirmed the five existing dates and venues on November 4, 2026.
+Migration `20261104180000_publish_confirmed_workshops.sql` publishes these fixed
+America/Chicago dates in the existing Neon database:
 
-- Browser demo: open any schedule, reservation, preparation, or portal
-  page with `?demo=1` (for example `/agenda?demo=1`). Sessions,
-  availability, and the signed-in student's reservation are fictional;
-  bookings are simulated in the browser and reach no server. The flag
-  persists per browser; `?demo=0` returns to real data. Off by default,
-  so tests and production are unaffected. Demo and live views look
-  identical, so check the URL before sharing a screenshot.
-- Staging seed: `WORKSHOP_SEED_DATABASE_URL=<staging-direct-url>
-  npm run db:seed:workshops -- --confirm` inserts eleven fictional
-  sessions and fictional reservations (`@example.com` and 555 contacts
-  only, enforced by the script). Idempotent and insert-only; sessions
-  past the 30-day retention window keep anonymous totals without rows.
-  Never run against production.
+| Local date and time | Workshop | Capacity |
+| --- | --- | --- |
+| November 9, 6:00–8:00 PM | Introducción a la IA · Oak Cliff | 30 |
+| November 16, 6:30–9:00 PM | IA para el Trabajo y los Negocios · Online | 30 |
+| November 23, 11:00 AM–1:00 PM | IA para la Vida Diaria · Fort Worth | 25 |
+| November 30, 6:00–8:00 PM | IA para Padres y Familias · Arlington | 35 |
+| December 7, 6:00–8:00 PM | Introduction to AI · Online | 30 |
 
+No reservations or attendance totals are prepopulated. Public schedule,
+registration, private reservation management, student reservations, and
+preparation always use the live API, regardless of the admin demo preference.
+An empty schedule stays empty; a service failure shows a retryable error.
+Dates do not move forward automatically. Existing staging-only fixtures remain
+isolated from the participant experience and must not be loaded in production.
+
+The normal production build runs `npm run db:migrate && npm run build` using
+`PORTAL_MIGRATION_DATABASE_URL` for Neon. Applying the migration creates the
+sessions once; subsequent organizer edits and real bookings are preserved.
 
 ## WhatsApp agenda and registration
 
@@ -121,8 +125,7 @@ link provides access to sessions beyond the first five. Empty schedules and
 service failures have different replies in the requested language.
 
 The live public API returned `{"sessions":[]}` during the November 3, 2026
-investigation. Browser Demo mode can still show fictional sessions; open
-`/agenda?demo=0` to compare the real schedule. Do not seed fictional workshops
+investigation. The public agenda now always reflects the same database records. Do not seed fictional workshops
 into production to fix an empty reply. Publish confirmed dates, times, venues,
 and capacities through the live admin workshop editor, then verify the public
 API contains the same session IDs. Existing WhatsApp credentials and recipient

@@ -5,7 +5,6 @@ import { ActionButton } from '../shared/action-button';
 import { RouterLink } from '@angular/router';
 import { Language } from '../i18n/language';
 import { WorkshopClient } from './workshop-client';
-import { readDemoBooking, saveDemoBooking } from './workshop-demo';
 import { workshopCopy } from './workshop-copy';
 import { workshopDate } from './workshop-format';
 import type { Reservation } from './workshop-types';
@@ -43,15 +42,6 @@ export class WorkshopManage {
   protected date(r:Reservation){return workshopDate(r.session,this.language.lang());}
   protected async act(action:string){
     this.loading.set(true);this.error.set('');
-    {
-      const booking=readDemoBooking(this.token);
-      if(booking){
-        const updated:Reservation=action==='cancel'?{...booking.reservation,status:'cancelled'}:action==='attach'?{...booking.reservation,linked:true}:booking.reservation;
-        saveDemoBooking({token:booking.token,reservation:updated});
-        this.reservation.set(updated);this.confirmCancel.set(false);
-        this.loading.set(false);return;
-      }
-    }
     try{this.reservation.set(await this.client.request<Reservation>('manage','POST',{token:this.token,action}));this.confirmCancel.set(false);}catch(e){this.error.set((e as Error).message==='already_reserved'?this.c().duplicate:action==='read'?this.c().unavailable:this.c().error);}finally{this.loading.set(false);}}
   protected print(){this.document.defaultView?.print();}
 }

@@ -33,6 +33,17 @@ try{
   const connectionString=`postgres://workshop_test:local-fictional-password@127.0.0.1:${port}/postgres`;
   await migratePortal({connectionString,directory:join(website,'db/migrations')});pool=createPortalPool(connectionString,10);
   const repo=new WorkshopRepository(pool),portal=new PortalRepository(pool);
+  // Validate the confirmed production events before isolating the scenario fixtures.
+  const confirmed=(await pool.query('SELECT * FROM workshop_sessions ORDER BY starts_at')).rows;
+  assert.equal(confirmed.length,5);
+  assert.deepEqual(confirmed.map(s=>s.capacity),[30,30,25,35,30]);
+  assert(confirmed.every(s=>s.status==='published'&&s.total_reservations===0));
+  assert.equal((await pool.query('SELECT count(*)::int AS n FROM workshop_reservations')).rows[0].n,0);
+  assert.deepEqual(confirmed.map(s=>venueDay({startsAt:s.starts_at.toISOString(),timeZone:s.time_zone})),['2026-11-09','2026-11-16','2026-11-23','2026-11-30','2026-12-07']);
+  await migratePortal({connectionString,directory:join(website,'db/migrations')});
+  assert.equal((await pool.query('SELECT count(*)::int AS n FROM workshop_sessions')).rows[0].n,5);
+  await pool.query('DELETE FROM workshop_sessions');
+  console.log('PASS confirmed workshop migration: fixed dates, capacities, publication, zero fabricated bookings, safe rerun.');
   process.env.PORTAL_EMAIL_HASH_SECRET='fictional-workshop-test-secret-with-32-characters';
   const accountOnly={...B,id:'basic-account',email:'basic@example.com'};
   await portal.consent(accountOnly,ACCOUNT_PRIVACY_VERSION);
