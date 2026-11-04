@@ -1,4 +1,4 @@
-<app-admin-breadcrumb pageTitle="Dashboard" />
+<app-admin-breadcrumb pageTitle="Dashboard" description="Review enquiries, workshop activity, and the learning programme." />
 <app-ai-usage />
 
 @if (loadError() && submissions() === null) {
@@ -123,14 +123,15 @@
       </button>
     </div>
   } @else {
-    <div class="max-w-full overflow-x-auto">
+    <p class="admin-table-hint">Scroll sideways to see all columns.</p>
+    <div class="admin-table-scroll max-w-full" role="region" aria-label="Dashboard table" tabindex="0">
       <table app-table class="w-full text-start">
         <thead app-table-header class="border-y border-gray-100 dark:border-gray-800">
           <tr app-table-row>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Requester</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Form</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Interest</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Requester</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Form</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Interest</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
           </tr>
         </thead>
         <tbody app-table-body class="divide-y divide-gray-100 dark:divide-gray-800">

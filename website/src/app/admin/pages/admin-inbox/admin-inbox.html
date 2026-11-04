@@ -1,4 +1,4 @@
-<app-admin-breadcrumb pageTitle="Requests" />
+<app-admin-breadcrumb pageTitle="Requests" description="Read messages by form and prepare a reply for review." />
 
 @if (loadError() && submissions() === null) {
   <div role="alert" class="rounded-2xl border border-red-500/30 bg-red-50 px-5 py-4 text-sm text-red-600 dark:bg-red-500/10 dark:text-red-400">
@@ -59,16 +59,17 @@
       }
     </div>
   } @else {
-    <div class="max-w-full overflow-x-auto">
+    <p class="admin-table-hint">Scroll sideways to see all columns.</p>
+    <div class="admin-table-scroll max-w-full" role="region" aria-label="Requests table" tabindex="0">
       <table app-table class="w-full text-start">
         <thead app-table-header class="border-y border-gray-100 dark:border-gray-800">
           <tr app-table-row>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Requester</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Form</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Interest</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Message</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Reply</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Requester</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Form</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Interest</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Message</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Date</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Reply</th>
           </tr>
         </thead>
         <tbody app-table-body class="divide-y divide-gray-100 dark:divide-gray-800">

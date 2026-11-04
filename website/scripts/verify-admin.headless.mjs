@@ -417,6 +417,21 @@ async function main() {
       const raised = await page.getByText('$119,500', { exact: true }).isVisible().catch(() => false);
       check('demo supporters render ledger + total', supporterRows === 10 && raised, `${supporterRows} rows`);
       await page.screenshot({ path: join(evidence, 'demo-supporters.png'), fullPage: true });
+      for (const width of [390, 320]) {
+        await page.setViewportSize({ width, height: 844 });
+        for (const route of ['requests', 'workshops', 'impact', 'supporters', 'plans']) {
+          await page.goto(`${base}/admin/${route}`, { waitUntil: 'networkidle' });
+          const fits = await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
+          check(`mobile admin ${route} fits ${width}px`, fits);
+        }
+      }
+      await page.goto(`${base}/admin/supporters`, { waitUntil: 'networkidle' });
+      const ledger = page.getByRole('region', { name: 'Supporters table' });
+      await ledger.focus();
+      await ledger.press('ArrowRight');
+      const scrolls = await page.waitForFunction(() => document.querySelector('.admin-table-scroll').scrollLeft > 0, null, { timeout: 5000 }).then(() => true).catch(() => false);
+      check('mobile ledger supports keyboard horizontal scrolling', scrolls);
+      await page.screenshot({ path: join(evidence, 'demo-supporters-mobile.png') });
       await page.close();
       await context.close();
 

@@ -9,12 +9,13 @@
  * Cascade design (light-only admin beside hand-written public CSS):
  * utilities stay UNLAYERED so they beat the public stylesheet's element
  * rules; the :where() resets below beat those same rules by source order
- * yet lose to utilities by specificity. Admin headings without font
- * utilities intentionally inherit the site serif from the public rules. */
+ * yet lose to utilities by specificity. Admin content headings use the shared dashboard sans-serif while the
+ * brand retains its display face. */
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css';
 @import '../shared/dashboard/portal-components.css';
 @import '../shared/dashboard/portal-access.css';
+@import './shared/admin-components.css';
 
 @custom-variant dark (&:is(.dark *));
 

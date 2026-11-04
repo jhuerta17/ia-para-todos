@@ -1,4 +1,4 @@
-<app-admin-breadcrumb pageTitle="Impact" />
+<app-admin-breadcrumb pageTitle="Impact" description="Review attendance and learning feedback. Demo figures are illustrative." />
 
 @if (!ready()) {
   <div class="animate-pulse space-y-4" aria-hidden="true">
@@ -51,15 +51,16 @@
   <div class="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pt-4 pb-3 sm:px-6 dark:border-gray-800 dark:bg-white/3">
     <h2 class="mb-1 px-2 text-lg font-semibold text-gray-800 sm:px-0 dark:text-white/90">Monthly reach</h2>
     <p class="mb-4 px-2 text-sm text-gray-500 sm:px-0 dark:text-gray-400">Attendees, volunteers, satisfaction, and improved confidence per month.</p>
-    <div class="max-w-full overflow-x-auto">
+    <p class="admin-table-hint">Scroll sideways to see all columns.</p>
+    <div class="admin-table-scroll max-w-full" role="region" aria-label="Impact table" tabindex="0">
       <table app-table class="w-full text-start">
         <thead app-table-header class="border-y border-gray-100 dark:border-gray-800">
           <tr app-table-row>
-            <th app-table-cell class="w-20 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Month</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Attendees</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Volunteers</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Satisfaction</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Confidence ↑</th>
+            <th scope="col" app-table-cell class="w-20 py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Month</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Attendees</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Volunteers</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Satisfaction</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Confidence ↑</th>
           </tr>
         </thead>
         <tbody app-table-body class="divide-y divide-gray-100 dark:divide-gray-800">

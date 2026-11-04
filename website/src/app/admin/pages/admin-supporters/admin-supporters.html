@@ -1,4 +1,4 @@
-<app-admin-breadcrumb pageTitle="Supporters" />
+<app-admin-breadcrumb pageTitle="Supporters" description="Review contribution records. Donation tracking is not yet connected." />
 
 @if (!ready()) {
   <div class="animate-pulse space-y-4" aria-hidden="true">
@@ -31,7 +31,7 @@
       <p class="text-sm text-gray-500 dark:text-gray-400">By supporter type</p>
       <ul class="mt-4 space-y-3">
         @for (row of byType(); track row.type) {
-          <li class="flex items-center gap-3 text-sm">
+          <li class="supporter-summary text-sm">
             <span class="w-24 shrink-0 text-gray-600 dark:text-gray-300">{{ row.type }}</span>
             <div class="h-1.5 flex-1 rounded-full bg-gray-200 dark:bg-gray-800" role="presentation">
               <div class="h-1.5 rounded-full bg-brand-500" [style.width.%]="row.share"></div>
@@ -48,16 +48,17 @@
 
   <div class="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pt-4 pb-3 sm:px-6 dark:border-gray-800 dark:bg-white/3">
     <h2 class="mb-4 px-2 text-lg font-semibold text-gray-800 sm:px-0 dark:text-white/90">Supporters</h2>
-    <div class="max-w-full overflow-x-auto">
+    <p class="admin-table-hint">Scroll sideways to see all columns.</p>
+    <div class="admin-table-scroll max-w-full" role="region" aria-label="Supporters table" tabindex="0">
       <table app-table class="w-full text-start">
         <thead app-table-header class="border-y border-gray-100 dark:border-gray-800">
           <tr app-table-row>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Supporter</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Type</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Since</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Total</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Latest gift</th>
-            <th app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Supporter</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Type</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Since</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Total</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Latest gift</th>
+            <th scope="col" app-table-cell class="py-3 text-start text-xs font-medium text-gray-500 dark:text-gray-400">Status</th>
           </tr>
         </thead>
         <tbody app-table-body class="divide-y divide-gray-100 dark:divide-gray-800">
