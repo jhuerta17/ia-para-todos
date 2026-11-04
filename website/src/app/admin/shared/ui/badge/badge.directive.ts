@@ -90,40 +90,40 @@ export class BadgeDirective implements OnChanges {
     const variants: Record<BadgeVariant, Record<BadgeColor, string>> = {
       light: {
         primary:
-          'bg-brand-50 text-brand-500 [text-shadow:0_4px_4px_var(--color-brand-200)] dark:bg-brand-500/15 dark:text-brand-400 dark:[text-shadow:0_4px_4px_rgba(70,95,255,0.20)]',
+          'bg-brand-50 text-brand-500  dark:bg-brand-500/15 dark:text-brand-400 ',
         success:
-          'bg-green-50 text-green-600 [text-shadow:0_4px_4px_var(--color-green-200)] dark:bg-green-500/15 dark:text-green-500 dark:[text-shadow:0_4px_4px_rgba(18,183,106,0.20)]',
+          'bg-green-50 text-green-700  dark:bg-green-500/15 dark:text-green-500 ',
         error:
-          'bg-red-50 text-red-600 [text-shadow:0_4px_4px_var(--color-red-200)] dark:bg-red-500/15 dark:text-red-500 dark:[text-shadow:0_4px_4px_rgba(240,68,56,0.20)]',
+          'bg-red-50 text-red-600  dark:bg-red-500/15 dark:text-red-500 ',
         warning:
-          'bg-amber-50 text-amber-600 [text-shadow:0_4px_4px_rgba(254,223,137,0.60)] dark:bg-amber-500/15 dark:text-orange-400 dark:[text-shadow:0_4px_4px_rgba(247,144,9,0.20)]',
-        info: 'bg-sky-50 text-sky-500 [text-shadow:0_4px_4px_var(--color-sky-200)] dark:bg-sky-500/15 dark:text-sky-500 dark:[text-shadow:0_4px_4px_rgba(11,165,236,0.20)]',
-        gray: 'bg-gray-100 text-gray-700 [text-shadow:0_4px_4px_var(--color-gray-300)] dark:bg-white/5 dark:text-white/80 dark:[text-shadow:0_4px_4px_rgba(255,255,255,0.10)]',
+          'bg-amber-50 text-amber-800  dark:bg-amber-500/15 dark:text-orange-400 ',
+        info: 'bg-sky-50 text-sky-700  dark:bg-sky-500/15 dark:text-sky-700 ',
+        gray: 'bg-gray-100 text-gray-700  dark:bg-white/5 dark:text-white/80 ',
         light:
           'bg-gray-100 text-gray-700 dark:bg-white/5 dark:text-white/80',
         dark: 'bg-gray-500/15 text-gray-800 dark:bg-white/5 dark:text-white',
       },
       solid: {
         primary:
-          'bg-brand-500 text-white shadow-[0_4px_8px_0_var(--color-brand-200)] dark:shadow-[0_4px_8px_0_rgba(70,95,255,0.20)]',
+          'bg-brand-500 text-white  ',
         success:
-          'bg-green-500 text-white shadow-[0_4px_8px_0_var(--color-green-200)] dark:shadow-[0_4px_8px_0_rgba(18,183,106,0.20)]',
+          'bg-green-700 text-white  ',
         error:
-          'bg-red-500 text-white shadow-[0_4px_8px_0_var(--color-red-200)] dark:shadow-[0_4px_8px_0_rgba(240,68,56,0.20)]',
+          'bg-red-700 text-white  ',
         warning:
-          'bg-amber-500 text-white shadow-[0_4px_8px_0_rgba(254,223,137,0.60)] dark:shadow-[0_4px_8px_0_rgba(247,144,9,0.20)]',
-        info: 'bg-sky-500 text-white shadow-[0_4px_8px_0_rgba(184,230,254,1)] dark:shadow-[0_4px_8px_0_rgba(11,165,236,0.20)]',
-        gray: 'bg-gray-700 text-white shadow-[0_4px_8px_0_rgba(209,213,220,1)] dark:bg-gray-700 dark:text-white dark:shadow-[0_4px_8px_0_rgba(255,255,255,0.10)]',
+          'bg-amber-800 text-white  ',
+        info: 'bg-sky-700 text-white  ',
+        gray: 'bg-gray-700 text-white  dark:bg-gray-700 dark:text-white ',
         light:
           'bg-gray-400 text-white dark:bg-white/5 dark:text-white/80',
         dark: 'bg-gray-800 text-white dark:bg-gray-700 dark:text-white',
       },
       ghost: {
         primary: 'text-brand-500 dark:text-brand-400 bg-transparent',
-        success: 'text-green-600 dark:text-green-500 bg-transparent',
+        success: 'text-green-700 dark:text-green-500 bg-transparent',
         error: 'text-red-600 dark:text-red-500 bg-transparent',
-        warning: 'text-amber-600 dark:text-orange-400 bg-transparent',
-        info: 'text-sky-500 bg-transparent',
+        warning: 'text-amber-800 dark:text-orange-400 bg-transparent',
+        info: 'text-sky-700 bg-transparent',
         gray: 'text-gray-700 dark:text-gray-300 bg-transparent',
         light: 'text-gray-700 dark:text-gray-300 bg-transparent',
         dark: 'text-gray-800 dark:text-white bg-transparent',
