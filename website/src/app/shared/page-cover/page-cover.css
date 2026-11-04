@@ -6,4 +6,12 @@ img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover
 @media (max-width: 1199px) { h1 { font-size: 42px; } }
 @media (max-width: 809px) { :host { padding: 70px 6px 0; } .cover { min-height: 512px; border-radius: 50px; } .copy { padding-inline: 30px; } app-icon { --icon-size: 48px; } h1 { font-size: 32px; } p { font-size: 16px; } }
 @media (prefers-reduced-motion: no-preference) { img { animation: enter 900ms var(--ease-out) both; } .motion-ready { transition: opacity var(--duration-reveal),transform var(--duration-reveal); } .motion-ready:not(.entered) { opacity: .2; transform: translateY(20px); } @keyframes enter { from { transform: scale(1.03); } to { transform: scale(1); } } }
-@media print { .cover { min-height: 300px; } img { animation: none; } .motion-ready { opacity: 1; transform: none; } }
+@media print {
+  :host { padding: 0; }
+  .cover { min-height: 0; display: block; border-radius: 0; overflow: visible; }
+  img, app-icon, .with-copy::after { display: none; }
+  .copy { width: auto; padding: 20px 0; color: #222; }
+  h1 { font-size: 32px; color: #222; }
+  p { font-size: 16px; }
+  .motion-ready { opacity: 1; transform: none; }
+}

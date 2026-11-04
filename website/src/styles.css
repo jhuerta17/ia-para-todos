@@ -211,3 +211,9 @@ body[data-page-transition='revealing'] main {
   body:has(app-workshop-schedule input#reservation-link) app-site-footer,
   body:has(app-workshop-schedule input#reservation-link) .skip-link { display: none !important; }
 }
+
+/* Printed learning pages keep the content rather than site navigation/forms. */
+@media print {
+  app-site-header, app-site-footer, app-page-transition, .skip-link { display: none !important; }
+  body { background: white; }
+}

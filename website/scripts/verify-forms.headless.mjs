@@ -207,7 +207,7 @@ async function main() {
     }
 
     // ---- 4. Responsiveness + performance observation (no thresholds) ----
-    for (const [key, url] of [['home', '/'], ['participate', '/participar'], ['donate', '/donar'], ['contact', '/contacto'], ['home-en', '/en']]) {
+    for (const [key, url] of [['home', '/'], ['participate', '/participar'], ['community', '/comunidad'], ['donate', '/donar'], ['contact', '/contacto'], ['home-en', '/en'], ['participate-en', '/en/participate'], ['donate-en', '/en/donate'], ['contact-en', '/en/contact']]) {
       const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true });
       let requests = 0;
       page.on('request', () => { requests += 1; });
@@ -215,7 +215,27 @@ async function main() {
       await page.goto(base + url, { waitUntil: 'networkidle' });
       results.timings[`mobile:${key}`] = Date.now() - started;
       results.viewports[`mobile:${key}`] = { requests };
+      check(`mobile ${key}: no horizontal overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       await page.screenshot({ path: join(evidence, `mobile-${key}.png`) });
+      await page.close();
+    }
+    // Reading pages retain content and lose navigation in print.
+    for (const [key, url] of [
+      ['workshop', '/talleres/introduccion-ia'], ['activity', '/actividades/primer-prompt'],
+      ['resource', '/recursos/que-es-ia'], ['privacy', '/privacidad'],
+      ['resource-en', '/en/resources/what-is-ai'], ['safety-en', '/en/safety'],
+    ]) {
+      const page = await browser.newPage({ viewport: { width: 320, height: 720 } });
+      await page.goto(base + url, { waitUntil: 'networkidle' });
+      check(`${key}: reading page fits 320px`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      await page.emulateMedia({ media: 'print' });
+      check(`${key}: print retains the title`, await page.locator('main h1').isVisible());
+      check(`${key}: print hides site navigation and newsletter`,
+        !(await page.locator('app-site-header').isVisible()) && !(await page.locator('app-site-footer').isVisible()));
+      if (key === 'activity') check('activity: print hides interactive tutor', !(await page.locator('app-ai-tutor').isVisible()));
+      await page.setViewportSize({ width: 1000, height: 1000 });
+      await page.screenshot({ path: join(evidence, `print-${key}.png`), fullPage: true });
+      await page.pdf({ path: join(evidence, `print-${key}.pdf`), format: 'A4' });
       await page.close();
     }
     for (const [key, url] of [['home', '/'], ['participate', '/participar']]) {
