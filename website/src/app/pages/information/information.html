@@ -1,0 +1,28 @@
+<main id="main-content" tabindex="-1">
+  <header class="introduction">
+    <p class="eyebrow">{{ c().information }}</p>
+    <h1>{{ page().title }}</h1>
+    <p class="lead">{{ page().intro }}</p>
+  </header>
+  <div class="reading-layout">
+    <nav class="contents" [attr.aria-label]="c().contents">
+      <h2>{{ c().contents }}</h2>
+      @for (section of page().sections; track section.heading; let i = $index) {
+        <a (click)="jump($event, i)" [href]="'/' + page().path + '#information-section-' + i">{{ section.heading }}</a>
+      }
+    </nav>
+    <article>
+      @for (section of page().sections; track section.heading; let i = $index) {
+        <section [id]="'information-section-' + i" tabindex="-1" [attr.aria-labelledby]="'information-heading-' + i">
+          <h2 [id]="'information-heading-' + i">{{ section.heading }}</h2>
+          @for (paragraph of section.paragraphs; track $index) { <p>{{ paragraph }}</p> }
+        </section>
+      }
+      <nav class="related" [attr.aria-label]="c().related">
+        <h2>{{ c().related }}</h2>
+        @for (link of related(); track link.path) { <a [routerLink]="'/' + link.path">{{ link.title }}</a> }
+      </nav>
+      <app-action-link to="/" [label]="c().back" />
+    </article>
+  </div>
+</main>
