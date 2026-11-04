@@ -92,9 +92,16 @@ export function createWhatsAppHandler(deps: WhatsAppDependencies = defaults) {
             const response=await deps.fetch(`https://graph.facebook.com/${deps.env('WHATSAPP_GRAPH_VERSION')}/${deps.env('WHATSAPP_PHONE_NUMBER_ID')}/messages`,{
               method:'POST',headers:{Authorization:`Bearer ${deps.env('WHATSAPP_ACCESS_TOKEN')}`,'Content-Type':'application/json'},
               body:JSON.stringify({messaging_product:'whatsapp',to:sender,type:'text',text:{preview_url:false,body:result.reply.slice(0,4000)}}),redirect:'error',signal:AbortSignal.timeout(8000)});
-            if(!response.ok)throw new Error('send_failed');
+            if(!response.ok) {
+              // Only numeric diagnostics: Meta error messages may contain private data.
+              const detail=await response.json().catch(()=>null) as {error?:{code?:unknown;error_subcode?:unknown}}|null;
+              console.error('whatsapp_send_rejected',JSON.stringify({status:response.status,
+                code:Number.isSafeInteger(detail?.error?.code)?detail!.error!.code:null,
+                subcode:Number.isSafeInteger(detail?.error?.error_subcode)?detail!.error!.error_subcode:null}));
+              throw new Error('send_failed');
+            }
             await pool.query("UPDATE whatsapp_events SET state='sent' WHERE id_hash=$1",[id]);
-          } catch {await pool.query("UPDATE whatsapp_events SET state='failed' WHERE id_hash=$1",[id]);}
+          } catch {console.error('whatsapp_reply_failed');await pool.query("UPDATE whatsapp_events SET state='failed' WHERE id_hash=$1",[id]);}
         }
       }
       return json({received:true});

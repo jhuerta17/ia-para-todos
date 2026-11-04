@@ -95,6 +95,18 @@ try{
   assert(!sent.at(-1).body.text.body.includes('No workshops are published'));
   const failed=envelope('Talleres');let attempts=0;const fail=createWhatsAppHandler({...deps,fetch:async()=>{attempts++;throw new Error('network');}});await fail(request(failed),context);await fail(request(failed),context);assert.equal(attempts,1);
   assert.equal((await pool.query('SELECT state FROM whatsapp_events WHERE id_hash=$1',[hash('event:'+failed.entry[0].changes[0].value.messages[0].id)])).rows[0].state,'failed');
+  const diagnostics=[];const originalError=console.error;
+  try {
+    console.error=(...args)=>diagnostics.push(args);
+    const rejected=envelope('Talleres');let rejectedAttempts=0;
+    const reject=createWhatsAppHandler({...deps,fetch:async()=>{rejectedAttempts++;return Response.json({error:{code:190,error_subcode:463,message:'PRIVATE token and recipient details'}},{status:401});}});
+    assert.equal((await reject(request(rejected),context)).status,200);
+    await reject(request(rejected),context);
+    assert.equal(rejectedAttempts,1,'rejected sends remain deduplicated');
+    assert.deepEqual(diagnostics[0],['whatsapp_send_rejected',JSON.stringify({status:401,code:190,subcode:463})]);
+    assert(!JSON.stringify(diagnostics).includes('PRIVATE'));
+    assert.equal((await pool.query('SELECT state FROM whatsapp_events WHERE id_hash=$1',[hash('event:'+rejected.entry[0].changes[0].value.messages[0].id)])).rows[0].state,'failed');
+  } finally {console.error=originalError;}
   const records=await pool.query('SELECT * FROM whatsapp_events');assert(records.rows.every(r=>/^[a-f0-9]{64}$/.test(r.id_hash)));assert(JSON.stringify(records.rows).includes('15555550100')===false);
   const saved=await pool.query('SELECT * FROM whatsapp_selections');assert(saved.rows.every(r=>/^[a-f0-9]{64}$/.test(r.sender_hash)));assert(saved.rows.every(r=>new Date(r.expires_at).getTime()<Date.now()+3700000));
   assert(records.rows.every(r=>new Date(r.expires_at).getTime()<Date.now()+8*86400000));
