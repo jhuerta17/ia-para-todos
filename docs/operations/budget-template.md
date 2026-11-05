@@ -50,7 +50,7 @@ Use venue *types*, never names, in any shared version.
 
 - Free to participants, always: no fees, no required purchases, no paid tools in curricula.
 - Every expense needs a receipt and a category; estimates are labeled as estimates.
-- Before handling donated funds: separate accounts and dual authorization (see `../nonprofit/` — planned).
+- Before handling donated funds: separate accounts and dual authorization (see [nonprofit planning](../nonprofit/formation-options.md)).
 - Financial details stay private; this repo holds only the template and anonymized aggregates.
 
 ## Related documents

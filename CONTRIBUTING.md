@@ -6,7 +6,10 @@ Thank you for your interest in contributing! IA Para Todos is a community educat
 
 ## Project stage
 
-The seven-part repository setup is **complete**: organization, strategy, nonprofit, roadmap, operations, safety, and brand docs plus workshop curricula, templates, and automation all exist as unvalidated drafts. The most helpful contributions right now:
+The repository includes the bilingual website, student/admin portals, reservations,
+Meta Muse integrations, curricula, templates, and organizational plans. Source
+implementation and production evidence are distinguished in [readiness](docs/readiness.md).
+Curricula and organizational plans remain provisional. Helpful contributions include:
 
 - Feedback on mission framing, curricula clarity, and bilingual quality.
 - Translation improvements (Spanish ↔ English).
@@ -16,7 +19,7 @@ The seven-part repository setup is **complete**: organization, strategy, nonprof
 
 - **Documentation** — fix errors, improve clarity, add examples.
 - **Translations** — Spanish ↔ English translation of docs and curricula.
-- **Curriculum feedback** — review workshop outlines once published.
+- **Curriculum feedback** — review the existing workshop outlines and validate them in pilots.
 - **Outreach ideas** — connections to community organizations, libraries, or venues.
 - **Accessibility** — improve readability and accessible formats.
 

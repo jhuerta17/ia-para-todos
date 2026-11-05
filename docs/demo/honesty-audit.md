@@ -1,5 +1,10 @@
 # Honesty Audit — Demo Sprint
 
+> **HISTORICAL RECORD:** Preserved planning/build notes; statements below refer
+> to their original checkpoint, not current feature availability or organization
+> status. Current access, implemented connections, and remaining evidence are in
+> [readiness](../readiness.md) and [architecture](../architecture.md).
+
 > **DRAFT:** Audit record for the demo sprint, run 2026-10-30. Re-run
 > after any copy change that touches claims about operations, status,
 > or results.

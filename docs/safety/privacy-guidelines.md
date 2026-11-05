@@ -54,9 +54,9 @@ Live Meta Contributor practice requires a separate acknowledgement: Meta may use
 prompts and replies to train its models. Local deletion cannot undo provider use.
 Do not log prompts, replies, email addresses, or authentication tokens.
 
-## Where private operational data lives
+## Other private operational records
 
-> **DECISION NEEDED:** The private storage solution (encrypted drive, access list, retention schedule) has not been selected. Until it is: paper in a locked location, digital in a password-protected folder with minimal sharing, and nothing in this repository or in personal chat histories beyond coordination.
+> **DECISION NEEDED:** Identity, Neon, and Forms hold the application records described above. Storage, access lists, and retention for other private operational files have not been selected. Until it is: paper in a locked location, digital in a password-protected folder with minimal sharing, and nothing in this repository or in personal chat histories beyond coordination.
 
 ## Breach response
 

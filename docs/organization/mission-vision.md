@@ -45,4 +45,4 @@
 
 - [values.md](values.md) — the values behind these statements
 - [overview.md](overview.md) — organizational overview
-- `../brand/messaging.md` (planned) — future boilerplate language
+- [messaging](../brand/messaging.md) — provisional boilerplate language

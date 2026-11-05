@@ -1,60 +1,78 @@
-# Five-Minute Demo Script
+# Five-minute judge walkthrough
 
-> **DRAFT:** Talk track for the demo-sprint showcase, 2026-10-30.
-> Timings are guides; the honesty opener is mandatory, not optional.
+> **CURRENT GUIDE — November 4, 2026:** Present only observed live behavior.
+> See [readiness](../readiness.md) for unverified steps. Allow extra time for
+> email confirmation before the five-minute walkthrough.
 
-## 0:00 — Honesty opener (say this first)
+## Before presenting
 
-> "What you're about to see is a showcase of what IA Para Todos
-> *would* look like after six months of running — the site, the
-> admin, and the AI tutor all working. Nothing here claims real
-> workshops happened: sample data is labeled everywhere, and the
-> tracker at the end shows exactly what's done and what's still a
-> plan."
+Open the [live website](https://ia-para-todos-jh.netlify.app/) in a fresh browser.
+Judges create their own account at
+[student signup](https://ia-para-todos-jh.netlify.app/portal/sign-up), using their
+own email, an eight-character-or-longer password, and the adult/account privacy
+acknowledgement. Follow the confirmation email. Password recovery is on
+[sign-in](https://ia-para-todos-jh.netlify.app/portal/sign-in).
 
-## 0:30 — Public site (the program face)
+Signup depends on enabled registration, the signup gate, and available pilot
+seats. Do not promise email delivery before testing it. Shared credentials are
+not published. Prepare only fictional prompts; do not reserve a real place just
+for a demonstration. Admin access requires a separately granted role.
 
-1. Home `/`: free Spanish workshops, phone-first, community framing.
-2. `/talleres`: four connected workshops — open one, show the agenda,
-   series position ("Taller 2 de 4"), and prev/next navigation.
-3. `/nosotros`: mission, program facts, values, and the real
-   founder story with photo.
-4. `/cursos`: the course ladder — free mini-course live, paid tiers
-   honestly marked in preparation.
+## 0:00 — Introduce the project
 
-## 2:00 — Lived-in admin (open `/admin`, enable `?demo=1`)
+“IA Para Todos is a community initiative for accessible AI education, starting
+with Spanish-speaking adults in Dallas–Fort Worth. This platform connects
+workshop discovery and reservations with optional preparation, courses, and
+Meta Muse practice. Simulated dashboard figures are labeled; they are not
+claims of real attendance, donations, or impact.”
 
-1. Dashboard: six months of intake, trend, and the plans strip.
-2. Requests: 227 seeded rows, per-form filters, believable Spanish
-   messages with volume growing month over month.
-3. Workshops: 8 sessions cycling the real series, rated 89–96%.
-4. Impact: reach, volunteers, satisfaction, and confidence curves.
-5. Supporters: $119,500 ledger with latest-gift history.
-6. Point at the amber banner: "Demo data. Simulated, not real
-   operations."
+## 0:30 — Discover and prepare
 
-## 3:30 — AI showcase (the flagship)
+1. Show `/agenda` or `/en/schedule`: published future sessions and availability.
+2. Open a session's registration details without submitting a booking unless
+   attending. Explain one-adult reservations, guest access, and the private
+   management link. No automatic booking email or SMS is sent.
+3. Open `/preparacion` or `/en/preparation`: optional five-minute preparation,
+   no AI call required. Signed-in completion can be saved.
 
-1. On `/actividades/primer-prompt`, type a prompt into **Practica
-   con IA**. Note the greeting, the privacy reminder, and the
-   "Respuesta de ejemplo" badge (live answers switch on with one
-   API key — see `docs/demo/ai-setup.md`).
-2. Back in Requests, press **Draft** on any row: an AI reply draft
-   appears with copy/dismiss. Same proxy, same guardrails
-   (server-side key, PII scrub, rate limits).
+## 1:30 — Student account and learning
 
-## 4:30 — Plans tracker and close
+1. Open `/portal` after confirmed signup; show linked reservations/preparation.
+2. Enter `/portal/courses`. Explain and accept learning/Contributor consent
+   only if comfortable with Meta training use; an account alone is not consent.
+3. Enroll and complete a lesson. Explain that progress uses private,
+   authenticated database records. Show cross-browser persistence only if tested.
 
-1. Open `/admin/plans`: 27 demo-sprint plans, all Done, with the
-   out-of-scope list showing what saying "no" looks like.
-2. Close: "The demo took five days. The real work — outreach,
-   pilots, the legal entity — starts from `docs/demo/next-steps.md`,
-   and every step after this one gets tracked in this same portal."
+## 2:45 — Meta Muse practice
 
-## Setup checklist (before presenting)
+1. Open `/portal/chats`, create a practice conversation, and use a fictional
+   prompt such as “Explain a prompt using a made-up neighborhood bakery.”
+2. Point to the actual live/sample label. Do not call a sample a live response.
+   Live tutoring uses `muse-spark-1.3-contributor`; Meta may use prompts/replies
+   for training. A live status or model-catalog check alone proves no generation.
+3. Explain saved-chat expiry after 30 days, student daily limits, the shared
+   student cost ledger, and the separate best-effort public tutor limits.
 
-- Production deploy green; open the site in a fresh browser.
-- Admin: sign in, append `?demo=1` once, keep the banner visible.
-- Optional: set `META_MUSE_API_KEY` for live tutor answers;
-  otherwise the labeled samples carry the demo.
-- Have `/admin/plans` loaded for the close.
+## 4:00 — Trust, connections, and optional admin view
+
+Show the [architecture guide](../architecture.md): Identity for login, Neon for
+private application records, Functions for server checks, Forms for intake,
+Blobs for the AI switch, and Meta Muse for generation. WhatsApp shares the agenda
+but remains an approved-recipient test integration; do not imply open delivery.
+
+If an authorized presenter has admin access, show `/admin` with demo labels
+visible. Explain that inbox drafts use Muse Standard and outreach drafts use
+Contributor. Public/student reservations still use real APIs regardless of demo
+mode. Do not submit, publish, or send anything as part of a read-only presentation.
+
+## 4:45 — Account control and close
+
+Show `/portal/account` and chat deletion controls without deleting an account
+needed for continued judging. Explain immediate application removal/access denial
+and scheduled Identity deletion retries. Local deletion cannot reverse provider
+training or establish removal from backups.
+
+Close with the [readiness checklist](../readiness.md): real-email, two-user,
+maintenance, recovery, and live-generation evidence are separate from source
+implementation. Organizational plans and curricula remain provisional until
+validated through real operations.

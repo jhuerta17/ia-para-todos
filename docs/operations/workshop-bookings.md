@@ -1,5 +1,8 @@
 # Workshop-first experience
 
+> **SOURCE REVIEW — November 4, 2026:** Implemented flows below; see
+> [readiness](../readiness.md) for current live checks and unverified workflows.
+
 In-person workshops are the main learning experience. The existing topic catalog
 remains; real dated sessions are managed at `/admin/workshops`. Drafts are private until an organizer publishes them. The existing
 admin demo mode remains synthetic and does not write live sessions.
@@ -124,8 +127,9 @@ sessions are labeled as full. Numbered replies provide details; the full agenda
 link provides access to sessions beyond the first five. Empty schedules and
 service failures have different replies in the requested language.
 
-The live public API returned `{"sessions":[]}` during the November 3, 2026
-investigation. The public agenda now always reflects the same database records. Do not seed fictional workshops
+The live public API returned `{"sessions":[]}` during the historical November 3, 2026
+investigation. The November 4 read-only check returned five published sessions;
+see [dated evidence](../readiness.md). The public agenda reflects the same database records. Do not seed fictional workshops
 into production to fix an empty reply. Publish confirmed dates, times, venues,
 and capacities through the live admin workshop editor, then verify the public
 API contains the same session IDs. Existing WhatsApp credentials and recipient

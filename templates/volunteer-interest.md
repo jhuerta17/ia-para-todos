@@ -41,7 +41,7 @@ Thank you for your interest! / ¡Gracias por tu interés!
 **Agreements / Acuerdos**
 
 - [ ] I understand this is an unpaid volunteer role in an early-stage initiative.
-- [ ] I agree to protect participant privacy: no names, photos, or personal data collected or shared.
+- [ ] I agree to protect participant privacy: no participant photos or informal contact lists; approved reservation/account data stays in authorized private systems and is never shared publicly.
 - [ ] I agree to the conduct expectations (education only: no sales, recruiting, preaching, or campaigning).
 
 Signature / Firma: _______________ Date / Fecha: _______________

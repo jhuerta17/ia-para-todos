@@ -24,7 +24,7 @@ Cover, in this order:
 
 1. **What:** free 90–120 minute beginner AI workshops in Spanish, smartphone-only, no paid tools.
 2. **Who:** their community members — parents, workers, older adults, job seekers.
-3. **Character:** inclusive, nonsectarian, non-commercial; no sales, no religious content, no data collection.
+3. **Character:** inclusive, nonsectarian, non-commercial; no sales or religious content; anonymous feedback, with optional private reservation/account data under explicit notices.
 4. **Ask:** a room, help announcing, and a present contact person. We bring facilitators and materials.
 5. **Honesty:** this is a pilot — we're validating, not launching; small groups (10–20); we'll share aggregate results.
 

@@ -20,10 +20,13 @@ Be precise about what exists today:
 | Free beginner AI workshops in Spanish | No official workshops conducted yet |
 | Trusted community host partners | No formal partnerships formed yet |
 | Trained volunteer facilitators | No volunteers recruited yet |
-| Validated, tested curricula | No curricula written yet (planned under `workshops/`) |
+| Validated, tested curricula | Four written workshop curricula exist; pilot validation remains pending |
 | Possible future nonprofit entity | Not incorporated; not a 501(c)(3); exploratory stage only |
 
-Everything in this repository — mission, values, strategy — is a **working draft to guide validation**, not a description of an operating program.
+Mission, values, and strategy remain **working drafts to guide validation**.
+The website, accounts, reservations, and AI integrations have source implementations;
+see [current readiness](../readiness.md) for deployment evidence. Future published
+sessions do not prove completed workshops, formal partnerships, or legal status.
 
 ## What this initiative is and is not
 
@@ -39,11 +42,11 @@ Everything in this repository — mission, values, strategy — is a **working d
 
 - **Organization docs** (this directory) define identity: mission, vision, values, audiences, FAQ.
 - `../strategy/` defines reasoning: the problem, how change happens, risks, and disciplined growth.
-- `../roadmap/` (planned) will sequence the work, starting with a pilot plan.
-- `../operations/` (planned) will make workshops repeatable: checklists, guides, budgets, measurement.
-- `../nonprofit/` (planned) will explore future legal structure — deliberately *after* program validation.
-- `../safety/` (planned) will set standards for responsible AI, privacy, safeguarding, and accessibility.
-- `../brand/` (planned) will hold voice, tone, and messaging guidelines.
+- [Roadmap](../roadmap/milestones.md) proposes work, starting with a pilot plan.
+- [Operations](../operations/workshop-checklist.md) helps make workshops repeatable: checklists, guides, budgets, measurement.
+- [Nonprofit planning](../nonprofit/formation-options.md) explores future legal structure — deliberately *after* program validation.
+- [Safety](../safety/responsible-ai.md) sets proposed standards for responsible AI, privacy, safeguarding, and accessibility.
+- [Brand](../brand/brand-guidelines.md) holds provisional voice, tone, and messaging guidelines.
 
 ## Related documents
 

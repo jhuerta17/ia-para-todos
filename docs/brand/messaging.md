@@ -13,10 +13,10 @@
 ## Status line (✅ append whenever describing the project publicly)
 
 **Español:**
-> Estamos en etapa exploratoria: aún no realizamos talleres oficiales ni formamos alianzas formales, y no somos una organización sin fines de lucro registrada.
+> Somos una iniciativa comunitaria con sitio bilingüe, portal de estudiantes, reservas y práctica con Meta Muse. La agenda muestra las próximas sesiones publicadas; no acredita talleres ya impartidos. Este repositorio no establece registro legal sin fines de lucro, alianzas formales ni resultados medidos.
 
 **English:**
-> We are in the exploratory stage: we have not yet held official workshops or formed formal partnerships, and we are not a registered nonprofit.
+> We are a community initiative with a bilingual site, student portal, reservations, and Meta Muse practice. The agenda shows published future sessions, not proof of delivered workshops. This repository does not establish legal nonprofit status, formal partnerships, or measured outcomes.
 
 ## Key messages
 

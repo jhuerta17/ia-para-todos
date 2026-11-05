@@ -55,7 +55,7 @@
 
 - Keep fixed costs near zero until demand is proven; fund the pilot out of pocket at small scale.
 - Measure true cost per workshop and per participant during the pilot.
-- Explore fiscal sponsorship before independent incorporation (see `../nonprofit/` — planned).
+- Explore fiscal sponsorship before independent incorporation (see [nonprofit planning](../nonprofit/formation-options.md)).
 - Pursue only mission-aligned funding; never accept conditions requiring paid tools, vendor favoritism, or exclusionary eligibility.
 
 ## 6. Unreliable internet or equipment
@@ -143,7 +143,7 @@
 
 - Keep the initiative independent from commercial lead generation: no attendee lists shared, no sales pitches, no product favoritism.
 - Any future transactions involving related businesses would require appropriate disclosure, independent evaluation, recusal, and organizational safeguards.
-- Adopt a written conflict-of-interest policy before any formalization (see `../nonprofit/` — planned).
+- Adopt a written conflict-of-interest policy before any formalization (see [nonprofit planning](../nonprofit/formation-options.md)).
 - Curricula recommend categories of free tools, never a single vendor, and never a related business.
 
 > No names, financial information, or confidential details about the founder's businesses are included in this repository, by design.

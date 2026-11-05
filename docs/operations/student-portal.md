@@ -1,20 +1,40 @@
 # Adult student portal operations
 
-The repository implements the free ES/EN introductory course, account progress,
-saved sample/live practice, adult/privacy consent, capped signup, quotas,
-retention, and deletion. Production deployment, real email callbacks, and
-real two-user staging evidence remain separate release gates.
+> **SOURCE REVIEW — November 4, 2026:** The repository implements accounts,
+> progress, saved sample/live practice, consent, capped signup, quotas, retention,
+> and deletion. Deployment and real-email/two-user evidence are separate checks;
+> see the [current readiness checklist](../readiness.md).
+
+## Judge registration and sign-in
+
+Use [Create account](https://ia-para-todos-jh.netlify.app/portal/sign-up) with
+name, an accessible personal email, and a password of at least eight characters.
+Confirm age 18+ and the basic account/privacy acknowledgement, then follow the
+confirmation email. [Sign in](https://ia-para-todos-jh.netlify.app/portal/sign-in)
+also provides password recovery. Use the ES/EN control for language.
+
+The form's existence does not prove production registration is open. Operators
+must enable Identity registration and `PORTAL_SIGNUP_ENABLED`, keep confirmation
+on, configure admission HMAC/database access, and have a free pilot seat. Signup
+can show a generic failure for a closed/full pilot or service failure. Existing
+accounts should sign in or recover their password, not create duplicates.
+
+Account creation covers linked reservations/preparation. Entering courses or
+saved practice requires the separate current learning/Contributor consent. Meta
+may use Contributor questions/replies for training; practice with fictional data.
+Student signup never grants admin. See the [README walkthrough](../../README.md).
 
 ## Data and access
 
 Netlify Identity owns credentials, email, and display name. Neon PostgreSQL owns
 profiles (Identity ID and consent), enrollments, lesson completion, chats,
 messages, admissions, deletion jobs, and usage counters. No student records or
-secrets belong in Git. Public workshops remain anonymous; the approved adult
-portal exception is documented in the privacy guidelines and public notices.
+secrets belong in Git. Workshop attendance/feedback remain anonymous; optional reservations store private
+contact details under their own notice. The approved adult portal exception is documented in the privacy guidelines and public notices.
 
-Every portal API derives ownership from verified Identity; it rejects
-unconfirmed email and requires adult/privacy consent. User metadata cannot
+Portal data APIs derive ownership from verified Identity and require confirmed
+email. Workshop/preparation access uses the basic account acknowledgement;
+courses and saved practice additionally require current learning/AI consent. User metadata cannot
 assign the admin role. Portal access does not imply admin access. Admin APIs
 and edge role rules retain their existing checks. Portal and admin share a
 session; signing out of either signs out of both.
@@ -146,7 +166,7 @@ confirmation enabled. Server roles change on next login/token refresh.
 
 Live practice is limited to 20 admitted requests per student per UTC day. A
 shared student-AI ledger is capped at 25,000,000 microdollars ($25) per UTC month.
-Student practice requests live AI by default after verified account setup. The versioned learning/practice consent notice discloses Meta Contributor training use in both languages. New workshop-focused accounts use a basic account acknowledgement at registration and accept AI consent separately when entering courses or saved practice. Existing accounts must accept `2026-11-03-meta-contributor-v1` once before using portal data; practice does not ask for consent again per conversation. The provider configuration, global AI switch, and usage limits still apply, and fallback replies remain labeled as samples.
+Student practice requests live AI by default after verified account setup. The versioned learning/practice consent notice discloses Meta Contributor training use in both languages. New workshop-focused accounts use a basic account acknowledgement at registration and accept AI consent separately when entering courses or saved practice. Existing accounts must accept `2026-11-03-meta-contributor-v1` once before entering learning/practice; workshop-only accounts use the basic notice. Practice does not ask for consent again per conversation. The provider configuration, global AI switch, and usage limits still apply, and fallback replies remain labeled as samples.
 
 Day/month reset at 00:00 UTC. Sample replies do not consume live allowance.
 Admission reserves conservative input/output cost before any provider call,
@@ -207,7 +227,10 @@ the initial 202 response. Test deletion with disposable staging users only.
    Do not read CLI token files or invent undocumented Identity endpoints.
 5. Record incidents privately. Commit only anonymized process improvements.
 
-## Release gates
+## Release verification
+
+The following is an operator procedure, not evidence that gates are currently
+closed or every step has passed. Track unresolved checks in [readiness](../readiness.md).
 
 1. Finish all local commands above and review desktop/mobile evidence.
 2. Configure a separate staging Netlify project with separate Identity users
@@ -229,7 +252,8 @@ the initial 202 response. Test deletion with disposable staging users only.
 7. Obtain production approval, set the reviewed configuration, and deploy the
    reviewed `main` commit through Git. Enable signup/live only after the
    migration and access checks pass. Do not create an ad-hoc manual production
-   deploy. No production deploy has been performed by this implementation work.
+   deploy. This checklist describes rollout requirements, not the current deployment status;
+   consult the readiness record for dated evidence.
 
 On a bad release, disable signup/live first and fix forward with a corrective
 commit. Do not remove migrations or restore data snapshots as a routine app

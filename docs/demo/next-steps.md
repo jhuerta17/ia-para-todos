@@ -1,5 +1,10 @@
 # Next Steps — After the Demo
 
+> **HISTORICAL RECORD:** Preserved planning/build notes; statements below refer
+> to their original checkpoint, not current feature availability or organization
+> status. Current access, implemented connections, and remaining evidence are in
+> [readiness](../readiness.md) and [architecture](../architecture.md).
+
 > **DRAFT:** On-ramp from the demo sprint to real operations,
 > 2026-10-30. Nothing here has started; day counts begin when the
 > work actually begins.
@@ -42,11 +47,11 @@ step names its exit signal; do not skip ahead.
 
 ## 4. Turn the demo into operations
 
-- Replace demo mode page by page with the live stores it
-  anticipates (scheduling, impact reporting, supporter ledger).
-- Point the tutor and triage at the verified Muse API endpoint and
-  key ([setup](ai-setup.md)); add admin auth to triage and a spend
-  cap before announcing widely.
+- Scheduling/reservations and student persistence now have database-backed
+  implementations. Impact reporting and the supporter ledger still need live stores.
+- The Muse proxy, authenticated admin triage, shared switch, and durable student
+  spending ledger are implemented. Public AI still uses best-effort limits;
+  verify provider billing controls before broad availability. See [setup](ai-setup.md).
 - Convert waitlist interest into the first real course cohort only
   after in-person demand is proven.
 - **Exit:** Plans tracker retired or re-scoped; milestones

@@ -1,6 +1,9 @@
 # Admin dashboard
 
-Owner-only dashboard for managing the site: review form submissions
+> **SOURCE REVIEW — November 4, 2026:** Current feature boundaries below; live
+> verification is tracked in [readiness](../readiness.md).
+
+Admin-role dashboard for managing the site: review form submissions
 (`participate`, `collaborate`, `newsletter`) behind a Netlify Identity
 login. English UI, light mode, same brand as the public site.
 
@@ -11,6 +14,7 @@ login. English UI, light mode, same brand as the public site.
 - Impact (admin role): `/admin/impact`
 - Supporters (admin role): `/admin/supporters`
 - Plans (admin role): `/admin/plans`
+- Outreach drafts (admin role): `/admin/outreach`
 
 Access is enforced in three layers: Netlify edge role rules
 (`netlify.toml`), the in-app route guard, and the Function, which
@@ -23,9 +27,11 @@ admin HTML is a data-free shell.
 Identity itself is already enabled. Complete these steps in the
 Netlify dashboard:
 
-1. **Invite-only registration.** Site settings → Identity →
-   Registration → Registration preferences → **Invite only**. This
-   closes public signup; only invited owners can exist.
+1. **Separate student registration from admin roles.** Public student signup
+   requires open Identity registration plus the portal signup gate and admission
+   capacity. Invite-only closes self-registration for students too; use it only
+   when intentionally pausing signup. Keep email confirmation enabled. Inviting
+   an owner never replaces explicit `admin` role assignment.
 2. **Invite yourself.** Identity → Users → **Invite users** → enter
    your email and send the invite.
 3. **Accept the invite.** Open the invite email link (it lands on the
@@ -39,12 +45,13 @@ Netlify dashboard:
    `ia-para-todos-admin` and copy the value (shown once). The inbox
    uses it read-only to list forms and submissions.
 6. **Set the env var.** Site settings → Environment variables → add
-   `NETLIFY_API_TOKEN` with the token value, marked secret, scoped to
-   all contexts (or at least production). Then **trigger a redeploy**
+   `NETLIFY_API_TOKEN` with the token value, marked secret, production-only, using the narrowest available Functions scope and token permissions.
+   Use separate credentials for staging; do not expose production tokens to previews. Then **trigger a redeploy**
    (Deploys → Trigger deploy): functions pick up env vars on deploy.
 
-No email-template changes are needed: invite links are detected
-site-wide and rerouted to `/admin/sign-in`, which consumes the token.
+The app detects invite links site-wide and reroutes them to
+`/admin/sign-in`, which consumes the token. Verify the deployed email links
+and callback configuration with a disposable account.
 Recovery and confirmation links reroute to `/portal/sign-in` instead;
 after consuming one, admins land on `/admin` and students on `/portal`.
 
@@ -62,11 +69,15 @@ for the isolated, fake-authentication verification workflow.
   a six-month request trend, a by-form breakdown, and the five latest
   submissions. **Requests** shows everything with per-form filters
   (latest 100 per form; a note appears when truncated).
-- **Workshops** lists sessions with attendance and status, **Impact**
-  reports reach and satisfaction, and **Supporters** keeps the
-  contribution ledger. These three pages have no live store yet: they
-  show honest empty states until their backends exist, and full
-  example content in demo mode (below).
+- **Workshops** manages database-backed bilingual sessions, publication,
+  capacity, private reservations, assisted booking, cancellation, and manual
+  follow-up. See [workshop operations](workshop-bookings.md).
+- **Impact** and **Supporters** have no live impact/ledger stores; they show
+  empty states or synthetic examples in demo mode. Demo totals are not evidence
+  of delivered workshops, satisfaction, donations, or partnerships.
+- **Outreach** (`/admin/outreach`) drafts invitations from published workshop
+  facts using Meta Muse Contributor after acknowledgement; a person reviews and
+  copies the draft. It does not automatically publish or send messages.
 - **Plans** is the business roadmap tracker: every strategy goal as a
   checkable plan grouped by area, with per-group and overall
   progress. Finished steps ship as Done from code (`done: true` in
@@ -78,10 +89,11 @@ for the isolated, fake-authentication verification workflow.
 
 ## Demo mode
 
-Demo mode swaps every admin page to deterministic synthetic data
+Demo mode provides deterministic synthetic dashboard examples
 (about six months of invented operations) so the dashboard can be
 evaluated before real data accumulates. It never touches Netlify
-Forms submissions: only the dashboard's data source changes.
+Forms submissions: only applicable demo views change. Public schedule, booking, private reservation
+management and student reservations always use live APIs, regardless of demo preference.
 
 - **Turn on:** open any admin page with `?demo=1`, pick **View demo
   data** in the account menu, or click **Preview with demo data** on
@@ -142,7 +154,8 @@ Run through this once after setup, ideally on a deploy preview first:
   `admin/data/demo-content.ts` (workshops, impact, supporters),
   `admin/data/analytics.ts` (buckets, deltas). Postbuild pins their
   exact output; `verify:admin` pins the UI behavior.
-- Follow-up: workshops, impact, and supporters need real stores
-  (functions + persistence) before their live views can show data.
+- Follow-up: Impact and Supporters still need real stores. Workshops and
+  reservations already use PostgreSQL; never seed fictional live sessions to
+  populate a demo. See [readiness](../readiness.md).
 - Local checks (Chromium via Playwright, Identity stubbed):
   `npm run build`, `npm run verify:admin`, `npm run verify:forms`.

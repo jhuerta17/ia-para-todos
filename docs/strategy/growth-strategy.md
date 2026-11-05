@@ -33,7 +33,7 @@
 - Additional venue types, possible English track, facilitator training cohorts.
 - Only with sustainable funding and governance in place.
 
-Detailed sequencing will live under `../roadmap/` (planned) once drafted.
+Detailed sequencing will live under [roadmap](../roadmap/milestones.md).
 
 ## Intentional growth constraints
 

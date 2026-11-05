@@ -1,6 +1,20 @@
 # Documentation Index
 
-Welcome to the IA Para Todos documentation. The seven-part setup is **complete**: all documentation sections exist (organization, strategy, nonprofit, roadmap, operations, safety, brand) plus workshops, templates, scripts, and `.github/` automation. Remaining: `assets/` brand/media files (planned once visual identity is decided) and pilot validation of every draft.
+Start with the [main README](../README.md) for the live site and judge signup.
+Documentation distinguishes current source behavior, separately verified production
+evidence, historical implementation records, and provisional organizational plans.
+
+## Current platform guides
+
+- [Readiness and remaining evidence](readiness.md) — current verification status and unresolved work.
+- [Architecture, connections and security](architecture.md) — services, data flow, access controls and limits.
+- [Student portal](operations/student-portal.md) — registration, consent, quotas and deletion.
+- [Workshop reservations](operations/workshop-bookings.md) — live scheduling, guest links and WhatsApp test discovery.
+- [Admin dashboard](operations/admin-dashboard.md) — roles, Forms inbox and synthetic demo data.
+- [Meta Muse setup](demo/ai-setup.md) — live switch, models, privacy and best-effort public limits.
+- [Judge walkthrough](demo/demo-script.md) — five-minute presentation flow.
+- [Website development](../website/README.md) — actual local/build/verification commands.
+- [Security policy](../SECURITY.md) — private reporting and supported deployment.
 
 ## Structure
 
@@ -15,11 +29,11 @@ Welcome to the IA Para Todos documentation. The seven-part setup is **complete**
 | `brand/` | [brand-guidelines.md](brand/brand-guidelines.md) · [voice-and-tone.md](brand/voice-and-tone.md) · [messaging.md](brand/messaging.md) |
 | `demo/` | [scope.md](demo/scope.md) · [honesty-audit.md](demo/honesty-audit.md) · [ai-setup.md](demo/ai-setup.md) · [demo-script.md](demo/demo-script.md) · [next-steps.md](demo/next-steps.md) |
 
-Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · [`scripts/`](../scripts/validate-docs.sh) (`bootstrap.sh`, `validate-docs.sh`) · [`.github/`](../.github/PULL_REQUEST_TEMPLATE.md) (issue/PR templates, docs-check workflow) · `assets/` (brand/media files, planned once visual identity is decided).
+Top-level companions (outside `docs/`): [`workshops/`](../workshops/README.md) (curricula index) · `templates/` ([partnership-outreach](../templates/partnership-outreach.md) · [volunteer-interest](../templates/volunteer-interest.md) · [workshop-feedback](../templates/workshop-feedback.md) · [venue-assessment](../templates/venue-assessment.md) · [pilot-retrospective](../templates/pilot-retrospective.md)) · [`scripts/`](../scripts/validate-docs.sh) (`bootstrap.sh`, `validate-docs.sh`) · [`.github/`](../.github/PULL_REQUEST_TEMPLATE.md) (issue/PR templates, docs-check workflow) · `website/public/` (shipped website assets and applicable third-party notices).
 
 ## Website implementation
 
-- [Spanish website content draft](website-content-draft.es.md) — provisional page copy for review.
+- [Spanish website content draft](website-content-draft.es.md) — historical provisional copy; current rendered content lives in the application.
 
 ## Documentation conventions
 
@@ -27,7 +41,7 @@ All contributors and future setup phases must follow these:
 
 1. **Descriptive Markdown** — ATX headings (`#`), fenced code blocks with language tags, tables for comparisons, blank lines around lists and headings. Wrap prose at ~100 columns where practical.
 2. **Relative links** — always link repository files relatively (e.g., `organization/mission-vision.md` from here, `../README.md` upward). Never hardcode absolute GitHub URLs for in-repo navigation.
-3. **Status labels** — every doc states its reliability up front:
+3. **Status labels** — state reliability up front; date source reviews and live evidence separately. Historical records must link to current guides. Planning docs retain their provisional labels:
    - `> **DRAFT:**` — untested or provisional content.
    - `> **DECISION NEEDED:**` — a choice the project has not made yet.
    - `> **VERIFY:**` — a fact that must be checked against an official source.

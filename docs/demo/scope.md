@@ -1,5 +1,10 @@
 # 5-Day Demo Sprint — Scope
 
+> **HISTORICAL RECORD:** Preserved planning/build notes; statements below refer
+> to their original checkpoint, not current feature availability or organization
+> status. Current access, implemented connections, and remaining evidence are in
+> [readiness](../readiness.md) and [architecture](../architecture.md).
+
 > **DRAFT:** Working scope for the demo sprint, locked 2026-10-30. Day
 > references are sprint days, not calendar commitments. Any change to
 > the out-of-scope list needs an explicit re-lock, not a quiet edit.

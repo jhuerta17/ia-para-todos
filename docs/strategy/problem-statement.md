@@ -30,7 +30,7 @@ See [../organization/target-audience.md](../organization/target-audience.md) for
 
 ## What success would look like
 
-Not attendance counts, but changed capability: participants who complete a practical AI task in a workshop, report higher confidence afterward, and report using AI again — carefully — weeks later. Measurement approaches will be defined under `../operations/` (planned) and piloted before being treated as benchmarks.
+Not attendance counts, but changed capability: participants who complete a practical AI task in a workshop, report higher confidence afterward, and report using AI again — carefully — weeks later. Measurement approaches are drafted in [impact measurement](../operations/impact-measurement.md) and must be piloted before being treated as benchmarks.
 
 ## Deliberately out of scope
 

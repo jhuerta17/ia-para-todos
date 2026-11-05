@@ -1,9 +1,14 @@
-# AI practice: simple admin switch
+# AI practice: live switch and public limits
+
+> **SOURCE REVIEW — November 4, 2026:** This guide describes public tutor and
+> admin AI. Student admission, pricing and durable limits are additional controls
+> in [student operations](../operations/student-portal.md). Current live evidence
+> is tracked in [readiness](../readiness.md).
 
 The current version uses **no Redis and no Cloudflare/Turnstile**. It has a
-shared on/off switch and basic hardcoded request limits. Live AI starts **off**.
+shared on/off switch and basic hardcoded request limits. An absent/unreadable live setting defaults **off**; this does not establish the current production switch value.
 
-Deployed on 2026-11-02:
+Historical deployment report, 2026-11-02 (not reverified by this source review):
 [production deployment](https://app.netlify.com/projects/ia-para-todos-jh/deploys/6ae8cbebfc463086c93dd33d).
 Validation passed: 12 offline handler scenarios, 22 desktop/mobile browser checks,
 function type checks, and the build. Production checks confirmed the saved switch
@@ -68,8 +73,10 @@ you need one. Hosting costs are also separate.
 ## Provider and privacy
 
 The only provider endpoint is `https://api.meta.ai/v1/responses`, selected in
-server code. Public tutor uses `muse-spark-1.3-contributor`; admin drafting uses
-`muse-spark-1.3` (Standard mode). Tools are disabled and response storage is off.
+server code. Public tutor and admin outreach use `muse-spark-1.3-contributor`; admin inbox
+triage uses `muse-spark-1.3` (Standard mode). Outreach requires Contributor
+acknowledgement and uses published workshop facts. Tools are disabled and response storage is requested off (`store:false`); this does not override Contributor
+training use or establish provider backup retention.
 
 Before live tutor practice, learners acknowledge that Contributor mode allows
 Meta to use their questions/replies for model training. Keep fictional-data
@@ -80,17 +87,21 @@ usage when returned, and response/denial reasons.
 
 ## Configuration
 
-Only these production environment variables are needed:
+For the public tutor/admin AI path, these production variables are needed
+alongside the saved switch (student AI has additional gates/pricing):
 
 | Variable | Purpose |
 |---|---|
 | `META_MUSE_API_KEY` | Existing Meta key, server-side only |
 | `AI_ALLOWED_ORIGINS` | Exact allowed HTTPS origins, comma separated; currently `https://ia-para-todos-jh.netlify.app` |
 
-`AI_LIVE_ENABLED`, pricing-verification variables, Redis variables, Turnstile
-variables, and IP-hashing secrets are no longer used. The saved admin switch is
+Legacy `AI_LIVE_ENABLED`, public-path pricing-verification variables, Redis
+variables, Turnstile variables, and IP-hashing secrets are no longer used by this
+public/admin path. The saved admin switch is
 the source of truth. No pricing verification or budget initialization is required
-to operate the toggle. Local development and previews always use samples.
+to operate the public/admin toggle. Student live practice additionally requires
+`PORTAL_AI_ENABLED`, exact `PORTAL_AI_PRICE_MODEL`, and verified positive
+`PORTAL_AI_INPUT_USD_PER_MILLION` / `PORTAL_AI_OUTPUT_USD_PER_MILLION`. Local development and previews always use samples.
 
 On the current Netlify plan, granular Functions-only environment scopes require
 an upgrade; the existing key is production-only with the plan's supported scopes.
@@ -101,7 +112,7 @@ An environment change alone does not revoke a provider key.
 ## Endpoints and tests
 
 - `GET /api/ai-status`: public live/sample status, no secrets.
-- `POST /api/ai-assist`: tutor input and admin drafts; triage requires admin auth.
+- `POST /api/ai-assist`: tutor input and admin drafts; triage and outreach require admin auth.
 - `GET/POST /.netlify/functions/ai-control`: authenticated admin read and
   `{ "action": "enable" | "pause" }` updates.
 
@@ -126,10 +137,9 @@ privacy acknowledgements, failure fallback, and secret-free logs.
 Named rate configuration must use `export const config: Config = { ... }`;
 Netlify CLI 27.4.2 ignores named initializers wrapped in `satisfies Config`.
 
-A manual production deploy can be replaced by the next push to `main`. Include
-these source changes before the next production push. Leave the saved switch off
-until you want to offer live practice; no live provider call is needed to test
-sample mode.
+Deploy reviewed source through the normal main-branch Git workflow. This guide
+does not authorize a production change or imply the switch is currently off.
+Sample-mode tests need no live provider call.
 
 The initial 400-token generation cap could be exhausted by Muse Spark's internal
 reasoning before it produced visible text (`provider_output_limit`). Generation
